@@ -1,0 +1,45 @@
+{
+    "name": "icomefromthenet/bookme",
+    "description": "A booking module for Bolt CMS",
+    "type": "bolt-extension",
+    "keywords": [
+        "booking",
+        "reservations"
+    ],
+    "require": {
+        "bolt/bolt": "^3.0",
+        "vlucas/valitron": "^1.2",
+        "league/tactician-command-events": "^0.6.0"
+    },
+    "require-dev": {
+        "phpunit/phpunit": "^4.7"
+    },
+    "license": "MIT",
+    "authors": [
+        {
+            "name": "Lewis Dyer",
+            "email": "getintouch@icomefromthenet.com"
+        }
+    ],
+    "minimum-stability": "dev",
+    "prefer-stable": true,
+    "autoload": {
+        "psr-4": {
+            "Bolt\\Extension\\IComeFromTheNet\\BookMe\\": "src"
+        }
+    },
+    "autoload-dev": {
+        "psr-4": {
+            "Bolt\\Extension\\IComeFromTheNet\\BookMe\\Tests\\": "tests",
+            "Bolt\\Tests\\": "vendor/bolt/bolt/tests/phpunit/unit/"
+        }
+    },
+    "extra": {
+        "bolt-assets": "web",
+        "bolt-class": "Bolt\\Extension\\IComeFromTheNet\\BookMe\\BookMeExtension",
+        "bolt-icon": "bolt-icon.png",
+        "bolt-screenshots": [
+            "screenshots/screenshot1.png"
+        ]
+    }
+}
