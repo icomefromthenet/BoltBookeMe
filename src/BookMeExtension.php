@@ -3,7 +3,7 @@
 namespace Bolt\Extension\IComeFromTheNet\BookMe;
 
 use DateTime;
-use Bolt\Application;
+use Silex\Application;
 use Bolt\Asset\File\JavaScript;
 use Bolt\Asset\File\Stylesheet;
 use Bolt\Controller\Zone;
@@ -26,6 +26,11 @@ use Bolt\Extension\IComeFromTheNet\BookMe\Schema\CalendarQuarterTable;
 use Bolt\Extension\IComeFromTheNet\BookMe\Schema\CalendarYearTable;
 use Bolt\Extension\IComeFromTheNet\BookMe\Schema\InitTable;
 
+// Load this extension composer dep autoloader
+// since bolt does not download packagist repo when does a merge
+// this extension must manage its own dependecies
+require (__DIR__.'/../thirdparty/vendor/autoload.php');
+
 
 /**
  * ExtensionName extension class.
@@ -38,6 +43,8 @@ class BookMeExtension extends SimpleExtension
     use DatabaseSchemaTrait;
     
     
+    //--------------------------------------------------------------------------
+    # Properties
     
     /**
      * Fetch the processing date used i.e. NOW()
@@ -61,34 +68,13 @@ class BookMeExtension extends SimpleExtension
         return $oContainer['db'];
     }
     
-    
-    /**
-     * {@inheritdoc}
-     */
-    protected function registerServices(Application $app)
-    {
-        $this->extendDatabaseSchemaServices();
-        
-        
-        return $app;
-    }
+   
     
     
 
-    /**
-     * {@inheritdoc}
-     */
-    protected function registerExtensionTables()
-    {
-        return [
-            'ints'                  => InitTable::class,
-            'bm_calendar'           => CalendarTable::class,
-            'bm_calendar_weeks'     => CalendarWeekTable::class,
-            'bm_calendar_months'    => CalendarMonthTable::class,
-            'bm_calendar_quarters'  => CalendarQuarterTable::class,
-            'bm_calendar_years'     => CalendarYearTable::class,
-        ];
-    }
+   //---------------------------------------------------------------------------
+   # Bolt Types
+    
     
     
     /**
@@ -109,9 +95,13 @@ class BookMeExtension extends SimpleExtension
          */
 
         return [
-            new Field\ExampleField(),
+           
         ];
     }
+    
+    
+    //--------------------------------------------------------------------------
+    # Services and Database
     
     /**
      * Return Service Providers to load
@@ -119,15 +109,49 @@ class BookMeExtension extends SimpleExtension
      */ 
     public function getServiceProviders()
     {
+       
         $parentProviders = parent::getServiceProviders();
         $localProviders = [
             new Provider\CommandBusProvider($this->getConfig()),
+            new Provider\CustomValidationProvider($this->getConfig()),
         ];
 
-        return $parentProviders + $localProviders;
+        return array_merge($parentProviders,$localProviders);
     }
     
+     
+    /**
+     * {@inheritdoc}
+     */
+    protected function registerServices(Application $app)
+    {
+        $this->extendDatabaseSchemaServices();
+        
+        
+        return $app;
+    }
+    
+    
+     /**
+     * {@inheritdoc}
+     */
+    protected function registerExtensionTables()
+    {
+        return [
+            'ints'                  => InitTable::class,
+            'bm_calendar'           => CalendarTable::class,
+            'bm_calendar_weeks'     => CalendarWeekTable::class,
+            'bm_calendar_months'    => CalendarMonthTable::class,
+            'bm_calendar_quarters'  => CalendarQuarterTable::class,
+            'bm_calendar_years'     => CalendarYearTable::class,
+        ];
+    }
+    
+    
+    
 
+    //--------------------------------------------------------------------------
+    # Assets
    
     /**
      * {@inheritdoc}
@@ -136,13 +160,15 @@ class BookMeExtension extends SimpleExtension
     {
         return [
             // Web assets that will be loaded in the frontend
-            new Stylesheet('extension.css'),
-            new JavaScript('extension.js'),
+          
             // Web assets that will be loaded in the backend
-            (new Stylesheet('clippy.js/clippy.css'))->setZone(Zone::BACKEND),
-            (new JavaScript('clippy.js/clippy.min.js'))->setZone(Zone::BACKEND),
+          
+          
         ];
     }
+    
+    //--------------------------------------------------------------------------
+    # Twig Extensions
 
     /**
      * {@inheritdoc}
@@ -175,6 +201,9 @@ class BookMeExtension extends SimpleExtension
 
         return $this->renderTemplate('extension.twig', $context);
     }
+    
+    //--------------------------------------------------------------------------
+    # Menu Entires and Routes
 
     /**
      * {@inheritdoc}
@@ -196,7 +225,7 @@ class BookMeExtension extends SimpleExtension
          *   - Menu icon a Font Awesome small child
          *   - Required Bolt permissions 'settings'
          */
-        $adminMenuEntry = (new MenuEntry('bookme-calendar-admin', 'bookme/calendar/admin'))
+        $adminMenuEntry = (new MenuEntry('bookme-calendar-admin', 'bookme/setup'))
             ->setLabel('Book Me Calendar Setup')
             ->setIcon('fa:child')
             ->setPermission('settings')
@@ -228,12 +257,35 @@ class BookMeExtension extends SimpleExtension
         $config = $this->getConfig();
       
         return [
-            'extend/bookme/calendar' => new Controller\CalendarAdminController($config,$this->getNow(),$this->getDatabase()),
+            'extend/bookme/setup' => new Controller\SetupController($config,$this->getNow(),$this->getDatabase()),
         ];
         
         
     }
 
+
+    //--------------------------------------------------------------------------
+    # Config
+    
+     /**
+     * {@inheritdoc}
+     */
+    protected function getDefaultConfig()
+    {
+        return [
+            'tablenames' => [
+                 'bm_ints'              => 'bolt_ints'   
+                ,'bm_calendar'          => 'bolt_bm_calendar'    
+                ,'bm_calendar_weeks'    => 'bolt_bm_calendar_weeks'      
+                ,'bm_calendar_months'   => 'bolt_bm_calendar_months'  
+                ,'bm_calendar_quarters' => 'bolt_bm_calendar_quarters'  
+                ,'bm_calendar_years'    => 'bolt_bm_calendar_years' 
+            ]
+            
+            
+        ];
+    }
+   
 
 }
 /* End of Extension */

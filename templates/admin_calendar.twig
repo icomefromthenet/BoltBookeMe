@@ -6,46 +6,99 @@
 
 {% block page_main %}
 
-    <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit. Alias
-    aliquid atque blanditiis culpa cum cupiditate deleniti dolor error
-    esse eveniet excepturi ipsum iusto molestiae non, nulla qui
-    repellendus sed ullam.</p>
-    <p>Autem distinctio eligendi impedit perspiciatis quam. Error eum
-    expedita fugit maiores praesentium suscipit voluptatum. Blanditiis
-    cumque dolorum expedita fuga labore natus obcaecati officia quis,
-    quo rem, tenetur velit! Repudiandae, totam.</p>
-    <p>A asperiores culpa cum dicta distinctio doloribus earum eligendi
-    enim, et explicabo facere hic id laboriosam magnam minima modi
-    molestias nam neque praesentium quia, quibusdam quidem sed veniam
-    voluptatem voluptatibus.</p>
-    <p>Ab accusantium deleniti distinctio dolor doloremque doloribus
-    eius, eos est, facere hic minima molestias natus porro possimus
-    sequi ullam voluptas? Atque dolorum error nemo quisquam ratione!
-    Autem modi quos sint!</p>
-    <p>Atque consectetur earum error et ipsa, laudantium maiores
-    officia officiis, provident quae ratione recusandae rem repudiandae
-    vero voluptates. Assumenda doloremque harum nihil officiis
-    perspiciatis qui quibusdam, recusandae repellat sunt velit!</p>
-    <p>Adipisci atque, commodi doloribus esse laborum libero nulla
-    pariatur praesentium quibusdam, ratione rerum soluta tenetur unde?
-    Assumenda, ipsa, ipsam labore laudantium odit pariatur quaerat
-    quisquam sunt tempora voluptas voluptate voluptatum?</p>
-    <p>Aliquam maiores sequi ut! Aliquid animi architecto blanditiis
-    consequuntur ducimus expedita, inventore ipsum iure labore
-    laudantium perspiciatis saepe similique sint tempora tempore
-    tenetur voluptates? Incidunt minima quidem quos rem vitae.</p>
-    <p>Dolore facere, vel. Accusamus architecto assumenda atque,
-    consequuntur cupiditate quasi. At laudantium rem repudiandae
-    suscipit temporibus. Aperiam at blanditiis dolores, dolorum est, et
-    explicabo fugiat harum illo ipsa totam voluptas?</p>
-    <p>Alias blanditiis culpa dolorem, doloremque eveniet in itaque
-    possimus quasi ratione repellendus suscipit voluptate. Aliquam
-    architecto distinctio eveniet, facere laborum libero, minus
-    mollitia odit placeat quod repudiandae vitae, voluptas
-    voluptatum.</p>
-    <p>Amet consequatur culpa cumque delectus, eaque excepturi fuga
-    fugiat, fugit maiores maxime minus natus necessitatibus, nemo
-    obcaecati odio omnis qui quibusdam quod rem voluptatem! Doloremque
-    id nisi non omnis recusandae!</p>
+
+    <div class="alert alert-info alert-dismissible">
+        <button type="button" class="close" data-dismiss="alert">×</button>
+        Before you can take a booking a calendar must be generated for now and next year. 
+        Adding more then now + 5 years is a waste of resources the option is available but please don't.
+    </div>
+
+
+<div class="row">
+  <div class="col-md-6">
+      
+       <div class="panel panel-default">
+        <div class="panel-heading">
+            <i class="fa fa-fw fa-bullhorn"></i>
+            Add New Calendar Year    
+        </div>
+
+        <div class="panel-body">
+               <form style="margin-bottom:10px;" method="post" action="{{ path('bookme-setup-calendar-add') }}">
+                   <input class="btn btn-primary" type="submit" value="Add Calendar Year" />
+                   <hidden type="iCalendarYear" value="1" />           
+               </form>
+            
+            
+            
+            <table class="dashboardlisting listing">
+                <thead>
+                    <th>
+                         -
+                    </th>
+                    <th>
+                        Year
+                    </th>
+                </thead>
+                <tbody>
+                   {% for y in aCalendarYearList %}
+                   <tr>
+                       <td>
+                            Year
+                        </td>
+                        <td>
+                            {{ y }}
+                        </td>
+                    {% else %}
+                        <td colspan="2">
+                            Add your first calendar year.
+                        </td>
+                    {% endfor %}
+                    </tr>
+                </tbody>
+             </table>
+        </div>
+    </div>
+  
+  </div>
+  <div class="col-md-6">
+      <div class="panel panel-default">
+        <div class="panel-heading">
+            <i class="fa fa-fw fa-bullhorn"></i>
+            Add New Time Slot
+        </div>
+
+        <div class="panel-body">
+               <form class="form-inline" style="margin-bottom:10px; width:100%;" method="post" action="{{ path('bookme-setup-timslot-add') }}">
+                       <div class="form-group">
+                       <label for="iSlotLength" style="display:inline">Slot Length:</label> 
+                       <input class="form-control" id="iSlotLength" type="text" name="iSlotLength"  />
+                       </div>
+                       <button type="submit" class="btn btn-primary">Add New Slot</button>
+               </form>
+            
+            <table class="dashboardlisting listing">
+                <thead>
+                    <th>
+                         Slot Length
+                    </th>
+                    <th>
+                        Date Added
+                    </th>
+                </thead>
+                <tbody>
+                 
+                </tbody>
+             </table>
+        </div>
+    </div>
+  
+  
+  </div>
+</div>
+
+
+  
+    
 
 {% endblock page_main %}

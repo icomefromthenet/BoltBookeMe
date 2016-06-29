@@ -1,9 +1,9 @@
 <?php
-namespace IComeFromTheNet\BookMe\Bus\Handler;
+namespace Bolt\Extension\IComeFromTheNet\BookMe\Model\Setup\Handler;
 
 use Doctrine\DBAL\Connection;
 use Doctrine\DBAL\Types\Type;
-use IComeFromTheNet\BookMe\Bus\Command\CalAddYearCommand;
+use Bolt\Extension\IComeFromTheNet\BookMe\Model\Setup\Command\CalAddYearCommand;
 
 
 /**
@@ -53,12 +53,12 @@ class CalAddYearHandler
         $oDatabase     = $this->oDatabaseAdapter;
         $sCalTableName = $this->aTableNames['bm_calendar'];
         $aSql          = [];
-        
+        $sIntsTable    = $this->aTableNames['bm_ints'];
         
         
         $aSql[] = " INSERT INTO $sCalTableName (calendar_date) ";
 		$aSql[] = " SELECT CAST('".$oLastCalYear->format('Y-m-d')."' AS DATETIME) + INTERVAL a.i*10000 + b.i*1000 + c.i*100 + d.i*10 + e.i DAY ";
-		$aSql[] = " FROM ints a JOIN ints b JOIN ints c JOIN ints d JOIN ints e ";
+		$aSql[] = " FROM $sIntsTable a JOIN $sIntsTable b JOIN $sIntsTable c JOIN $sIntsTable d JOIN $sIntsTable e ";
 		$aSql[] = " WHERE (a.i*10000 + b.i*1000 + c.i*100 + d.i*10 + e.i) <= DATEDIFF(DATE_FORMAT(CAST('".$oLastCalYear->format('Y-m-d')."' AS DATETIME) + INTERVAL (? -1) YEAR,'%Y-12-31'),DATE_FORMAT(CAST('".$oLastCalYear->format('Y-m-d')."' AS DATETIME) ,'%Y-01-01')) ";
 		$aSql[] = " ORDER BY 1 ";
 	
@@ -173,6 +173,29 @@ class CalAddYearHandler
         
     }
     
+    protected function buildIntTable()
+    {
+        $oDatabase       = $this->oDatabaseAdapter;
+        $sIntsTable      = $this->aTableNames['bm_ints'];
+        $aSql            = [];
+       
+       
+        $aSql[] = " INSERT INTO `$sIntsTable` (`i`) VALUES (0) ON DUPLICATE KEY UPDATE `i` = 0";
+	    $aSql[] = " INSERT INTO `$sIntsTable` (`i`) VALUES (1) ON DUPLICATE KEY UPDATE `i` = 1";
+	    $aSql[] = " INSERT INTO `$sIntsTable` (`i`) VALUES (2) ON DUPLICATE KEY UPDATE `i` = 2";
+	    $aSql[] = " INSERT INTO `$sIntsTable` (`i`) VALUES (3) ON DUPLICATE KEY UPDATE `i` = 3";
+	    $aSql[] = " INSERT INTO `$sIntsTable` (`i`) VALUES (4) ON DUPLICATE KEY UPDATE `i` = 4";
+	    $aSql[] = " INSERT INTO `$sIntsTable` (`i`) VALUES (5) ON DUPLICATE KEY UPDATE `i` = 5";
+	    $aSql[] = " INSERT INTO `$sIntsTable` (`i`) VALUES (6) ON DUPLICATE KEY UPDATE `i` = 6";
+	    $aSql[] = " INSERT INTO `$sIntsTable` (`i`) VALUES (7) ON DUPLICATE KEY UPDATE `i` = 7";
+	    $aSql[] = " INSERT INTO `$sIntsTable` (`i`) VALUES (8) ON DUPLICATE KEY UPDATE `i` = 8";
+	    $aSql[] = " INSERT INTO `$sIntsTable` (`i`) VALUES (9) ON DUPLICATE KEY UPDATE `i` = 9";
+    
+        foreach($aSql as $sSql) {
+            $oDatabase->executeUpdate($sSql, [], []);    
+        }
+        
+    }
     
     public function __construct(array $aTableNames, Connection $oDatabaseAdapter)
     {
@@ -193,6 +216,7 @@ class CalAddYearHandler
     
         }
         
+        $this->buildIntTable();
         $this->buildCalendar($iYears, $oLastCalYear); 
         $this->buildWeeks($iYears, $oLastCalYear);
         $this->buildMonths($iYears, $oLastCalYear);

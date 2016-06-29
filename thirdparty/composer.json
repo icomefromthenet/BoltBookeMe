@@ -1,0 +1,14 @@
+{
+    "name": "root/thirdparty",
+    "require": {
+        "vlucas/valitron": "^1.2",
+        "league/tactician-command-events": "^0.6.0",
+        "league/tactician": "^1.0"
+    },
+    "authors": [
+        {
+            "name": "Lewis Dyer",
+            "email": "signup@icomefromthenet.com"
+        }
+    ]
+}

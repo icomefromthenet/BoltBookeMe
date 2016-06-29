@@ -12,13 +12,13 @@ use Symfony\Component\HttpFoundation\Response;
 use Bolt\Storage\Database\Connection;
 
 /**
- * Calendar Admin Controller
+ * Calendar and timeslot Admin Controller
  * 
  * Used to view and manage calendar years.
  *
  * @author Lewis Dyer <getintouch@icomefromthenet.com>
  */
-class CalendarAdminController implements ControllerProviderInterface
+class SetupController implements ControllerProviderInterface
 {
     /** 
      * @var array The extension's configuration parameters
@@ -51,12 +51,15 @@ class CalendarAdminController implements ControllerProviderInterface
         /** @var $ctr \Silex\ControllerCollection */
         $oCtr = $app['controllers_factory'];
 
-        $oCtr->get('admin',[$this,'onCalendarAdminGet'])
-              ->bind('bookme-admin-calendar');
+        $oCtr->get('',[$this,'onSetupGet'])
+              ->bind('bookme-setup');
    
    
-        $oCtr->post('admin',[$this,'onCalendarAdminPost'])
-              ->bind('bookme-admin-calendar-add');
+        $oCtr->post('calendar',[$this,'onAddCalendarPost'])
+              ->bind('bookme-setup-calendar-add');
+    
+        $oCtr->post('timeslot',[$this,'onAddTimeslotPost'])
+              ->bind('bookme-setup-timslot-add');
     
         
         return $oCtr;
@@ -69,7 +72,7 @@ class CalendarAdminController implements ControllerProviderInterface
      * @param Request       $request
      * @return Response
      */
-    public function onCalendarAdminGet(Application $app, Request $request)
+    public function onSetupGet(Application $app, Request $request)
     {
        
        $oDatabase = $this->oDatabase;
@@ -89,22 +92,25 @@ class CalendarAdminController implements ControllerProviderInterface
            $iNextCalendarYear = $aCalendarYearList[$iCalCount] + 1;
        }
        
+       # load a list of timeslots
+       $aTimeslots = $oDatabase->fetchArray('SELECT y 
+                                                    FROM bolt_bm_calendar_years 
+                                                    ORDER BY y DESC');
        
-       return $app['twig']->render('admin_calendar.twig', ['title' => 'Setup Calendars','calendars' => $aCalendarYearList, 'nextYear' => $iNextCalendarYear ], []);
+       return $app['twig']->render('admin_calendar.twig', ['title' => 'Setup Calendars','calendars' => $aCalendarYearList, 'nextYear' => $iNextCalendarYear, 'timeslots' => $aTimeslots], []);
     }
 
     /**
-     * Handles POST requests on admin and return with a redirect
-     *
-     * This will add the required calendar year. 
-     * 
+     * Handles request to create new calendar year(s)
+   
+     * @param Application $app
      * @param Request $request
      *
      * @return Response
      */
-    public function onCalendarAdminPost(Application $app, Request $request)
+    public function onAddCalendarPost(Application $app, Request $request)
     {
-        $oCommandBus = $app['commandBus'];
+        $oCommandBus = $app['bm.commandBus'];
         
         
         
@@ -115,5 +121,26 @@ class CalendarAdminController implements ControllerProviderInterface
         return $jsonResponse;
     }
 
+
+    /**
+     * Handles request to create new timeslot.
+     *
+     * @param Application $app
+     * @param Request $request
+     *
+     * @return Response
+     */
+    public function onAddTimeslotPost(Application $app, Request $request)
+    {
+        $oCommandBus = $app['bm.commandBus'];
+        
+        
+        
+        # Add Calendar for the given years
+        
+        # redirect back to admin page when sucessful
+
+        return $jsonResponse;
+    }
 }
 /* End of Calendar Admin Controller */

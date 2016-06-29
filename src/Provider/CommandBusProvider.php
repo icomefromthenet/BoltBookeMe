@@ -1,7 +1,7 @@
 <?php
 namespace Bolt\Extension\IComeFromTheNet\BookMe\Provider;
 
-use DateTime;
+
 use Silex\Application;
 use Silex\ServiceProviderInterface;
 
@@ -14,9 +14,13 @@ use League\Tactician\Handler\CommandNameExtractor\ClassNameExtractor;
 use League\Tactician\CommandEvents\EventMiddleware;
 use League\Tactician\CommandEvents\Event\CommandHandled;
 
+use Bolt\Extension\IComeFromTheNet\BookMe\Bus\Listener\CommandHandled as CustomHandler;
 use Bolt\Extension\IComeFromTheNet\BookMe\Bus\Middleware\ValidatePropMiddleware;
 use Bolt\Extension\IComeFromTheNet\BookMe\Bus\Middleware\ExceptionWrapperMiddleware;
 use Bolt\Extension\IComeFromTheNet\BookMe\Bus\Middleware\UnitOfWorkMiddleware;
+
+use Bolt\Extension\IComeFromTheNet\BookMe\Model\Setup\Command\CalAddYearCommand;
+use Bolt\Extension\IComeFromTheNet\BookMe\Model\Setup\Handler\CalAddYearHandler;
 
 
 
@@ -29,8 +33,6 @@ class CommandBusProvider implements ServiceProviderInterface
 {
     /** @var array */
     private $config;
-
-
 
 
     /**
@@ -49,15 +51,32 @@ class CommandBusProvider implements ServiceProviderInterface
     public function register(Application $app)
     {
       
-       $this['commandBus'] = $app->share(function($c){
+        $aConfig   = $this->config;
+      
+        $app['bm.model.setup.handler.addyear'] = $app->share(function(Application $container) use ($aConfig){
+                
+            return new CalAddYearHandler($aConfig['tablenames'],$container['db']);
+                
+        });
+      
+      
+       $app['bm.leagueeventhandler'] = function($c) {
+            return new CustomHandler($c['dispatcher']);
+        };
+      
+      
+       $app['bm.commandBus'] = $app->share(function(Application $c) {
                 
            # fetch database
-           $oDatabase = $app['db'];
+           $oDatabase = $c['db'];
+          
            
             $aLocatorMap = [
-                //CalAddYearCommand::class            => 'handlers.cal.addyear',
+                CalAddYearCommand::class            => 'bm.model.setup.handler.addyear',
               
             ];
+            
+            
     
          
             // Create the Middleware that loads the commands
@@ -74,9 +93,9 @@ class CommandBusProvider implements ServiceProviderInterface
             $oEventMiddleware->addListener(
             	'command.handled',
             	function (CommandHandled $event) use ($c) {
-                	 # fetch event dispatcher
-                    $oEvent = $app['event'];
-                	$oEvent->handle($oEvent);
+                	// custom handler withh convert this league event into symfony event
+                	$oCustomEventHandler = $c['bm.leagueeventhandler']; 
+                	$oCustomEventHandler->handle($event);
             	}
             );
             
