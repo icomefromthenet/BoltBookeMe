@@ -53,31 +53,59 @@ class ExtensionTest extends BoltUnitTest
         return $bolt;
     }
     
-    protected function setUp()
+    protected function getAppConfig()
     {
-       $app  = $this->getApp();
-       
-       $aConfig = [
+        return [
            'tablenames' => [
                  'bm_ints'              => 'bolt_ints'   
                 ,'bm_calendar'          => 'bolt_bm_calendar'    
                 ,'bm_calendar_weeks'    => 'bolt_bm_calendar_weeks'      
                 ,'bm_calendar_months'   => 'bolt_bm_calendar_months'  
                 ,'bm_calendar_quarters' => 'bolt_bm_calendar_quarters'  
-                ,'bm_calendar_years'    => 'bolt_bm_calendar_years' 
-       ]];
+                ,'bm_calendar_years'    => 'bolt_bm_calendar_years'
+                
+                ,'bm_timeslot'          => 'bolt_bm_timeslot'
+                ,'bm_timeslot_day'      => 'bolt_bm_timeslot_day'
+                ,'bm_timeslot_year'      => 'bolt_bm_timeslot_year'
+            ]
        
+       ];
+        
+    }
+    
+    protected function getApp($boot = true)
+    {
+        if ($this->app) {
+            return $this->app;
+        }
+        
        
-       $oExtension = new BookMeExtension();
-       $oExtension->setContainer($app);
-       $oExtension->register($app);
-       $oExtension->boot($app);
-       
-       $this->oTestAPI = new BookMeService($app);
-      
-       
+        $app = parent::getApp(false);
+        
+         
+       $aConfig = $this->getAppConfig();
      
-       $this->handleEventPostFixtureRun($oTestAPI);
+       
+       
+        $this->oTestAPI = new BookMeService($app, $aConfig);
+        
+        return $this->app = $app;
+    }
+    
+    protected function setUp()
+    {
+        # Truncate the Tables
+        $aConfig = $this->getAppConfig();
+        
+        $this->getDatabaseAdapter()->exec('SET foreign_key_checks = 0');
+        foreach($aConfig['tablenames'] as $sTable) {
+            $this->getDatabaseAdapter()->exec('truncate table '.$sTable);
+        }
+        
+       $this->getDatabaseAdapter()->exec('SET foreign_key_checks = 1');
+       
+       
+       $this->handleEventPostFixtureRun();
     }
 
     
@@ -98,6 +126,12 @@ class ExtensionTest extends BoltUnitTest
         $sNow         = $bolt['db']->fetchColumn("select date_format(NOW(),'%Y-%m-%d')  ",[],0,[]);
         
         return $oDateType->convertToPHPValue($sNow,$oDBPlatform);
+    }
+    
+    
+    protected function getTestAPI()
+    {
+        return $this->oTestAPI;
     }
     
     protected function getDatabaseAdapter()

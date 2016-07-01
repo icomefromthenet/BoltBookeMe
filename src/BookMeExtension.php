@@ -25,6 +25,9 @@ use Bolt\Extension\IComeFromTheNet\BookMe\Schema\CalendarMonthTable;
 use Bolt\Extension\IComeFromTheNet\BookMe\Schema\CalendarQuarterTable;
 use Bolt\Extension\IComeFromTheNet\BookMe\Schema\CalendarYearTable;
 use Bolt\Extension\IComeFromTheNet\BookMe\Schema\InitTable;
+use Bolt\Extension\IComeFromTheNet\BookMe\Schema\TimeslotTable;
+use Bolt\Extension\IComeFromTheNet\BookMe\Schema\TimeslotDayTable;
+use Bolt\Extension\IComeFromTheNet\BookMe\Schema\TimeslotYearTable;
 
 // Load this extension composer dep autoloader
 // since bolt does not download packagist repo when does a merge
@@ -144,6 +147,11 @@ class BookMeExtension extends SimpleExtension
             'bm_calendar_months'    => CalendarMonthTable::class,
             'bm_calendar_quarters'  => CalendarQuarterTable::class,
             'bm_calendar_years'     => CalendarYearTable::class,
+            
+            'bm_timeslot'           => TimeslotTable::class,
+            'bm_timeslot_day'       => TimeslotDayTable::class,
+            'bm_timeslot_year'      => TimeslotYearTable::class,
+            
         ];
     }
     
@@ -279,7 +287,11 @@ class BookMeExtension extends SimpleExtension
                 ,'bm_calendar_weeks'    => 'bolt_bm_calendar_weeks'      
                 ,'bm_calendar_months'   => 'bolt_bm_calendar_months'  
                 ,'bm_calendar_quarters' => 'bolt_bm_calendar_quarters'  
-                ,'bm_calendar_years'    => 'bolt_bm_calendar_years' 
+                ,'bm_calendar_years'    => 'bolt_bm_calendar_years'
+                
+                ,'bm_timeslot'          => 'bolt_bm_timeslot'
+                ,'bm_timeslot_day'      => 'bolt_bm_timeslot_day'
+                ,'bm_timeslot_year'     => 'bolt_bm_timeslot_year'
             ]
             
             

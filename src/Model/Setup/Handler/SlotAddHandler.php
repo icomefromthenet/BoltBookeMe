@@ -1,11 +1,11 @@
 <?php
-namespace IComeFromTheNet\BookMe\Bus\Handler;
+namespace Bolt\Extension\IComeFromTheNet\BookMe\Model\Setup\Handler;
 
 use Doctrine\DBAL\Connection;
 use Doctrine\DBAL\Types\Type;
 use Doctrine\DBAL\DBALException;
-use IComeFromTheNet\BookMe\Bus\Command\SlotAddCommand;
-use IComeFromTheNet\BookMe\Bus\Exception\SlotFailedException;
+use Bolt\Extension\IComeFromTheNet\BookMe\Model\Setup\Command\SlotAddCommand;
+use Bolt\Extension\IComeFromTheNet\BookMe\Model\Setup\SetupException;
 
 
 /**
@@ -59,7 +59,7 @@ class SlotAddHandler
                  
 	    }
 	    catch(DBALException $e) {
-	        throw SlotFailedException::hasFailedToCreateNewTimeslot($oCommand, $e);
+	        throw SetupException::hasFailedToCreateNewTimeslot($oCommand, $e);
 	    }
     	
 
@@ -78,6 +78,7 @@ class SlotAddHandler
         $oDatabase              = $this->oDatabaseAdapter;
         $sTimeSlotTableName     = $this->aTableNames['bm_timeslot'];
         $sTimeSlotDayTableName  = $this->aTableNames['bm_timeslot_day'];
+        $sIntsTableName         = $this->aTableNames['bm_ints']; 
         $iTimeSlotId            = $oCommand->getTimeSlotId();
         $aSql                   = [];
         
@@ -90,7 +91,7 @@ class SlotAddHandler
         $aSql[] = " SELECT null, :iTimeSlotId, `ints`.`tick` as start, `t`.`timeslot_length`+`ints`.`tick` as end  ";                                                                                      
         $aSql[] = " FROM ( ";                                                                                                                                                                             
         $aSql[] = "     SELECT 1 + (`a`.`i`*1000 + `b`.`i`*100 + `c`.`i`*10 + `d`.`i`) as tick   ";                                                                                                        
-        $aSql[] = "     FROM ints a JOIN ints b JOIN ints c JOIN ints d ";                                                                                                  
+        $aSql[] = "     FROM $sIntsTableName a JOIN $sIntsTableName b JOIN $sIntsTableName c JOIN $sIntsTableName d ";                                                                                                  
         $aSql[] = "     WHERE (`a`.`i`*1000 + `b`.`i`*100 + `c`.`i`*10 + `d`.`i`) <= (60*24) "; 
         $aSql[] = "     ORDER BY 1";
         $aSql[] = " ) ints ";                                                                                                                                                                              
@@ -112,7 +113,7 @@ class SlotAddHandler
                  
 	    }
 	    catch(DBALException $e) {
-	        throw SlotFailedException::hasFailedToCreateDays($oCommand, $e);
+	        throw SetupException::hasFailedToCreateDays($oCommand, $e);
 	    }
         
               
@@ -159,7 +160,7 @@ class SlotAddHandler
                  
 	    }
 	    catch(DBALException $e) {
-	        throw SlotFailedException::hasFailedToCreateYear($oCommand, $e);
+	        throw SetupException::hasFailedToCreateYear($oCommand, $e);
 	    }
         
               

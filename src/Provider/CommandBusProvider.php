@@ -21,8 +21,8 @@ use Bolt\Extension\IComeFromTheNet\BookMe\Bus\Middleware\UnitOfWorkMiddleware;
 
 use Bolt\Extension\IComeFromTheNet\BookMe\Model\Setup\Command\CalAddYearCommand;
 use Bolt\Extension\IComeFromTheNet\BookMe\Model\Setup\Handler\CalAddYearHandler;
-
-
+use Bolt\Extension\IComeFromTheNet\BookMe\Model\Setup\Command\SlotAddCommand;
+use Bolt\Extension\IComeFromTheNet\BookMe\Model\Setup\Handler\SlotAddHandler;
 
 /**
  * Bootstrap the Command Bus used for booking operations.
@@ -50,7 +50,6 @@ class CommandBusProvider implements ServiceProviderInterface
      */
     public function register(Application $app)
     {
-      
         $aConfig   = $this->config;
       
         $app['bm.model.setup.handler.addyear'] = $app->share(function(Application $container) use ($aConfig){
@@ -58,6 +57,14 @@ class CommandBusProvider implements ServiceProviderInterface
             return new CalAddYearHandler($aConfig['tablenames'],$container['db']);
                 
         });
+        
+        $app['bm.model.setup.handler.addslot'] = $app->share(function(Application $container) use ($aConfig){
+                
+            return new SlotAddHandler($aConfig['tablenames'],$container['db']);
+                
+        });
+        
+        
       
       
        $app['bm.leagueeventhandler'] = function($c) {
@@ -73,6 +80,7 @@ class CommandBusProvider implements ServiceProviderInterface
            
             $aLocatorMap = [
                 CalAddYearCommand::class            => 'bm.model.setup.handler.addyear',
+                SlotAddCommand::class               => 'bm.model.setup.handler.addslot',
               
             ];
             

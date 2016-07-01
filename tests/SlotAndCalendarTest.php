@@ -9,13 +9,12 @@ use Valitron\Validator;
 use Bolt\Extension\IComeFromTheNet\BookMe\BookMeExtension;
 use Bolt\Extension\IComeFromTheNet\BookMe\Tests\Base\ExtensionTest;
 use Bolt\Extension\IComeFromTheNet\BookMe\Model\Setup\SetupException;
-use Bolt\Extension\IComeFromTheNet\Booke\Command\Bus\Middleware\ValidationException;
+use Bolt\Extension\IComeFromTheNet\BookMe\Bus\Middleware\ValidationException;
 
 use Bolt\Extension\IComeFromTheNet\BookMe\Model\Setup\Command\CalAddYearCommand;
-//use Bolt\Extension\IComeFromTheNet\BookMe\Bus\Command\SlotToggleStatusCommand;
-//use Bolt\Extension\IComeFromTheNet\BookMe\Bus\Command\SlotAddCommand;
-//use Bolt\Extension\IComeFromTheNet\BookMe\Bus\Command\CalAddYearCommand;
-//use Bolt\Extension\IComeFromTheNet\BookMe\Bus\Command\RolloverTimeslotCommand;
+use Bolt\Extension\IComeFromTheNet\BookMe\Model\Setup\Command\SlotToggleStatusCommand;
+use Bolt\Extension\IComeFromTheNet\BookMe\Model\Setup\Command\SlotAddCommand;
+use Bolt\Extension\IComeFromTheNet\BookMe\Model\Setup\Command\RolloverTimeslotCommand;
 
 
 class SlotAndCalendarTest extends ExtensionTest
@@ -60,7 +59,7 @@ class SlotAndCalendarTest extends ExtensionTest
        
        
        // Test Add New Slot
-       /*
+      
        $iSlotId = $this->AddNewSlotTest($oStartYear->format('Y'));
        
        
@@ -68,9 +67,11 @@ class SlotAndCalendarTest extends ExtensionTest
        try {
            $this->AddFailsOnDuplicateTest($oStartYear->format('Y'));
            $this->assertFalse(true,'Exception validation on duplicate failed');
-       } catch(SlotFailedException $e) {
+       } catch(SetupException $e) {
            $this->assertTrue(true);
        }
+       
+        /*
        
        // Test disabled toggle
        $this->ToggleSlotDisabledTest($iSlotId);

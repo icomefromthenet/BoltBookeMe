@@ -6,6 +6,7 @@ use Bolt\Application;
 use Bolt\Extension\IComeFromTheNet\BookMe\BookMeException;
 use Bolt\Extension\IComeFromTheNet\BookMe\BookMeEvents;
 
+use Bolt\Extension\IComeFromTheNet\BookMe\Provider;
 
 
 use Bolt\Extension\IComeFromTheNet\BookMe\Model\Setup\Command\CalAddYearCommand;
@@ -53,14 +54,32 @@ class BookMeService
 
     protected $oContainer;
 
+
+    protected $aConfig;
+
+
     /**
      * Class Constructor
      * 
      * @param   BookMeContainer     $oContainer     The Service Container
      */ 
-    public function __construct(Application $oContainer)
+    public function __construct(Application $oContainer, $aConfig)
     {
        $this->oContainer = $oContainer;
+       $this->aConfig    = $aConfig;
+       $aProviders = [
+            new Provider\CommandBusProvider($aConfig),
+            new Provider\CustomValidationProvider($aConfig),
+        ];
+        
+        foreach($aProviders as $aProvider) {
+            $aProvider->register($oContainer);
+        }
+        
+        foreach($aProviders as $aProvider) {
+            $aProvider->boot($oContainer);
+        }
+        
         
     }
 

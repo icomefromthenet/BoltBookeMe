@@ -3,9 +3,9 @@ namespace Bolt\Extension\IComeFromTheNet\BookMe\Model\Setup;
 
 use Bolt\Extension\IComeFromTheNet\BookMe\BookMeException;
 use Bolt\Extension\IComeFromTheNet\BookMe\Model\Setup\Command\CalAddYearCommand;
-use Bolt\Extension\IComeFromTheNet\BookMe\Model\Setup\SlotAddCommand;
-use Bolt\Extension\IComeFromTheNet\Bookme\Model\Setup\SlotToggleStatusCommand;
-use Bolt\Extension\IComeFromTheNet\Bookme\Model\Setup\RolloverTimeslotCommand;
+use Bolt\Extension\IComeFromTheNet\BookMe\Model\Setup\Command\SlotAddCommand;
+use Bolt\Extension\IComeFromTheNet\Bookme\Model\Setup\Command\SlotToggleStatusCommand;
+use Bolt\Extension\IComeFromTheNet\Bookme\Model\Setup\Command\RolloverTimeslotCommand;
 
 
 use League\Tactician\Exception\Exception as BusException;
