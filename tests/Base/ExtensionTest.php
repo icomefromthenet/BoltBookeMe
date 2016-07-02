@@ -66,7 +66,7 @@ class ExtensionTest extends BoltUnitTest
                 
                 ,'bm_timeslot'          => 'bolt_bm_timeslot'
                 ,'bm_timeslot_day'      => 'bolt_bm_timeslot_day'
-                ,'bm_timeslot_year'      => 'bolt_bm_timeslot_year'
+                ,'bm_timeslot_year'     => 'bolt_bm_timeslot_year'
             ]
        
        ];
@@ -119,11 +119,11 @@ class ExtensionTest extends BoltUnitTest
     *  @return DateTime
     *
     */
-    protected function getNow($bolt)
+    protected function getNow()
     {
-        $oDBPlatform  = $bolt['db']->getDatabasePlatform();
+        $oDBPlatform  = $this->getDatabaseAdapter()->getDatabasePlatform();
         $oDateType    = Type::getType(Type::DATE); 
-        $sNow         = $bolt['db']->fetchColumn("select date_format(NOW(),'%Y-%m-%d')  ",[],0,[]);
+        $sNow         = $this->getDatabaseAdapter()->fetchColumn("select date_format(NOW(),'%Y-%m-%d')  ",[],0,[]);
         
         return $oDateType->convertToPHPValue($sNow,$oDBPlatform);
     }

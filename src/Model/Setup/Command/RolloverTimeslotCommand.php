@@ -1,10 +1,10 @@
 <?php
-namespace IComeFromTheNet\BookMe\Bus\Command;
+namespace Bolt\Extension\IComeFromTheNet\BookMe\Model\Setup\Command;
 
-use IComeFromTheNet\BookMe\Bus\Middleware\ValidationInterface;
-use IComeFromTheNet\BookMe\Bus\Listener\HasEventInterface;
-use IComeFromTheNet\BookMe\Bus\Listener\CommandEvent;
-use IComeFromTheNet\BookMe\BookMeEvents;
+use Bolt\Extension\IComeFromTheNet\BookMe\Bus\Middleware\ValidationInterface;
+use Bolt\Extension\IComeFromTheNet\BookMe\Bus\Listener\HasEventInterface;
+use Bolt\Extension\IComeFromTheNet\BookMe\Bus\Listener\CommandEvent;
+use Bolt\Extension\IComeFromTheNet\BookMe\BookMeEvents;
 
 
 /**
@@ -13,37 +13,38 @@ use IComeFromTheNet\BookMe\BookMeEvents;
  * @author Lewis Dyer <getintouch@icomefromthenet.com>
  * @since 1.0
  */ 
-class RolloverTimeslotCommand implements ValidationInterface, HasEventInterface
+class RolloverTimeslotCommand implements HasEventInterface
 {
 
     
-    /**
-     * @var integer the calendar year to rollover
-     */ 
-    protected $iCalendarYearRollover;
-  
+    
     /**
      * @var integer number of schedules that been rolledover
      */ 
     protected $iRolloverNumber;
     
     
-    public function __construct($iCalendarYearRollover)
+    
+    protected $iTimeslotDatabaseId;
+    
+    
+    
+    public function __construct($iTimeslotDatabaseId)
     {
-        $this->iCalendarYearRollover    = $iCalendarYearRollover;
-        
+        $this->iTimeslotDatabaseId = $iTimeslotDatabaseId;
     }
     
     
     /**
-    * Return the calendar year to rollover
+    * Fetch the database id of the new timeslot
     * 
-    * @return integer 
+    * @access public
     */ 
-    public function getCalendarYearRollover()
+    public function getTimeSlotId()
     {
-        return $this->iCalendarYearRollover;
+      return $this->iTimeslotDatabaseId;
     }
+   
     
     /**
     * Return Number of timeslots rolledover
@@ -74,13 +75,13 @@ class RolloverTimeslotCommand implements ValidationInterface, HasEventInterface
     {
         return [
             'integer' => [
-                ['calendar_year']
+                ['timeslot_id']
             ]
             ,'min' => [
-                ['calendar_year',2000]
+                ['timeslot_id',1]
             ]
             ,'required' => [
-                ['calendar_year']
+                ['timeslot_id']
             ]
         ];
     }
@@ -89,7 +90,7 @@ class RolloverTimeslotCommand implements ValidationInterface, HasEventInterface
     public function getData()
     {
         return [
-            'calendar_year' => $this->iCalendarYearRollover,
+            'timeslot_id' => $this->iTimeslotDatabaseId,
         ];
     }
     

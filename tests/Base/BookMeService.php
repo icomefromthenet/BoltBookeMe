@@ -10,10 +10,11 @@ use Bolt\Extension\IComeFromTheNet\BookMe\Provider;
 
 
 use Bolt\Extension\IComeFromTheNet\BookMe\Model\Setup\Command\CalAddYearCommand;
+use Bolt\Extension\IComeFromTheNet\BookMe\Model\Setup\Command\SlotToggleStatusCommand;
+use Bolt\Extension\IComeFromTheNet\BookMe\Model\Setup\Command\SlotAddCommand;
 
-/*use Bolt\Extension\IComeFromTheNet\BookMe\Bus\Command\ToggleScheduleCarryCommand;
-use Bolt\Extension\IComeFromTheNet\BookMe\Bus\Command\SlotToggleStatusCommand;
-use Bolt\Extension\IComeFromTheNet\BookMe\Bus\Command\SlotAddCommand;
+/*
+use Bolt\Extension\IComeFromTheNet\BookMe\Model\Setup\Command\ToggleScheduleCarryCommand;
 use Bolt\Extension\IComeFromTheNet\BookMe\Bus\Command\RegisterMemberCommand;
 use Bolt\Extension\IComeFromTheNet\BookMe\Bus\Command\RegisterTeamCommand;
 use Bolt\Extension\IComeFromTheNet\BookMe\Bus\Command\AssignTeamMemberCommand;
@@ -103,7 +104,7 @@ class BookMeService
     {
         $oCommand = new CalAddYearCommand($iYearsToAdd, $oStartYear);
         
-        return $this->getContainer()->getCommandBus()->handle($oCommand);
+        return $this->getCommandBus()->handle($oCommand);
     }
 
     
@@ -121,7 +122,7 @@ class BookMeService
     {
         $oCommand = new SlotAddCommand($iTimeSlotLengthMinutes,$iCalYear);
         
-        $this->getContainer()->getCommandBus()->handle($oCommand);
+        $this->getCommandBus()->handle($oCommand);
         
         return $oCommand->getTimeSlotId();
     }
@@ -140,7 +141,7 @@ class BookMeService
     {
         $oCommand = new SlotToggleStatusCommand($iTimeslotDatabaseId);
         
-        return $this->getContainer()->getCommandBus()->handle($oCommand);
+        return $this->getCommandBus()->handle($oCommand);
     }
     
     
@@ -170,7 +171,7 @@ class BookMeService
     {
         $oCommand = new RegisterMemberCommand();
         
-        $this->getContainer()->getCommandBus()->handle($oCommand);
+        $this->getCommandBus()->handle($oCommand);
        
         return $oCommand->getMemberId();
         
@@ -190,7 +191,7 @@ class BookMeService
     {
         $oCommand = new RegisterTeamCommand($iTimeslotDatabaseId);   
         
-        $this->getContainer()->getCommandBus()->handle($oCommand);
+        $this->getCommandBus()->handle($oCommand);
        
         return $oCommand->getTeamId();
      
@@ -210,7 +211,7 @@ class BookMeService
     {
         $oCommand = new StartScheduleCommand($iMemberDatabaseId, $iTimeSlotDatabbaseId, $iCalendarYear);  
         
-        $this->getContainer()->getCommandBus()->handle($oCommand);
+        $this->getCommandBus()->handle($oCommand);
        
         return $oCommand->getScheduleId();
      
@@ -228,7 +229,7 @@ class BookMeService
     {
         $oCommand = new StopScheduleCommand($iScheduleDatabaseId, $oStopDate);  
         
-        $this->getContainer()->getCommandBus()->handle($oCommand);
+        $this->getCommandBus()->handle($oCommand);
        
         return true;
    
@@ -243,7 +244,7 @@ class BookMeService
     {
         $oCommand = new ResumeScheduleCommand($iScheduleDatabaseId);  
         
-        $this->getContainer()->getCommandBus()->handle($oCommand);
+        $this->getCommandBus()->handle($oCommand);
        
         return true;
         
@@ -268,7 +269,7 @@ class BookMeService
         
         $oCommand = new AssignTeamMemberCommand($iMemberDatabaseId, $iTeamDatabaseId, $iScheduleId);
         
-        $this->getContainer()->getCommandBus()->handle($oCommand);
+        $this->getCommandBus()->handle($oCommand);
          
         return true;
     }
@@ -286,7 +287,7 @@ class BookMeService
         
         $oCommand = new WithdrawlTeamMemberCommand($iMemberDatabaseId, $iTeamDatabaseId, $iScheduleId);
         
-        $this->getContainer()->getCommandBus()->handle($oCommand);
+        $this->getCommandBus()->handle($oCommand);
         
         return true;
     }
@@ -313,7 +314,7 @@ class BookMeService
         $oCommand = new CreateRuleCommand($oStartDate, $oEndDate, 1, $iTimeslotDatabaseId, $iOpeningSlot, $iClosingSlot, '*', '*', '*', true);
         
         
-        $this->getContainer()->getCommandBus()->handle($oCommand);
+        $this->getCommandBus()->handle($oCommand);
         
         return $oCommand->getRuleId();
         
@@ -336,7 +337,7 @@ class BookMeService
         $oCommand = new CreateRuleCommand($oStartFromDate, $oEndtAtDate, 1, $iTimeslotDatabaseId, $iOpeningSlot, $iClosingSlot, $sRepeatDayofweek,$sRepeatDayofmonth,$sRepeatMonth,false);
         
         
-        $this->getContainer()->getCommandBus()->handle($oCommand);
+        $this->getCommandBus()->handle($oCommand);
         
         return $oCommand->getRuleId();
         
@@ -358,7 +359,7 @@ class BookMeService
         $oCommand = new CreateRuleCommand($oStartDate, $oEndDate, 2, $iTimeslotDatabaseId, $iOpeningSlot, $iClosingSlot, '*', '*', '*', true);
         
         
-        $this->getContainer()->getCommandBus()->handle($oCommand);
+        $this->getCommandBus()->handle($oCommand);
         
         return $oCommand->getRuleId();
         
@@ -382,7 +383,7 @@ class BookMeService
         $oCommand = new CreateRuleCommand($oStartFromDate, $oEndtAtDate, 2, $iTimeslotDatabaseId, $iOpeningSlot, $iClosingSlot, $sRepeatDayofweek,$sRepeatDayofmonth,$sRepeatMonth,false);
         
         
-        $this->getContainer()->getCommandBus()->handle($oCommand);
+        $this->getCommandBus()->handle($oCommand);
         
         return $oCommand->getRuleId();
         
@@ -404,7 +405,7 @@ class BookMeService
         $oCommand = new CreateRuleCommand($oStartDate, $oEndDate, 3, $iTimeslotDatabaseId, $iOpeningSlot, $iClosingSlot, '*', '*', '*', true);
         
         
-        $this->getContainer()->getCommandBus()->handle($oCommand);
+        $this->getCommandBus()->handle($oCommand);
         
         return $oCommand->getRuleId();
     }
@@ -428,7 +429,7 @@ class BookMeService
         $oCommand = new CreateRuleCommand($oStartFromDate, $oEndtAtDate, 3, $iTimeslotDatabaseId, $iOpeningSlot, $iClosingSlot, $sRepeatDayofweek,$sRepeatDayofmonth,$sRepeatMonth,false);
         
         
-        $this->getContainer()->getCommandBus()->handle($oCommand);
+        $this->getCommandBus()->handle($oCommand);
         
         return $oCommand->getRuleId();
         
@@ -450,7 +451,7 @@ class BookMeService
         $oCommand = new CreateRuleCommand($oStartDate, $oEndDate, 4, $iTimeslotDatabaseId, $iOpeningSlot, $iClosingSlot, '*', '*', '*', true);
         
         
-        $this->getContainer()->getCommandBus()->handle($oCommand);
+        $this->getCommandBus()->handle($oCommand);
         
         return $oCommand->getRuleId();
         
@@ -474,7 +475,7 @@ class BookMeService
         $oCommand = new CreateRuleCommand($oStartFromDate, $oEndtAtDate, 4, $iTimeslotDatabaseId, $iOpeningSlot, $iClosingSlot, $sRepeatDayofweek,$sRepeatDayofmonth,$sRepeatMonth,false);
         
         
-        $this->getContainer()->getCommandBus()->handle($oCommand);
+        $this->getCommandBus()->handle($oCommand);
         
         return $oCommand->getRuleId();
         
@@ -494,7 +495,7 @@ class BookMeService
     {
         $oCommand = new AssignRuleToScheduleCommand($iScheduleDatabaseId,$iRuleDatabaseId,$bRolloverRule);    
         
-        $this->getContainer()->getCommandBus()->handle($oCommand);
+        $this->getCommandBus()->handle($oCommand);
         
         return true;
     }
@@ -511,7 +512,7 @@ class BookMeService
     {
         $oCommand = new RemoveRuleFromScheduleCommand($iScheduleDatabaseId, $iRuleDatabaseId);
         
-        $this->getContainer()->getCommandBus()->handle($oCommand);
+        $this->getCommandBus()->handle($oCommand);
         
         return true;
     }
@@ -528,7 +529,7 @@ class BookMeService
     {
         $oCommand = new RefreshScheduleCommand($iScheduleDatabaseId);
         
-        $this->getContainer()->getCommandBus()->handle($oCommand);
+        $this->getCommandBus()->handle($oCommand);
         
         return true;
     }
@@ -554,7 +555,7 @@ class BookMeService
     {
          $oCommand = new TakeBookingCommand($iScheduleId, $oOpeningSlot, $oClosingSlot);
         
-        $this->getContainer()->getCommandBus()->handle($oCommand);
+        $this->getCommandBus()->handle($oCommand);
         
         return $oCommand->getBookingId();
     }
@@ -573,7 +574,7 @@ class BookMeService
     {
         $oCommand = new ClearBookingCommand($iBookingId);
         
-        $this->getContainer()->getCommandBus()->handle($oCommand);
+        $this->getCommandBus()->handle($oCommand);
         
         return true;
     }

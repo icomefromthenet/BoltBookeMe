@@ -1,11 +1,11 @@
 <?php
-namespace IComeFromTheNet\BookMe\Bus\Handler;
+namespace Bolt\Extension\IComeFromTheNet\BookMe\Model\Setup\Handler;
 
 use Doctrine\DBAL\Connection;
 use Doctrine\DBAL\Types\Type;
 use Doctrine\DBAL\DBALException;
-use IComeFromTheNet\BookMe\Bus\Command\SlotToggleStatusCommand;
-use IComeFromTheNet\BookMe\Bus\Exception\SlotFailedException;
+use Bolt\Extension\IComeFromTheNet\BookMe\Model\Setup\Command\SlotToggleStatusCommand;
+use Bolt\Extension\IComeFromTheNet\BookMe\Bus\SetupException;
 
 
 /**
@@ -62,7 +62,7 @@ class SlotToggleStatusHandler
                  
 	    }
 	    catch(DBALException $e) {
-	        throw SlotFailedException::hasFailedToToggleStatus($oCommand, $e);
+	        throw SetupException::hasFailedToToggleStatus($oCommand, $e);
 	    }
         
         

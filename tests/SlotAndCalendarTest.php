@@ -71,7 +71,7 @@ class SlotAndCalendarTest extends ExtensionTest
            $this->assertTrue(true);
        }
        
-        /*
+        
        
        // Test disabled toggle
        $this->ToggleSlotDisabledTest($iSlotId);
@@ -80,9 +80,10 @@ class SlotAndCalendarTest extends ExtensionTest
        // Test Enabled Toggle
        $this->ToggleSlotEnabledTest($iSlotId);
        
+       
        // Test custom validators
        $this->SameCalYearValidatorTest();
-       */
+       
       
     }
     
@@ -205,7 +206,7 @@ class SlotAndCalendarTest extends ExtensionTest
         $oIntergerType = Type::getType(TYPE::INTEGER);
     
         $mResult =  $this->getDatabaseAdapter()->fetchColumn('SELECT is_active_slot FROM bolt_bm_timeslot where timeslot_id = ?',[$iSlotId],0,[$oIntergerType]);
-        $mResult = $oBooleanType->convertToPHPValue($mResult,$oContainer->getDatabaseAdapter()->getDatabasePlatform());
+        $mResult = $oBooleanType->convertToPHPValue($mResult,$this->getDatabaseAdapter()->getDatabasePlatform());
        
         $this->assertTrue($mResult);  
         
@@ -228,7 +229,7 @@ class SlotAndCalendarTest extends ExtensionTest
         $oIntergerType = Type::getType(TYPE::INTEGER);
     
         $mResult =  $this->getDatabaseAdapter()->fetchColumn('SELECT is_active_slot FROM bolt_bm_timeslot where timeslot_id = ?',[$iSlotId],0,[$oIntergerType]);
-        $mResult = $oBooleanType->convertToPHPValue($mResult,$oContainer->getDatabaseAdapter()->getDatabasePlatform());
+        $mResult = $oBooleanType->convertToPHPValue($mResult,$this->getDatabaseAdapter()->getDatabasePlatform());
        
         $this->assertFalse($mResult);  
      

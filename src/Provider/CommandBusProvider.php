@@ -23,6 +23,10 @@ use Bolt\Extension\IComeFromTheNet\BookMe\Model\Setup\Command\CalAddYearCommand;
 use Bolt\Extension\IComeFromTheNet\BookMe\Model\Setup\Handler\CalAddYearHandler;
 use Bolt\Extension\IComeFromTheNet\BookMe\Model\Setup\Command\SlotAddCommand;
 use Bolt\Extension\IComeFromTheNet\BookMe\Model\Setup\Handler\SlotAddHandler;
+use Bolt\Extension\IComeFromTheNet\BookMe\Model\Setup\Command\SlotToggleStatusCommand;
+use Bolt\Extension\IComeFromTheNet\BookMe\Model\Setup\Handler\SlotToggleStatusHandler;
+use Bolt\Extension\IComeFromTheNet\BookMe\Model\Setup\Command\RolloverTimeslotCommand;
+use Bolt\Extension\IComeFromTheNet\BookMe\Model\Setup\Handler\RolloverTimeslotHandler;
 
 /**
  * Bootstrap the Command Bus used for booking operations.
@@ -53,18 +57,20 @@ class CommandBusProvider implements ServiceProviderInterface
         $aConfig   = $this->config;
       
         $app['bm.model.setup.handler.addyear'] = $app->share(function(Application $container) use ($aConfig){
-                
             return new CalAddYearHandler($aConfig['tablenames'],$container['db']);
-                
         });
         
         $app['bm.model.setup.handler.addslot'] = $app->share(function(Application $container) use ($aConfig){
-                
             return new SlotAddHandler($aConfig['tablenames'],$container['db']);
-                
         });
         
+        $app['bm.model.setup.handler.toggleslot'] = $app->share(function(Application $container) use ($aConfig){
+            return new SlotToggleStatusHandler($aConfig['tablenames'],$container['db']);
+        });
         
+        $app['bm.model.setup.handler.rolloverslot'] = $app->share(function(Application $container) use ($aConfig){
+            return new RolloverTimeslotHandler($aConfig['tablenames'],$container['db']);
+        });
       
       
        $app['bm.leagueeventhandler'] = function($c) {
@@ -81,7 +87,11 @@ class CommandBusProvider implements ServiceProviderInterface
             $aLocatorMap = [
                 CalAddYearCommand::class            => 'bm.model.setup.handler.addyear',
                 SlotAddCommand::class               => 'bm.model.setup.handler.addslot',
-              
+                SlotToggleStatusCommand::class      => 'bm.model.setup.handler.toggleslot',
+                RolloverTimeslotCommand::class      => 'bm.model.setup.handler.rolloverslot',
+                
+                
+                
             ];
             
             

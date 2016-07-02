@@ -99,7 +99,7 @@ class SetupException extends BookMeException implements BusException
     public static function hasFailedToRollover(RolloverTimeslotCommand $oCommand, DBALException $oDatabaseException = null)
     {
         $exception = new static(
-            'Unable to rollover timeslots for new calyear '. $oCommand->getCalendarYearRollover() .' ', 0 , $oDatabaseException
+            'Unable to rollover timeslots into new calendar years', 0 , $oDatabaseException
         );
         
         $exception->oCommand = $oCommand;
