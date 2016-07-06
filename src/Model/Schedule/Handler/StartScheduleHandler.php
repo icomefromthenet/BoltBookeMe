@@ -1,11 +1,11 @@
 <?php
-namespace IComeFromTheNet\BookMe\Bus\Handler;
+namespace Bolt\Extension\IComeFromTheNet\BookMe\Model\Schedule\Handler;
 
 use Doctrine\DBAL\Connection;
 use Doctrine\DBAL\Types\Type;
 use Doctrine\DBAL\DBALException;
-use IComeFromTheNet\BookMe\Bus\Command\StartScheduleCommand;
-use IComeFromTheNet\BookMe\Bus\Exception\ScheduleException;
+use Bolt\Extension\IComeFromTheNet\BookMe\Model\Schedule\Command\StartScheduleCommand;
+use Bolt\Extension\IComeFromTheNet\BookMe\Model\Schedule\ScheduleException;
 
 
 /**

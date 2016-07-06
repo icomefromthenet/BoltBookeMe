@@ -1,12 +1,12 @@
 <?php
-namespace IComeFromTheNet\BookMe\Bus\Handler;
+namespace Bolt\Extension\IComeFromTheNet\BookMe\Model\Schedule\Handler;
 
 use Doctrine\DBAL\Connection;
 use Doctrine\DBAL\Types\Type;
 use Doctrine\DBAL\DBALException;
-use IComeFromTheNet\BookMe\Bus\Command\RefreshScheduleCommand;
-use IComeFromTheNet\BookMe\Bus\Exception\ScheduleException;
-use IComeFromTheNet\BookMe\Cron\CronToQuery;
+use Bolt\Extension\IComeFromTheNet\BookMe\Model\Schedule\Command\RefreshScheduleCommand;
+use Bolt\Extension\IComeFromTheNet\BookMe\Model\Schedule\ScheduleException;
+use Bolt\Extension\IComeFromTheNet\BookMe\Cron\CronToQuery;
 
 
 /**

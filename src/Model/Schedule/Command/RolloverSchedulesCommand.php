@@ -1,37 +1,37 @@
 <?php
-namespace IComeFromTheNet\BookMe\Bus\Command;
+namespace Bolt\Extension\IComeFromTheNet\BookMe\Model\Schedule\Command;
 
-use IComeFromTheNet\BookMe\Bus\Middleware\ValidationInterface;
-use IComeFromTheNet\BookMe\Bus\Listener\HasEventInterface;
-use IComeFromTheNet\BookMe\Bus\Listener\CommandEvent;
-use IComeFromTheNet\BookMe\BookMeEvents;
+use Bolt\Extension\IComeFromTheNet\BookMe\Bus\Middleware\ValidationInterface;
+use Bolt\Extension\IComeFromTheNet\BookMe\Bus\Listener\HasEventInterface;
+use Bolt\Extension\IComeFromTheNet\BookMe\Bus\Listener\CommandEvent;
+use Bolt\Extension\IComeFromTheNet\BookMe\BookMeEvents;
 
 
 /**
- * This command is used to rollover last years teams.
+ * This command is used to rollover last years schedules.
  * 
  * @author Lewis Dyer <getintouch@icomefromthenet.com>
  * @since 1.0
  */ 
-class RolloverTeamsCommand implements ValidationInterface, HasEventInterface
+class RolloverSchedulesCommand implements ValidationInterface, HasEventInterface
 {
 
     
     /**
      * @var integer the calendar year to rollover
      */ 
-    protected $iCalendarYearRollover;
+    protected $iNextCalendarYearRollover;
   
-   /**
-   * @var integer the number of teams effected in this rollover
-   */ 
+    /**
+     * @var integer number of schedules that been rolledover
+     */ 
     protected $iRolloverNumber;
     
     
-    
-    public function __construct($iCalendarYearRollover)
+    public function __construct($iNextCalendarYearRollover)
     {
-        $this->iCalendarYearRollover    = $iCalendarYearRollover;
+        $this->iNextCalendarYearRollover    = $iNextCalendarYearRollover;
+        
     }
     
     
@@ -40,9 +40,9 @@ class RolloverTeamsCommand implements ValidationInterface, HasEventInterface
     * 
     * @return integer 
     */ 
-    public function getNextCalendarYear()
+    public function getNewCalendarYear()
     {
-        return $this->iCalendarYearRollover;
+        return $this->iNextCalendarYearRollover;
     }
     
     /**
@@ -64,6 +64,7 @@ class RolloverTeamsCommand implements ValidationInterface, HasEventInterface
     {
         return $this->iRolloverNumber = $iRolloverNumber;
     }
+    
     
     //---------------------------------------------------------
     # validation interface
@@ -88,7 +89,7 @@ class RolloverTeamsCommand implements ValidationInterface, HasEventInterface
     public function getData()
     {
         return [
-            'calendar_year' => $this->iCalendarYearRollover,
+            'calendar_year' => $this->iNextCalendarYearRollover,
         ];
     }
     
@@ -103,7 +104,7 @@ class RolloverTeamsCommand implements ValidationInterface, HasEventInterface
     
     public function getEventName()
     {
-        return BookMeEvents::TEAM_ROLLOVER;  
+        return BookMeEvents::SCHEDULE_ROLLOVER;  
     }
 
   

@@ -1,10 +1,10 @@
 <?php
-namespace IComeFromTheNet\BookMe\Bus\Command;
+namespace Bolt\Extension\IComeFromTheNet\BookMe\Model\Schedule\Command;
 
-use IComeFromTheNet\BookMe\Bus\Middleware\ValidationInterface;
-use IComeFromTheNet\BookMe\Bus\Listener\HasEventInterface;
-use IComeFromTheNet\BookMe\Bus\Listener\CommandEvent;
-use IComeFromTheNet\BookMe\BookMeEvents;
+use Bolt\Extension\IComeFromTheNet\BookMe\Bus\Middleware\ValidationInterface;
+use Bolt\Extension\IComeFromTheNet\BookMe\Bus\Listener\HasEventInterface;
+use Bolt\Extension\IComeFromTheNet\BookMe\Bus\Listener\CommandEvent;
+use Bolt\Extension\IComeFromTheNet\BookMe\BookMeEvents;
 
 
 /**

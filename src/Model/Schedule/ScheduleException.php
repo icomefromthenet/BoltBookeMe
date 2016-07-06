@@ -1,12 +1,12 @@
 <?php
-namespace Bolt\Extension\IComeFromTheNet\BookMe\Bus\Exception;
+namespace Bolt\Extension\IComeFromTheNet\BookMe\Model\Schedule;
 
 use Bolt\Extension\IComeFromTheNet\BookMe\BookMeException;
-use Bolt\Extension\IComeFromTheNet\BookMe\Bus\Command\ToggleScheduleCarryCommand;
-use Bolt\Extension\IComeFromTheNet\BookMe\Bus\Command\StartScheduleCommand;
-use Bolt\Extension\IComeFromTheNet\BookMe\Bus\Command\StopScheduleCommand;
-use Bolt\Extension\IComeFromTheNet\BookMe\Bus\Command\RolloverSchedulesCommand;
-use Bolt\Extension\IComeFromTheNet\BookMe\Bus\Command\RefreshScheduleCommand;
+use Bolt\Extension\IComeFromTheNet\BookMe\Model\Schedule\Command\ToggleScheduleCarryCommand;
+use Bolt\Extension\IComeFromTheNet\BookMe\Model\Schedule\Command\StartScheduleCommand;
+use Bolt\Extension\IComeFromTheNet\BookMe\Model\Schedule\Command\StopScheduleCommand;
+use Bolt\Extension\IComeFromTheNet\BookMe\Model\Schedule\Command\RolloverSchedulesCommand;
+use Bolt\Extension\IComeFromTheNet\BookMe\Model\Schedule\Command\RefreshScheduleCommand;
 
 use League\Tactician\Exception\Exception as BusException;
 use Doctrine\DBAL\DBALException;
