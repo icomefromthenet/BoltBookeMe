@@ -70,8 +70,8 @@ class ExtensionTest extends BoltUnitTest
                 
                 ,'bm_schedule_membership' => 'bolt_bm_schedule_membership'
                 ,'bm_schedule_team'       => 'bolt_bm_schedule_team'
-                ,'bm_schedule_team_members' => 'bolt_bm_schedule_team_members'
-                 
+                ,'bm_schedule'            => 'bolt_bm_schedule'
+                ,'bm_schedule_slot'       => 'bolt_bm_schedule_slot'
                 
             ]
        

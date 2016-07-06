@@ -16,9 +16,9 @@ class TimeslotTable extends BaseTable
             
         $this->table->addOption('comment','Timeslot definitions');
         
-        $this->table->addColumn('timeslot_id',          'integer',    ['notnull' => true,'comment' =>'Table Primary key', 'autoincrement' => true, 'unsigned' => true ]);
-        $this->table->addColumn('timeslot_length',      'smallint',   ['notnull' => true,'comment' =>'Number of minutes in the slot', 'unsigned' => true ]);
-        $this->table->addColumn('is_active_slot',       'boolean',    ['notnull' => true,'comment' =>'Be used in new schedules', 'default' => 1, 'unsigned' => true ]);
+        $this->table->addColumn('timeslot_id',          'integer',    ['notnull' => true, 'comment' =>'Table Primary key', 'autoincrement' => true, 'unsigned' => true ]);
+        $this->table->addColumn('timeslot_length',      'smallint',   ['notnull' => true, 'comment' =>'Number of minutes in the slot', 'unsigned' => true ]);
+        $this->table->addColumn('is_active_slot',       'boolean',    ['default' => true, 'comment' =>'Be used in new schedules' ]);
         
         
     }
