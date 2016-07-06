@@ -1,10 +1,10 @@
 <?php
-namespace IComeFromTheNet\BookMe\Bus\Command;
+namespace Bolt\Extension\IComeFromTheNet\BookMe\Model\Member\Command;
 
-use IComeFromTheNet\BookMe\Bus\Middleware\ValidationInterface;
-use IComeFromTheNet\BookMe\Bus\Listener\HasEventInterface;
-use IComeFromTheNet\BookMe\Bus\Listener\CommandEvent;
-use IComeFromTheNet\BookMe\BookMeEvents;
+use Bolt\Extension\IComeFromTheNet\BookMe\Bus\Middleware\ValidationInterface;
+use Bolt\Extension\IComeFromTheNet\BookMe\Bus\Listener\HasEventInterface;
+use Bolt\Extension\IComeFromTheNet\BookMe\Bus\Listener\CommandEvent;
+use Bolt\Extension\IComeFromTheNet\BookMe\BookMeEvents;
 
 
 /**
@@ -23,27 +23,26 @@ class RegisterTeamCommand implements  HasEventInterface, ValidationInterface
   protected $iTeamDatabaseId;
   
   /**
-   * @var integer the database id of the timeslot type to use
+   * @var string a name for the team
    */ 
-  protected $iTeamTimeSlotId;
+  protected $sTeamName;  
     
     
-    
-  public function __construct($iTeamTimeSlotId)
+  public function __construct($sTeamName)
   {
-    $this->iTeamTimeSlotId = $iTeamTimeSlotId;    
+    $this->sTeamName = $sTeamName;    
   }
   
   
   /**
-   * Load the assigned timeslot type for this team
+   * Load the assigned team name
    * 
-   * @return integer the database if of timeslot type
+   * @return string
    * 
    */ 
-  public function getTimeSlotId()
+  public function getTeamName()
   {
-      return $this->iTeamTimeSlotId;
+      return $this->sTeamName;
   }
   
   
@@ -74,14 +73,14 @@ class RegisterTeamCommand implements  HasEventInterface, ValidationInterface
   public function getRules()
   {
       return [
-        'integer' => [
-            ['timeslot_id']
+       'required' => [
+          ['team_name']
         ]
-        ,'min' => [
-           ['timeslot_id',1]
+        ,'lengthBetween' => [
+          ['team_name',1,100]
         ]
-        ,'required' => [
-            ['timeslot_id']     
+        ,'alphaNumAndSpace' => [
+          ['team_name']
         ]
       ];
   }
@@ -90,7 +89,7 @@ class RegisterTeamCommand implements  HasEventInterface, ValidationInterface
   public function getData()
   {
       return [
-        'timeslot_id' => $this->iTeamTimeSlotId
+        'team_name' => $this->sTeamName
       ];
   }
   

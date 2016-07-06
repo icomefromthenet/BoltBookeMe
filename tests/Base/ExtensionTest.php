@@ -67,6 +67,12 @@ class ExtensionTest extends BoltUnitTest
                 ,'bm_timeslot'          => 'bolt_bm_timeslot'
                 ,'bm_timeslot_day'      => 'bolt_bm_timeslot_day'
                 ,'bm_timeslot_year'     => 'bolt_bm_timeslot_year'
+                
+                ,'bm_schedule_membership' => 'bolt_bm_schedule_membership'
+                ,'bm_schedule_team'       => 'bolt_bm_schedule_team'
+                ,'bm_schedule_team_members' => 'bolt_bm_schedule_team_members'
+                 
+                
             ]
        
        ];

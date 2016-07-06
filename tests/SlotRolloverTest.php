@@ -8,12 +8,9 @@ use Valitron\Validator;
 
 use Bolt\Extension\IComeFromTheNet\BookMe\BookMeExtension;
 use Bolt\Extension\IComeFromTheNet\BookMe\Tests\Base\ExtensionTest;
-use Bolt\Extension\IComeFromTheNet\BookMe\Model\Setup\SetupException;
 use Bolt\Extension\IComeFromTheNet\BookMe\Bus\Middleware\ValidationException;
-
-
 use Bolt\Extension\IComeFromTheNet\BookMe\Model\Setup\Command\RolloverTimeslotCommand;
-
+use Bolt\Extension\IComeFromTheNet\BookMe\Model\Setup\SetupException;
 
 class SlotRolloverTest extends ExtensionTest
 {

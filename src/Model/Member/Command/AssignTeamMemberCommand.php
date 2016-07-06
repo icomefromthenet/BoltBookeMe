@@ -1,10 +1,10 @@
 <?php
-namespace IComeFromTheNet\BookMe\Bus\Command;
+namespace Bolt\Extension\IComeFromTheNet\BookMe\Model\Member\Command;
 
-use IComeFromTheNet\BookMe\Bus\Middleware\ValidationInterface;
-use IComeFromTheNet\BookMe\Bus\Listener\HasEventInterface;
-use IComeFromTheNet\BookMe\Bus\Listener\CommandEvent;
-use IComeFromTheNet\BookMe\BookMeEvents;
+use Bolt\Extension\IComeFromTheNet\BookMe\Bus\Middleware\ValidationInterface;
+use Bolt\Extension\IComeFromTheNet\BookMe\Bus\Listener\HasEventInterface;
+use Bolt\Extension\IComeFromTheNet\BookMe\Bus\Listener\CommandEvent;
+use Bolt\Extension\IComeFromTheNet\BookMe\BookMeEvents;
 
 
 /**
@@ -27,19 +27,13 @@ class AssignTeamMemberCommand implements  HasEventInterface, ValidationInterface
      */ 
     protected $iTeamDatabaseId;
     
-    /**
-     * @var integer is the schedule instance to join
-     */ 
-    protected $iScheduleId;
     
-    
-    public function __construct($iMemberDatabaseId, $iTeamDatabaseId, $iScheduleId)
+    public function __construct($iMemberDatabaseId, $iTeamDatabaseId)
     {
         $this->iMemberDatabaseId = $iMemberDatabaseId;
         $this->iTeamDatabaseId   = $iTeamDatabaseId;
-        $this->iScheduleId       = $iScheduleId;
+        
     }
-    
     
     
     
@@ -62,16 +56,7 @@ class AssignTeamMemberCommand implements  HasEventInterface, ValidationInterface
     {
       return $this->iTeamDatabaseId;
     }
-    
-    /**
-     * Fetches the database id of the schedule to use
-     * 
-     * @access public
-     */ 
-    public function getScheduleId()
-    {
-        return $this->iScheduleId;
-    }
+   
     
     //---------------------------------------------------------
     # validation interface
@@ -81,13 +66,13 @@ class AssignTeamMemberCommand implements  HasEventInterface, ValidationInterface
     {
         return [
             'integer' => [
-                ['team_id'], ['member_id'], ['schedule_id']
+                ['team_id'], ['member_id']
             ]
             ,'min' => [
-                ['team_id',1], ['member_id',1], ['schedule_id',1]
+                ['team_id',1], ['member_id',1]
             ]
             ,'required' => [
-                ['team_id'], ['member_id'], ['schedule_id']
+                ['team_id'], ['member_id']
             ]
         ];
     }
@@ -98,7 +83,6 @@ class AssignTeamMemberCommand implements  HasEventInterface, ValidationInterface
         return [
             'team_id' => $this->iTeamDatabaseId,
             'member_id' => $this->iMemberDatabaseId,
-            'schedule_id' => $this->iScheduleId,
         ];
     }
     

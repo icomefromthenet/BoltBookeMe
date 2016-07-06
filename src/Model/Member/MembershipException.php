@@ -1,12 +1,12 @@
 <?php
-namespace Bolt\Extension\IComeFromTheNet\BookMe\Bus\Exception;
+namespace Bolt\Extension\IComeFromTheNet\BookMe\Model\Member;
 
 use Bolt\Extension\IComeFromTheNet\BookMe\BookMeException;
-use Bolt\Extension\IComeFromTheNet\BookMe\Bus\Command\RegisterMemberCommand;
-use Bolt\Extension\IComeFromTheNet\BookMe\Bus\Command\RegisterTeamCommand;
-use Bolt\Extension\IComeFromTheNet\BookMe\Bus\Command\AssignTeamMemberCommand;
-use Bolt\Extension\IComeFromTheNet\BookMe\Bus\Command\WithdrawlTeamMemberCommand;
-use Bolt\Extension\IComeFromTheNet\BookMe\Bus\Command\RolloverTeamsCommand;
+use Bolt\Extension\IComeFromTheNet\BookMe\Model\Member\Command\RegisterMemberCommand;
+use Bolt\Extension\IComeFromTheNet\BookMe\Model\Member\Command\RegisterTeamCommand;
+use Bolt\Extension\IComeFromTheNet\BookMe\Model\Member\Command\AssignTeamMemberCommand;
+use Bolt\Extension\IComeFromTheNet\BookMe\Model\Member\Command\WithdrawlTeamMemberCommand;
+use Bolt\Extension\IComeFromTheNet\BookMe\Model\Member\Command\RolloverTeamsCommand;
 
 use League\Tactician\Exception\Exception as BusException;
 use Doctrine\DBAL\DBALException;
@@ -35,7 +35,7 @@ class MembershipException extends BookMeException implements BusException
     public static function hasFailedRegisterMember(RegisterMemberCommand $oCommand, DBALException $oDatabaseException)
     {
         $exception = new static(
-            'Unable to create new schedule member', 0 , $oDatabaseException
+            'Unable to create new schedule member with name '.$oCommand->getMemberName(), 0 , $oDatabaseException
         );
         
         $exception->oCommand = $oCommand;
@@ -51,7 +51,7 @@ class MembershipException extends BookMeException implements BusException
     public static function hasFailedRegisterTeam(RegisterTeamCommand $oCommand, DBALException $oDatabaseException)
     {
         $exception = new static(
-            'Unable to create new schedule team using timeslot at datbase id '.$oCommand->getTimeSlotId(), 0 , $oDatabaseException
+            'Unable to create new schedule team with name '.$oCommand->getTeamName(), 0 , $oDatabaseException
         );
         
         $exception->oCommand = $oCommand;
@@ -67,7 +67,7 @@ class MembershipException extends BookMeException implements BusException
     public static function hasFailedAssignTeamMember(AssignTeamMemberCommand $oCommand, DBALException $oDatabaseException = null)
     {
         $exception = new static(
-            'Unable to assign member at id '.$oCommand->getMemberId() .' to team at id '.$oCommand->getTeamId() .' For Schedule at id '.$oCommand->getScheduleId(), 0 , $oDatabaseException
+            'Unable to assign member at id '.$oCommand->getMemberId() .' to team at id '.$oCommand->getTeamId(), 0, $oDatabaseException
         );
         
         $exception->oCommand = $oCommand;
@@ -84,24 +84,7 @@ class MembershipException extends BookMeException implements BusException
     public static function hasFailedWithdrawlTeamMember(WithdrawlTeamMemberCommand $oCommand, DBALException $oDatabaseException = null)
     {
         $exception = new static(
-            'Unable to withdrawl member at id '.$oCommand->getMemberId() .' to team at id '.$oCommand->getTeamId() .' For Schedule at id '.$oCommand->getScheduleId(), 0 , $oDatabaseException
-        );
-        
-        $exception->oCommand = $oCommand;
-        
-        return $exception;
-    }
-    
-     /**
-     * @param mixed $invalidCommand
-     *
-     * @return static
-     */
-    public static function hasFailedRolloverTeam(RolloverTeamsCommand $oCommand, DBALException $oDatabaseException)
-    {
-        $exception = new static(
-            'Unable to rollover teams for calendar year '.$oCommand->getCalendarYearRollover()
-            , 0 , $oDatabaseException
+            'Unable to withdrawl member at id '.$oCommand->getMemberId() .' to team at id '.$oCommand->getTeamId(), 0, $oDatabaseException
         );
         
         $exception->oCommand = $oCommand;

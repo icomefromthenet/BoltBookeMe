@@ -56,6 +56,14 @@ class CustomValidationProvider implements ServiceProviderInterface
                  return $vtime == $ptime;
                 
             }, 'Calendar Year do not match');
+            
+            
+          Validator::addRule('alphaNumAndSpace', function($field, $value, array $params, array $fields) {
+              
+               return \preg_match('/^([a-z0-9 ])+$/i', $value);
+              
+          },'Must contain a-z or 0-9 or space character');
+          
         
     }
 }

@@ -5,6 +5,8 @@ use DateTime;
 use Bolt\Application;
 use Bolt\Extension\IComeFromTheNet\BookMe\BookMeException;
 use Bolt\Extension\IComeFromTheNet\BookMe\BookMeEvents;
+use Bolt\Extension\IComeFromTheNet\BookMe\Bus\Middleware\ValidationException;
+
 
 use Bolt\Extension\IComeFromTheNet\BookMe\Provider;
 
@@ -12,10 +14,10 @@ use Bolt\Extension\IComeFromTheNet\BookMe\Provider;
 use Bolt\Extension\IComeFromTheNet\BookMe\Model\Setup\Command\CalAddYearCommand;
 use Bolt\Extension\IComeFromTheNet\BookMe\Model\Setup\Command\SlotToggleStatusCommand;
 use Bolt\Extension\IComeFromTheNet\BookMe\Model\Setup\Command\SlotAddCommand;
+use Bolt\Extension\IComeFromTheNet\BookMe\Bus\Command\RegisterMemberCommand;
 
 /*
 use Bolt\Extension\IComeFromTheNet\BookMe\Model\Setup\Command\ToggleScheduleCarryCommand;
-use Bolt\Extension\IComeFromTheNet\BookMe\Bus\Command\RegisterMemberCommand;
 use Bolt\Extension\IComeFromTheNet\BookMe\Bus\Command\RegisterTeamCommand;
 use Bolt\Extension\IComeFromTheNet\BookMe\Bus\Command\AssignTeamMemberCommand;
 use Bolt\Extension\IComeFromTheNet\BookMe\Bus\Command\WithdrawlTeamMemberCommand;
@@ -165,13 +167,21 @@ class BookMeService
      * 
      * @return integer the membership database id
      * @access public
+     * @param string the members full name
      * @throws Bolt\Extension\IComeFromTheNet\BookMe\Bus\Exception\MembershipException if operation fails
      */
-    public function registerMembership()
+    public function registerMembership($sMemberName)
     {
-        $oCommand = new RegisterMemberCommand();
+        $oCommand = new RegisterMemberCommand($sMemberName);
+        
+        try {
         
         $this->getCommandBus()->handle($oCommand);
+       
+        } catch (ValidationException $e) {
+           
+            return $e->getValidationFailures();
+        }
        
         return $oCommand->getMemberId();
         
@@ -185,13 +195,21 @@ class BookMeService
      * @access public
      * @return integer  The new team database id
      * @throws Bolt\Extension\IComeFromTheNet\BookMe\Bus\Exception\MembershipException if operation fails
+     * @param string    $sTeamName   Team name
      * 
      */ 
-    public function registerTeam($iTimeslotDatabaseId)
+    public function registerTeam($sTeamName)
     {
-        $oCommand = new RegisterTeamCommand($iTimeslotDatabaseId);   
+        $oCommand = new RegisterTeamCommand($sTeamName);   
         
-        $this->getCommandBus()->handle($oCommand);
+         try {
+        
+            $this->getCommandBus()->handle($oCommand);
+       
+        } catch (ValidationException $e) {
+           
+            return $e->getValidationFailures();
+        }
        
         return $oCommand->getTeamId();
      

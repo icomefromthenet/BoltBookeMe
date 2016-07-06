@@ -28,6 +28,18 @@ use Bolt\Extension\IComeFromTheNet\BookMe\Model\Setup\Handler\SlotToggleStatusHa
 use Bolt\Extension\IComeFromTheNet\BookMe\Model\Setup\Command\RolloverTimeslotCommand;
 use Bolt\Extension\IComeFromTheNet\BookMe\Model\Setup\Handler\RolloverTimeslotHandler;
 
+use Bolt\Extension\IComeFromTheNet\BookMe\Model\Member\Command\RegisterMemberCommand;
+use Bolt\Extension\IComeFromTheNet\BookMe\Model\Member\Handler\RegisterMemberHandler;
+use Bolt\Extension\IComeFromTheNet\BookMe\Model\Member\Command\RegisterTeamCommand;
+use Bolt\Extension\IComeFromTheNet\BookMe\Model\Member\Handler\RegisterTeamHandler;
+use Bolt\Extension\IComeFromTheNet\BookMe\Model\Member\Command\AssignTeamMemberCommand;
+use Bolt\Extension\IComeFromTheNet\BookMe\Model\Member\Handler\AssignTeamMemberHandler;
+use Bolt\Extension\IComeFromTheNet\BookMe\Model\Member\Command\WithdrawlTeamMemberCommand;
+use Bolt\Extension\IComeFromTheNet\BookMe\Model\Member\Handler\WithdrawlTeamMemberHandler;
+
+
+
+
 /**
  * Bootstrap the Command Bus used for booking operations.
  *
@@ -72,8 +84,23 @@ class CommandBusProvider implements ServiceProviderInterface
             return new RolloverTimeslotHandler($aConfig['tablenames'],$container['db']);
         });
       
+        $app['bm.model.member.handler.addmember'] = $app->share(function(Application $container) use ($aConfig){
+            return new RegisterMemberHandler($aConfig['tablenames'],$container['db']);
+        });
       
-       $app['bm.leagueeventhandler'] = function($c) {
+        $app['bm.model.member.handler.addteam'] = $app->share(function(Application $container) use ($aConfig){
+            return new RegisterTeamHandler($aConfig['tablenames'],$container['db']);
+        });
+        
+        $app['bm.model.member.handler.assign'] = $app->share(function(Application $container) use ($aConfig){
+            return new AssignTeamMemberHandler($aConfig['tablenames'],$container['db']);
+        });
+        
+         $app['bm.model.member.handler.withdrawl'] = $app->share(function(Application $container) use ($aConfig){
+            return new WithdrawlTeamMemberHandler($aConfig['tablenames'],$container['db']);
+        });
+      
+        $app['bm.leagueeventhandler'] = function($c) {
             return new CustomHandler($c['dispatcher']);
         };
       
@@ -89,7 +116,10 @@ class CommandBusProvider implements ServiceProviderInterface
                 SlotAddCommand::class               => 'bm.model.setup.handler.addslot',
                 SlotToggleStatusCommand::class      => 'bm.model.setup.handler.toggleslot',
                 RolloverTimeslotCommand::class      => 'bm.model.setup.handler.rolloverslot',
-                
+                RegisterMemberCommand::class        => 'bm.model.member.handler.addmember',
+                RegisterTeamCommand::class          => 'bm.model.member.handler.addteam',
+                AssignTeamMemberCommand::class      => 'bm.model.member.handler.assign',
+                WithdrawlTeamMemberCommand::class   => 'bm.model.member.handler.withdrawl',
                 
                 
             ];

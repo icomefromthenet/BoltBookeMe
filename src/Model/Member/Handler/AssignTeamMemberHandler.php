@@ -1,20 +1,20 @@
 <?php
-namespace IComeFromTheNet\BookMe\Bus\Handler;
+namespace Bolt\Extension\IComeFromTheNet\BookMe\Model\Member\Handler;
 
 use Doctrine\DBAL\Connection;
 use Doctrine\DBAL\Types\Type;
 use Doctrine\DBAL\DBALException;
-use IComeFromTheNet\BookMe\Bus\Command\WithdrawlTeamMemberCommand;
-use IComeFromTheNet\BookMe\Bus\Exception\MembershipException;
+use Bolt\Extension\IComeFromTheNet\BookMe\Model\Member\Command\AssignTeamMemberCommand;
+use Bolt\Extension\IComeFromTheNet\BookMe\Model\Member\MembershipException;
 
 
 /**
- * Used to remove a member from a team 
+ * Used to assign a member to a team
  * 
  * @author Lewis Dyer <getintouch@icomefromthenet.com>
  * @since 1.0
  */ 
-class WithdrawlTeamMemberHandler 
+class AssignTeamMemberHandler 
 {
     
     /**
@@ -34,11 +34,10 @@ class WithdrawlTeamMemberHandler
         $this->oDatabaseAdapter = $oDatabaseAdapter;
         $this->aTableNames      = $aTableNames;
         
-        
     }
     
     
-    public function handle(WithdrawlTeamMemberCommand $oCommand)
+    public function handle(AssignTeamMemberCommand $oCommand)
     {
         
         $oDatabase              = $this->oDatabaseAdapter;
@@ -46,35 +45,31 @@ class WithdrawlTeamMemberHandler
         
         $iTeamId           = $oCommand->getTeamId();
         $iMemberId         = $oCommand->getMemberId();
-        $iScheduleId       = $oCommand->getScheduleId();
-  
-  
-        $sSql  =" DELETE FROM $sTeamMemberTableName ";
-        $sSql .=" WHERE `team_id`     = :iTeamId ";
-        $sSql .=" AND `schedule_id`   = :iScheduleId ";
-        $sSql .=" AND `membership_id` = :iMemberId ";      
-  
+        
+        
+        $sSql  = " INSERT INTO $sTeamMemberTableName (`team_id`, `membership_id`, `registered_date`) VALUES (:iTeamId, :iMemberId, NOW()) ";
+        
 	    try {
 	    
 	        $oIntegerType = Type::getType(Type::INTEGER);
 	    
 	        $aParams = [
 	                ':iTeamId'     => $iTeamId,
-	                ':iScheduleId' => $iScheduleId,
 	                ':iMemberId'   => $iMemberId,  
 	        ];
 	    
-	       $iRowsRemoved =  $oDatabase->executeUpdate($sSql, $aParams, [$oIntegerType, $oIntegerType, $oIntegerType]);
-
-            if(true === empty($iRowsRemoved)) {
-                throw new DBALException('Unable to find Team membership to remove');
+	        $iAffected = $oDatabase->executeUpdate($sSql, $aParams, [$oIntegerType, $oIntegerType]);
+            
+            if(true === empty($iAffected)) {
+                throw MembershipException::hasFailedAssignTeamMember($oCommand, $e);
             }
-
+                 
 	    }
 	    catch(DBALException $e) {
-	        throw MembershipException::hasFailedWithdrawlTeamMember($oCommand, $e);
+	        throw MembershipException::hasFailedAssignTeamMember($oCommand, $e);
 	    }
-    
+    	
+        
         
         return true;
     }

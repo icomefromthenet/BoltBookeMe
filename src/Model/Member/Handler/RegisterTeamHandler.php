@@ -1,11 +1,11 @@
 <?php
-namespace IComeFromTheNet\BookMe\Bus\Handler;
+namespace Bolt\Extension\IComeFromTheNet\BookMe\Model\Member\Handler;
 
 use Doctrine\DBAL\Connection;
 use Doctrine\DBAL\Types\Type;
 use Doctrine\DBAL\DBALException;
-use IComeFromTheNet\BookMe\Bus\Command\RegisterMemberCommand;
-use IComeFromTheNet\BookMe\Bus\Exception\MembershipException;
+use Bolt\Extension\IComeFromTheNet\BookMe\Model\Member\Command\RegisterTeamCommand;
+use Bolt\Extension\IComeFromTheNet\BookMe\Model\Member\MembershipException;
 
 
 /**
@@ -14,7 +14,7 @@ use IComeFromTheNet\BookMe\Bus\Exception\MembershipException;
  * @author Lewis Dyer <getintouch@icomefromthenet.com>
  * @since 1.0
  */ 
-class RegisterMemberHandler 
+class RegisterTeamHandler 
 {
     
     /**
@@ -38,28 +38,28 @@ class RegisterMemberHandler
     }
     
     
-    public function handle(RegisterMemberCommand $oCommand)
+    public function handle(RegisterTeamCommand $oCommand)
     {
         
-        $oDatabase          = $this->oDatabaseAdapter;
-        $sMemberTableName   = $this->aTableNames['bm_schedule_membership'];
-        $iMemberId           = null;
+        $oDatabase         = $this->oDatabaseAdapter;
+        $sTeamTableName    = $this->aTableNames['bm_schedule_team'];
+        $iTeamId           = null;
+        $sTeamName         = $oCommand->getTeamName();
         
-        
-        $sSql = " INSERT INTO $sMemberTableName (membership_id, registered_date) VALUES (null, NOW()) ";
+        $sSql = " INSERT INTO $sTeamTableName (team_id, team_name ,registered_date) VALUES (null, ? ,NOW()) ";
 
 	    
 	    try {
 	    
-	        $oDatabase->executeUpdate($sSql, [], []);
+	        $oDatabase->executeUpdate($sSql, [$sTeamName], [Type::getType(Type::STRING)]);
             
-            $iMemberId = $oDatabase->lastInsertId();
+            $iTeamId = $oDatabase->lastInsertId();
             
-            $oCommand->setMemberId($iMemberId);
+            $oCommand->setTeamId($iTeamId);
                  
 	    }
 	    catch(DBALException $e) {
-	        throw SlotFailedException::hasFailedRegisterMember($oCommand, $e);
+	        throw MembershipException::hasFailedRegisterTeam($oCommand, $e);
 	    }
     	
         
