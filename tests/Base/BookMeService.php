@@ -14,13 +14,15 @@ use Bolt\Extension\IComeFromTheNet\BookMe\Provider;
 use Bolt\Extension\IComeFromTheNet\BookMe\Model\Setup\Command\CalAddYearCommand;
 use Bolt\Extension\IComeFromTheNet\BookMe\Model\Setup\Command\SlotToggleStatusCommand;
 use Bolt\Extension\IComeFromTheNet\BookMe\Model\Setup\Command\SlotAddCommand;
-use Bolt\Extension\IComeFromTheNet\BookMe\Bus\Command\RegisterMemberCommand;
+use Bolt\Extension\IComeFromTheNet\BookMe\Model\Member\Command\RegisterMemberCommand;
+use Bolt\Extension\IComeFromTheNet\BookMe\Model\Member\Command\RegisterTeamCommand;
+use Bolt\Extension\IComeFromTheNet\BookMe\Model\Member\Command\WithdrawlTeamMemberCommand;
+use Bolt\Extension\IComeFromTheNet\BookMe\Model\Member\Command\AssignTeamMemberCommand;
+
 
 /*
 use Bolt\Extension\IComeFromTheNet\BookMe\Model\Setup\Command\ToggleScheduleCarryCommand;
-use Bolt\Extension\IComeFromTheNet\BookMe\Bus\Command\RegisterTeamCommand;
-use Bolt\Extension\IComeFromTheNet\BookMe\Bus\Command\AssignTeamMemberCommand;
-use Bolt\Extension\IComeFromTheNet\BookMe\Bus\Command\WithdrawlTeamMemberCommand;
+
 use Bolt\Extension\IComeFromTheNet\BookMe\Bus\Command\StartScheduleCommand;
 use Bolt\Extension\IComeFromTheNet\BookMe\Bus\Command\StopScheduleCommand;
 use Bolt\Extension\IComeFromTheNet\BookMe\Bus\Command\ResumeScheduleCommand;

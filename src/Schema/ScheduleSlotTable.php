@@ -22,10 +22,10 @@ class ScheduleSlotTable extends BaseTable
         $this->table->addColumn('is_available',  'boolean',   ['default' => true,'comment' =>'Is this available']);
         $this->table->addColumn('is_excluded',   'boolean',   ['default' => true,'comment' =>'Is this slot not available']);
         $this->table->addColumn('is_override',   'boolean',   ['default' => true,'comment' =>'Is this available otherwise']);
-        $this->table->addColumn('is_closed',     'boolean',   ['default' => true,'comment' =>'Is this slot closed']);
+        $this->table->addColumn('is_closed',     'boolean',   ['default' => false,'comment' =>'Is this slot closed']);
         
         $this->table->addColumn('slot_open',    'datetime',   ['notnull' => true, 'comment' =>'Start time of slot' ]);
-        $this->table->addColumn('slot_close',   'datetime',   ['notnull' => false,'comment' =>'End time of slot' ]);
+        $this->table->addColumn('slot_close',   'datetime',   ['notnull' => true,'comment' =>'End time of slot' ]);
         
         
     }

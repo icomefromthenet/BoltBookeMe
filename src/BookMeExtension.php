@@ -32,6 +32,11 @@ use Bolt\Extension\IComeFromTheNet\BookMe\Schema\ScheduleMembershipTable;
 use Bolt\Extension\IComeFromTheNet\BookMe\Schema\ScheduleTeamTable;
 use Bolt\Extension\IComeFromTheNet\BookMe\Schema\ScheduleTable;
 use Bolt\Extension\IComeFromTheNet\BookMe\Schema\ScheduleSlotTable;
+use Bolt\Extension\IComeFromTheNet\BookMe\Schema\BookingTable;
+use Bolt\Extension\IComeFromTheNet\BookMe\Schema\BookingConflictTable;
+use Bolt\Extension\IComeFromTheNet\BookMe\Schema\RuleTypeTable;
+use Bolt\Extension\IComeFromTheNet\BookMe\Schema\RuleTable;
+use Bolt\Extension\IComeFromTheNet\BookMe\Schema\RuleSeriesTable;
 
 // Load this extension composer dep autoloader
 // since bolt does not download packagist repo when does a merge
@@ -160,6 +165,12 @@ class BookMeExtension extends SimpleExtension
             'bm_schedule'           => ScheduleTable::class,  
             'bm_schedule_slot'      => ScheduleSlotTable::class,
             
+            'bm_booking'            => BookingTable::class,
+            'bm_booking_conflict'   => BookingConflictTable::class,
+            
+            'bm_rule_type'          => RuleTypeTable::class,
+            'bm_rule'               => RuleTable::class,
+            'bm_rule_series'        => RuleSeriesTable::class,
             
         ];
     }
@@ -306,6 +317,14 @@ class BookMeExtension extends SimpleExtension
                 ,'bm_schedule_team'       => 'bolt_bm_schedule_team'
                 ,'bm_schedule'            => 'bolt_bm_schedule'
                 ,'bm_schedule_slot'       => 'bolt_bm_schedule_slot'
+               
+               
+                ,'bm_booking'             => 'bolt_bm_booking'
+                ,'bm_booking_conflict'    => 'bolt_bm_booking_conflict'
+                
+                ,'bm_rule_type'           => 'bolt_bm_rule_type'
+                ,'bm_rule'                => 'bolt_bm_rule'
+                ,'bm_rule_series'         => 'bolt_bm_rule_series'
             ]
             
             

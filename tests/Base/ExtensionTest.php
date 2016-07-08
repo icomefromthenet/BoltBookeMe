@@ -73,6 +73,14 @@ class ExtensionTest extends BoltUnitTest
                 ,'bm_schedule'            => 'bolt_bm_schedule'
                 ,'bm_schedule_slot'       => 'bolt_bm_schedule_slot'
                 
+                
+                ,'bm_booking'             => 'bolt_bm_booking' 
+                ,'bm_booking_conflict'    => 'bolt_bm_booking_conflict'
+                
+                ,'bm_rule_type'           => 'bolt_bm_rule_type'
+                ,'bm_rule'                => 'bolt_bm_rule'
+                ,'bm_rule_series'         => 'bolt_bm_rule_series'
+                
             ]
        
        ];

@@ -37,6 +37,15 @@ use Bolt\Extension\IComeFromTheNet\BookMe\Model\Member\Handler\AssignTeamMemberH
 use Bolt\Extension\IComeFromTheNet\BookMe\Model\Member\Command\WithdrawlTeamMemberCommand;
 use Bolt\Extension\IComeFromTheNet\BookMe\Model\Member\Handler\WithdrawlTeamMemberHandler;
 
+use Bolt\Extension\IComeFromTheNet\BookMe\Model\Schedule\Command\StartScheduleCommand;
+use Bolt\Extension\IComeFromTheNet\BookMe\Model\Schedule\Handler\StartScheduleHandler;
+use Bolt\Extension\IComeFromTheNet\BookMe\Model\Schedule\Command\StopScheduleCommand;
+use Bolt\Extension\IComeFromTheNet\BookMe\Model\Schedule\Handler\StopScheduleHandler;
+use Bolt\Extension\IComeFromTheNet\BookMe\Model\Schedule\Command\ResumeScheduleCommand;
+use Bolt\Extension\IComeFromTheNet\BookMe\Model\Schedule\Handler\ResumeScheduleHandler;
+use Bolt\Extension\IComeFromTheNet\BookMe\Model\Schedule\Command\ToggleScheduleCarryCommand;
+use Bolt\Extension\IComeFromTheNet\BookMe\Model\Schedule\Handler\ToggleScheduleCarryHandler;
+
 
 
 
@@ -96,9 +105,27 @@ class CommandBusProvider implements ServiceProviderInterface
             return new AssignTeamMemberHandler($aConfig['tablenames'],$container['db']);
         });
         
-         $app['bm.model.member.handler.withdrawl'] = $app->share(function(Application $container) use ($aConfig){
+        $app['bm.model.member.handler.withdrawl'] = $app->share(function(Application $container) use ($aConfig){
             return new WithdrawlTeamMemberHandler($aConfig['tablenames'],$container['db']);
         });
+        
+        $app['bm.model.schedule.handler.start'] = $app->share(function(Application $container) use ($aConfig){
+            return new StartScheduleHandler($aConfig['tablenames'],$container['db']);
+        });
+        
+        $app['bm.model.schedule.handler.stop'] = $app->share(function(Application $container) use ($aConfig){
+            return new StopScheduleHandler($aConfig['tablenames'],$container['db']);
+        });
+      
+        $app['bm.model.schedule.handler.resume'] = $app->share(function(Application $container) use ($aConfig){
+            return new ResumeScheduleHandler($aConfig['tablenames'],$container['db']);
+        });
+        
+         $app['bm.model.schedule.handler.toggle'] = $app->share(function(Application $container) use ($aConfig){
+            return new ToggleScheduleCarryHandler($aConfig['tablenames'],$container['db']);
+        });
+        
+        
       
         $app['bm.leagueeventhandler'] = function($c) {
             return new CustomHandler($c['dispatcher']);
@@ -120,7 +147,10 @@ class CommandBusProvider implements ServiceProviderInterface
                 RegisterTeamCommand::class          => 'bm.model.member.handler.addteam',
                 AssignTeamMemberCommand::class      => 'bm.model.member.handler.assign',
                 WithdrawlTeamMemberCommand::class   => 'bm.model.member.handler.withdrawl',
-                
+                StartScheduleCommand::class         => 'bm.model.schedule.handler.start',
+                StopScheduleCommand::class          => 'bm.model.schedule.handler.stop',
+                ResumeScheduleCommand::class        => 'bm.model.schedule.handler.resume',
+                ToggleScheduleCarryCommand::class   => 'bm.model.schedule.handler.toggle',
                 
             ];
             
