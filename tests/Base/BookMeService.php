@@ -19,18 +19,18 @@ use Bolt\Extension\IComeFromTheNet\BookMe\Model\Member\Command\RegisterTeamComma
 use Bolt\Extension\IComeFromTheNet\BookMe\Model\Member\Command\WithdrawlTeamMemberCommand;
 use Bolt\Extension\IComeFromTheNet\BookMe\Model\Member\Command\AssignTeamMemberCommand;
 
+use Bolt\Extension\IComeFromTheNet\BookMe\Model\Schedule\Command\StartScheduleCommand;
+use Bolt\Extension\IComeFromTheNet\BookMe\Model\Schedule\Command\StopScheduleCommand;
+use Bolt\Extension\IComeFromTheNet\BookMe\Model\Schedule\Command\ResumeScheduleCommand;
+use Bolt\Extension\IComeFromTheNet\BookMe\Model\Schedule\Command\ToggleScheduleCarryCommand;
+
+
+use Bolt\Extension\IComeFromTheNet\BookMe\Model\Rule\Command\CreateRuleCommand;
+use Bolt\Extension\IComeFromTheNet\BookMe\Model\Rule\Command\AssignRuleToScheduleCommand;
+use Bolt\Extension\IComeFromTheNet\BookMe\Model\Rule\Command\RemoveRuleFromScheduleCommand;
+use Bolt\Extension\IComeFromTheNet\BookMe\Model\Rule\Command\RefreshScheduleCommand;
 
 /*
-use Bolt\Extension\IComeFromTheNet\BookMe\Model\Setup\Command\ToggleScheduleCarryCommand;
-
-use Bolt\Extension\IComeFromTheNet\BookMe\Bus\Command\StartScheduleCommand;
-use Bolt\Extension\IComeFromTheNet\BookMe\Bus\Command\StopScheduleCommand;
-use Bolt\Extension\IComeFromTheNet\BookMe\Bus\Command\ResumeScheduleCommand;
-use Bolt\Extension\IComeFromTheNet\BookMe\Bus\Command\CreateRuleCommand;
-use Bolt\Extension\IComeFromTheNet\BookMe\Bus\Command\AssignRuleToScheduleCommand;
-use Bolt\Extension\IComeFromTheNet\BookMe\Bus\Command\RemoveRuleFromScheduleCommand;
-use Bolt\Extension\IComeFromTheNet\BookMe\Bus\Command\RefreshScheduleCommand;
-
 use Bolt\Extension\IComeFromTheNet\BookMe\Bus\Command\TakeBookingCommand;
 use Bolt\Extension\IComeFromTheNet\BookMe\Bus\Command\ClearBookingCommand;
 */
@@ -73,8 +73,9 @@ class BookMeService
        $this->oContainer = $oContainer;
        $this->aConfig    = $aConfig;
        $aProviders = [
-            new Provider\CommandBusProvider($aConfig),
+            new Provider\CronParseProvider($aConfig),
             new Provider\CustomValidationProvider($aConfig),
+            new Provider\CommandBusProvider($aConfig),
         ];
         
         foreach($aProviders as $aProvider) {
@@ -231,7 +232,14 @@ class BookMeService
     {
         $oCommand = new StartScheduleCommand($iMemberDatabaseId, $iTimeSlotDatabbaseId, $iCalendarYear);  
         
-        $this->getCommandBus()->handle($oCommand);
+        try {
+        
+            $this->getCommandBus()->handle($oCommand);
+       
+        } catch (ValidationException $e) {
+           
+            return $e->getValidationFailures();
+        }
        
         return $oCommand->getScheduleId();
      
@@ -249,7 +257,14 @@ class BookMeService
     {
         $oCommand = new StopScheduleCommand($iScheduleDatabaseId, $oStopDate);  
         
-        $this->getCommandBus()->handle($oCommand);
+        try {
+        
+            $this->getCommandBus()->handle($oCommand);
+       
+        } catch (ValidationException $e) {
+           
+            return $e->getValidationFailures();
+        }
        
         return true;
    
@@ -264,7 +279,14 @@ class BookMeService
     {
         $oCommand = new ResumeScheduleCommand($iScheduleDatabaseId);  
         
-        $this->getCommandBus()->handle($oCommand);
+        try {
+        
+            $this->getCommandBus()->handle($oCommand);
+        
+        } catch (ValidationException $e) {
+           
+            return $e->getValidationFailures();
+        }
        
         return true;
         
@@ -289,7 +311,14 @@ class BookMeService
         
         $oCommand = new AssignTeamMemberCommand($iMemberDatabaseId, $iTeamDatabaseId, $iScheduleId);
         
-        $this->getCommandBus()->handle($oCommand);
+        try {
+        
+         $this->getCommandBus()->handle($oCommand);
+         
+         } catch (ValidationException $e) {
+           
+            return $e->getValidationFailures();
+        } 
          
         return true;
     }
@@ -307,7 +336,14 @@ class BookMeService
         
         $oCommand = new WithdrawlTeamMemberCommand($iMemberDatabaseId, $iTeamDatabaseId, $iScheduleId);
         
-        $this->getCommandBus()->handle($oCommand);
+        try {
+        
+            $this->getCommandBus()->handle($oCommand);
+        
+        } catch (ValidationException $e) {
+           
+            return $e->getValidationFailures();
+        } 
         
         return true;
     }

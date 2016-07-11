@@ -1,13 +1,13 @@
 <?php
-namespace IComeFromTheNet\BookMe\Bus\Handler;
+namespace Bolt\Extension\IComeFromTheNet\BookMe\Model\Rule\Handler;
 
 use Doctrine\DBAL\Connection;
 use Doctrine\DBAL\Types\Type;
 use Doctrine\DBAL\DBALException;
-use IComeFromTheNet\BookMe\Bus\Command\RolloverRulesCommand;
-use IComeFromTheNet\BookMe\Bus\Command\CreateRuleCommand;
-use IComeFromTheNet\BookMe\Bus\Exception\RuleException;
-use IComeFromTheNet\BookMe\Cron\CronToQuery;
+use Bolt\Extension\IComeFromTheNet\BookMe\Model\Rule\Command\RolloverRulesCommand;
+use Bolt\Extension\IComeFromTheNet\BookMe\Model\Rule\Command\CreateRuleCommand;
+use Bolt\Extension\IComeFromTheNet\BookMe\Model\Rule\RuleException;
+use Bolt\Extension\IComeFromTheNet\BookMe\Cron\CronToQuery;
 
 
 /**

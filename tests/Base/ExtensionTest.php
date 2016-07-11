@@ -80,6 +80,9 @@ class ExtensionTest extends BoltUnitTest
                 ,'bm_rule_type'           => 'bolt_bm_rule_type'
                 ,'bm_rule'                => 'bolt_bm_rule'
                 ,'bm_rule_series'         => 'bolt_bm_rule_series'
+                ,'bm_rule_schedule'       => 'bolt_bm_rule_schedule'
+                
+                ,'bm_tmp_rule_series'     => 'bm_tmp_rule_series'
                 
             ]
        
@@ -92,15 +95,11 @@ class ExtensionTest extends BoltUnitTest
         if ($this->app) {
             return $this->app;
         }
-        
        
         $app = parent::getApp(false);
-        
          
-       $aConfig = $this->getAppConfig();
+        $aConfig = $this->getAppConfig();
      
-       
-       
         $this->oTestAPI = new BookMeService($app, $aConfig);
         
         return $this->app = $app;
@@ -113,11 +112,20 @@ class ExtensionTest extends BoltUnitTest
         
         $this->getDatabaseAdapter()->exec('SET foreign_key_checks = 0');
         foreach($aConfig['tablenames'] as $sTable) {
-            $this->getDatabaseAdapter()->exec('truncate table '.$sTable);
+            
+            if($sTable !== 'bm_tmp_rule_series') {
+                $this->getDatabaseAdapter()->exec('truncate table '.$sTable);
+            }
         }
         
        $this->getDatabaseAdapter()->exec('SET foreign_key_checks = 1');
        
+       
+        $this->getDatabaseAdapter()->executeUpdate("INSERT INTO ".$aConfig['tablenames']['bm_rule_type'] ." (`rule_type_id`,`rule_code`,`is_work_day`,`is_exclusion`,`is_inc_override`) values (1,'workday',true,false,false)");
+        $this->getDatabaseAdapter()->executeUpdate("INSERT INTO ".$aConfig['tablenames']['bm_rule_type'] ." (`rule_type_id`,`rule_code`,`is_work_day`,`is_exclusion`,`is_inc_override`) values (2,'break',false,true,false)");
+        $this->getDatabaseAdapter()->executeUpdate("INSERT INTO ".$aConfig['tablenames']['bm_rule_type'] ." (`rule_type_id`,`rule_code`,`is_work_day`,`is_exclusion`,`is_inc_override`) values (3,'holiday',false,true,false)");
+        $this->getDatabaseAdapter()->executeUpdate("INSERT INTO ".$aConfig['tablenames']['bm_rule_type'] ." (`rule_type_id`,`rule_code`,`is_work_day`,`is_exclusion`,`is_inc_override`) values (4,'overtime',false,false,true)");
+
        
        $this->handleEventPostFixtureRun();
     }

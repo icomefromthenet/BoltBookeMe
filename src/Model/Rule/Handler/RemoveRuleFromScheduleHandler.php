@@ -1,23 +1,23 @@
 <?php
-namespace IComeFromTheNet\BookMe\Bus\Handler;
+namespace Bolt\Extension\IComeFromTheNet\BookMe\Model\Rule\Handler;
 
 use Doctrine\DBAL\Connection;
 use Doctrine\DBAL\Types\Type;
 use Doctrine\DBAL\DBALException;
-use IComeFromTheNet\BookMe\Bus\Command\AssignRuleToScheduleCommand;
-use IComeFromTheNet\BookMe\Bus\Exception\RuleException;
-use IComeFromTheNet\BookMe\Cron\CronToQuery;
+use Bolt\Extension\IComeFromTheNet\BookMe\Model\Rule\Command\RemoveRuleFromScheduleCommand;
+use Bolt\Extension\IComeFromTheNet\BookMe\Model\Rule\RuleException;
+use Bolt\Extension\IComeFromTheNet\BookMe\Model\Rule\Cron\CronToQuery;
 
 
 /**
- * Used to save link a rule to a schedule
+ * Used to unlink a rule from schedule
  * 
- * This handler will only save the link it will not refresh the schedule.
+ * This handler will only remove the link relationship it will not refresh the schedule.
  * 
  * @author Lewis Dyer <getintouch@icomefromthenet.com>
  * @since 1.0
  */ 
-class AssignRuleToScheduleHandler
+class RemoveRuleFromScheduleHandler
 {
     
     /**
@@ -40,7 +40,7 @@ class AssignRuleToScheduleHandler
     }
     
     
-    public function handle(AssignRuleToScheduleCommand $oCommand)
+    public function handle(RemoveRuleFromScheduleCommand $oCommand)
     {
        
         $oDatabase              = $this->oDatabaseAdapter;
@@ -51,26 +51,24 @@ class AssignRuleToScheduleHandler
             $aBind = [
                 ':iRuleId'       => $oCommand->getRuleId(),
                 ':iScheduleId'   => $oCommand->getScheduleId(),
-                ':bIsRolllover'  => $oCommand->getRolloverFlag(),
             ];
             
             $aType = [
               ':iRuleId'        => TYPE::INTEGER,
               ':iScheduleId'    => TYPE::INTEGER,
-              ':bIsRolllover'   => TYPE::BOOLEAN,
             ];
             
-            $sSql  =" INSERT INTO $sRuleScheduleTableName (`rule_id`, `schedule_id`, `is_rollover`) ";
-	        $sSql .=" VALUES (:iRuleId, :iScheduleId, :bIsRolllover)";   
+            $sSql  =" DELETE FROM $sRuleScheduleTableName ";
+	        $sSql .=" WHERE `rule_id` = :iRuleId AND `schedule_id` = :iScheduleId";   
 	      
 	        $iAffectedRows = $oDatabase->executeUpdate($sSql, $aBind, $aType);
 	        
 	        if($iAffectedRows !== 1) {
-	            throw RuleException::hasFailedAssignRuleToSchedule($oCommand, null);
+	            throw RuleException::hasFailedRemoveRuleFromSchedule($oCommand, null);
 	        }
 	        
         } catch (DBALException $e) {
-            throw hasFailedAssignRuleToSchedule($oCommand,$e);
+            throw hasFailedRemoveRuleFromSchedule($oCommand,$e);
         }
 	        
         return true;

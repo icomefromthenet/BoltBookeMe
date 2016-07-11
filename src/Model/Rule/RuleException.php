@@ -1,11 +1,11 @@
 <?php
-namespace Bolt\Extension\IComeFromTheNet\BookMe\Bus\Exception;
+namespace Bolt\Extension\IComeFromTheNet\BookMe\Model\Rule;
 
 use Bolt\Extension\IComeFromTheNet\BookMe\BookMeException;
-use Bolt\Extension\IComeFromTheNet\BookMe\Bus\Command\CreateRuleCommand;
-use Bolt\Extension\IComeFromTheNet\BookMe\Bus\Command\AssignRuleToScheduleCommand;
-use Bolt\Extension\IComeFromTheNet\BookMe\Bus\Command\RemoveRuleFromScheduleCommand;
-use Bolt\Extension\IComeFromTheNet\BookMe\Bus\Command\RolloverRulesCommand;
+use Bolt\Extension\IComeFromTheNet\BookMe\Model\Rule\Command\CreateRuleCommand;
+use Bolt\Extension\IComeFromTheNet\BookMe\Model\Rule\Command\AssignRuleToScheduleCommand;
+use Bolt\Extension\IComeFromTheNet\BookMe\Model\Rule\Command\RemoveRuleFromScheduleCommand;
+use Bolt\Extension\IComeFromTheNet\BookMe\Model\Rule\Command\RolloverRulesCommand;
 
 
 use League\Tactician\Exception\Exception as BusException;

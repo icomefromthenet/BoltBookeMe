@@ -46,8 +46,14 @@ use Bolt\Extension\IComeFromTheNet\BookMe\Model\Schedule\Handler\ResumeScheduleH
 use Bolt\Extension\IComeFromTheNet\BookMe\Model\Schedule\Command\ToggleScheduleCarryCommand;
 use Bolt\Extension\IComeFromTheNet\BookMe\Model\Schedule\Handler\ToggleScheduleCarryHandler;
 
-
-
+use Bolt\Extension\IComeFromTheNet\BookMe\Model\Rule\Command\AssignRuleToScheduleCommand;
+use Bolt\Extension\IComeFromTheNet\BookMe\Model\Rule\Command\RemoveRuleFromScheduleCommand;
+use Bolt\Extension\IComeFromTheNet\BookMe\Model\Rule\Command\CreateRuleCommand;
+use Bolt\Extension\IComeFromTheNet\BookMe\Model\Rule\Command\RolloverRulesCommand;
+use Bolt\Extension\IComeFromTheNet\BookMe\Model\Rule\Handler\AssignRuleToScheduleHandler;
+use Bolt\Extension\IComeFromTheNet\BookMe\Model\Rule\Handler\RemoveRuleFromScheduleHandler;
+use Bolt\Extension\IComeFromTheNet\BookMe\Model\Rule\Handler\CreateRuleHandler;
+use Bolt\Extension\IComeFromTheNet\BookMe\Model\Rule\Handler\RolloverRulesHandler;
 
 /**
  * Bootstrap the Command Bus used for booking operations.
@@ -121,10 +127,25 @@ class CommandBusProvider implements ServiceProviderInterface
             return new ResumeScheduleHandler($aConfig['tablenames'],$container['db']);
         });
         
-         $app['bm.model.schedule.handler.toggle'] = $app->share(function(Application $container) use ($aConfig){
+        $app['bm.model.schedule.handler.toggle'] = function(Application $container) use ($aConfig){
             return new ToggleScheduleCarryHandler($aConfig['tablenames'],$container['db']);
-        });
+        };
         
+        $app['bm.model.rule.handler.create'] = function(Application $container) use ($aConfig,$app){
+            return new CreateRuleHandler($aConfig['tablenames'],$container['db'], $app['bm.cronToQuery']);
+        };
+        
+        $app['bm.model.rule.handler.addschedule'] = function(Application $container) use ($aConfig){
+            return new AssignRuleToScheduleHandler($aConfig['tablenames'],$container['db']);
+        };
+        
+        $app['bm.model.rule.handler.removeschedule'] = function(Application $container) use ($aConfig){
+            return new RemoveRuleFromScheduleHandler($aConfig['tablenames'],$container['db']);
+        };
+        
+        $app['bm.model.rule.handler.rollover'] = function(Application $container) use ($aConfig){
+            return new RolloverRulesHandler($aConfig['tablenames'],$container['db'], $container['bm.cronToQuery']);
+        };
         
       
         $app['bm.leagueeventhandler'] = function($c) {
@@ -151,7 +172,10 @@ class CommandBusProvider implements ServiceProviderInterface
                 StopScheduleCommand::class          => 'bm.model.schedule.handler.stop',
                 ResumeScheduleCommand::class        => 'bm.model.schedule.handler.resume',
                 ToggleScheduleCarryCommand::class   => 'bm.model.schedule.handler.toggle',
-                
+                AssignRuleToScheduleCommand::class  => 'bm.model.rule.handler.addschedule',
+                CreateRuleCommand::class            => 'bm.model.rule.handler.create',
+                RemoveRuleFromScheduleCommand::class=> 'bm.model.rule.handler.removeschedule',
+                RolloverTimeslotCommand::class      => 'bm.model.rule.handler.rollover',
             ];
             
             

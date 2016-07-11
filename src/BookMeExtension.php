@@ -37,6 +37,7 @@ use Bolt\Extension\IComeFromTheNet\BookMe\Schema\BookingConflictTable;
 use Bolt\Extension\IComeFromTheNet\BookMe\Schema\RuleTypeTable;
 use Bolt\Extension\IComeFromTheNet\BookMe\Schema\RuleTable;
 use Bolt\Extension\IComeFromTheNet\BookMe\Schema\RuleSeriesTable;
+use Bolt\Extension\IComeFromTheNet\BookMe\Schema\RuleScheduleTable;
 
 // Load this extension composer dep autoloader
 // since bolt does not download packagist repo when does a merge
@@ -125,6 +126,7 @@ class BookMeExtension extends SimpleExtension
         $parentProviders = parent::getServiceProviders();
         $localProviders = [
             new Provider\CommandBusProvider($this->getConfig()),
+            new Provider\CronParseProvider($this->getConfig()),
             new Provider\CustomValidationProvider($this->getConfig()),
         ];
 
@@ -171,6 +173,7 @@ class BookMeExtension extends SimpleExtension
             'bm_rule_type'          => RuleTypeTable::class,
             'bm_rule'               => RuleTable::class,
             'bm_rule_series'        => RuleSeriesTable::class,
+            'bm_rule_schedule'      => RuleScheduleTable::class,
             
         ];
     }
@@ -325,6 +328,9 @@ class BookMeExtension extends SimpleExtension
                 ,'bm_rule_type'           => 'bolt_bm_rule_type'
                 ,'bm_rule'                => 'bolt_bm_rule'
                 ,'bm_rule_series'         => 'bolt_bm_rule_series'
+                ,'bm_rule_schedule'       => 'bolt_bm_rule_schedule'
+                
+                ,'bm_tmp_rule_series'     => 'bm_tmp_rule_series'
             ]
             
             
