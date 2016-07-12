@@ -1,5 +1,5 @@
 <?php
-namespace Bolt\Extension\Test\IComeFromTheNet\BookMe\Test;
+namespace Bolt\Extension\IComeFromTheNet\BookMe\Tests;
 
 use DateTime;
 use Doctrine\DBAL\Types\Type;

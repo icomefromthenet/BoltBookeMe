@@ -45,6 +45,8 @@ use Bolt\Extension\IComeFromTheNet\BookMe\Model\Schedule\Command\ResumeScheduleC
 use Bolt\Extension\IComeFromTheNet\BookMe\Model\Schedule\Handler\ResumeScheduleHandler;
 use Bolt\Extension\IComeFromTheNet\BookMe\Model\Schedule\Command\ToggleScheduleCarryCommand;
 use Bolt\Extension\IComeFromTheNet\BookMe\Model\Schedule\Handler\ToggleScheduleCarryHandler;
+use Bolt\Extension\IComeFromTheNet\BookMe\Model\Schedule\Command\RefreshScheduleCommand;
+use Bolt\Extension\IComeFromTheNet\BookMe\Model\Schedule\Handler\RefreshScheduleHandler;
 
 use Bolt\Extension\IComeFromTheNet\BookMe\Model\Rule\Command\AssignRuleToScheduleCommand;
 use Bolt\Extension\IComeFromTheNet\BookMe\Model\Rule\Command\RemoveRuleFromScheduleCommand;
@@ -131,6 +133,11 @@ class CommandBusProvider implements ServiceProviderInterface
             return new ToggleScheduleCarryHandler($aConfig['tablenames'],$container['db']);
         };
         
+        $app['bm.model.schedule.handler.refresh'] = function(Application $container) use ($aConfig){
+            return new RefreshScheduleHandler($aConfig['tablenames'],$container['db']);
+        };
+        
+        
         $app['bm.model.rule.handler.create'] = function(Application $container) use ($aConfig,$app){
             return new CreateRuleHandler($aConfig['tablenames'],$container['db'], $app['bm.cronToQuery']);
         };
@@ -172,6 +179,7 @@ class CommandBusProvider implements ServiceProviderInterface
                 StopScheduleCommand::class          => 'bm.model.schedule.handler.stop',
                 ResumeScheduleCommand::class        => 'bm.model.schedule.handler.resume',
                 ToggleScheduleCarryCommand::class   => 'bm.model.schedule.handler.toggle',
+                RefreshScheduleCommand::class       => 'bm.model.schedule.handler.refresh',
                 AssignRuleToScheduleCommand::class  => 'bm.model.rule.handler.addschedule',
                 CreateRuleCommand::class            => 'bm.model.rule.handler.create',
                 RemoveRuleFromScheduleCommand::class=> 'bm.model.rule.handler.removeschedule',

@@ -6,7 +6,6 @@ use Doctrine\DBAL\Types\Type;
 use Doctrine\DBAL\DBALException;
 use Bolt\Extension\IComeFromTheNet\BookMe\Model\Schedule\Command\RefreshScheduleCommand;
 use Bolt\Extension\IComeFromTheNet\BookMe\Model\Schedule\ScheduleException;
-use Bolt\Extension\IComeFromTheNet\BookMe\Cron\CronToQuery;
 
 
 /**

@@ -8,8 +8,8 @@ use Bolt\Extension\IComeFromTheNet\BookMe\Tests\Base\ExtensionTest;
 use Bolt\Extension\IComeFromTheNet\BookMe\Model\Schedule\Command\RefreshScheduleCommand;
 use Bolt\Extension\IComeFromTheNet\BookMe\Model\Rule\Command\AssignRuleToScheduleCommand;
 use Bolt\Extension\IComeFromTheNet\BookMe\Model\Rule\Command\RemoveRuleFromScheduleCommand;
-use Bolt\Extension\IComeFromTheNet\BookMe\Model\Member\AssignTeamMemberCommand;
-use Bolt\Extension\IComeFromTheNet\BookMe\Model\Member\WithdrawlTeamMemberCommand;
+use Bolt\Extension\IComeFromTheNet\BookMe\Model\Member\Command\AssignTeamMemberCommand;
+use Bolt\Extension\IComeFromTheNet\BookMe\Model\Member\Command\WithdrawlTeamMemberCommand;
 use Bolt\Extension\IComeFromTheNet\BookMe\Model\Schedule\ScheduleException;
 
 
@@ -151,10 +151,10 @@ class ScheduleAdvanceTest extends ExtensionTest
         $iTeamOneScheduleId= $this->aDatabaseId['schedule_member_one'];
         
         $this->ApplyRulesTest($iScheduleId, $iRuleOneId,$iRuleTwoId,$iRuleThreeId);
-        //$this->RefreshScheduleTest($iScheduleId);
-        //$this->RemoveFromScheduleTest($iScheduleId, $iRuleOneId);
-        //$this->AssignToTeam($iMemberOneId,$iTeamOneId,$iTeamOneScheduleId);
-        //$this->WithdrawlToTeam($iMemberOneId,$iTeamOneId,$iTeamOneScheduleId);
+        $this->RefreshScheduleTest($iScheduleId);
+        $this->RemoveFromScheduleTest($iScheduleId, $iRuleOneId);
+        $this->AssignToTeam($iMemberOneId,$iTeamOneId);
+        $this->WithdrawlToTeam($iMemberOneId,$iTeamOneId);
        
     }
     
@@ -211,7 +211,7 @@ class ScheduleAdvanceTest extends ExtensionTest
         $oContainer  = $this->getContainer();
         $oDatabase   = $this->getDatabaseAdapter();
         
-        $oCommandBus = $oContainer->getCommandBus(); 
+        $oCommandBus = $this->getCommandBus(); 
        
         $oCommand = new RefreshScheduleCommand($iScheduleId);
        
@@ -234,7 +234,7 @@ class ScheduleAdvanceTest extends ExtensionTest
         $oContainer  = $this->getContainer();
         $oDatabase   = $this->getDatabaseAdapter();
         
-        $oCommandBus = $oContainer->getCommandBus(); 
+        $oCommandBus = $this->getCommandBus(); 
        
         $oCommand = new RemoveRuleFromScheduleCommand($iScheduleId, $iRuleId);
        
@@ -245,43 +245,43 @@ class ScheduleAdvanceTest extends ExtensionTest
     }
     
     
-    public function AssignToTeam($iMemberId, $iTeamId, $iScheduleId)
+    public function AssignToTeam($iMemberId, $iTeamId)
     {
         $oContainer  = $this->getContainer();
         $oDatabase   = $this->getDatabaseAdapter();
         
-        $oCommandBus = $oContainer->getCommandBus(); 
+        $oCommandBus = $this->getCommandBus(); 
        
-        $oCommand = new AssignTeamMemberCommand($iMemberId, $iTeamId, $iScheduleId);
+        $oCommand = new AssignTeamMemberCommand($iMemberId, $iTeamId);
          
         $this->getCommandBus()->handle($oCommand);
         
         
         $iInserted = (integer) $oDatabase->fetchColumn('SELECT count(*) 
                                                 FROM bolt_bm_schedule_team_members 
-                                                WHERE schedule_id = ? and membership_id = ? and team_id = ? 
-                                                ',[$iScheduleId,$iMemberId,$iTeamId],0);
+                                                WHERE membership_id = ? and team_id = ? 
+                                                ',[$iMemberId,$iTeamId],0);
         
         $this->assertEquals(1,$iInserted);
         
     }
     
-    public function WithdrawlToTeam($iMemberId, $iTeamId, $iScheduleId)
+    public function WithdrawlToTeam($iMemberId, $iTeamId)
     {
         $oContainer  = $this->getContainer();
         $oDatabase   = $this->getDatabaseAdapter();
         
-        $oCommandBus = $oContainer->getCommandBus(); 
+        $oCommandBus = $this->getCommandBus(); 
        
-        $oCommand = new WithdrawlTeamMemberCommand($iMemberId, $iTeamId, $iScheduleId);
+        $oCommand = new WithdrawlTeamMemberCommand($iMemberId, $iTeamId);
          
         $this->getCommandBus()->handle($oCommand);
         
         
         $bInserted = (integer) $oDatabase->fetchColumn('SELECT count(*) 
                                                 FROM bolt_bm_schedule_team_members 
-                                                WHERE schedule_id = ? and membership_id = ? and team_id = ? 
-                                                ',[$iScheduleId,$iMemberId,$iTeamId],0);
+                                                WHERE membership_id = ? and team_id = ? 
+                                                ',[$iMemberId,$iTeamId],0);
         
         $this->assertEquals(0,$bInserted);
         

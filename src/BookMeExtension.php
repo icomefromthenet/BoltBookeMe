@@ -32,6 +32,7 @@ use Bolt\Extension\IComeFromTheNet\BookMe\Schema\ScheduleMembershipTable;
 use Bolt\Extension\IComeFromTheNet\BookMe\Schema\ScheduleTeamTable;
 use Bolt\Extension\IComeFromTheNet\BookMe\Schema\ScheduleTable;
 use Bolt\Extension\IComeFromTheNet\BookMe\Schema\ScheduleSlotTable;
+use Bolt\Extension\IComeFromTheNet\BookMe\Schema\ScheduleTeamMemberTable;
 use Bolt\Extension\IComeFromTheNet\BookMe\Schema\BookingTable;
 use Bolt\Extension\IComeFromTheNet\BookMe\Schema\BookingConflictTable;
 use Bolt\Extension\IComeFromTheNet\BookMe\Schema\RuleTypeTable;
@@ -166,6 +167,7 @@ class BookMeExtension extends SimpleExtension
             'bm_schedule_team'      => ScheduleTeamTable::class,
             'bm_schedule'           => ScheduleTable::class,  
             'bm_schedule_slot'      => ScheduleSlotTable::class,
+            'bm_schedule_team_members' => ScheduleTeamMemberTable::class,
             
             'bm_booking'            => BookingTable::class,
             'bm_booking_conflict'   => BookingConflictTable::class,
@@ -320,6 +322,7 @@ class BookMeExtension extends SimpleExtension
                 ,'bm_schedule_team'       => 'bolt_bm_schedule_team'
                 ,'bm_schedule'            => 'bolt_bm_schedule'
                 ,'bm_schedule_slot'       => 'bolt_bm_schedule_slot'
+                ,'bm_schedule_team_members' => 'bolt_bm_schedule_team_members'
                
                
                 ,'bm_booking'             => 'bolt_bm_booking'
