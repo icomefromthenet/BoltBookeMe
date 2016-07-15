@@ -13,12 +13,17 @@ class AppointmentTable extends BaseTable
     protected function addColumns()
     {
         
-        $this->table->addOption('comment','Contain details of bookings that are in conflict due to rule changes');
+        $this->table->addOption('comment','Container for customer and booking');
         
-        $this->table->addColumn('booking_id',   'integer',   ['notnull' => true,'comment' =>'Table Primary key', 'autoincrement' => true, 'unsigned' => true ]);
-        $this->table->addColumn('known_date',  'datetime',   ['notnull' => true,'comment' =>'Date Booking Taken' ]);
+        $this->table->addColumn('appointment_id',   'integer',   ['notnull' => true,'comment' =>'Table Primary key', 'autoincrement' => true, 'unsigned' => true ]);
         
+        $this->table->addColumn('customer_id',   'integer',   ['notnull' => false,'comment' =>'Fk to the customer table', 'unsigned' => true ]);
         
+        $this->table->addColumn('booking_id',   'integer',   ['notnull' => false,'comment' =>'Fk to the current booking', 'unsigned' => true ]);
+        
+        $this->table->addColumn('instructions',   'text',   ['notnull' => false,'comment' =>'Fk to the current booking' ]);
+        
+        $this->table->addColumn('status_code',    'string', ['notnull' => true, 'comment' => 'Status Code from status table', 'length' => 2]);
         
     }
 
@@ -35,7 +40,7 @@ class AppointmentTable extends BaseTable
      */
     protected function setPrimaryKey()
     {
-        $this->table->setPrimaryKey(['booking_id']);
+        $this->table->setPrimaryKey(['appointment_id']);
     }
     
     /**
@@ -47,6 +52,13 @@ class AppointmentTable extends BaseTable
        
        $this->table->addForeignKeyConstraint($sBookingTableName, ['booking_id'], ['booking_id'], [], null);
        
+       $sStatusTableName = $this->tablePrefix .'bm_appointment_status';
+       
+       $this->table->addForeignKeyConstraint($sStatusTableName, ['status_code'], ['status_code'], [], null);
+       
+       $sCustomerTableName = $this->tablePrefix .'bm_customer';
+       
+       $this->table->addForeignKeyConstraint($sCustomerTableName, ['customer_id'], ['customer_id'], [], null);
     }
 }
 /* End of Table */

@@ -17,7 +17,7 @@ class ScheduleSlotTable extends BaseTable
         
         $this->table->addColumn('schedule_id',   'integer',   ['notnull' => true,'comment' =>'Table Primary key', 'autoincrement' => true, 'unsigned' => true ]);
         
-        $this->table->addColumn('booking_id',    'integer',  ['notnull' => true,'comment' =>'FK to Booking Table', 'unsigned' => true ]);
+        $this->table->addColumn('booking_id',    'integer',   ['notnull' => false,'comment' =>'FK to Booking Table', 'unsigned' => true ]);
         
         $this->table->addColumn('is_available',  'boolean',   ['default' => true,'comment' =>'Is this available']);
         $this->table->addColumn('is_excluded',   'boolean',   ['default' => true,'comment' =>'Is this slot not available']);

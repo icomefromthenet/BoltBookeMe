@@ -1,12 +1,11 @@
 <?php
-namespace Bolt\Extension\IComeFromTheNet\BookMe\Bus\Exception;
-
-use Bolt\Extension\IComeFromTheNet\BookMe\BookMeException;
-use Bolt\Extension\IComeFromTheNet\BookMe\Bus\Command\TakeBookingCommand;
-use Bolt\Extension\IComeFromTheNet\BookMe\Bus\Command\ClearBookingCommand;
+namespace Bolt\Extension\IComeFromTheNet\BookMe\Model\Booking;
 
 use League\Tactician\Exception\Exception as BusException;
 use Doctrine\DBAL\DBALException;
+use Bolt\Extension\IComeFromTheNet\BookMe\BookMeException;
+use Bolt\Extension\IComeFromTheNet\BookMe\Model\Booking\Command\TakeBookingCommand;
+use Bolt\Extension\IComeFromTheNet\BookMe\Model\Booking\Command\ClearBookingCommand;
 
 
 /**

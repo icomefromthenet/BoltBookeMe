@@ -1,11 +1,11 @@
 <?php
-namespace IComeFromTheNet\BookMe\Bus\Handler;
+namespace Bolt\Extension\IComeFromTheNet\BookMe\Model\Booking\Handler;
 
 use Doctrine\DBAL\Connection;
 use Doctrine\DBAL\Types\Type;
 use Doctrine\DBAL\DBALException;
-use IComeFromTheNet\BookMe\Bus\Command\TakeBookingCommand;
-use IComeFromTheNet\BookMe\Bus\Exception\BookingException;
+use Bolt\Extension\IComeFromTheNet\BookMe\Model\Booking\Command\TakeBookingCommand;
+use Bolt\Extension\IComeFromTheNet\BookMe\Model\Booking\BookingException;
 
 
 /**
@@ -87,7 +87,7 @@ class TakeBookingHandler
           
         $sCreateBookSql = implode(PHP_EOL,$aCreateBookSql);
       
-        
+        //var_dump($sCreateBookSql);
         
         try {
             

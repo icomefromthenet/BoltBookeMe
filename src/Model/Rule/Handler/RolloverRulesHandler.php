@@ -7,7 +7,7 @@ use Doctrine\DBAL\DBALException;
 use Bolt\Extension\IComeFromTheNet\BookMe\Model\Rule\Command\RolloverRulesCommand;
 use Bolt\Extension\IComeFromTheNet\BookMe\Model\Rule\Command\CreateRuleCommand;
 use Bolt\Extension\IComeFromTheNet\BookMe\Model\Rule\RuleException;
-use Bolt\Extension\IComeFromTheNet\BookMe\Cron\CronToQuery;
+use Bolt\Extension\IComeFromTheNet\BookMe\Model\Rule\Cron\CronToQuery;
 
 
 /**

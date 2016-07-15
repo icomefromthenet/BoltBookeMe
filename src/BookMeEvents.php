@@ -102,10 +102,41 @@ final class BookMeEvents
      */ 
     const RULE_CREATE = 'bookme.rule.create';
     
-    
     /**
      * When a rule is removed
      */ 
     const RULE_REMOVE = 'bookme.rule.remove';
+    
+    /**
+     * When a customer is created
+     */ 
+    const CUSTOMER_CREATE = 'bookme.customer.create';
+    
+    /**
+     * When a customer is created
+     */ 
+    const CUSTOMER_UPDATE = 'bookme.customer.update';
+ 
+    /**
+     * When a Appointment is created
+     */ 
+    const APPT_CREATED   = 'bookme.appointment.created';
+    
+    /**
+     * When a appointment added to waitinglist
+     */ 
+    const APPT_WAITINGLISTED = 'bookme.appointment.waitinglisted';
+    
+    /**
+     * When an booking assigned to appointment
+     */ 
+    const APPT_ASSIGNED = 'bookme.appointment.assigned';
+ 
+    /**
+     * When an appointment been finished
+     */ 
+    const APPT_COMPLETED = 'bookme.appointment.completed';  
+    
+    
 }
 /* End of File */

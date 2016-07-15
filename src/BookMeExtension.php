@@ -39,6 +39,10 @@ use Bolt\Extension\IComeFromTheNet\BookMe\Schema\RuleTypeTable;
 use Bolt\Extension\IComeFromTheNet\BookMe\Schema\RuleTable;
 use Bolt\Extension\IComeFromTheNet\BookMe\Schema\RuleSeriesTable;
 use Bolt\Extension\IComeFromTheNet\BookMe\Schema\RuleScheduleTable;
+use Bolt\Extension\IComeFromTheNet\BookMe\Schema\CustomerTable;
+use Bolt\Extension\IComeFromTheNet\BookMe\Schema\ActivityTable;
+use Bolt\Extension\IComeFromTheNet\BookMe\Schema\AppointmentStatusTable;
+use Bolt\Extension\IComeFromTheNet\BookMe\Schema\AppointmentTable;
 
 // Load this extension composer dep autoloader
 // since bolt does not download packagist repo when does a merge
@@ -176,6 +180,11 @@ class BookMeExtension extends SimpleExtension
             'bm_rule'               => RuleTable::class,
             'bm_rule_series'        => RuleSeriesTable::class,
             'bm_rule_schedule'      => RuleScheduleTable::class,
+            
+            'bm_customer'           => CustomerTable::class,
+            'bm_activity'           => ActivityTable::class,
+            'bm_appointment_status' => AppointmentStatusTable::class,
+            'bm_appointment'        => AppointmentTable::class,
             
         ];
     }
@@ -334,6 +343,11 @@ class BookMeExtension extends SimpleExtension
                 ,'bm_rule_schedule'       => 'bolt_bm_rule_schedule'
                 
                 ,'bm_tmp_rule_series'     => 'bm_tmp_rule_series'
+                
+                ,'bm_customer'            => 'bolt_bm_customer'
+                ,'bm_activity'            => 'bolt_bm_activity'
+                ,'bm_appointment_status'  => 'bolt_bm_appointment_status'
+                ,'bm_appointment'         => 'bolt_bm_appointment'
             ]
             
             

@@ -23,17 +23,19 @@ use Bolt\Extension\IComeFromTheNet\BookMe\Model\Schedule\Command\StartScheduleCo
 use Bolt\Extension\IComeFromTheNet\BookMe\Model\Schedule\Command\StopScheduleCommand;
 use Bolt\Extension\IComeFromTheNet\BookMe\Model\Schedule\Command\ResumeScheduleCommand;
 use Bolt\Extension\IComeFromTheNet\BookMe\Model\Schedule\Command\ToggleScheduleCarryCommand;
+use Bolt\Extension\IComeFromTheNet\BookMe\Model\Schedule\Command\RefreshScheduleCommand;
 
 
 use Bolt\Extension\IComeFromTheNet\BookMe\Model\Rule\Command\CreateRuleCommand;
 use Bolt\Extension\IComeFromTheNet\BookMe\Model\Rule\Command\AssignRuleToScheduleCommand;
 use Bolt\Extension\IComeFromTheNet\BookMe\Model\Rule\Command\RemoveRuleFromScheduleCommand;
-use Bolt\Extension\IComeFromTheNet\BookMe\Model\Rule\Command\RefreshScheduleCommand;
 
-/*
-use Bolt\Extension\IComeFromTheNet\BookMe\Bus\Command\TakeBookingCommand;
-use Bolt\Extension\IComeFromTheNet\BookMe\Bus\Command\ClearBookingCommand;
-*/
+
+use Bolt\Extension\IComeFromTheNet\BookMe\Model\Booking\Command\TakeBookingCommand;
+use Bolt\Extension\IComeFromTheNet\BookMe\Model\Booking\Command\ClearBookingCommand;
+
+
+
 /**
  * Core Library Service.
  * 
@@ -315,7 +317,7 @@ class BookMeService
         
          $this->getCommandBus()->handle($oCommand);
          
-         } catch (ValidationException $e) {
+        } catch (ValidationException $e) {
            
             return $e->getValidationFailures();
         } 
@@ -369,8 +371,13 @@ class BookMeService
         
         $oCommand = new CreateRuleCommand($oStartDate, $oEndDate, 1, $iTimeslotDatabaseId, $iOpeningSlot, $iClosingSlot, '*', '*', '*', true);
         
+        try {
+            $this->getCommandBus()->handle($oCommand);
         
-        $this->getCommandBus()->handle($oCommand);
+        } catch (ValidationException $e) {
+           
+            return $e->getValidationFailures();
+        } 
         
         return $oCommand->getRuleId();
         
@@ -392,8 +399,14 @@ class BookMeService
     {
         $oCommand = new CreateRuleCommand($oStartFromDate, $oEndtAtDate, 1, $iTimeslotDatabaseId, $iOpeningSlot, $iClosingSlot, $sRepeatDayofweek,$sRepeatDayofmonth,$sRepeatMonth,false);
         
+        try {
+             $this->getCommandBus()->handle($oCommand);
         
-        $this->getCommandBus()->handle($oCommand);
+        } catch (ValidationException $e) {
+           
+            return $e->getValidationFailures();
+        } 
+       
         
         return $oCommand->getRuleId();
         
@@ -414,8 +427,12 @@ class BookMeService
         
         $oCommand = new CreateRuleCommand($oStartDate, $oEndDate, 2, $iTimeslotDatabaseId, $iOpeningSlot, $iClosingSlot, '*', '*', '*', true);
         
-        
-        $this->getCommandBus()->handle($oCommand);
+        try {
+            $this->getCommandBus()->handle($oCommand);
+        } catch (ValidationException $e) {
+           
+            return $e->getValidationFailures();
+        } 
         
         return $oCommand->getRuleId();
         
@@ -438,8 +455,14 @@ class BookMeService
         
         $oCommand = new CreateRuleCommand($oStartFromDate, $oEndtAtDate, 2, $iTimeslotDatabaseId, $iOpeningSlot, $iClosingSlot, $sRepeatDayofweek,$sRepeatDayofmonth,$sRepeatMonth,false);
         
-        
-        $this->getCommandBus()->handle($oCommand);
+        try {
+            
+            $this->getCommandBus()->handle($oCommand);
+            
+        } catch (ValidationException $e) {
+           
+            return $e->getValidationFailures();
+        } 
         
         return $oCommand->getRuleId();
         
@@ -460,8 +483,14 @@ class BookMeService
         
         $oCommand = new CreateRuleCommand($oStartDate, $oEndDate, 3, $iTimeslotDatabaseId, $iOpeningSlot, $iClosingSlot, '*', '*', '*', true);
         
-        
-        $this->getCommandBus()->handle($oCommand);
+        try {
+            
+            $this->getCommandBus()->handle($oCommand);
+            
+        } catch (ValidationException $e) {
+           
+            return $e->getValidationFailures();
+        } 
         
         return $oCommand->getRuleId();
     }
@@ -484,8 +513,14 @@ class BookMeService
         
         $oCommand = new CreateRuleCommand($oStartFromDate, $oEndtAtDate, 3, $iTimeslotDatabaseId, $iOpeningSlot, $iClosingSlot, $sRepeatDayofweek,$sRepeatDayofmonth,$sRepeatMonth,false);
         
-        
-        $this->getCommandBus()->handle($oCommand);
+        try {
+            
+            $this->getCommandBus()->handle($oCommand);
+            
+        } catch (ValidationException $e) {
+           
+            return $e->getValidationFailures();
+        } 
         
         return $oCommand->getRuleId();
         
@@ -506,8 +541,14 @@ class BookMeService
         
         $oCommand = new CreateRuleCommand($oStartDate, $oEndDate, 4, $iTimeslotDatabaseId, $iOpeningSlot, $iClosingSlot, '*', '*', '*', true);
         
-        
-        $this->getCommandBus()->handle($oCommand);
+        try {
+            
+            $this->getCommandBus()->handle($oCommand);
+            
+        } catch (ValidationException $e) {
+           
+            return $e->getValidationFailures();
+        } 
         
         return $oCommand->getRuleId();
         
@@ -530,8 +571,14 @@ class BookMeService
         
         $oCommand = new CreateRuleCommand($oStartFromDate, $oEndtAtDate, 4, $iTimeslotDatabaseId, $iOpeningSlot, $iClosingSlot, $sRepeatDayofweek,$sRepeatDayofmonth,$sRepeatMonth,false);
         
+        try {
         
-        $this->getCommandBus()->handle($oCommand);
+            $this->getCommandBus()->handle($oCommand);
+            
+        } catch (ValidationException $e) {
+           
+            return $e->getValidationFailures();
+        } 
         
         return $oCommand->getRuleId();
         
@@ -551,7 +598,15 @@ class BookMeService
     {
         $oCommand = new AssignRuleToScheduleCommand($iScheduleDatabaseId,$iRuleDatabaseId,$bRolloverRule);    
         
-        $this->getCommandBus()->handle($oCommand);
+        
+        try {
+            
+            $this->getCommandBus()->handle($oCommand);
+            
+        } catch (ValidationException $e) {
+           
+            return $e->getValidationFailures();
+        } 
         
         return true;
     }
@@ -568,7 +623,14 @@ class BookMeService
     {
         $oCommand = new RemoveRuleFromScheduleCommand($iScheduleDatabaseId, $iRuleDatabaseId);
         
-        $this->getCommandBus()->handle($oCommand);
+        
+        try {
+            $this->getCommandBus()->handle($oCommand);
+        
+        } catch (ValidationException $e) {
+           
+            return $e->getValidationFailures();
+        } 
         
         return true;
     }
@@ -585,7 +647,12 @@ class BookMeService
     {
         $oCommand = new RefreshScheduleCommand($iScheduleDatabaseId);
         
-        $this->getCommandBus()->handle($oCommand);
+        try {
+            $this->getCommandBus()->handle($oCommand);
+        } catch (ValidationException $e) {
+           
+            return $e->getValidationFailures();
+        } 
         
         return true;
     }
@@ -609,9 +676,15 @@ class BookMeService
      */ 
     public function takeBooking($iScheduleId, DateTime $oOpeningSlot, DateTime $oClosingSlot)
     {
-         $oCommand = new TakeBookingCommand($iScheduleId, $oOpeningSlot, $oClosingSlot);
+        $oCommand = new TakeBookingCommand($iScheduleId, $oOpeningSlot, $oClosingSlot);
         
-        $this->getCommandBus()->handle($oCommand);
+        try {
+            
+            $this->getCommandBus()->handle($oCommand);
+        } catch (ValidationException $e) {
+           
+            return $e->getValidationFailures();
+        } 
         
         return $oCommand->getBookingId();
     }
@@ -630,7 +703,12 @@ class BookMeService
     {
         $oCommand = new ClearBookingCommand($iBookingId);
         
-        $this->getCommandBus()->handle($oCommand);
+        try {
+            $this->getCommandBus()->handle($oCommand);
+        } catch (ValidationException $e) {
+           
+            return $e->getValidationFailures();
+        } 
         
         return true;
     }

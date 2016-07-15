@@ -1,5 +1,5 @@
 <?php
-namespace IComeFromTheNet\BookMe\Test;
+namespace  Bolt\Extension\IComeFromTheNet\BookMe\Tests;
 
 use Doctrine\DBAL\Types\Type;
 use Bolt\Extension\IComeFromTheNet\BookMe\Tests\Base\ExtensionTest;

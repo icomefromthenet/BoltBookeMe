@@ -1,11 +1,11 @@
 <?php
-namespace Bolt\Extension\IComeFromTheNet\BookMe\Bus\Decorator;
+namespace Bolt\Extension\IComeFromTheNet\BookMe\Model\Booking\Decorator;
 
 use Doctrine\DBAL\Connection;
 use Doctrine\DBAL\Types\Type;
 use Doctrine\DBAL\DBALException;
-use Bolt\Extension\IComeFromTheNet\BookMe\Bus\Command\TakeBookingCommand;
-use Bolt\Extension\IComeFromTheNet\BookMe\Bus\Exception\BookingException;
+use Bolt\Extension\IComeFromTheNet\BookMe\Model\Booking\Command\TakeBookingCommand;
+use Bolt\Extension\IComeFromTheNet\BookMe\Model\Booking\BookingException;
 
 
 /**

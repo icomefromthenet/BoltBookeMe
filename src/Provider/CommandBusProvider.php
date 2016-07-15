@@ -57,6 +57,21 @@ use Bolt\Extension\IComeFromTheNet\BookMe\Model\Rule\Handler\RemoveRuleFromSched
 use Bolt\Extension\IComeFromTheNet\BookMe\Model\Rule\Handler\CreateRuleHandler;
 use Bolt\Extension\IComeFromTheNet\BookMe\Model\Rule\Handler\RolloverRulesHandler;
 
+use Bolt\Extension\IComeFromTheNet\BookMe\Model\Booking\Command\ClearBookingCommand;
+use Bolt\Extension\IComeFromTheNet\BookMe\Model\Booking\Handler\ClearBookingHandler;
+use Bolt\Extension\IComeFromTheNet\BookMe\Model\Booking\Command\LookBookingConflictsCommand;
+use Bolt\Extension\IComeFromTheNet\BookMe\Model\Booking\Handler\LookBookingConflictsHandler;
+use Bolt\Extension\IComeFromTheNet\BookMe\Model\Booking\Command\TakeBookingCommand;
+use Bolt\Extension\IComeFromTheNet\BookMe\Model\Booking\Handler\TakeBookingHandler;
+use Bolt\Extension\IComeFromTheNet\BookMe\Model\Booking\Decorator\MaxBookingsDecorator;
+
+use Bolt\Extension\IComeFromTheNet\BookMe\Model\Customer\Command\CreateCustomerCommand;
+use Bolt\Extension\IComeFromTheNet\BookMe\Model\Customer\Handler\CreateCustomerHandler;
+
+use Bolt\Extension\IComeFromTheNet\BookMe\Model\Customer\Command\ChangeCustomerCommand;
+use Bolt\Extension\IComeFromTheNet\BookMe\Model\Customer\Handler\ChangeCustomerHandler;
+
+
 /**
  * Bootstrap the Command Bus used for booking operations.
  *
@@ -154,6 +169,27 @@ class CommandBusProvider implements ServiceProviderInterface
             return new RolloverRulesHandler($aConfig['tablenames'],$container['db'], $container['bm.cronToQuery']);
         };
         
+        $app['bm.model.booking.handler.take'] = function(Application $container) use ($aConfig){
+            return new MaxBookingsDecorator(new TakeBookingHandler($aConfig['tablenames'],$container['db']), $aConfig['tablenames'],$container['db']);
+        };
+        
+        $app['bm.model.booking.handler.clear'] = function(Application $container) use ($aConfig){
+            return new ClearBookingHandler($aConfig['tablenames'],$container['db']);
+        };
+        
+        $app['bm.model.booking.handler.conflict'] = function(Application $container) use ($aConfig){
+            return new LookBookingConflictsHandler($aConfig['tablenames'],$container['db']);
+        };
+      
+      
+        $app['bm.model.customer.handler.create'] = function(Application $container) use ($aConfig){
+            return new CreateCustomerHandler($aConfig['tablenames'],$container['db']);
+        };
+        
+         $app['bm.model.customer.handler.change'] = function(Application $container) use ($aConfig){
+            return new ChangeCustomerHandler($aConfig['tablenames'],$container['db']);
+        };
+      
       
         $app['bm.leagueeventhandler'] = function($c) {
             return new CustomHandler($c['dispatcher']);
@@ -183,7 +219,12 @@ class CommandBusProvider implements ServiceProviderInterface
                 AssignRuleToScheduleCommand::class  => 'bm.model.rule.handler.addschedule',
                 CreateRuleCommand::class            => 'bm.model.rule.handler.create',
                 RemoveRuleFromScheduleCommand::class=> 'bm.model.rule.handler.removeschedule',
-                RolloverTimeslotCommand::class      => 'bm.model.rule.handler.rollover',
+                RolloverRulesCommand::class         => 'bm.model.rule.handler.rollover',
+                TakeBookingCommand::class           => 'bm.model.booking.handler.take',
+                ClearBookingCommand::class          => 'bm.model.booking.handler.clear',
+                LookBookingConflictsCommand::class  => 'bm.model.booking.handler.conflict',
+                CreateCustomerCommand::class        => 'bm.model.customer.handler.create',
+                ChangeCustomerCommand::class        => 'bm.model.customer.handler.change',
             ];
             
             
