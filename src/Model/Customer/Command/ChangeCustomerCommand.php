@@ -30,6 +30,7 @@ class ChangeCustomerCommand  extends CustomerEntity implements HasEventInterface
 	   $this->sAddressLineTwo   = $sAddressLineTwo;
 	   $this->sCompanyName      = $sCompanyName;
 	   $this->iCustomerId       = $iCustomerId;
+	
     }
     
     
@@ -46,7 +47,7 @@ class ChangeCustomerCommand  extends CustomerEntity implements HasEventInterface
     {
         $oBaseRules = parent::getRules();
         
-        $oBaseRules['required'] = $oBaseRules['required'] + [['iCustomerId']]
+        $oBaseRules['required'] = $oBaseRules['required'] + [['iCustomerId']];
         
         return $oBaseRules;
     }

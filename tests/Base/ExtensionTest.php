@@ -134,7 +134,8 @@ class ExtensionTest extends BoltUnitTest
 
         $this->getDatabaseAdapter()->executeUpdate("INSERT INTO ".$aConfig['tablenames']['bm_appointment_status'] ." (`status_code`,`status_description`) values ('W','Waiting')");
         $this->getDatabaseAdapter()->executeUpdate("INSERT INTO ".$aConfig['tablenames']['bm_appointment_status'] ." (`status_code`,`status_description`) values ('A','Assigned')");
-        $this->getDatabaseAdapter()->executeUpdate("INSERT INTO ".$aConfig['tablenames']['bm_appointment_status'] ." (`status_code`,`status_description`) values ('C','Completed')");
+        $this->getDatabaseAdapter()->executeUpdate("INSERT INTO ".$aConfig['tablenames']['bm_appointment_status'] ." (`status_code`,`status_description`) values ('D','Completed')");
+        $this->getDatabaseAdapter()->executeUpdate("INSERT INTO ".$aConfig['tablenames']['bm_appointment_status'] ." (`status_code`,`status_description`) values ('C','Canceled')");
 
        
        $this->handleEventPostFixtureRun();

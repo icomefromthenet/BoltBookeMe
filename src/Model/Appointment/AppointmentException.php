@@ -4,11 +4,11 @@ namespace Bolt\Extension\IComeFromTheNet\BookMe\Model\Appointment;
 use League\Tactician\Exception\Exception as BusException;
 use Doctrine\DBAL\DBALException;
 use Bolt\Extension\IComeFromTheNet\BookMe\BookMeException;
-use Bolt\Extension\IComeFromTheNet\BookMe\Model\Appointment\Command\
-use Bolt\Extension\IComeFromTheNet\BookMe\Model\Appointment\Command\
-use Bolt\Extension\IComeFromTheNet\BookMe\Model\Appointment\Command\
-use Bolt\Extension\IComeFromTheNet\BookMe\Model\Appointment\Command\
-use Bolt\Extension\IComeFromTheNet\BookMe\Model\Appointment\Command\
+use Bolt\Extension\IComeFromTheNet\BookMe\Model\Appointment\Command\AssignApptCommand;
+use Bolt\Extension\IComeFromTheNet\BookMe\Model\Appointment\Command\CancelApptCommand;
+use Bolt\Extension\IComeFromTheNet\BookMe\Model\Appointment\Command\CompleteApptCommand;
+use Bolt\Extension\IComeFromTheNet\BookMe\Model\Appointment\Command\CreateApptCommand;
+use Bolt\Extension\IComeFromTheNet\BookMe\Model\Appointment\Command\MoveApptWaitingCommand;
 
 
 /**
@@ -27,22 +27,22 @@ class AppointmentException extends BookMeException implements BusException
     
     
     /**
-     * @param TakeBookingCommand $oCommand
+     * @param CreateApptCommand $oCommand
+     * @param DBALException     $oDatabaseException 
      *
      * @return static
      */
-    public static function hasFailedToReserveSlots(TakeBookingCommand $oCommand, DBALException $oDatabaseException= null)
+    public static function hasFailedToCreateAppt(CreateApptCommand $oCommand, DBALException $oDatabaseException= null)
     {
         $exception = new static(
-            'Unable to reserve schedule slots for schedule at id '.$oCommand->getScheduleId() 
-            .' time from '.$oCommand->getOpeningSlot()->format('Y-m-d H:i:s') 
-            .' until '.$oCommand->getClosingSlot()->format('Y-m-d H:i:s') , 0 , $oDatabaseException
+            'Unable to create new appointment for customer at id '.$oCommand->getCustomerId(), null, $oDatabaseException
         );
         
         $exception->oCommand = $oCommand;
         
         return $exception;
     }
+   
    
     
    

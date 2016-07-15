@@ -28,6 +28,7 @@ class CreateCustomerCommand extends CustomerEntity implements  HasEventInterface
 	   $this->sAddressLineOne   = $sAddressLineOne;
 	   $this->sAddressLineTwo   = $sAddressLineTwo;
 	   $this->sCompanyName      = $sCompanyName;
+	   
     }
     
     
@@ -52,6 +53,6 @@ class CreateCustomerCommand extends CustomerEntity implements  HasEventInterface
         return BookMeEvents::CUSTOMER_CREATE;  
     }
     
-
+   
 }
 /* End of Clas */

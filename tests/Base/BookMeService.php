@@ -34,6 +34,9 @@ use Bolt\Extension\IComeFromTheNet\BookMe\Model\Rule\Command\RemoveRuleFromSched
 use Bolt\Extension\IComeFromTheNet\BookMe\Model\Booking\Command\TakeBookingCommand;
 use Bolt\Extension\IComeFromTheNet\BookMe\Model\Booking\Command\ClearBookingCommand;
 
+use Bolt\Extension\IComeFromTheNet\BookMe\Model\Customer\Command\CreateCustomerCommand;
+
+use Bolt\Extension\IComeFromTheNet\BookMe\Model\Appointment\Command\CreateApptCommand;
 
 
 /**
@@ -712,7 +715,95 @@ class BookMeService
         
         return true;
     }
+    
+    //----------------------------------------
+    // Customer
+    //
+    //----------------------------------------
+    
+    /**
+     * This will create a new customer record
+     * 
+     * @return integer the customers database id
+     * @param string $sFirstName
+     * @param string $sLastName
+     * @param string $sEmail
+     * @param string $sMobile
+     * @param string $sLandline
+     * @param string $sAddressLineOne
+     * @param string $sAddressLineTwo
+     * @param string $sCompanyName
+     
+     */ 
+    public function createCustomer($sFirstName, $sLastName, $sEmail, $sMobile, $sLandline, $sAddressLineOne, $sAddressLineTwo, $sCompanyName)
+    {
+        $oCommand = new CreateCustomerCommand($sFirstName, $sLastName, $sEmail, $sMobile, $sLandline, $sAddressLineOne, $sAddressLineTwo, $sCompanyName);
+        
+        try {
+            $this->getCommandBus()->handle($oCommand);
+        } catch (ValidationException $e) {
+           
+            return $e->getValidationFailures();
+        } 
+        
+        return $oCommand->getCustomerId();
+    }
    
+   
+    //----------------------------------------
+    // Appointment
+    //
+    //----------------------------------------
+    
+    /**
+     * Create a new appointment.
+     * 
+     * @param integer $iCustomerId
+     * @parmm string  $sInstruction
+     * @return integer the appointment new database id
+     */ 
+    public function createAppointment($iCustomerId,$sInstruction)
+    {
+        $oCommand = new CreateApptCommand($iCustomerId,$sInstruction);
+        
+        try {
+            $this->getCommandBus()->handle($oCommand);
+        } catch (ValidationException $e) {
+           
+            return $e->getValidationFailures();
+        } 
+        
+        return $oCommand->getAppointmentId();
+        
+    }
+    
+    
+    public function addAppointmentToWaitingList()
+    {
+        
+        
+    }
+    
+    
+    public function completeAppointment()
+    {
+        
+        
+    }
+    
+    
+    public function assignAppointment()
+    {
+        
+        
+    }
+    
+    public function cancelAppointment()
+    {
+        
+        
+    }
+    
     
     //--------------------------------------------------------------------------
     # Accessors

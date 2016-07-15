@@ -137,6 +137,11 @@ final class BookMeEvents
      */ 
     const APPT_COMPLETED = 'bookme.appointment.completed';  
     
+    /**
+     * When an appointment been canceled
+     */ 
+    const APPT_CANCELED = 'bookme.appointment.canceled';  
+    
     
 }
 /* End of File */

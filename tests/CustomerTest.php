@@ -46,8 +46,6 @@ class CustomerTest extends ExtensionTest
        
           try {
        
-            $oCommand  = new CreateCustomerCommand($sFirstName, $sLastName, $sEmail, $sMobile, $sLandline, $sAddressLineOne, $sAddressLineTwo, $sCompanyName);
-            
             $sFirstName = 'fName';
             $sLastName = 'lName';
             $sEmail = 'email@email.com.au';
@@ -56,6 +54,9 @@ class CustomerTest extends ExtensionTest
             $sAddressLineOne ='Address Line One';
             $sAddressLineTwo = 'Address Line Two';
             $sCompanyName ='ACompany';
+            
+            $oCommand  = new CreateCustomerCommand($sFirstName, $sLastName, $sEmail, $sMobile, $sLandline, $sAddressLineOne, $sAddressLineTwo, $sCompanyName);
+           
             
             $oCommandBus->handle($oCommand);
        
@@ -79,18 +80,18 @@ class CustomerTest extends ExtensionTest
        
         $this->assertEquals($iCustomerId,$aResult['customer_id'],'New customer could not be found in database');
         
-        $this->assertEquals($oCustomer->sFirstName, $aResult['first_name']);
-        $this->assertEquals($oCustomer->sLastName,$aResult['last_name']);
-        $this->assertEquals($oCustomer->sEmail,$aResult['email']);
-        $this->assertEquals($oCustomer->sMobile,$aResult['mobile']);
-        $this->assertEquals($oCustomer->sLandline,$aResult['landline']);
-        $this->assertEquals($oCustomer->sAddressLineOne,$aResult['address_one']);
-        $this->assertEquals($oCustomer->sAddressLineTwo,$aResult['address_two']);
-        $this->assertEquals($oCustomer->sCompanyName,$aResult['company_name']);
+        $this->assertEquals($oCommand->sFirstName, $aResult['first_name']);
+        $this->assertEquals($oCommand->sLastName,$aResult['last_name']);
+        $this->assertEquals($oCommand->sEmail,$aResult['email']);
+        $this->assertEquals($oCommand->sMobile,$aResult['mobile']);
+        $this->assertEquals($oCommand->sLandline,$aResult['landline']);
+        $this->assertEquals($oCommand->sAddressLineOne,$aResult['address_one']);
+        $this->assertEquals($oCommand->sAddressLineTwo,$aResult['address_two']);
+        $this->assertEquals($oCommand->sCompanyName,$aResult['company_name']);
         $this->assertNotEmpty($aResult['created_on']);
         $this->assertNotEmpty($aResult['updated_on']);
         
-        return $oCustomer;
+        return $oCommand;
         
     }
     
@@ -100,11 +101,7 @@ class CustomerTest extends ExtensionTest
         $oContainer  = $this->getContainer();
         $oCommandBus = $this->getCommandBus(); 
        
-      
-       
-          try {
-       
-            $oCommand  = new CreateCustomerCommand($oCustomer->getCustomerId(),$sFirstName, $sLastName, $sEmail, $sMobile, $sLandline, $sAddressLineOne, $sAddressLineTwo, $sCompanyName);
+         try {
        
             $sFirstName = '2fName';
             $sLastName = '2lName';
@@ -115,7 +112,8 @@ class CustomerTest extends ExtensionTest
             $sAddressLineTwo = '2Address Line Two';
             $sCompanyName ='2ACompany';
             
-            
+            $oCommand  = new ChangeCustomerCommand($oCustomer->getCustomerId(),$sFirstName, $sLastName, $sEmail, $sMobile, $sLandline, $sAddressLineOne, $sAddressLineTwo, $sCompanyName);
+       
             
             $oCommandBus->handle($oCommand);
        
@@ -148,7 +146,7 @@ class CustomerTest extends ExtensionTest
         $this->assertNotEmpty($aResult['created_on']);
         $this->assertNotEmpty($aResult['updated_on']);
         
-        return $oCustomer;
+        return $oCommand;
         
         
     }
