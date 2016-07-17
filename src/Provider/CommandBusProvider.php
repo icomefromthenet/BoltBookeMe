@@ -71,6 +71,8 @@ use Bolt\Extension\IComeFromTheNet\BookMe\Model\Customer\Handler\CreateCustomerH
 use Bolt\Extension\IComeFromTheNet\BookMe\Model\Customer\Command\ChangeCustomerCommand;
 use Bolt\Extension\IComeFromTheNet\BookMe\Model\Customer\Handler\ChangeCustomerHandler;
 
+use Bolt\Extension\IComeFromTheNet\BookMe\Model\Appointment\Command\CreateApptCommand;
+use Bolt\Extension\IComeFromTheNet\BookMe\Model\Appointment\Handler\CreateApptHandler;
 
 /**
  * Bootstrap the Command Bus used for booking operations.
@@ -186,8 +188,12 @@ class CommandBusProvider implements ServiceProviderInterface
             return new CreateCustomerHandler($aConfig['tablenames'],$container['db']);
         };
         
-         $app['bm.model.customer.handler.change'] = function(Application $container) use ($aConfig){
+        $app['bm.model.customer.handler.change'] = function(Application $container) use ($aConfig){
             return new ChangeCustomerHandler($aConfig['tablenames'],$container['db']);
+        };
+        
+        $app['bm.model.appointment.handler.create'] = function(Application $container) use ($aConfig){
+            return new CreateApptHandler($aConfig['tablenames'],$container['db']);
         };
       
       
@@ -225,6 +231,9 @@ class CommandBusProvider implements ServiceProviderInterface
                 LookBookingConflictsCommand::class  => 'bm.model.booking.handler.conflict',
                 CreateCustomerCommand::class        => 'bm.model.customer.handler.create',
                 ChangeCustomerCommand::class        => 'bm.model.customer.handler.change',
+                CreateApptCommand::class            => 'bm.model.appointment.handler.create',
+                
+                
             ];
             
             

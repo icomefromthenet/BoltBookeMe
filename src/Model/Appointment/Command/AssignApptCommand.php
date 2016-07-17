@@ -55,7 +55,7 @@ class AssignApptCommand extends ApptEntity implements  HasEventInterface, Valida
     {
         $oBaseRules = parent::getRules();
         
-        $oBaseRules['required'] = $oBaseRules['required'] + [['iBookingId'],['sInstructions']]
+        $oBaseRules['required'] = $oBaseRules['required'] + [['iBookingId'],['sInstructions']];
         
         return $oBaseRules;
     }

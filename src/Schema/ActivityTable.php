@@ -21,7 +21,6 @@ class ActivityTable extends BaseTable
 
         # optional fk 
         $this->table->addColumn('bolt_user_id',   'integer',   ['notnull' => false, 'comment' =>'Fk to Bolt User table',        'unsigned' => true ]);
-        $this->table->addColumn('booking_id' ,    'integer',   ['notnull' => false, 'comment' =>'Fk to Booking table',          'unsigned' => true ]);
         $this->table->addColumn('appointment_id', 'integer',   ['notnull' => false, 'comment' =>'Fk to Appointment table',      'unsigned' => true ]);
         $this->table->addColumn('customer_id',    'integer',   ['notnull' => false, 'comment' =>'Fk to Customer table',         'unsigned' => true ]);
         $this->table->addColumn('member_id',      'integer',   ['notnull' => false, 'comment' =>'Fk to Schedule Member table',  'unsigned' => true ]);
@@ -59,11 +58,6 @@ class ActivityTable extends BaseTable
        $sBoltUserTableName = $this->tablePrefix .'user';
        
        $this->table->addForeignKeyConstraint($sBoltUserTableName, ['bolt_user_id'], ['user_id'], [], null);
-       
-       
-       $sBookingTableName = $this->tablePrefix .'bm_booking';
-       
-       $this->table->addForeignKeyConstraint($sBookingTableName, ['booking_id'], ['booking_id'], [], null);
        
        
        $sApptTableName = $this->tablePrefix .'bm_appointment';

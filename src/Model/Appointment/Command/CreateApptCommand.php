@@ -15,7 +15,7 @@ use Bolt\Extension\IComeFromTheNet\BookMe\Model\Appointment\ApptEntity;
  * @author Lewis Dyer <getintouch@icomefromthenet.com>
  * @since 1.0
  */ 
-class AssignApptCommand extends ApptEntity implements  HasEventInterface, ValidationInterface
+class CreateApptCommand extends ApptEntity implements  HasEventInterface, ValidationInterface
 {
  
  
@@ -23,6 +23,7 @@ class AssignApptCommand extends ApptEntity implements  HasEventInterface, Valida
     {
         $this->iCustomerId    = $iCustomerId;
         $this->sInstructions  = $sInstruction;
+        $this->sStatusCode    = 'W';
     }
  
  
@@ -36,9 +37,14 @@ class AssignApptCommand extends ApptEntity implements  HasEventInterface, Valida
         return $this->iCustomerId;
     }
     
-    public function getInsructions()
+    public function getInstructions()
     {
         return $this->sInstructions;
+    }
+    
+    public function getStatusCode()
+    {
+        return $this->sStatusCode;
     }
     
     //---------------------------------------------------------

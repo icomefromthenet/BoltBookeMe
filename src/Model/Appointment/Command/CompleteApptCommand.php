@@ -38,7 +38,7 @@ class CompleteApptCommand extends ApptEntity implements  HasEventInterface, Vali
     {
         $oBaseRules = parent::getRules();
         
-        $oBaseRules['required'] = $oBaseRules['required'] + [['iAppointmentId']]
+        $oBaseRules['required'] = $oBaseRules['required'] + [['iAppointmentId']];
         
         return $oBaseRules;
     }

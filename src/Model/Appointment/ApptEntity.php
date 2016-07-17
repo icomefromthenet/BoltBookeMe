@@ -1,5 +1,5 @@
 <?php
-namespace Bolt\Extension\IComeFromTheNet\BookMe\Model\Customer;
+namespace Bolt\Extension\IComeFromTheNet\BookMe\Model\Appointment;
 
 use DateTime;
 use Bolt\Extension\IComeFromTheNet\BookMe\Bus\Middleware\ValidationInterface;
@@ -16,7 +16,7 @@ class ApptEntity implements ValidationInterface
     
     public $iAppointmentId;
     
-    public $iCustomerId
+    public $iCustomerId;
     
     public $iBookingId;
     
@@ -51,11 +51,11 @@ class ApptEntity implements ValidationInterface
     public function getData()
     {
         return [
-             'iAppointmentId'      => $this->iAppointmentId
-             'iCustomerId'         => $this->iCustomerId
-             'iBookingId'          => $this->iBookingId
-             'sInstructions'       => $this->sInstructions
-             'sStatusCode'         => $this->sStatusCode
+             'iAppointmentId'      => $this->iAppointmentId,
+             'iCustomerId'         => $this->iCustomerId,
+             'iBookingId'          => $this->iBookingId,
+             'sInstructions'       => $this->sInstructions,
+             'sStatusCode'         => $this->sStatusCode,
           
         ];
     }
