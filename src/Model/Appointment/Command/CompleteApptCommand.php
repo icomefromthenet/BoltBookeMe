@@ -22,6 +22,7 @@ class CompleteApptCommand extends ApptEntity implements  HasEventInterface, Vali
     public function __construct($iAppointmentId)
     {
         $this->iAppointmentId = $iAppointmentId;
+        $this->sStatusCode    = 'D';
     }
  
  
@@ -29,6 +30,12 @@ class CompleteApptCommand extends ApptEntity implements  HasEventInterface, Vali
     {
         return $this->iAppointmentId;
     }
+    
+    public function getStatusCode()
+    {
+        return $this->sStatusCode;
+    }
+ 
  
 
     //---------------------------------------------------------

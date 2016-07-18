@@ -22,6 +22,7 @@ class CancelApptCommand extends ApptEntity implements  HasEventInterface, Valida
     public function __construct($iAppointmentId)
     {
         $this->iAppointmentId = $iAppointmentId;
+        $this->sStatusCode    = 'C';
     }
  
  
@@ -29,6 +30,12 @@ class CancelApptCommand extends ApptEntity implements  HasEventInterface, Valida
     {
         return $this->iAppointmentId;
     }
+    
+    public function getStatusCode()
+    {
+        return $this->sStatusCode;
+    }
+ 
  
 
     //---------------------------------------------------------
@@ -38,7 +45,7 @@ class CancelApptCommand extends ApptEntity implements  HasEventInterface, Valida
     {
         $oBaseRules = parent::getRules();
         
-        $oBaseRules['required'] = $oBaseRules['required'] + [['iAppointmentId']]
+        $oBaseRules['required'] = [['iAppointmentId'],['sStatusCode']];
         
         return $oBaseRules;
     }

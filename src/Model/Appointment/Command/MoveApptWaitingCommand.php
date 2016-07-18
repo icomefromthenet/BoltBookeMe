@@ -22,12 +22,18 @@ class MoveApptWaitingCommand extends ApptEntity implements  HasEventInterface, V
     public function __construct($iAppointmentId)
     {
         $this->iAppointmentId = $iAppointmentId;
+        $this->sStatusCode    = 'W';
     }
  
  
     public function getAppointmentId()
     {
         return $this->iAppointmentId;
+    }
+    
+    public function getStatusCode()
+    {
+        return $this->sStatusCode;
     }
  
 

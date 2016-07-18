@@ -43,8 +43,23 @@ class AppointmentException extends BookMeException implements BusException
         return $exception;
     }
    
+    /**
+     * @param CreateApptCommand $oCommand
+     * @param DBALException     $oDatabaseException 
+     *
+     * @return static
+     */
+    public static function hasFailedToCancelAppt(CancelApptCommand $oCommand, DBALException $oDatabaseException= null)
+    {
+        $exception = new static(
+            'Unable to create cancel appointment at id '.$oCommand->getAppointmentId(). ' the appointment is either not found or not in correct status ', null, $oDatabaseException
+        );
+        
+        $exception->oCommand = $oCommand;
+        
+        return $exception;
+    }
    
-    
    
     
     /**

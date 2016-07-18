@@ -4,6 +4,8 @@ namespace  Bolt\Extension\IComeFromTheNet\BookMe\Tests;
 use Doctrine\DBAL\Types\Type;
 use Bolt\Extension\IComeFromTheNet\BookMe\Tests\Base\ExtensionTest;
 use Bolt\Extension\IComeFromTheNet\BookMe\Model\Appointment\Command\CreateApptCommand;
+use Bolt\Extension\IComeFromTheNet\BookMe\Model\Appointment\Command\CancelApptCommand;
+
 use Bolt\Extension\IComeFromTheNet\BookMe\Model\Appointment\ApptEntity;
 use Bolt\Extension\IComeFromTheNet\BookMe\Model\Appointment\AppointmentException;
 use Bolt\Extension\IComeFromTheNet\BookMe\Bus\Middleware\ValidationException;
@@ -44,7 +46,8 @@ class AppointmentTest extends ExtensionTest
     public function testAppointmentCommands()
     {
         
-       $oApptId   =  $this->CreateAppointmentTest($this->aDatabaseId['customer_1']);
+       $iApptId   =  $this->CreateAppointmentTest($this->aDatabaseId['customer_1']);
+                    $this->CancelAppointmentTest($iApptId);    
        
        
     }
@@ -75,7 +78,7 @@ class AppointmentTest extends ExtensionTest
         
         $iApptId = $oCommand->getAppointmentId();
         
-        $this->assertNotEmpty($iApptId,'The new appointment command failed to return new customer database id');
+        $this->assertNotEmpty($iApptId,'The new appointment command failed to return new appt database id');
         
         $aResult = $this->getDatabaseAdapter()
                               ->fetchAssoc("select *
@@ -83,7 +86,7 @@ class AppointmentTest extends ExtensionTest
                                             where appointment_id = ? ",[$iApptId],[Type::getType(Type::INTEGER)]);
        
        
-        $this->assertEquals($iApptId,$aResult['appointment_id'],'New customer could not be found in database');
+        $this->assertEquals($iApptId,$aResult['appointment_id'],'New appt could not be found in database');
         
         $this->assertEquals($oCommand->getInstructions(), $aResult['instructions']);
         $this->assertEquals('W',$aResult['status_code']);
@@ -93,7 +96,42 @@ class AppointmentTest extends ExtensionTest
         
     }
     
-   
+    protected function CancelAppointmentTest($iApptId)
+    {
+        $oContainer  = $this->getContainer();
+        $oCommandBus = $this->getCommandBus(); 
+       
+        try {
+       
+            
+            $oCommand  = new CancelApptCommand($iApptId);
+           
+            
+            $oCommandBus->handle($oCommand);
+       
+        } catch (ValidationException $e) {
+           
+            var_dump($e->getValidationFailures());
+            
+            $this->assertFalse(true,'failed validation');
+        }
+     
+        
+        $iApptId = $oCommand->getAppointmentId();
+        
+        $aResult = $this->getDatabaseAdapter()
+                              ->fetchAssoc("select *
+                                            from bolt_bm_appointment 
+                                            where appointment_id = ? ",[$iApptId],[Type::getType(Type::INTEGER)]);
+       
+       
+        $this->assertEquals($iApptId,$aResult['appointment_id'],'Appt id do not equal');
+        $this->assertEquals('C',$aResult['status_code']);
+      
+        
+        return $iApptId;
+        
+    }
     
     
 }
