@@ -73,8 +73,13 @@ use Bolt\Extension\IComeFromTheNet\BookMe\Model\Customer\Handler\ChangeCustomerH
 
 use Bolt\Extension\IComeFromTheNet\BookMe\Model\Appointment\Command\CreateApptCommand;
 use Bolt\Extension\IComeFromTheNet\BookMe\Model\Appointment\Handler\CreateApptHandler;
+use Bolt\Extension\IComeFromTheNet\BookMe\Model\Appointment\Decorator\ApptNumDecorator;
 use Bolt\Extension\IComeFromTheNet\BookMe\Model\Appointment\Command\CancelApptCommand;
 use Bolt\Extension\IComeFromTheNet\BookMe\Model\Appointment\Handler\CancelApptHandler;
+use Bolt\Extension\IComeFromTheNet\BookMe\Model\Appointment\Command\AssignApptCommand;
+use Bolt\Extension\IComeFromTheNet\BookMe\Model\Appointment\Handler\AssignApptHandler;
+
+
 
 
 /**
@@ -196,11 +201,18 @@ class CommandBusProvider implements ServiceProviderInterface
         };
         
         $app['bm.model.appointment.handler.create'] = function(Application $container) use ($aConfig){
-            return new CreateApptHandler($aConfig['tablenames'],$container['db']);
+            return new ApptNumDecorator(new CreateApptHandler($aConfig['tablenames'],$container['db'])
+                                        ,$aConfig['tablenames']
+                                        ,$container['db']
+                                        ,$container['bm.appnumber']);
         };
       
-         $app['bm.model.appointment.handler.cancel'] = function(Application $container) use ($aConfig){
+        $app['bm.model.appointment.handler.cancel'] = function(Application $container) use ($aConfig){
             return new CancelApptHandler($aConfig['tablenames'],$container['db']);
+        };
+      
+        $app['bm.model.appointment.handler.assign'] = function(Application $container) use ($aConfig){
+            return new AssignApptHandler($aConfig['tablenames'],$container['db']);
         };
       
         $app['bm.leagueeventhandler'] = function($c) {
@@ -239,6 +251,7 @@ class CommandBusProvider implements ServiceProviderInterface
                 ChangeCustomerCommand::class        => 'bm.model.customer.handler.change',
                 CreateApptCommand::class            => 'bm.model.appointment.handler.create',
                 CancelApptCommand::class            => 'bm.model.appointment.handler.cancel',
+                AssignApptCommand::class            => 'bm.model.appointment.handler.assign',
                 
             ];
             

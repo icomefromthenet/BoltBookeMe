@@ -25,6 +25,7 @@ class AppointmentTable extends BaseTable
         
         $this->table->addColumn('status_code',    'string', ['notnull' => true, 'comment' => 'Status Code from status table', 'length' => 2]);
         
+        $this->table->addColumn('appointment_no',    'string', ['notnull' => false, 'comment' => 'Appointment Products', 'length' => 25]);
     }
 
     /**
@@ -32,7 +33,7 @@ class AppointmentTable extends BaseTable
      */
     protected function addIndexes()
     {
-        
+         $this->table->addUniqueIndex(['appointment_no']);
     }
 
     /**

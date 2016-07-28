@@ -133,6 +133,7 @@ class BookMeExtension extends SimpleExtension
             new Provider\CommandBusProvider($this->getConfig()),
             new Provider\CronParseProvider($this->getConfig()),
             new Provider\CustomValidationProvider($this->getConfig()),
+            new Provider\ExtrasProvider($this->getConfig()),
         ];
 
         return array_merge($parentProviders,$localProviders);
@@ -315,7 +316,12 @@ class BookMeExtension extends SimpleExtension
     protected function getDefaultConfig()
     {
         return [
-            'tablenames' => [
+            'apptnumber' => [
+                 'suffix'       => ''    
+                ,'prefix'       => 'A'    
+                ,'starting'     => 1000
+            ]
+            ,'tablenames' => [
                  'bm_ints'              => 'bolt_ints'   
                 ,'bm_calendar'          => 'bolt_bm_calendar'    
                 ,'bm_calendar_weeks'    => 'bolt_bm_calendar_weeks'      

@@ -44,7 +44,7 @@ class MoveApptWaitingCommand extends ApptEntity implements  HasEventInterface, V
     {
         $oBaseRules = parent::getRules();
         
-        $oBaseRules['required'] = $oBaseRules['required'] + [['iAppointmentId']]
+        $oBaseRules['required'] = [['iAppointmentId']]
         
         return $oBaseRules;
     }

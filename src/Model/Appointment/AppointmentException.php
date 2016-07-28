@@ -42,6 +42,40 @@ class AppointmentException extends BookMeException implements BusException
         
         return $exception;
     }
+    
+    /**
+     * @param CreateApptCommand $oCommand
+     * @param DBALException     $oDatabaseException 
+     *
+     * @return static
+     */
+    public static function hasFailedCreateApptNumberSeedEmpty(CreateApptCommand $oCommand, DBALException $oDatabaseException= null)
+    {
+        $exception = new static(
+            'Unable to create appointment number as the seed is empty', null, $oDatabaseException
+        );
+        
+        $exception->oCommand = $oCommand;
+        
+        return $exception;
+    }
+    
+    /**
+     * @param CreateApptCommand $oCommand
+     * @param DBALException     $oDatabaseException 
+     *
+     * @return static
+     */
+    public static function hasFailedCreateApptNumber(CreateApptCommand $oCommand, DBALException $oDatabaseException= null)
+    {
+        $exception = new static(
+            'Unable to create appointment number appointment not found at id '.$oCommand->getCustomerId(), null, $oDatabaseException
+        );
+        
+        $exception->oCommand = $oCommand;
+        
+        return $exception;
+    }
    
     /**
      * @param CreateApptCommand $oCommand
@@ -60,6 +94,22 @@ class AppointmentException extends BookMeException implements BusException
         return $exception;
     }
    
+    /**
+     * @param CreateApptCommand $oCommand
+     * @param DBALException     $oDatabaseException 
+     *
+     * @return static
+     */
+    public static function hasFailedToAssignBookingToAppt(AssignApptCommand $oCommand, DBALException $oDatabaseException= null)
+    {
+        $exception = new static(
+            'Unable to assign booking at id '.$oCommand->getBookingId().' to appointment at id '.$oCommand->getAppointmentId(). ' the appointment is either not found or not in correct status ', null, $oDatabaseException
+        );
+        
+        $exception->oCommand = $oCommand;
+        
+        return $exception;
+    }
    
     
     /**

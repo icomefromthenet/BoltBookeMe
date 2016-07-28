@@ -47,6 +47,11 @@ class CreateApptCommand extends ApptEntity implements  HasEventInterface, Valida
         return $this->sStatusCode;
     }
     
+    public function getAppointmentNumber()
+    {
+        return $this->sApptNumber;
+    }
+    
     //---------------------------------------------------------
     # validation interface
    

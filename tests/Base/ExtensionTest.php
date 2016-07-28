@@ -56,7 +56,12 @@ class ExtensionTest extends BoltUnitTest
     protected function getAppConfig()
     {
         return [
-           'tablenames' => [
+            'apptnumber' => [
+                 'suffix'       => '#'    
+                ,'prefix'       => 'A'    
+                ,'starting'     => 1000
+            ]
+           ,'tablenames' => [
                  'bm_ints'              => 'bolt_ints'   
                 ,'bm_calendar'          => 'bolt_bm_calendar'    
                 ,'bm_calendar_weeks'    => 'bolt_bm_calendar_weeks'      

@@ -9,7 +9,7 @@ use Bolt\Extension\IComeFromTheNet\BookMe\BookMeEvents;
 use Bolt\Extension\IComeFromTheNet\BookMe\Model\Appointment\ApptEntity;
 
 /**
- * This command is used to assign appointment to booking 
+ * This command is used to assign a booking to an appointment
  * 
  * 
  * @author Lewis Dyer <getintouch@icomefromthenet.com>
@@ -19,11 +19,10 @@ class AssignApptCommand extends ApptEntity implements  HasEventInterface, Valida
 {
  
  
-    public function __construct($iAppointmentId, $iBookingId, $iCustomerId, $sInstruction)
+    public function __construct($iAppointmentId, $iBookingId, $sInstruction)
     {
         $this->iAppointmentId = $iAppointmentId;
         $this->iBookingId     = $iBookingId;
-        $this->iCustomerId    = $iCustomerId;
         $this->sInstructions  = $sInstruction;
     }
  
@@ -38,15 +37,11 @@ class AssignApptCommand extends ApptEntity implements  HasEventInterface, Valida
         return $this->iBookingId;
     }
     
-    public function getCustomerId()
+    public function getStatusCode()
     {
-        return $this->iCustomerId;
+        return $this->sStatusCode;
     }
-    
-    public function getInsructions()
-    {
-        return $this->sInstructions;
-    }
+   
     
     //---------------------------------------------------------
     # validation interface
@@ -55,7 +50,7 @@ class AssignApptCommand extends ApptEntity implements  HasEventInterface, Valida
     {
         $oBaseRules = parent::getRules();
         
-        $oBaseRules['required'] = $oBaseRules['required'] + [['iBookingId'],['sInstructions']];
+        $oBaseRules['required'] =  + [['iAppointmentId'],['iBookingId'],['sInstructions']];
         
         return $oBaseRules;
     }

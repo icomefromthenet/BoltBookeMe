@@ -24,6 +24,7 @@ class ApptEntity implements ValidationInterface
         
     public $sStatusCode;    
 
+    public $sApptNumber;
 
     //---------------------------------------------------------
     # validation interface
@@ -36,10 +37,10 @@ class ApptEntity implements ValidationInterface
                 ['iAppointmentId'],['iCustomerId'],['iBookingId']
             ]
             ,'min' => [
-                 ['iAppointmentId',1],['iCustomerId',1],['iBookingId',1]
+                 ['iAppointmentId',1],['iCustomerId',1],['iBookingId',1],['sApptNumber',1]
             ]
             ,'lengthMax' => [
-                ['sInstructions',1000],['sStatusCode',2]
+                ['sInstructions',1000],['sStatusCode',2],['sApptNumber',25]
             ]
             ,'required' => [
                 ['iCustomerId'],['sStatusCode']
@@ -56,6 +57,7 @@ class ApptEntity implements ValidationInterface
              'iBookingId'          => $this->iBookingId,
              'sInstructions'       => $this->sInstructions,
              'sStatusCode'         => $this->sStatusCode,
+             'sApptNumber'         => $this->sApptNumber,
           
         ];
     }

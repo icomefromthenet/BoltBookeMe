@@ -76,7 +76,7 @@ class CancelApptHandler
 	       	$iRowsAffected = $oDatabase->executeUpdate($sSaveSql, $aParams, $aTypes);
 	        
 	        if($iRowsAffected == 0) {
-	            throw new DBALException('Could not save customer');
+	            throw new DBALException('Could not cancel appointment');
 	        }
 	             
 	    }

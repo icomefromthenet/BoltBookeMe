@@ -81,6 +81,7 @@ class BookMeService
             new Provider\CronParseProvider($aConfig),
             new Provider\CustomValidationProvider($aConfig),
             new Provider\CommandBusProvider($aConfig),
+            new Provider\ExtrasProvider($aConfig),
         ];
         
         foreach($aProviders as $aProvider) {
