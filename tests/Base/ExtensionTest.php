@@ -95,7 +95,8 @@ class ExtensionTest extends BoltUnitTest
                 ,'bm_appointment_status'  => 'bolt_bm_appointment_status'
                 ,'bm_appointment'         => 'bolt_bm_appointment'
                 
-            ]
+            ],
+            'leadtime' => 'P1D'
        
        ];
         

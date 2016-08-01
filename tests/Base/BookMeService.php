@@ -1,6 +1,7 @@
 <?php
 namespace Bolt\Extension\IComeFromTheNet\BookMe\Tests\Base;
 
+use DateInterval;
 use DateTime;
 use Bolt\Application;
 use Bolt\Extension\IComeFromTheNet\BookMe\BookMeException;
@@ -32,6 +33,7 @@ use Bolt\Extension\IComeFromTheNet\BookMe\Model\Rule\Command\RemoveRuleFromSched
 
 
 use Bolt\Extension\IComeFromTheNet\BookMe\Model\Booking\Command\TakeBookingCommand;
+use Bolt\Extension\IComeFromTheNet\BookMe\Model\Booking\Command\WebBookingCommand;
 use Bolt\Extension\IComeFromTheNet\BookMe\Model\Booking\Command\ClearBookingCommand;
 
 use Bolt\Extension\IComeFromTheNet\BookMe\Model\Customer\Command\CreateCustomerCommand;
@@ -80,8 +82,8 @@ class BookMeService
        $aProviders = [
             new Provider\CronParseProvider($aConfig),
             new Provider\CustomValidationProvider($aConfig),
-            new Provider\CommandBusProvider($aConfig),
             new Provider\ExtrasProvider($aConfig),
+            new Provider\CommandBusProvider($aConfig),
         ];
         
         foreach($aProviders as $aProvider) {
@@ -667,6 +669,52 @@ class BookMeService
     //
     //----------------------------------------
    
+     /**
+     * This will create a booking reserving the chosen slots on the schedule
+     * 
+     * If slots can not be reserved then an exception will be thrown
+     * 
+     * @param integer       $iScheduleId        The database id of the schedule to use      
+     * @param DateTime      $oOpeningSlot       The opening of the first Slot
+     * @param DateTime      $oClosingSlot       The closing date the last slot. 
+     * 
+     * @return integer the booking database id
+     */  
+    public function takeManualBooking($iScheduleId, DateTime $oOpeningSlot, DateTime $oClosingSlot)
+    {
+        return $this->takeBooking($iScheduleId, $oOpeningSlot, $oClosingSlot);
+    }
+   
+   /**
+     * This will create a booking reserving the chosen slots on the schedule
+     * 
+     * If slots can not be reserved then an exception will be thrown
+     * 
+     * @param integer       $iScheduleId        The database id of the schedule to use      
+     * @param DateTime      $oOpeningSlot       The opening of the first Slot
+     * @param DateTime      $oClosingSlot       The closing date the last slot. 
+     * @param integer       $iMaxBookings       The max bookings allowed on the day
+     * @param DateInterval  $oInterval          The lead time.      
+     * 
+     * @return integer the booking database id
+     */  
+    public function takeWebBooking($iScheduleId, DateTime $oOpeningSlot, DateTime $oClosingSlot, $iMaxBookings = 1, DateInterval $oInterval)
+    {
+        $oNow = $this->oContainer['bm.now'];
+        
+        $oCommand = new WebBookingCommand($iScheduleId, $oOpeningSlot, $oClosingSlot, $oNow, $iMaxBookings, $oInterval);
+        
+        try {
+            $this->getCommandBus()->handle($oCommand);
+        } catch (ValidationException $e) {
+           
+            return $e->getValidationFailures();
+        } 
+        
+        return $oCommand->getBookingId();
+        
+    }
+   
     /**
      * This will create a booking reserving the chosen slots on the schedule
      * 
@@ -777,6 +825,8 @@ class BookMeService
         return $oCommand->getAppointmentId();
         
     }
+    
+   
     
     
     public function addAppointmentToWaitingList()

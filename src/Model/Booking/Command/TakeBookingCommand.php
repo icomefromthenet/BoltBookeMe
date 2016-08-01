@@ -37,18 +37,13 @@ class TakeBookingCommand implements  HasEventInterface, ValidationInterface
      */ 
     protected $oClosingSlot;
     
-    /**
-     * @var Number of max bookings per calendar day
-     */ 
-    protected $iMaxBookings;
     
     
-    public function __construct($iScheduleId, DateTime $oOpeningSlot, DateTime $oClosingSlot, $iMaxBookings = null)
+    public function __construct($iScheduleId, DateTime $oOpeningSlot, DateTime $oClosingSlot)
     {
         $this->iScheduleId       = $iScheduleId;
         $this->oOpeningSlot      = $oOpeningSlot;
         $this->oClosingSlot      = $oClosingSlot;
-        $this->iMaxBookings      = $iMaxBookings;
         
     }
     

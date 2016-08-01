@@ -65,6 +65,8 @@ class MaxBookingsDecorator
                                      WHERE DATE(slot_open) = ?"
                                      ,[$oOpenDate],0,[Type::DATE]);
             
+            
+            
             # Have we exceeded max booking rile
             if($iBookingCount > $iMaxBookings) {
                 throw BookingException::maxBookingsExceeded($oCommand,null);      

@@ -63,17 +63,7 @@ class BookMeExtension extends SimpleExtension
     
     //--------------------------------------------------------------------------
     # Properties
-    
-    /**
-     * Fetch the processing date used i.e. NOW()
-     * 
-     * @return DateTime
-     */ 
-    protected function getNow()
-    {
-        return new DateTime();
-    }
-
+  
     /**
      * Return the database adapter
      * 
@@ -355,6 +345,7 @@ class BookMeExtension extends SimpleExtension
                 ,'bm_appointment_status'  => 'bolt_bm_appointment_status'
                 ,'bm_appointment'         => 'bolt_bm_appointment'
             ]
+            ,'leadtime' => 'PT1D'
             
             
         ];

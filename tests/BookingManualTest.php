@@ -11,12 +11,12 @@ use Bolt\Extension\IComeFromTheNet\BookMe\BookMeExtension;
 use Bolt\Extension\IComeFromTheNet\BookMe\Tests\Base\ExtensionTest;
 use Bolt\Extension\IComeFromTheNet\BookMe\Bus\Middleware\ValidationException;
 
-use Bolt\Extension\IComeFromTheNet\BookMe\Model\Booking\Command\TakeBookingCommand;
+use Bolt\Extension\IComeFromTheNet\BookMe\Model\Booking\Command\ManualBookingCommand;
 use Bolt\Extension\IComeFromTheNet\BookMe\Model\Booking\Command\LookBookingConflictsCommand;
 use Bolt\Extension\IComeFromTheNet\BookMe\Model\Booking\Command\ClearBookingCommand;
 use Bolt\Extension\IComeFromTheNet\BookMe\Model\Booking\BookingException;
 
-class BookingTest extends ExtensionTest
+class BookingManualTest extends ExtensionTest
 {
     
     
@@ -159,6 +159,7 @@ class BookingTest extends ExtensionTest
       $oService->resfreshSchedule($iMemberFourSchedule);
     
     
+     
     
       // save identifiers for use below    
             
@@ -215,19 +216,7 @@ class BookingTest extends ExtensionTest
       
       $this->FailOnDuplicateBooking($this->aDatabaseId['schedule_member_one'],$oOpen,$oClose);
       
-      // Take a second booking so we can test if max check works
-      $oOpen  =  clone $oNow;
-      $oOpen->setDate($oNow->format('Y'),1,14);
-      $oOpen->setTime(17,20,0);
-      
-      $oClose = clone $oNow;
-      $oClose->setDate($oNow->format('Y'),1,14);
-      $oClose->setTime(17,40,0);
-      
-      
-      $this->SucessfulyTakeBooking($this->aDatabaseId['schedule_member_one'],$oOpen,$oClose,4);
-      $this->FailMaxBooking($this->aDatabaseId['schedule_member_one'],$oOpen,$oClose);
-      
+    
       $oOpen  =  clone $oNow;
       $oOpen->setDate($oNow->format('Y'),1,28);
       $oOpen->setTime(9,0,0);
@@ -265,7 +254,7 @@ class BookingTest extends ExtensionTest
         $oDatabase   = $this->getDatabaseAdapter();
         $oCommandBus = $this->getCommandBus(); 
        
-        $oCommand  = new TakeBookingCommand($iScheduleId, $oOpeningSlot, $oClosingSlot);
+        $oCommand  = new ManualBookingCommand($iScheduleId, $oOpeningSlot, $oClosingSlot);
         
         $oCommandBus->handle($oCommand);
         
@@ -292,33 +281,13 @@ class BookingTest extends ExtensionTest
    
    
    
-   public function FailMaxBooking($iScheduleId, DateTime $oOpeningSlot, DateTime $oClosingSlot)
-   {
-        $oContainer  = $this->getContainer();
-        $oDatabase   = $this->getDatabaseAdapter();
-        $oCommandBus = $this->getCommandBus(); 
-       
-        $oCommand  = new TakeBookingCommand($iScheduleId, $oOpeningSlot, $oClosingSlot,1);
-       
-        try {
-        
-            $oCommandBus->handle($oCommand);
-            $this->assertFalse(true,'The Max Booking check should of failed');
-            
-        }
-        catch(BookingException $e) {
-           $this->assertEquals($e->getMessage(),'Max bookings taken for calendar day for schedule at id 1 time from '.$oOpeningSlot->format('Y-m-d H:i:s').' until '.$oClosingSlot->format('Y-m-d H:i:s'));
-        }
-    
-   }
-   
    public function FailOnDuplicateBooking($iScheduleId, DateTime $oOpeningSlot, DateTime $oClosingSlot)
    {
         $oContainer  = $this->getContainer();
         $oDatabase   = $this->getDatabaseAdapter();
         $oCommandBus = $this->getCommandBus();  
        
-        $oCommand  = new TakeBookingCommand($iScheduleId, $oOpeningSlot, $oClosingSlot);
+        $oCommand  = new ManualBookingCommand($iScheduleId, $oOpeningSlot, $oClosingSlot);
         
         try {
         
@@ -341,7 +310,7 @@ class BookingTest extends ExtensionTest
         $oDatabase   = $this->getDatabaseAdapter();
         $oCommandBus = $this->getCommandBus(); 
        
-        $oCommand  = new TakeBookingCommand($iScheduleId, $oOpeningSlot, $oClosingSlot);
+        $oCommand  = new ManualBookingCommand($iScheduleId, $oOpeningSlot, $oClosingSlot);
         
         $oCommandBus->handle($oCommand);
         
@@ -372,7 +341,7 @@ class BookingTest extends ExtensionTest
         $oDatabase   = $this->getDatabaseAdapter();
         $oCommandBus = $this->getCommandBus(); 
        
-        $oCommand  = new TakeBookingCommand($iScheduleId, $oOpeningSlot, $oClosingSlot);
+        $oCommand  = new ManualBookingCommand($iScheduleId, $oOpeningSlot, $oClosingSlot);
         
         try {
         

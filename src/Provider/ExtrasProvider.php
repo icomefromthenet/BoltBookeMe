@@ -44,6 +44,16 @@ class ExtrasProvider implements ServiceProviderInterface
             
         };
         
+        $app['bm.now']  = function($c) use ($aConfig) {
+            
+            $oDatabase    = $c['db'];
+            $oDBPlatform  = $oDatabase->getDatabasePlatform();
+            $oDateType    = Type::getType(Type::DATE); 
+            $sNow         = $oDatabase->fetchColumn("select date_format(NOW(),'%Y-%m-%d')  ",[],0,[]);
+        
+            return $oDateType->convertToPHPValue($sNow,$oDBPlatform);
+            
+        };
             
        
     }

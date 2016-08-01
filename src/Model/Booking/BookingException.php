@@ -114,7 +114,21 @@ class BookingException extends BookMeException implements BusException
     }
     
     
-   
+   /**
+     * @param ClearBookingCommand $oCommand
+     *
+     * @return static
+     */
+    public static function hasFailedLeadTimeCheck(TakeBookingCommand $oCommand, DBALException $oDatabaseException= null)
+    {
+        $exception = new static(
+            'Unable to create booking it has been taken within the required lead time' , 0 , $oDatabaseException
+        );
+        
+        $exception->oCommand = $oCommand;
+        
+        return $exception;
+    }
     
     /**
      * Return the command that has failed validation

@@ -1,7 +1,7 @@
 <?php
 namespace Bolt\Extension\IComeFromTheNet\BookMe\Provider;
 
-
+use DateTime;
 use Silex\Application;
 use Silex\ServiceProviderInterface;
 
@@ -63,7 +63,10 @@ use Bolt\Extension\IComeFromTheNet\BookMe\Model\Booking\Command\LookBookingConfl
 use Bolt\Extension\IComeFromTheNet\BookMe\Model\Booking\Handler\LookBookingConflictsHandler;
 use Bolt\Extension\IComeFromTheNet\BookMe\Model\Booking\Command\TakeBookingCommand;
 use Bolt\Extension\IComeFromTheNet\BookMe\Model\Booking\Handler\TakeBookingHandler;
+use Bolt\Extension\IComeFromTheNet\BookMe\Model\Booking\Command\ManualBookingCommand;
+use Bolt\Extension\IComeFromTheNet\BookMe\Model\Booking\Command\WebBookingCommand;
 use Bolt\Extension\IComeFromTheNet\BookMe\Model\Booking\Decorator\MaxBookingsDecorator;
+use Bolt\Extension\IComeFromTheNet\BookMe\Model\Booking\Decorator\LeadTimeDecorator;
 
 use Bolt\Extension\IComeFromTheNet\BookMe\Model\Customer\Command\CreateCustomerCommand;
 use Bolt\Extension\IComeFromTheNet\BookMe\Model\Customer\Handler\CreateCustomerHandler;
@@ -79,7 +82,7 @@ use Bolt\Extension\IComeFromTheNet\BookMe\Model\Appointment\Handler\CancelApptHa
 use Bolt\Extension\IComeFromTheNet\BookMe\Model\Appointment\Command\AssignApptCommand;
 use Bolt\Extension\IComeFromTheNet\BookMe\Model\Appointment\Handler\AssignApptHandler;
 
-
+use Bolt\Extension\IComeFromTheNet\BookMe\BookMeException;
 
 
 /**
@@ -91,7 +94,6 @@ class CommandBusProvider implements ServiceProviderInterface
 {
     /** @var array */
     private $config;
-
 
     /**
      * Constructor.
@@ -109,7 +111,7 @@ class CommandBusProvider implements ServiceProviderInterface
     public function register(Application $app)
     {
         $aConfig   = $this->config;
-      
+       
         $app['bm.model.setup.handler.addyear'] = $app->share(function(Application $container) use ($aConfig){
             return new CalAddYearHandler($aConfig['tablenames'],$container['db']);
         });
@@ -163,8 +165,8 @@ class CommandBusProvider implements ServiceProviderInterface
         };
         
         
-        $app['bm.model.rule.handler.create'] = function(Application $container) use ($aConfig,$app){
-            return new CreateRuleHandler($aConfig['tablenames'],$container['db'], $app['bm.cronToQuery']);
+        $app['bm.model.rule.handler.create'] = function(Application $container) use ($aConfig){
+            return new CreateRuleHandler($aConfig['tablenames'],$container['db'], $container['bm.cronToQuery']);
         };
         
         $app['bm.model.rule.handler.addschedule'] = function(Application $container) use ($aConfig){
@@ -180,8 +182,22 @@ class CommandBusProvider implements ServiceProviderInterface
         };
         
         $app['bm.model.booking.handler.take'] = function(Application $container) use ($aConfig){
-            return new MaxBookingsDecorator(new TakeBookingHandler($aConfig['tablenames'],$container['db']), $aConfig['tablenames'],$container['db']);
+            return new TakeBookingHandler($aConfig['tablenames'],$container['db']);
         };
+    
+        $app['bm.model.booking.handler.web'] = function(Application $container) use ($aConfig){
+            
+            return new MaxBookingsDecorator(
+                        new LeadTimeDecorator($container['bm.model.booking.handler.take'],$aConfig['tablenames'],$container['db'])
+                        ,$aConfig['tablenames']
+                        ,$container['db']);
+        };
+    
+    
+        $app['bm.model.booking.handler.manual'] = function(Application $container) use ($aConfig){
+            return $container['bm.model.booking.handler.take'];
+        };
+        
         
         $app['bm.model.booking.handler.clear'] = function(Application $container) use ($aConfig){
             return new ClearBookingHandler($aConfig['tablenames'],$container['db']);
@@ -245,6 +261,8 @@ class CommandBusProvider implements ServiceProviderInterface
                 RemoveRuleFromScheduleCommand::class=> 'bm.model.rule.handler.removeschedule',
                 RolloverRulesCommand::class         => 'bm.model.rule.handler.rollover',
                 TakeBookingCommand::class           => 'bm.model.booking.handler.take',
+                WebBookingCommand::class            => 'bm.model.booking.handler.web',
+                ManualBookingCommand::class         => 'bm.model.booking.handler.manual',
                 ClearBookingCommand::class          => 'bm.model.booking.handler.clear',
                 LookBookingConflictsCommand::class  => 'bm.model.booking.handler.conflict',
                 CreateCustomerCommand::class        => 'bm.model.customer.handler.create',
