@@ -83,7 +83,7 @@ class CreateApptHandler
 	             
 	    }
 	    catch(DBALException $e) {
-	        throw AppointmentException::hasFailedToCreateAppt($oCommand,$e);
+	        throw AppointmentException::hasFailedToCompleteAppt($oCommand,$e);
 	    }
         
         

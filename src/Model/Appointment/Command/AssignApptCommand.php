@@ -24,6 +24,7 @@ class AssignApptCommand extends ApptEntity implements  HasEventInterface, Valida
         $this->iAppointmentId = $iAppointmentId;
         $this->iBookingId     = $iBookingId;
         $this->sInstructions  = $sInstruction;
+        $this->sStatusCode    = 'A';
     }
  
  
@@ -42,6 +43,10 @@ class AssignApptCommand extends ApptEntity implements  HasEventInterface, Valida
         return $this->sStatusCode;
     }
    
+    public function getInstructions()
+    {
+        return $this->sInstructions;
+    }
     
     //---------------------------------------------------------
     # validation interface
@@ -50,7 +55,7 @@ class AssignApptCommand extends ApptEntity implements  HasEventInterface, Valida
     {
         $oBaseRules = parent::getRules();
         
-        $oBaseRules['required'] =  + [['iAppointmentId'],['iBookingId'],['sInstructions']];
+        $oBaseRules['required'] = [['iAppointmentId'],['iBookingId'],['sInstructions']];
         
         return $oBaseRules;
     }

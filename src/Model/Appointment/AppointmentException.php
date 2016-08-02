@@ -86,7 +86,7 @@ class AppointmentException extends BookMeException implements BusException
     public static function hasFailedToCancelAppt(CancelApptCommand $oCommand, DBALException $oDatabaseException= null)
     {
         $exception = new static(
-            'Unable to create cancel appointment at id '.$oCommand->getAppointmentId(). ' the appointment is either not found or not in correct status ', null, $oDatabaseException
+            'Unable to cancel appointment at id '.$oCommand->getAppointmentId(). ' the appointment is either not found or not in correct status ', null, $oDatabaseException
         );
         
         $exception->oCommand = $oCommand;
@@ -110,6 +110,42 @@ class AppointmentException extends BookMeException implements BusException
         
         return $exception;
     }
+    
+    /**
+     * @param CreateApptCommand $oCommand
+     * @param DBALException     $oDatabaseException 
+     *
+     * @return static
+     */
+    public static function hasFailedToCompleteAppt(CompleteApptCommand $oCommand, DBALException $oDatabaseException= null)
+    {
+        $exception = new static(
+            'Unable to mark as complete appointment at id '.$oCommand->getAppointmentId(). ' the appointment is either not found or not in correct status ', null, $oDatabaseException
+        );
+        
+        $exception->oCommand = $oCommand;
+        
+        return $exception;
+    }
+  
+    /**
+     * @param CreateApptCommand $oCommand
+     * @param DBALException     $oDatabaseException 
+     *
+     * @return static
+     */
+    public static function hasFailedToMoveApptWaitingList(CompleteApptCommand $oCommand, DBALException $oDatabaseException= null)
+    {
+        $exception = new static(
+            'Unable to move appointment at id '.$oCommand->getAppointmentId(). ' to the waiting list the appointment is either not found or not in correct status ', null, $oDatabaseException
+        );
+        
+        $exception->oCommand = $oCommand;
+        
+        return $exception;
+    }
+    
+    
    
     
     /**

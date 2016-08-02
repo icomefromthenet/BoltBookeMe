@@ -14,7 +14,7 @@ use Bolt\Extension\IComeFromTheNet\BookMe\Model\Appointment\AppointmentException
  * @author Lewis Dyer <getintouch@icomefromthenet.com>
  * @since 1.0
  */ 
-class AssignApptApptHandler 
+class AssignApptHandler 
 {
     
     /**
@@ -38,7 +38,7 @@ class AssignApptApptHandler
     }
     
     
-    public function handle(CancelApptCommand $oCommand)
+    public function handle(AssignApptCommand $oCommand)
     {
         $oDatabase               = $this->oDatabaseAdapter;
         $sApptTableName          = $this->aTableNames['bm_appointment'];

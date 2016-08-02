@@ -35,8 +35,8 @@ class MoveApptWaitingCommand extends ApptEntity implements  HasEventInterface, V
     {
         return $this->sStatusCode;
     }
- 
-
+    
+    
     //---------------------------------------------------------
     # validation interface
    
@@ -44,7 +44,7 @@ class MoveApptWaitingCommand extends ApptEntity implements  HasEventInterface, V
     {
         $oBaseRules = parent::getRules();
         
-        $oBaseRules['required'] = [['iAppointmentId']]
+        $oBaseRules['required'] = [['iAppointmentId']];
         
         return $oBaseRules;
     }

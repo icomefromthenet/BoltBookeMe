@@ -75,12 +75,19 @@ use Bolt\Extension\IComeFromTheNet\BookMe\Model\Customer\Command\ChangeCustomerC
 use Bolt\Extension\IComeFromTheNet\BookMe\Model\Customer\Handler\ChangeCustomerHandler;
 
 use Bolt\Extension\IComeFromTheNet\BookMe\Model\Appointment\Command\CreateApptCommand;
-use Bolt\Extension\IComeFromTheNet\BookMe\Model\Appointment\Handler\CreateApptHandler;
-use Bolt\Extension\IComeFromTheNet\BookMe\Model\Appointment\Decorator\ApptNumDecorator;
-use Bolt\Extension\IComeFromTheNet\BookMe\Model\Appointment\Command\CancelApptCommand;
-use Bolt\Extension\IComeFromTheNet\BookMe\Model\Appointment\Handler\CancelApptHandler;
 use Bolt\Extension\IComeFromTheNet\BookMe\Model\Appointment\Command\AssignApptCommand;
+use Bolt\Extension\IComeFromTheNet\BookMe\Model\Appointment\Command\CancelApptCommand;
+use Bolt\Extension\IComeFromTheNet\BookMe\Model\Appointment\Command\CompleteApptCommand;
+use Bolt\Extension\IComeFromTheNet\BookMe\Model\Appointment\Command\MoveApptWaitingCommand;
+
+use Bolt\Extension\IComeFromTheNet\BookMe\Model\Appointment\Handler\CreateApptHandler;
+use Bolt\Extension\IComeFromTheNet\BookMe\Model\Appointment\Handler\CancelApptHandler;
 use Bolt\Extension\IComeFromTheNet\BookMe\Model\Appointment\Handler\AssignApptHandler;
+use Bolt\Extension\IComeFromTheNet\BookMe\Model\Appointment\Handler\CompleteApptHandler;
+use Bolt\Extension\IComeFromTheNet\BookMe\Model\Appointment\Handler\MoveApptWaitingHandler;
+
+use Bolt\Extension\IComeFromTheNet\BookMe\Model\Appointment\Decorator\ApptNumDecorator;
+
 
 use Bolt\Extension\IComeFromTheNet\BookMe\BookMeException;
 
@@ -230,6 +237,15 @@ class CommandBusProvider implements ServiceProviderInterface
         $app['bm.model.appointment.handler.assign'] = function(Application $container) use ($aConfig){
             return new AssignApptHandler($aConfig['tablenames'],$container['db']);
         };
+        
+        $app['bm.model.appointment.handler.complete'] = function(Application $container) use ($aConfig){
+            return new CompleteApptHandler($aConfig['tablenames'],$container['db']);
+        };
+        
+        $app['bm.model.appointment.handler.waiting'] = function(Application $container) use ($aConfig){
+            return new MoveApptWaitingHandler($aConfig['tablenames'],$container['db']);
+        };
+        
       
         $app['bm.leagueeventhandler'] = function($c) {
             return new CustomHandler($c['dispatcher']);
@@ -270,7 +286,8 @@ class CommandBusProvider implements ServiceProviderInterface
                 CreateApptCommand::class            => 'bm.model.appointment.handler.create',
                 CancelApptCommand::class            => 'bm.model.appointment.handler.cancel',
                 AssignApptCommand::class            => 'bm.model.appointment.handler.assign',
-                
+                CompleteApptCommand::class          => 'bm.model.appointment.handler.complete',
+                MoveApptWaitingCommand::class       => 'bm.model.appointment.handler.waiting',
             ];
             
             

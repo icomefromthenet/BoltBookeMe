@@ -39,6 +39,10 @@ use Bolt\Extension\IComeFromTheNet\BookMe\Model\Booking\Command\ClearBookingComm
 use Bolt\Extension\IComeFromTheNet\BookMe\Model\Customer\Command\CreateCustomerCommand;
 
 use Bolt\Extension\IComeFromTheNet\BookMe\Model\Appointment\Command\CreateApptCommand;
+use Bolt\Extension\IComeFromTheNet\BookMe\Model\Appointment\Command\AssignApptCommand;
+use Bolt\Extension\IComeFromTheNet\BookMe\Model\Appointment\Command\CancelApptCommand;
+use Bolt\Extension\IComeFromTheNet\BookMe\Model\Appointment\Command\MoveApptWaitingCommand;
+use Bolt\Extension\IComeFromTheNet\BookMe\Model\Appointment\Command\CompleteApptCommand;
 
 
 /**
@@ -826,32 +830,67 @@ class BookMeService
         
     }
     
-   
     
     
-    public function addAppointmentToWaitingList()
+    public function addAppointmentToWaitingList($iAppointmentId)
     {
+        $oCommand = new MoveApptWaitingCommand($iAppointmentId);
         
+        try {
+            $this->getCommandBus()->handle($oCommand);
+        } catch (ValidationException $e) {
+           
+            return $e->getValidationFailures();
+        } 
+        
+        return true;
         
     }
     
     
-    public function completeAppointment()
+    public function completeAppointment($iAppointmentId)
     {
+        $oCommand = new CompleteApptCommand($iAppointmentId);
         
+        try {
+            $this->getCommandBus()->handle($oCommand);
+        } catch (ValidationException $e) {
+           
+            return $e->getValidationFailures();
+        } 
+        
+        return true;
         
     }
     
     
-    public function assignAppointment()
+    public function assignAppointment($iAppointmentId, $iBookingId, $sInstruction)
     {
+         $oCommand = new AssignApptCommand($iAppointmentId, $iBookingId, $sInstruction);
         
+        try {
+            $this->getCommandBus()->handle($oCommand);
+        } catch (ValidationException $e) {
+           
+            return $e->getValidationFailures();
+        } 
+        
+        return true;
         
     }
     
-    public function cancelAppointment()
+    public function cancelAppointment($iAppointmentId)
     {
+          $oCommand = new CancelApptCommand($iAppointmentId);
         
+        try {
+            $this->getCommandBus()->handle($oCommand);
+        } catch (ValidationException $e) {
+           
+            return $e->getValidationFailures();
+        } 
+        
+        return true;
         
     }
     
