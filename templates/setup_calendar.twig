@@ -1,0 +1,71 @@
+{% extends '_base/_page-nav.twig' %}
+
+{% block page_nav title %}
+
+{% block page_title __(title) %}
+
+{% block page_main %}
+
+
+    <div class="alert alert-info alert-dismissible">
+        <button type="button" class="close" data-dismiss="alert">×</button>
+        Before you can take a booking a calendar must be generated for now and next year. 
+        Adding more then now + 5 years is a waste of resources the option is available but please don't.
+    </div>
+
+
+<div class="row">
+  <div class="col-md-12">
+      
+      <div class="panel panel-default">
+        <div class="panel-heading">
+            <i class="fa fa-fw fa-bullhorn"></i>
+            Add New Calendar Year    
+        </div>
+
+        <div class="panel-body">
+               <form style="margin-bottom:10px;" method="post" action="{{ path('bookme-setup-calendar-add') }}">
+                   <input class="btn btn-primary" type="submit" value="Add Calendar Year" />
+                   
+                    <table class="dashboardlisting listing">
+                    <thead>
+                        <th>
+                             -
+                        </th>
+                        <th>
+                            Year
+                        </th>
+                    </thead>
+                    <tbody>
+                       {% for y in aCalendarYearList %}
+                       <tr>
+                           <td>
+                                Year
+                            </td>
+                            <td>
+                                {{ y }}
+                            </td>
+                        {% else %}
+                            <td colspan="2">
+                                Add your first calendar year.
+                            </td>
+                        {% endfor %}
+                        </tr>
+                    </tbody>
+                     </table>
+                   
+                   
+               </form>
+        </div>
+    </div>
+  
+  </div>
+
+
+</div>
+
+
+  
+    
+
+{% endblock page_main %}

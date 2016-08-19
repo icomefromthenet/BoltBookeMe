@@ -5,6 +5,7 @@ use DateTime;
 use Silex\Application;
 use Silex\ServiceProviderInterface;
 use Bolt\Extension\IComeFromTheNet\BookMe\Model\Appointment\AppointmentNumberGenerator;
+use Doctrine\DBAL\Types\Type;
 
 /**
  * Bootstrap any extras that don't fit else ware

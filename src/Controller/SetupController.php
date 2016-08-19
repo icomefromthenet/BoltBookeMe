@@ -10,6 +10,9 @@ use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Bolt\Storage\Database\Connection;
+use Bolt\Extension\IComeFromTheNet\BookMe\Model\Setup\Command\CalAddYearCommand;
+use Bolt\Extension\IComeFromTheNet\BookMe\Model\Setup\Command\RolloverTimeslotCommand;
+
 
 /**
  * Calendar and timeslot Admin Controller
@@ -18,41 +21,20 @@ use Bolt\Storage\Database\Connection;
  *
  * @author Lewis Dyer <getintouch@icomefromthenet.com>
  */
-class SetupController implements ControllerProviderInterface
+class SetupController extends CommonController implements ControllerProviderInterface
 {
-    /** 
-     * @var array The extension's configuration parameters
-     */ 
-    protected $config;
-
-    /**
-     * @var Bolt\Storage\Database\Connection    The Database Connection
-     */ 
-    protected $oDatabase;
     
-    /**
-     * @var DateTime    The Processing Date
-     */ 
-    protected $oNow;
-
-    
-    
-    
-    public function __construct(array $config, DateTime $oNow, Connection $oDatabase)
-    {
-        $this->config    = $config;
-        $this->oDatabase = $oDatabase;
-        $this->oNow      = $oNow;
-    }
-
 
     public function connect(Application $app)
     {
         /** @var $ctr \Silex\ControllerCollection */
         $oCtr = $app['controllers_factory'];
 
-        $oCtr->get('',[$this,'onSetupGet'])
-              ->bind('bookme-setup');
+        $oCtr->get('calendar',[$this,'onSetupCalendar'])
+              ->bind('bookme-setup-calendar');
+   
+        $oCtr->get('timeslot',[$this,'onSetupTimeslot'])
+              ->bind('bookme-setup-timeslot');
    
    
         $oCtr->post('calendar',[$this,'onAddCalendarPost'])
@@ -72,11 +54,46 @@ class SetupController implements ControllerProviderInterface
      * @param Request       $request
      * @return Response
      */
-    public function onSetupGet(Application $app, Request $request)
+    public function onSetupCalendar(Application $app, Request $request)
     {
        
-       $oDatabase = $this->oDatabase;
-       $oNow      = $this->oNow;
+       $oDatabase = $this->getDatabaseAdapter();
+       $oNow      = $this->getNow();
+       
+       # load a list of active calendars for display in the template
+       $aCalendarYearList = $oDatabase->fetchArray('SELECT y 
+                                                    FROM bolt_bm_calendar_years 
+                                                    ORDER BY y DESC');
+       # if we don't have any calendars setup which true on first install
+       # add the current year 
+       $iCalCount = count($aCalendarYearList);
+       
+       if(0 === $iCalCount) {
+           $iNextCalendarYear = $oNow->format('Y');  
+       } else {
+           $iNextCalendarYear = $aCalendarYearList[$iCalCount] + 1;
+       }
+       
+       # load a list of timeslots
+       $aTimeslots = $oDatabase->fetchArray('SELECT y 
+                                                    FROM bolt_bm_calendar_years 
+                                                    ORDER BY y DESC');
+       
+       return $app['twig']->render('admin_calendar.twig', ['title' => 'Setup Calendars','calendars' => $aCalendarYearList, 'nextYear' => $iNextCalendarYear, 'timeslots' => $aTimeslots], []);
+    }
+
+     /**
+     * Load the backend Calendar Config Page.
+     *
+     * @param Application   $app
+     * @param Request       $request
+     * @return Response
+     */
+    public function onSetupTimeslot(Application $app, Request $request)
+    {
+       
+       $oDatabase = $this->getDatabaseAdapter();
+       $oNow      = $this->getNow();
        
        # load a list of active calendars for display in the template
        $aCalendarYearList = $oDatabase->fetchArray('SELECT y 
@@ -103,22 +120,49 @@ class SetupController implements ControllerProviderInterface
     /**
      * Handles request to create new calendar year(s)
    
-     * @param Application $app
      * @param Request $request
      *
      * @return Response
      */
     public function onAddCalendarPost(Application $app, Request $request)
     {
-        $oCommandBus = $app['bm.commandBus'];
-        
-        
+        $oCommandBus    = $this->getCommandBus();
+        $oDatabase      = $this->getDatabaseAdapter();
+        $aConfig        = $this->getExtensionConfig();
+        $sTimeSlotTable = $aConfig['tablenames']['bm_timeslot'];
         
         # Add Calendar for the given years
+        $iCalenderYear = $request->request->get('iCalendarYear');
+        
+        if(true === empty($iCalenderYear)) {
+            throw new \RuntimeException('The iCalendarYear is missing');
+        }
+        
+        $oStartYear = DateTime::createFromFormat('Y-m-d',$iCalenderYear.'-01-01');
+        
+        if(true === empty($oStartYear)) {
+            throw new \RuntimeException('Unable to create a starting date');
+        }
+        
+        # Create the new calendar Year
+        
+        $oCommand = new CalAddYearCommand(1,$oStartYear);
+        
+        $oCommandBus->handle($oCommand);
+        
+        # build time slots for this new year
+        
+        $aSlots = $oDatabase->fetchAll("SELECT timeslot_id FROM $sTimeSlotTable");
+        
+        foreach( $aSlots as $aSlot) {
+        
+            $oCommand = new RolloverTimeslotCommand($aSlot['timeslot_id']);
+            $oCommandBus->handle($oCommand);
+        }
         
         # redirect back to admin page when sucessful
 
-        return $jsonResponse;
+        return $app->redirect('/bolt/extend/bookme/home/timeslot');
     }
 
 
@@ -132,7 +176,7 @@ class SetupController implements ControllerProviderInterface
      */
     public function onAddTimeslotPost(Application $app, Request $request)
     {
-        $oCommandBus = $app['bm.commandBus'];
+        $oCommandBus = $this->getCommandBus();
         
         
         

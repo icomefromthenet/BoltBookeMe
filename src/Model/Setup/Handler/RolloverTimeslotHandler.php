@@ -9,7 +9,7 @@ use Bolt\Extension\IComeFromTheNet\BookMe\Model\Setup\SetupException;
 
 
 /**
- * Used to build slot years when rolling over schedules
+ * Used to fill slot years when add a new calendar year
  * 
  * @author Lewis Dyer <getintouch@icomefromthenet.com>
  * @since 1.0
@@ -53,7 +53,7 @@ class RolloverTimeslotHandler
         
         $aFoundSql[] =" SELECT `cy`.`y` ";
         $aFoundSql[] =" FROM $sCalenderYearTableName cy ";
-        $aFoundSql[] =" WHERE `cy`.`y` NOT IN (select distinct `td`.`y` FROM $sTimeslotYearTableName td) ";
+        $aFoundSql[] =" WHERE `cy`.`y` NOT IN (select distinct `td`.`y` FROM $sTimeslotYearTableName td where `td`.`timeslot_id` = ?) ";
         
         $sFoundSql = implode(PHP_EOL,$aFoundSql);
         
@@ -76,8 +76,8 @@ class RolloverTimeslotHandler
 	        $iAffectedTotal = 0;
 	        
 	        // fetch list of calendar years that need to have timeslots generated
-	        $aYears = $oDatabase->fetchAll($sFoundSql, [], []);
-	        
+	        $aYears = $oDatabase->fetchAll($sFoundSql, [$iTimeSlotId], [$oIntType]);
+	    
 	        $sSql = implode(PHP_EOL,$aSql);
 	        
 	        // Build slots for these missing years

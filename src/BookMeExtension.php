@@ -1,5 +1,4 @@
 <?php
-
 namespace Bolt\Extension\IComeFromTheNet\BookMe;
 
 use DateTime;
@@ -258,11 +257,10 @@ class BookMeExtension extends SimpleExtension
          *   - Menu icon a Font Awesome small child
          *   - Required Bolt permissions 'settings'
          */
-        $adminMenuEntry = (new MenuEntry('bookme-calendar-admin', 'bookme/setup'))
-            ->setLabel('Book Me Calendar Setup')
+        $adminMenuEntry = (new MenuEntry('bookme-home', 'bookme/home'))
+            ->setLabel('Book Me Home')
             ->setIcon('fa:child')
-            ->setPermission('settings')
-        ;
+            ->setPermission('settings');
 
         return [$adminMenuEntry];
     }
@@ -290,7 +288,12 @@ class BookMeExtension extends SimpleExtension
         $config = $this->getConfig();
       
         return [
-            'extend/bookme/setup' => new Controller\SetupController($config,$this->getNow(),$this->getDatabase()),
+            'extend/bookme/home'          => new Controller\HomeController($config, $app),
+            'extend/bookme/setup'         => new Controller\SetupController($config, $app),
+            'extend/bookme/worker'        => new Controller\WorkerController($config, $app),
+            'extend/bookme/appointment'   => new Controller\AppointmentController($config, $app),
+            'extend/bookme/schedule'      => new Controller\ScheduleController($config, $app),
+            'extend/bookme/rule'          => new Controller\RuleController($config, $app),
         ];
         
         
