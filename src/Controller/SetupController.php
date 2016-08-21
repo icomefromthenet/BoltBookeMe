@@ -12,6 +12,7 @@ use Symfony\Component\HttpFoundation\Response;
 use Bolt\Storage\Database\Connection;
 use Bolt\Extension\IComeFromTheNet\BookMe\Model\Setup\Command\CalAddYearCommand;
 use Bolt\Extension\IComeFromTheNet\BookMe\Model\Setup\Command\RolloverTimeslotCommand;
+use Bolt\Extension\IComeFromTheNet\BookMe\Model\Setup\Command\SlotAddCommand;
 
 
 /**
@@ -31,18 +32,14 @@ class SetupController extends CommonController implements ControllerProviderInte
         $oCtr = $app['controllers_factory'];
 
         $oCtr->get('calendar',[$this,'onSetupCalendar'])
-              ->bind('bookme-setup-calendar');
+             ->post('calendar',[$this,'onAddCalendarPost'])
+             ->bind('bookme-setup-calendar');
    
         $oCtr->get('timeslot',[$this,'onSetupTimeslot'])
+              ->post('timeslot',[$this,'onAddTimeslotPost'])
               ->bind('bookme-setup-timeslot');
    
-   
-        $oCtr->post('calendar',[$this,'onAddCalendarPost'])
-              ->bind('bookme-setup-calendar-add');
-    
-        $oCtr->post('timeslot',[$this,'onAddTimeslotPost'])
-              ->bind('bookme-setup-timslot-add');
-    
+     
         
         return $oCtr;
     }
@@ -134,10 +131,6 @@ class SetupController extends CommonController implements ControllerProviderInte
         # Add Calendar for the given years
         $iCalenderYear = $request->request->get('iCalendarYear');
         
-        if(true === empty($iCalenderYear)) {
-            throw new \RuntimeException('The iCalendarYear is missing');
-        }
-        
         $oStartYear = DateTime::createFromFormat('Y-m-d',$iCalenderYear.'-01-01');
         
         if(true === empty($oStartYear)) {
@@ -161,8 +154,9 @@ class SetupController extends CommonController implements ControllerProviderInte
         }
         
         # redirect back to admin page when sucessful
+        $this->getFlash()->success('Created new Calendar Year '.$iCalenderYear);
 
-        return $app->redirect('/bolt/extend/bookme/home/timeslot');
+        return $app->redirect('/bolt/extend/bookme/home/calendar');
     }
 
 
@@ -176,15 +170,25 @@ class SetupController extends CommonController implements ControllerProviderInte
      */
     public function onAddTimeslotPost(Application $app, Request $request)
     {
-        $oCommandBus = $this->getCommandBus();
+        $oCommandBus    = $this->getCommandBus();
+        $oDatabase      = $this->getDatabaseAdapter();
+        $oNow           = $this->getNow();
         
+        $iSlotLength = $request->request->get('iSlotLength');
+    
         
+        $oCommand = new SlotAddCommand($iSlotLength,$oNow->format('Y'));
+    
+        $oCommandBus->handle($oCommand);
         
-        # Add Calendar for the given years
+        if(true === empty($oCommand->getTimeSlotId())) {
+            $this->getFlash()->warning('Unable to create the new slot');
+        }
         
-        # redirect back to admin page when sucessful
+        $this->getFlash()->success('Created new time slot '.$iSlotLength);
 
-        return $jsonResponse;
+    
+        return $app->redirect('/bolt/extend/bookme/home/timeslot');
     }
 }
 /* End of Calendar Admin Controller */

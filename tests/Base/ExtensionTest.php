@@ -7,13 +7,15 @@ use Doctrine\DBAL\Types\Type;
 use Bolt\Tests\BoltUnitTest;
 use Bolt\Extension\IComeFromTheNet\BookMe\BookMeExtension;
 use Bolt\Extension\IComeFromTheNet\BookMe\Tests\Base\BookMeService;
-
+use Bolt\Application;
+use Bolt\Configuration\Standard;
+use Cocur\Slugify\Slugify;
 
 /**
  * Ensure that the ExtensionName extension loads correctly.
  *
  */
-class ExtensionTest extends BoltUnitTest
+class ExtensionTest extends \PHPUnit_Framework_TestCase
 {
     
     /**
@@ -21,35 +23,40 @@ class ExtensionTest extends BoltUnitTest
      */ 
     protected $oTestAPI;
     
+    protected $app; 
+    
     
     protected function handleEventPostFixtureRun()
-   {
-      return false;
-   }  
+    {
+        return false;
+    }  
     
+    protected function setAppPaths($config)
+    {
+        $config->setPath('app', PHPUNIT_WEBROOT . '/app');
+        $config->setPath('config', PHPUNIT_WEBROOT . '/app/config');
+        $config->setPath('cache', PHPUNIT_WEBROOT . '/app/cache');
+        $config->setPath('web', PHPUNIT_WEBROOT . '/');
+        $config->setPath('files', PHPUNIT_WEBROOT . '/files');
+        $config->setPath('themebase', PHPUNIT_WEBROOT . '/theme/');
+        $config->setPath('extensionsconfig', PHPUNIT_WEBROOT . '/config/extensions');
+        $config->setPath('extensions', PHPUNIT_WEBROOT . '/extensions');
+    }
     
     protected function makeApp()
     {
-        $bolt = parent::makeApp();
-        
-        // Change the database
-        
-        $bolt['config']->set(
-            'general/database',
-            [
-                'dbname'       => $GLOBALS['DEMO_DATABASE_SCHEMA'],
-                'driver'       => $GLOBALS['DEMO_DATABASE_TYPE'],
-                'password'     => $GLOBALS['DEMO_DATABASE_PASSWORD'],
-                'prefix'       => 'bolt_',
-                'user'         => getenv('C9_USER') == false ? $GLOBALS['DEMO_DATABASE_USER'] :getenv('C9_USER'),
-                'host'         => getenv('IP') == false ? $GLOBALS['DEMO_DATABASE_HOST'] : getenv('IP'),
-                'wrapperClass' => '\Bolt\Storage\Database\Connection',
-                'port'         => $GLOBALS['DEMO_DATABASE_PORT'],
-            ]
-        );
-        
-        
-        
+        $config = new Standard(TEST_ROOT);
+        $this->setAppPaths($config);
+        $config->verify();
+
+        $bolt = new Application(['resources' => $config]);
+        $bolt['session.test'] = true;
+        $bolt['debug'] = false;
+        $bolt['config']->set('general/canonical', 'bolt.dev');
+        $bolt['slugify'] = Slugify::create();
+
+        $this->setAppPaths($bolt['resources']);
+     
         return $bolt;
     }
     
@@ -107,12 +114,24 @@ class ExtensionTest extends BoltUnitTest
         if ($this->app) {
             return $this->app;
         }
-       
-        $app = parent::getApp(false);
+        
+         if (!$this->app) {
+            $app = $this->makeApp();
+            
+            $oExtension = new BookMeExtension();
+            $oExtension->setContainer($app);
+            
+            $app->initialize();
+
+            if ($boot) {
+                $app->boot();
+            }
+        }
+      
          
-        $aConfig = $this->getAppConfig();
+        //$aConfig = $this->getAppConfig();
      
-        $this->oTestAPI = new BookMeService($app, $aConfig);
+        //$this->oTestAPI = new BookMeService($app, $aConfig);
         
         return $this->app = $app;
     }
@@ -121,6 +140,8 @@ class ExtensionTest extends BoltUnitTest
     {
         # Truncate the Tables
         $aConfig = $this->getAppConfig();
+       
+       //var_dump($this->getDatabaseAdapter()->getConfiguration());
         
         $this->getDatabaseAdapter()->exec('SET foreign_key_checks = 0');
         foreach($aConfig['tablenames'] as $sTable) {

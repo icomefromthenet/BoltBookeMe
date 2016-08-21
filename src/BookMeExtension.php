@@ -116,6 +116,7 @@ class BookMeExtension extends SimpleExtension
      */ 
     public function getServiceProviders()
     {
+            
        
         $parentProviders = parent::getServiceProviders();
         $localProviders = [
@@ -136,6 +137,7 @@ class BookMeExtension extends SimpleExtension
     {
         $this->extendDatabaseSchemaServices();
         
+ 
         
         return $app;
     }
@@ -146,6 +148,8 @@ class BookMeExtension extends SimpleExtension
      */
     protected function registerExtensionTables()
     {
+        
+        
         return [
             'ints'                  => InitTable::class,
             'bm_calendar'           => CalendarTable::class,

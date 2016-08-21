@@ -52,6 +52,59 @@ class WorkerController extends CommonController implements ControllerProviderInt
        //return $app['twig']->render('admin_calendar.twig', ['title' => 'Setup Calendars','calendars' => $aCalendarYearList, 'nextYear' => $iNextCalendarYear, 'timeslots' => $aTimeslots], []);
     }
 
+    
+    /**
+     * Create a new Schedule Member
+     * 
+     * @param Application   $app
+     * @param Request       $request
+     * @return Response 
+     */ 
+    public function onWorkerAdd(Application $app, Request $request)
+    {
+        
+        
+    }
+    
+    
+    /**
+     * Create a new schedule team
+     * 
+     * @param Application   $app
+     * @param Request       $request
+     * @return Response  
+     */ 
+    public function onTeamAdd(Application $app, Request $request)
+    {
+        
+        
+    }
+    
+    /**
+     * Add a member to one or more teams
+     * 
+     * @param Application   $app
+     * @param Request       $request
+     * @return Response  
+     */ 
+    public function onAddRegisterMembertoTeam(Application $app, Request $request)
+    {
+        
+        
+    }
    
+    /**
+     * Remove a member from on or more teams
+     * 
+     * @param Application   $app
+     * @param Request       $request
+     * @return Response  
+     */ 
+    public function onWithdrawlMemberFromTeam(Application $app, Request $request)
+    {
+     
+        
+    }
+    
 }
 /* End of Calendar Admin Controller */

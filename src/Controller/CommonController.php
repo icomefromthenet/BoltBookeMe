@@ -48,5 +48,11 @@ abstract class CommonController
     {
         return $this->oContainer->offsetGet('bm.now');
     }
+    
+    protected function getFlash()
+    {
+        return $this->oContainer->offsetGet('logger.flash');
+    }
+    
 }
 /* End of Calendar Admin Controller */

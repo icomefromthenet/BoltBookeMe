@@ -6,10 +6,10 @@ use Doctrine\DBAL\Types\Type;
 use Symfony\Component\HttpFoundation\Request;
 
 use Bolt\Extension\IComeFromTheNet\BookMe\Tests\Base\ExtensionTest;
-use Bolt\Extension\IComeFromTheNet\BookMe\Controller\SetupController;
+use Bolt\Extension\IComeFromTheNet\BookMe\Controller\WorkerController;
 
 
-class SetupControllerTest extends ExtensionTest
+class WorkerControllerTest extends ExtensionTest
 {
     
     
@@ -47,14 +47,13 @@ class SetupControllerTest extends ExtensionTest
     /**
     * @group Management
     */ 
-    public function testSetupController()
+    public function testWorkerController()
     {
        $iCalYear = $this->getNow()->format('Y');
       
        $this->AddTimeslotTest(30);
        $this->AddCalendarYearTest($iCalYear+1);  
        
-       $meta = $this->getApp()->offsetGet('storage.metadata')->getClassMetadata('bolt_bm_schedule_membership');
        
     }
     
