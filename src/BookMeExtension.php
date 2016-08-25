@@ -148,7 +148,7 @@ class BookMeExtension extends SimpleExtension
      */
     protected function registerExtensionTables()
     {
-        
+        var_dump('aaaaaaaaaaaaaaaaaaa');
         
         return [
             'ints'                  => InitTable::class,

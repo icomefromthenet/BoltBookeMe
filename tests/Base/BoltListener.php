@@ -255,6 +255,7 @@ class BoltListener implements \PHPUnit_Framework_TestListener
         @$fs->mkdir(PHPUNIT_WEBROOT . '/app/config/', 0777);
         @$fs->mkdir(PHPUNIT_WEBROOT . '/app/database/', 0777);
         @$fs->mkdir(PHPUNIT_WEBROOT . '/extensions/', 0777);
+        @$fs->mkdir(PHPUNIT_WEBROOT . '/extensions/local', 0777);
         @$fs->mkdir(PHPUNIT_WEBROOT . '/files/', 0777);
         @$fs->mkdir(PHPUNIT_WEBROOT . '/theme/', 0777);
 
@@ -262,6 +263,10 @@ class BoltListener implements \PHPUnit_Framework_TestListener
         $fs->mirror(TEST_ROOT . '/app/resources/',      PHPUNIT_WEBROOT . '/app/resources/',      null, ['override' => true]);
         $fs->mirror(TEST_ROOT . '/app/theme_defaults/', PHPUNIT_WEBROOT . '/app/theme_defaults/', null, ['override' => true]);
         $fs->mirror(TEST_ROOT . '/app/view/',           PHPUNIT_WEBROOT . '/app/view/',           null, ['override' => true]);
+        
+        // System link extension to local
+        $fs->symlink(BOOKME_EXTENSION_PATH,PHPUNIT_WEBROOT.'/extensions/local/icomefromthenet/bookme',false);
+        
         
         // Build a clean bolt database
         $oDatabase = $this->getBoltDatabaseConnection();
@@ -284,10 +289,6 @@ class BoltListener implements \PHPUnit_Framework_TestListener
         // Empty the cache
         system('php ' . NUT_PATH . ' cache:clear');
         
-        //Ensure Schema is Built
-        system('php ' . NUT_PATH . ' database:update -n -q');
-        
-        
         
     }
 
@@ -298,7 +299,7 @@ class BoltListener implements \PHPUnit_Framework_TestListener
     {
         // Empty the cache
         system('php ' . NUT_PATH . ' cache:clear');
-
+   
         // Remove the test database
         if ($this->reset) {
             $fs = new Filesystem();

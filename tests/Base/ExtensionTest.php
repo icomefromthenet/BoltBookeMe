@@ -120,8 +120,11 @@ class ExtensionTest extends \PHPUnit_Framework_TestCase
             
             $oExtension = new BookMeExtension();
             $oExtension->setContainer($app);
+           
+            //$app['extensions']->add($oExtension);
             
             $app->initialize();
+            
 
             if ($boot) {
                 $app->boot();
