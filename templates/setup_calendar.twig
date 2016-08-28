@@ -10,7 +10,6 @@
     <div class="alert alert-info alert-dismissible">
         <button type="button" class="close" data-dismiss="alert">×</button>
         Before you can take a booking a calendar must be generated for now and next year. 
-        Adding more then now + 5 years is a waste of resources the option is available but please don't.
     </div>
 
 
@@ -24,8 +23,8 @@
         </div>
 
         <div class="panel-body">
-               <form style="margin-bottom:10px;" method="post" action="{{ path('bookme-setup-calendar-add') }}">
-                   <input class="btn btn-primary" type="submit" value="Add Calendar Year" />
+              
+                  
                    
                     <table class="dashboardlisting listing">
                     <thead>
@@ -35,27 +34,39 @@
                         <th>
                             Year
                         </th>
+                        <th>
+                            Action
+                        </th>
                     </thead>
                     <tbody>
-                       {% for y in aCalendarYearList %}
+                       {% for y in calendars %}
                        <tr>
                            <td>
                                 Year
                             </td>
                             <td>
-                                {{ y }}
+                                {{ y.y }}
                             </td>
-                        {% else %}
-                            <td colspan="2">
-                                Add your first calendar year.
+                            <td>
+                                <span style="color:green;">Exists</span>
                             </td>
+                        </tr>
                         {% endfor %}
+                        <tr>
+                            <td>
+                                Year
+                            </td>
+                            <td>
+                                {{ nextYear }}
+                            </td>
+                            <td>
+                                 <form style="margin-bottom:10px;" method="post" action="{{ path('bookme-setup-calendar') }}"> 
+                                     <input type ="hidden" name="iCalendarYear"  value="{{ nextYear }}" />
+                                <input class="btn btn-primary" type="submit" value="Add Calendar Year" /> </form>
+                            </td>
                         </tr>
                     </tbody>
-                     </table>
-                   
-                   
-               </form>
+                </table>
         </div>
     </div>
   

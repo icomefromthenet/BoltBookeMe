@@ -32,12 +32,15 @@ class SetupController extends CommonController implements ControllerProviderInte
         $oCtr = $app['controllers_factory'];
 
         $oCtr->get('calendar',[$this,'onSetupCalendar'])
-             ->post('calendar',[$this,'onAddCalendarPost'])
              ->bind('bookme-setup-calendar');
+        
+        $oCtr->post('calendar',[$this,'onAddCalendarPost']);
+    
    
         $oCtr->get('timeslot',[$this,'onSetupTimeslot'])
-              ->post('timeslot',[$this,'onAddTimeslotPost'])
               ->bind('bookme-setup-timeslot');
+  
+        $oCtr->post('timeslot',[$this,'onAddTimeslotPost']);
    
      
         
@@ -58,25 +61,24 @@ class SetupController extends CommonController implements ControllerProviderInte
        $oNow      = $this->getNow();
        
        # load a list of active calendars for display in the template
-       $aCalendarYearList = $oDatabase->fetchArray('SELECT y 
+       $aCalendarYearList = $oDatabase->fetchAll('SELECT y 
                                                     FROM bolt_bm_calendar_years 
-                                                    ORDER BY y DESC');
+                                                    ORDER BY y ASC');
+       
+       
        # if we don't have any calendars setup which true on first install
        # add the current year 
        $iCalCount = count($aCalendarYearList);
        
-       if(0 === $iCalCount) {
+      if(true == empty($aCalendarYearList)) {
            $iNextCalendarYear = $oNow->format('Y');  
        } else {
-           $iNextCalendarYear = $aCalendarYearList[$iCalCount] + 1;
+           $aLastYear = end($aCalendarYearList);
+           $iNextCalendarYear = $aLastYear['y'] + 1;
        }
+    
        
-       # load a list of timeslots
-       $aTimeslots = $oDatabase->fetchArray('SELECT y 
-                                                    FROM bolt_bm_calendar_years 
-                                                    ORDER BY y DESC');
-       
-       return $app['twig']->render('admin_calendar.twig', ['title' => 'Setup Calendars','calendars' => $aCalendarYearList, 'nextYear' => $iNextCalendarYear, 'timeslots' => $aTimeslots], []);
+       return $app['twig']->render('setup_calendar.twig', ['title' => 'Setup Calendars','calendars' => $aCalendarYearList, 'nextYear' => $iNextCalendarYear], []);
     }
 
      /**
@@ -100,18 +102,18 @@ class SetupController extends CommonController implements ControllerProviderInte
        # add the current year 
        $iCalCount = count($aCalendarYearList);
        
-       if(0 === $iCalCount) {
+       if(true == empty($aCalendarYearList)) {
            $iNextCalendarYear = $oNow->format('Y');  
        } else {
-           $iNextCalendarYear = $aCalendarYearList[$iCalCount] + 1;
+         
        }
-       
+
        # load a list of timeslots
        $aTimeslots = $oDatabase->fetchArray('SELECT y 
                                                     FROM bolt_bm_calendar_years 
                                                     ORDER BY y DESC');
        
-       return $app['twig']->render('admin_calendar.twig', ['title' => 'Setup Calendars','calendars' => $aCalendarYearList, 'nextYear' => $iNextCalendarYear, 'timeslots' => $aTimeslots], []);
+       return $app['twig']->render('setup_timelsot.twig', ['title' => 'Setup Calendars','calendars' => $aCalendarYearList, 'nextYear' => $iNextCalendarYear, 'timeslots' => $aTimeslots], []);
     }
 
     /**
@@ -129,7 +131,7 @@ class SetupController extends CommonController implements ControllerProviderInte
         $sTimeSlotTable = $aConfig['tablenames']['bm_timeslot'];
         
         # Add Calendar for the given years
-        $iCalenderYear = $request->request->get('iCalendarYear');
+        $iCalenderYear = trim($request->request->get('iCalendarYear'));
         
         $oStartYear = DateTime::createFromFormat('Y-m-d',$iCalenderYear.'-01-01');
         
@@ -156,7 +158,7 @@ class SetupController extends CommonController implements ControllerProviderInte
         # redirect back to admin page when sucessful
         $this->getFlash()->success('Created new Calendar Year '.$iCalenderYear);
 
-        return $app->redirect('/bolt/extend/bookme/home/calendar');
+        return $app->redirect('/bolt/extend/bookme/setup/calendar/');
     }
 
 

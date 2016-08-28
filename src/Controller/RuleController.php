@@ -59,22 +59,7 @@ class RuleController extends CommonController implements ControllerProviderInter
        $oNow        = $this->getNow();
        $oCommandBus = $this->getCommandBus();
        
-       $oStartFromDate     = $request->get;
-       $oEndtAtDate
-       $iRuleTypeDatabaseId
-       $iTimeslotDatabaseId
-       $iOpeningSlot
-       $iClosingSlot
-       $sRepeatDayofweek
-       $sRepeatDayofmonth
-       $sRepeatMonth
-       $bIsSingleDay
-       
-       
-       $oCommand    = new CreateRuleCommand($oStartFromDate, $oEndtAtDate, $iRuleTypeDatabaseId
-                              , $iTimeslotDatabaseId, $iOpeningSlot, $iClosingSlot
-                              , $sRepeatDayofweek, $sRepeatDayofmonth, $sRepeatMonth, $bIsSingleDay);
-        
+
     }
    
 }

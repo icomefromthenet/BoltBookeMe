@@ -50,6 +50,23 @@ class ExtensionTest extends \PHPUnit_Framework_TestCase
         $config->verify();
 
         $bolt = new Application(['resources' => $config]);
+
+        // Change the database
+        $bolt['config']->set(
+            'general/database',
+            [
+                'dbname'       => $GLOBALS['DEMO_DATABASE_SCHEMA'],
+                'driver'       => $GLOBALS['DEMO_DATABASE_TYPE'],
+                'password'     => $GLOBALS['DEMO_DATABASE_PASSWORD'],
+                'prefix'       => 'bolt_',
+                'user'         => getenv('C9_USER') == false ? $GLOBALS['DEMO_DATABASE_USER'] :getenv('C9_USER'),
+                'host'         => getenv('IP') == false ? $GLOBALS['DEMO_DATABASE_HOST'] : getenv('IP'),
+                'wrapperClass' => '\Bolt\Storage\Database\Connection',
+                'port'         => $GLOBALS['DEMO_DATABASE_PORT'],
+            ]
+        );
+        
+        
         $bolt['session.test'] = true;
         $bolt['debug'] = false;
         $bolt['config']->set('general/canonical', 'bolt.dev');
@@ -118,23 +135,19 @@ class ExtensionTest extends \PHPUnit_Framework_TestCase
          if (!$this->app) {
             $app = $this->makeApp();
             
-            $oExtension = new BookMeExtension();
-            $oExtension->setContainer($app);
            
-            //$app['extensions']->add($oExtension);
-            
             $app->initialize();
             
-
+   
             if ($boot) {
                 $app->boot();
             }
         }
       
          
-        //$aConfig = $this->getAppConfig();
+        $aConfig = $this->getAppConfig();
      
-        //$this->oTestAPI = new BookMeService($app, $aConfig);
+        $this->oTestAPI = new BookMeService($app, $aConfig);
         
         return $this->app = $app;
     }
@@ -143,19 +156,6 @@ class ExtensionTest extends \PHPUnit_Framework_TestCase
     {
         # Truncate the Tables
         $aConfig = $this->getAppConfig();
-       
-       //var_dump($this->getDatabaseAdapter()->getConfiguration());
-        
-        $this->getDatabaseAdapter()->exec('SET foreign_key_checks = 0');
-        foreach($aConfig['tablenames'] as $sTable) {
-            
-            if($sTable !== 'bm_tmp_rule_series') {
-                $this->getDatabaseAdapter()->exec('truncate table '.$sTable);
-            }
-        }
-        
-       $this->getDatabaseAdapter()->exec('SET foreign_key_checks = 1');
-       
        
         $this->getDatabaseAdapter()->executeUpdate("INSERT INTO ".$aConfig['tablenames']['bm_rule_type'] ." (`rule_type_id`,`rule_code`,`is_work_day`,`is_exclusion`,`is_inc_override`) values (1,'workday',true,false,false)");
         $this->getDatabaseAdapter()->executeUpdate("INSERT INTO ".$aConfig['tablenames']['bm_rule_type'] ." (`rule_type_id`,`rule_code`,`is_work_day`,`is_exclusion`,`is_inc_override`) values (2,'break',false,true,false)");
