@@ -52,7 +52,8 @@ class SetupControllerTest extends ExtensionTest
        $iCalYear = $this->getNow()->format('Y');
       
        $this->AddTimeslotTest(30);
-       $this->AddCalendarYearTest($iCalYear+1);  
+       $this->AddCalendarYearTest($iCalYear+1);
+       $this->ToggleTimeslotTest($this->aDatabaseId['five_minute']);
        
        $meta = $this->getApp()->offsetGet('storage.metadata')->getClassMetadata('bolt_bm_schedule_membership');
        
@@ -108,6 +109,37 @@ class SetupControllerTest extends ExtensionTest
         $this->assertEquals(4,$iSlotCount);
     }
     
+    
+     protected function ToggleTimeslotTest($iSlotId)
+    {
+        $oApp        = $this->getApp();
+        $oContainer  = $this->getContainer();
+        $aConfig     = $this->getAppConfig();
+       
+        $oController = new SetupController($aConfig,$oContainer);
+        
+        $oRequest = new Request(array(),array('iTimeslotId'=>$iSlotId));
+        
+        
+        // assert disabled slot
+        $oController->onTimeslotToggle($oApp,$oRequest);
+        
+        $bSlotActive = (bool) $this->getDatabaseAdapter()->fetchColumn("select is_active_slot from bolt_bm_timeslot where timeslot_id = :islotId"
+                                                             ,[':islotId' => $iSlotId]);
+        
+        $this->assertFalse($bSlotActive);
+        
+        
+        // assert enabled the slot
+        $oController->onTimeslotToggle($oApp,$oRequest);
+        
+        # assert we have new calendar year
+        $bSlotActive = (bool) $this->getDatabaseAdapter()->fetchColumn("select is_active_slot from bolt_bm_timeslot where timeslot_id = :islotId"
+                                                             ,[':islotId' => $iSlotId]);
+        
+        $this->assertTrue($bSlotActive);
+        
+    }
     
    
     

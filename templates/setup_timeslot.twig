@@ -9,59 +9,13 @@
 
     <div class="alert alert-info alert-dismissible">
         <button type="button" class="close" data-dismiss="alert">×</button>
-        Before you can take a booking a calendar must be generated for now and next year. 
-        Adding more then now + 5 years is a waste of resources the option is available but please don't.
+        Timeslots must be measued in minutes and divide a day into even number of slots. e.g 5min, 10min, 15min, 30min. <br />
+        Invalid slot are example 7 minutes, 13 minutes.
     </div>
 
 
 <div class="row">
-  <div class="col-md-6">
-      
-       <div class="panel panel-default">
-        <div class="panel-heading">
-            <i class="fa fa-fw fa-bullhorn"></i>
-            Add New Calendar Year    
-        </div>
-
-        <div class="panel-body">
-               <form style="margin-bottom:10px;" method="post" action="{{ path('bookme-setup-timeslot') }}">
-                   <input class="btn btn-primary" type="submit" value="Add Calendar Year" />
-                   <hidden type="iCalendarYear" value="1" />           
-               </form>
-            
-            
-            
-            <table class="dashboardlisting listing">
-                <thead>
-                    <th>
-                         -
-                    </th>
-                    <th>
-                        Year
-                    <   /th>
-                </thead>
-                <tbody>
-                   {% for y in aCalendarYearList %}
-                   <tr>
-                       <td>
-                            Year
-                        </td>
-                        <td>
-                            {{ y }}
-                        </td>
-                    {% else %}
-                        <td colspan="2">
-                            Add your first calendar year.
-                        </td>
-                    {% endfor %}
-                    </tr>
-                </tbody>
-             </table>
-        </div>
-    </div>
-  
-  </div>
-  <div class="col-md-6">
+  <div class="col-md-12">
       <div class="panel panel-default">
         <div class="panel-heading">
             <i class="fa fa-fw fa-bullhorn"></i>
@@ -69,7 +23,7 @@
         </div>
 
         <div class="panel-body">
-               <form class="form-inline" style="margin-bottom:10px; width:100%;" method="post" action="{{ path('bookme-setup-timslot-add') }}">
+               <form class="form-inline" style="margin-bottom:10px; width:100%;" method="post" action="{{ path('bookme-setup-timeslot') }}">
                        <div class="form-group">
                        <label for="iSlotLength" style="display:inline">Slot Length:</label> 
                        <input class="form-control" id="iSlotLength" type="text" name="iSlotLength"  />
@@ -80,25 +34,48 @@
             <table class="dashboardlisting listing">
                 <thead>
                     <th>
-                         Slot Length
+                        Slot Database ID
                     </th>
                     <th>
-                        Date Added
+                        Slot Length
+                    </th>
+                    <th>
+                        Is Visible for New Schedules
+                    </th>
+                    <th>
+                        Hide
                     </th>
                 </thead>
                 <tbody>
-                 
+                    {% for slot in timeslots %}
+                       <tr>
+                           <td>
+                                {{ slot.timeslot_id }}
+                            </td>
+                            <td>
+                                {{ slot.timeslot_length }}
+                            </td>
+                            <td>
+                                {% if  slot.is_active_slot == 1 %}
+                                  Yes
+                                {% else %}
+                                  No
+                                {% endif %}
+                            </td>
+                            <td>
+                                <form method="post" action="{{ path('bookme-setup-timeslot-toggle') }}">
+                                     <input name="iTimeslotId" type="hidden" value="{{ slot.timeslot_id }}"  />
+                                      <button type="submit" class="btn btn-secondary">Toggle Timeslot</button>
+                                </form>
+                            </td>
+                            
+                        </tr>
+                    {% endfor %}
                 </tbody>
              </table>
         </div>
     </div>
-  
-  
   </div>
 </div>
-
-
-  
-    
 
 {% endblock page_main %}

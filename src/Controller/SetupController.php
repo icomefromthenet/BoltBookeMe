@@ -13,6 +13,7 @@ use Bolt\Storage\Database\Connection;
 use Bolt\Extension\IComeFromTheNet\BookMe\Model\Setup\Command\CalAddYearCommand;
 use Bolt\Extension\IComeFromTheNet\BookMe\Model\Setup\Command\RolloverTimeslotCommand;
 use Bolt\Extension\IComeFromTheNet\BookMe\Model\Setup\Command\SlotAddCommand;
+use Bolt\Extension\IComeFromTheNet\BookMe\Model\Setup\Command\SlotToggleStatusCommand;
 
 
 /**
@@ -42,8 +43,9 @@ class SetupController extends CommonController implements ControllerProviderInte
   
         $oCtr->post('timeslot',[$this,'onAddTimeslotPost']);
    
-     
-        
+        $oCtr->post('timeslot/toggle',[$this,'onTimeslotToggle'])
+             ->bind('bookme-setup-timeslot-toggle');
+             
         return $oCtr;
     }
 
@@ -57,13 +59,15 @@ class SetupController extends CommonController implements ControllerProviderInte
     public function onSetupCalendar(Application $app, Request $request)
     {
        
-       $oDatabase = $this->getDatabaseAdapter();
-       $oNow      = $this->getNow();
+       $oDatabase     = $this->getDatabaseAdapter();
+       $oNow          = $this->getNow();
+       $aConfig       = $this->getExtensionConfig();
+       $sCalYearTable = $aConfig['tablenames']['bm_calendar_years'];
        
        # load a list of active calendars for display in the template
-       $aCalendarYearList = $oDatabase->fetchAll('SELECT y 
-                                                    FROM bolt_bm_calendar_years 
-                                                    ORDER BY y ASC');
+       $aCalendarYearList = $oDatabase->fetchAll("SELECT y 
+                                                    FROM $sCalYearTable 
+                                                    ORDER BY y ASC");
        
        
        # if we don't have any calendars setup which true on first install
@@ -81,40 +85,7 @@ class SetupController extends CommonController implements ControllerProviderInte
        return $app['twig']->render('setup_calendar.twig', ['title' => 'Setup Calendars','calendars' => $aCalendarYearList, 'nextYear' => $iNextCalendarYear], []);
     }
 
-     /**
-     * Load the backend Calendar Config Page.
-     *
-     * @param Application   $app
-     * @param Request       $request
-     * @return Response
-     */
-    public function onSetupTimeslot(Application $app, Request $request)
-    {
-       
-       $oDatabase = $this->getDatabaseAdapter();
-       $oNow      = $this->getNow();
-       
-       # load a list of active calendars for display in the template
-       $aCalendarYearList = $oDatabase->fetchArray('SELECT y 
-                                                    FROM bolt_bm_calendar_years 
-                                                    ORDER BY y DESC');
-       # if we don't have any calendars setup which true on first install
-       # add the current year 
-       $iCalCount = count($aCalendarYearList);
-       
-       if(true == empty($aCalendarYearList)) {
-           $iNextCalendarYear = $oNow->format('Y');  
-       } else {
-         
-       }
-
-       # load a list of timeslots
-       $aTimeslots = $oDatabase->fetchArray('SELECT y 
-                                                    FROM bolt_bm_calendar_years 
-                                                    ORDER BY y DESC');
-       
-       return $app['twig']->render('setup_timelsot.twig', ['title' => 'Setup Calendars','calendars' => $aCalendarYearList, 'nextYear' => $iNextCalendarYear, 'timeslots' => $aTimeslots], []);
-    }
+    
 
     /**
      * Handles request to create new calendar year(s)
@@ -160,7 +131,30 @@ class SetupController extends CommonController implements ControllerProviderInte
 
         return $app->redirect('/bolt/extend/bookme/setup/calendar/');
     }
-
+    
+    /**
+     * Load the backend Calendar Config Page.
+     *
+     * @param Application   $app
+     * @param Request       $request
+     * @return Response
+     */
+    public function onSetupTimeslot(Application $app, Request $request)
+    {
+       
+       $oDatabase       = $this->getDatabaseAdapter();
+       $oNow            = $this->getNow();
+       $aConfig         = $this->getExtensionConfig();
+       $sTimeSlotTable  = $aConfig['tablenames']['bm_timeslot'];
+       
+       # load a list of active calendars for display in the template
+       $aTimeslots = $oDatabase->fetchAll("SELECT timeslot_id, timeslot_length, is_active_slot
+                                           FROM $sTimeSlotTable
+                                           ORDER BY timeslot_length DESC");
+     
+       
+       return $app['twig']->render('setup_timeslot.twig', ['title' => 'Setup Timeslot','timeslots' => $aTimeslots], []);
+    }
 
     /**
      * Handles request to create new timeslot.
@@ -187,10 +181,41 @@ class SetupController extends CommonController implements ControllerProviderInte
             $this->getFlash()->warning('Unable to create the new slot');
         }
         
-        $this->getFlash()->success('Created new time slot '.$iSlotLength);
+        $this->getFlash()->success('Created new time slot with length of '.$iSlotLength. ' minutes');
 
     
-        return $app->redirect('/bolt/extend/bookme/home/timeslot');
+        return $app->redirect('/bolt/extend/bookme/setup/timeslot');
+    }
+    
+    /**
+     * Handles request to change timeslot status to hidden
+     *
+     * @param Application $app
+     * @param Request $request
+     *
+     * @return Response
+     */
+    public function onTimeslotToggle(Application $app, Request $request)
+    {
+        $oCommandBus    = $this->getCommandBus();
+        $oDatabase      = $this->getDatabaseAdapter();
+        $oNow           = $this->getNow();
+        
+        $iSlotId = $request->request->get('iTimeslotId');
+    
+        
+        $oCommand = new SlotToggleStatusCommand($iSlotId);
+    
+        $oCommandBus->handle($oCommand);
+        
+        if(true === empty($oCommand->getTimeSlotId())) {
+            $this->getFlash()->warning('Unable set slot status to hidden at ID '.$iSlotId);
+        }
+        
+        $this->getFlash()->success('Slot is now hidden at ID '.$iSlotId);
+
+    
+        return $app->redirect('/bolt/extend/bookme/setup/timeslot');
     }
 }
 /* End of Calendar Admin Controller */

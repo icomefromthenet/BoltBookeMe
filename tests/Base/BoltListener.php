@@ -351,7 +351,10 @@ class BoltListener implements \PHPUnit_Framework_TestListener
         $oDatabase->exec('SET foreign_key_checks = 0');
         
         foreach ($aTables as $table) {
-            $oDatabase->exec('TRUNCATE TABLE '.$table->getName());
+            if(strpos($table->getName(),'_bm_') != false) {
+                $oDatabase->exec('TRUNCATE TABLE '.$table->getName());    
+            }
+            
         }
     
         $oDatabase->exec('SET foreign_key_checks = 1');
