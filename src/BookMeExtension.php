@@ -219,7 +219,7 @@ class BookMeExtension extends SimpleExtension
     protected function registerTwigFunctions()
     {
         return [
-            'my_twig_function' => 'myTwigFunction',
+            'convertSlotTime' => 'convertSlotTime',
         ];
     }
 
@@ -228,13 +228,15 @@ class BookMeExtension extends SimpleExtension
      *
      * @return string
      */
-    public function myTwigFunction()
+    public function convertSlotTime($iTimeslot, $sFormat = null)
     {
-        $context = [
-            'something' => mt_rand(),
-        ];
-
-        return $this->renderTemplate('extension.twig', $context);
+        $oDate = new DateTime('now');
+        
+        if(true === empty($sFormat)) {
+            $sFormat = 'H:i:s';
+        }
+        
+        return $oDate->setTime(0,0,0)->modify('+'.$iTimeslot. ' minutes')->format($sFormat);
     }
     
     //--------------------------------------------------------------------------

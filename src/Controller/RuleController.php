@@ -150,6 +150,8 @@ class RuleController extends CommonController implements ControllerProviderInter
        # check if the rule type request matchs on on the list
         
        $sRequestRuleType = $request->query->get('sRuleTypeCode');
+       $iCalYear         = $request->query->get('iCalYear');
+       $iTimeslotId      = $request->query->get('iTimeslotId');
         
        if(true === empty($sRequestRuleType)) {
             $aRuleTypeList = $oDatabase->fetchAll("SELECT rule_type_id, rule_code 
@@ -173,8 +175,13 @@ class RuleController extends CommonController implements ControllerProviderInter
        $aCalendarYearList = $oDatabase->fetchAll("SELECT y 
                                                     FROM $sCalYearTable 
                                                     ORDER BY y ASC");
-        
-       $iActiveCalYear   = $this->getNow()->format('Y');
+       
+       if(empty($iCalYear)) {
+        $iActiveCalYear   = $this->getNow()->format('Y');
+       } else {
+        $iActiveCalYear = $iCalYear;
+       }
+       
        
        
        # Load a list of timeslots
@@ -190,6 +197,7 @@ class RuleController extends CommonController implements ControllerProviderInter
           'iActiveCalYear'      => $iActiveCalYear,
           'sRequestRuleType'    => $sRequestRuleType,
           'aTimeslots'          => $aTimeslots,
+          'iTimeslotId'         => $iTimeslotId,
         ];
        
         return $app['twig']->render('rule_page_one.twig', $aTemplateParams, []);
@@ -216,32 +224,54 @@ class RuleController extends CommonController implements ControllerProviderInter
         $aConfig             = $this->getExtensionConfig();
         $sTimeslotSlotTable  = $aConfig['tablenames']['bm_timeslot_day'];
        
-        # load expected requets vars
+        # Process vars from Page One
         
         $iTimeslotId        = $request->query->get('iTimeslotId');  
         $iCalYear           = $request->query->get('iCalYear');
-        $sRuleTypeCode      = $request->query->get('sRuleTypeId');
+        $sRuleTypeId        = $request->query->get('sRuleTypeId');
         
         if(true === empty($iTimeslotId)) {
             $this->getFlash()->error('A Timeslot has not been selected');
-            
             return $this->onNewRulePageOne($app, $request);
         }
         
+        if(true === empty($iCalYear)) {
+            $this->getFlash()->error('A Calendar Year not been selected');
+            return $this->onNewRulePageOne($app, $request);
+        }
         
-        # load list of slots for the day
-        $aDayTimeslots = $oDatabase->fetchAll("SELECT `timeslot_day_id`, `open_minute`, `closing_slot` FROM $sTimeslotSlotTable ORDER BY `open_minute`");
+        if(true === empty($sRuleTypeId)) {
+            $this->getFlash()->error('A Rule Type has not been selected');
+            return $this->onNewRulePageOne($app, $request);
+        }
+        
+        # Load data for Page two
+        
+        $bSingleDay         = $request->query->get('bSingleDay'); 
+        $iOpenSlotMinute    = $request->query->get('iOpenSlotMinute'); 
+        $iCloseSlotMinute   = $request->query->get('iCloseSlotMinute'); 
+        
+        
+        $aDayTimeslots = $oDatabase->fetchAll("SELECT `timeslot_day_id`, `open_minute`, `close_minute` 
+                                               FROM $sTimeslotSlotTable
+                                               where timeslot_id = :iTimeSlotId
+                                               ORDER BY `open_minute`",[':iTimeSlotId' => $iTimeslotId],[TYPE::INTEGER]);
     
     
     
-        #
+        
     
         
         $aTemplateParams = [
-            'title'             => 'New Rule Page 1',
+            'title'             => 'New Rule Page 2',
             'iTimeslotId'       => $iTimeslotId,
             'iCalYear'          => $iCalYear,
-            'sRuleTypeCode'     => $sRuleTypeCode,
+            'sRuleTypeId'       => $sRuleTypeId,
+            'bSingleDay'        => $bSingleDay,
+            'aDayTimeslots'     => $aDayTimeslots,
+            'iOpenSlotMinute'   => $iOpenSlotMinute,
+            'iCloseSlotMinute'  => $iCloseSlotMinute,
+            
          
         ];
        

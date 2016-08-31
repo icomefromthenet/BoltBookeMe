@@ -1,0 +1,90 @@
+{% extends '_base/_page-nav.twig' %}
+
+{% block page_nav title %}
+
+{% block page_title __(title) %}
+
+{% block page_main %}
+
+
+<div class="row">
+  <div class="col-md-6">
+      
+      <div class="panel panel-default">
+        <div class="panel-heading">
+            <i class="fa fa-fw fa-bullhorn"></i>
+            Create New Rule Step 2  
+        </div>
+
+        <div class="panel-body">
+
+        <form style="" method="get" action="{{ path('bookme-rule-new-three') }}"> 
+            
+            <!-- Single or Repeat -->
+            <h4>Repeat Option</h4>
+            <div class="radio">
+                <label for="bIsSingleRule" class="radio-inline">
+                    <input type="radio" id="bIsSingleRule" name="bSingleDay" {% if bSingleDay == true %} checked="checked" {% endif %} /> 
+                    Occurs on a Single Day
+                </label>
+                <label for="bIsRepeatRule" class="radio-inline">
+                    <input type="radio" id="bIsRepeatRule" name="bSingleDay" {% if bSingleDay == false %} checked="checked" {% endif %} /> 
+                    Occurs over many Days
+                </label>
+                
+                
+            </div>
+            
+            <hr />
+            
+            
+            <h4>Start and End Time</h4>
+              <div class="form-inline">
+                  <div class="form-group">
+                    <label for="iOpenSlotMinute">Open Time (24hr)</label>
+                    <select name="iOpenSlotMinute" class="form-control" id="iOpenSlotMinute">
+                        <option>pick opening slot</option>
+                        {% for oTimeSlot in aDayTimeslots %}
+                            <option value="{{ oTimeSlot.open_minute }}" {% if iOpenSlotMinute == oTimeSlot.open_minute %} selected="selected" {% endif %}>
+                                {{ convertSlotTime(oTimeSlot.open_minute)}}
+                            </option>
+                        {% endfor %}
+                    </select> &nbsp;
+                  </div>
+                  <div class="form-group">
+                    <label for="iCloseSlotMinute">Close Time (24hr)</label>
+                    <select name="iCloseSlotMinute" class="form-control" id="iCloseSlotMinute">
+                        <option>pick closing slot</option>
+                        {% for oTimeSlot in aDayTimeslots %}
+                        <option value="{{ oTimeSlot.close_minute }}" {% if iCloseSlotMinute == oTimeSlot.close_minute %} selected="selected" {% endif %}>
+                                {{ convertSlotTime(oTimeSlot.close_minute)}}
+                        </option> 
+                        {% endfor %}
+                    </select>
+                  </div>
+              </div>
+            <hr />
+           
+            <!-- Details From Step One -->
+            <input type="hidden" name="iTimeslotId" value="{{ iTimeslotId }}" />
+            <input type="hidden" name="iCalYear" value="{{ iCalYear }}" />
+            <input type="hidden" name="sRuleTypeId" value="{{ sRuleTypeId }}" />
+        
+            <input class="btn btn-primary" type="submit" value="Continue to next step" /> 
+        </form>
+
+                
+        </div>
+    </div>
+  
+  </div>
+    <div class="col-md-6">
+    </div>
+
+</div>
+
+
+  
+    
+
+{% endblock page_main %}

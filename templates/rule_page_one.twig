@@ -24,7 +24,6 @@
             <div class="form-group">
                 <label for="bookeMeRuleType">Rule Type</label>
                 <select class="form-control" name="sRuleTypeId" id="bookeMeRuleType">
-                    <option value="">Select A Rule Type</option>
                     {% for oRuleType in aRuleTypeList %}
                         <option value="{{ oRuleType.rule_type_id }}" {% if sRequestRuleType == oRuleType.rule_code %} selected="selected" {% endif %}>{{ oRuleType.rule_code|ucfirst }}</option>,
                     {% endfor %}
@@ -47,7 +46,7 @@
                 <select class="form-control" name="iTimeslotId" id="bookeMeTimeslot">
                     <option value="">Select A Slot</option>
                     {% for oTimeSlot in aTimeslots %}
-                        <option value="{{ oTimeSlot.timeslot_id }}">{{ oTimeSlot.timeslot_length }} minutes</option>
+                        <option value="{{ oTimeSlot.timeslot_id }}" {% if iTimeslotId == oTimeSlot.timeslot_id %} selectd ="selected" {% endif %}>{{ oTimeSlot.timeslot_length }} minutes</option>
                     {% endfor %}
                 </select>
             </div>
