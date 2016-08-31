@@ -38,13 +38,16 @@
              Workers 
         </li>
         <li>
-             WorkDay Rules 
+          <a href="{{ url('bookme-rule-new-one') }}?sRuleTypeCode=workday"> WorkDay Rules </a>
         </li>
         <li>
-             Break/Holiday/Offshift Rules 
+            <a href="{{ url('bookme-rule-new-one') }}?sRuleTypeCode=holiday"> Holiday Rules </a> 
         </li>
         <li>
-             After Hours Rules 
+            <a href="{{ url('bookme-rule-new-one') }}?sRuleTypeCode=break"> Lunch/Break Rules </a> 
+        </li>
+        <li>
+             <a href="{{ url('bookme-rule-new-one') }}?sRuleTypeCode=overtime"> After Hours Rules  </a>
         </li>
     </ul>
   </div>

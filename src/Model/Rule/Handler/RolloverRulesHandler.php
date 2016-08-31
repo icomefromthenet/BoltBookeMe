@@ -56,7 +56,7 @@ class RolloverRulesHandler
         $aSql[] = " SELECT NULL, `r`.`rule_type_id`, `r`.`timeslot_id`, `r`.`repeat_minute`,  `r`.`repeat_hour`, ";
         $aSql[] = "        `r`.`repeat_dayofweek`, `r`.`repeat_dayofmonth`, `r`.`repeat_month`, ";
         $aSql[] = " date_add(`r`.`start_from`,INTERVAL 1 YEAR), date_add(`r`.`end_at`, INTERVAL 1 YEAR), ";
-        $aSql[] = "        `r`.`open_slot`, `r`.`close_slot`,  :iNextCalendarYear, `r`.`is_single_day`, `r`.`rule_id` ";
+        $aSql[] = "        `r`.`open_slot`, `r`.`close_slot`,  :iNextCalendarYear, `r`.`is_single_day`, `r`.`rule_id`, `r`.`rule_name` ";
         $aSql[] = " FROM $sRuleTable r ";
         $aSql[] = " WHERE `r`.rule_id IN ( ";
                                         $aSql[] = " SELECT distinct(`rs`.`rule_id`) AS rule_id ";

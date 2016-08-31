@@ -1,0 +1,73 @@
+{% extends '_base/_page-nav.twig' %}
+
+{% block page_nav title %}
+
+{% block page_title __(title) %}
+
+{% block page_main %}
+
+
+<div class="row">
+  <div class="col-md-6">
+      
+      <div class="panel panel-default">
+        <div class="panel-heading">
+            <i class="fa fa-fw fa-bullhorn"></i>
+            Create New Rule Step 1  
+        </div>
+
+        <div class="panel-body">
+
+        <form style="" method="get" action="{{ path('bookme-rule-new-two') }}"> 
+            
+            <!-- Rule Type -->    
+            <div class="form-group">
+                <label for="bookeMeRuleType">Rule Type</label>
+                <select class="form-control" name="sRuleTypeId" id="bookeMeRuleType">
+                    <option value="">Select A Rule Type</option>
+                    {% for oRuleType in aRuleTypeList %}
+                        <option value="{{ oRuleType.rule_type_id }}" {% if sRequestRuleType == oRuleType.rule_code %} selected="selected" {% endif %}>{{ oRuleType.rule_code|ucfirst }}</option>,
+                    {% endfor %}
+                </select>
+            </div>
+            
+            <!-- Calendar Year -->
+            <div class="form-group">
+                <label for="bookeMeCalYear">Calendar Year</label>
+                 <select class="form-control" name="iCalYear" id="bookeMeCalYear">
+                    {% for oCalYear in aCalendarYearList %}
+                        <option value="{{ oCalYear.y }}" {% if oCalYear.y == iActiveCalYear %} selected="selected" {% endif %}>{{ oCalYear.y }}</option>
+                    {% endfor %}
+                </select>
+            </div>
+            
+            <!-- Timeslot Year -->
+            <div class="form-group">
+                <label for="bookeMeTimeslot">Timeslot</label>
+                <select class="form-control" name="iTimeslotId" id="bookeMeTimeslot">
+                    <option value="">Select A Slot</option>
+                    {% for oTimeSlot in aTimeslots %}
+                        <option value="{{ oTimeSlot.timeslot_id }}">{{ oTimeSlot.timeslot_length }} minutes</option>
+                    {% endfor %}
+                </select>
+            </div>
+            <input type="hidden" name="sRuleTypeCode" value="{{ sRequestRuleType }}" />
+        
+            <input class="btn btn-primary" type="submit" value="Continue to next step" /> 
+        </form>
+
+                
+        </div>
+    </div>
+  
+  </div>
+    <div class="col-md-6">
+    </div>
+
+</div>
+
+
+  
+    
+
+{% endblock page_main %}

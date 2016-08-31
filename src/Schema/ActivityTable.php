@@ -55,9 +55,9 @@ class ActivityTable extends BaseTable
      */
     protected function addForeignKeyConstraints()
     {
-       $sBoltUserTableName = $this->tablePrefix .'user';
+       //$sBoltUserTableName = $this->tablePrefix .'user';
        
-       $this->table->addForeignKeyConstraint($sBoltUserTableName, ['bolt_user_id'], ['user_id'], [], null);
+       //$this->table->addForeignKeyConstraint($sBoltUserTableName, ['bolt_user_id'], ['user_id'], [], null);
        
        
        $sApptTableName = $this->tablePrefix .'bm_appointment';
@@ -72,7 +72,7 @@ class ActivityTable extends BaseTable
        
        $sMemberTableName = $this->tablePrefix .'bm_schedule_membership';
        
-       $this->table->addForeignKeyConstraint($sMemberTableName, ['member_id'], ['member_id'], [], null);
+       $this->table->addForeignKeyConstraint($sMemberTableName, ['member_id'], ['membership_id'], [], null);
        
        
        $sRuleTableName = $this->tablePrefix .'bm_rule';

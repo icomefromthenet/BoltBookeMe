@@ -82,6 +82,12 @@ class CreateRuleCommand implements ValidationInterface, HasEventInterface
      */ 
     protected $bIsSingleDay;
     
+    /**
+     * An optional name to help identify a rule
+     */ 
+    protected $sRuleName;
+    
+    
     public function __construct(DateTime $oStartFromDate
                               , DateTime $oEndtAtDate
                               , $iRuleTypeDatabaseId
@@ -91,7 +97,8 @@ class CreateRuleCommand implements ValidationInterface, HasEventInterface
                               , $sRepeatDayofweek
                               , $sRepeatDayofmonth
                               , $sRepeatMonth
-                              , $bIsSingleDay = false)
+                              , $bIsSingleDay = false
+                              , $sRuleName  = null)
     {
         $this->sRepeatMinute        = '*';
         $this->sRepeatHour          = '*';
@@ -107,6 +114,7 @@ class CreateRuleCommand implements ValidationInterface, HasEventInterface
         $this->iClosingSlot         = $iClosingSlot;
         $this->iTimeslotDatabaseId  = $iTimeslotDatabaseId;
         $this->bIsSingleDay         = $bIsSingleDay;
+        $this->sRuleName            = $sRuleName;
     }
   
   
@@ -254,6 +262,16 @@ class CreateRuleCommand implements ValidationInterface, HasEventInterface
         return $this->bIsSingleDay;   
     }
   
+    /**
+     * A rule text name
+     * 
+     * @retun string the rule Name
+     */ 
+    public function getRuleName()
+    {
+        return $this->sRuleName;
+    }
+  
     //---------------------------------------------------------
     # validation interface
     
@@ -279,6 +297,9 @@ class CreateRuleCommand implements ValidationInterface, HasEventInterface
             ,'boolean' => [
                 ['is_single_day']    
             ]
+            ,'lengthBetween' => [
+                ['rule_name',0,100]
+            ]
             
         ];
     }
@@ -299,6 +320,7 @@ class CreateRuleCommand implements ValidationInterface, HasEventInterface
             'closing_slot'      => $this->iClosingSlot,
             'timeslot_id'       => $this->iTimeslotDatabaseId,
             'is_single_day'     => $this->bIsSingleDay,
+            'rule_name'         => $this->sRuleName,  
         ];
     }
   
