@@ -228,15 +228,25 @@ class BookMeExtension extends SimpleExtension
      *
      * @return string
      */
-    public function convertSlotTime($iTimeslot, $sFormat = null)
+    public function convertSlotTime($iTimeslot,$bOpening)
     {
         $oDate = new DateTime('now');
+        $sFormat = 'H:i:s';
         
-        if(true === empty($sFormat)) {
-            $sFormat = 'H:i:s';
+        
+        
+        $sValue =  $oDate->setTime(0,0,0)->modify('+'.$iTimeslot. ' minutes')->format($sFormat);
+        
+        if(true == $bOpening &&  $sValue == '00:00:00') {
+            $sValue = 'Start of Day';
+            
+        } 
+        
+        if(false == $bOpening  && $sValue == '00:00:00') {
+            $sValue = 'End of Day';
         }
         
-        return $oDate->setTime(0,0,0)->modify('+'.$iTimeslot. ' minutes')->format($sFormat);
+        return $sValue;
     }
     
     //--------------------------------------------------------------------------

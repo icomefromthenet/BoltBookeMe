@@ -469,9 +469,10 @@ class RulesTest extends ExtensionTest
         $iOpeningTimeslot = 1000;
         $iClosingTimeslot = 1440;
         $iTimeslotId = $this->aDatabaseId['ten_minute'];
- 
+        $sDescription = 'A short rule description';
+        $sName        = 'A short rule name';
         
-        $oCommand = new CreateRuleCommand($oStartDate, $oEndDate, 1, $iTimeslotId, $iOpeningTimeslot, $iClosingTimeslot,'*', '1-14','10-12');
+        $oCommand = new CreateRuleCommand($oStartDate, $oEndDate, 1, $iTimeslotId, $iOpeningTimeslot, $iClosingTimeslot,'*', '1-14','10-12',false,$sName, $sDescription);
         
         $this->getCommandBus()->handle($oCommand);
         
@@ -506,9 +507,10 @@ class RulesTest extends ExtensionTest
         $iOpeningTimeslot = 1000;
         $iClosingTimeslot = 1440;
         $iTimeslotId = $this->aDatabaseId['ten_minute'];
- 
+        $sDescription = 'A short rule description';
+        $sName        = 'A short rule name';
         
-        $oCommand = new CreateRuleCommand($oStartDate, $oEndDate, 1, $iTimeslotId, $iOpeningTimeslot, $iClosingTimeslot,'*', '*','*',true);
+        $oCommand = new CreateRuleCommand($oStartDate, $oEndDate, 1, $iTimeslotId, $iOpeningTimeslot, $iClosingTimeslot,'*', '*','*',true,$sName, $sDescription);
         
         $this->getCommandBus()->handle($oCommand);
         

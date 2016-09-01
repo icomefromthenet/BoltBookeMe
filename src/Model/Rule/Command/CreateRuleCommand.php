@@ -83,9 +83,14 @@ class CreateRuleCommand implements ValidationInterface, HasEventInterface
     protected $bIsSingleDay;
     
     /**
-     * An optional name to help identify a rule
+     * @var string An optional name to help identify a rule
      */ 
     protected $sRuleName;
+    
+     /**
+     * @var string An optional rule description
+     */ 
+    protected $sRuleDescription;
     
     
     public function __construct(DateTime $oStartFromDate
@@ -98,7 +103,8 @@ class CreateRuleCommand implements ValidationInterface, HasEventInterface
                               , $sRepeatDayofmonth
                               , $sRepeatMonth
                               , $bIsSingleDay = false
-                              , $sRuleName  = null)
+                              , $sRuleName  = null
+                              , $sRuleDescription = null)
     {
         $this->sRepeatMinute        = '*';
         $this->sRepeatHour          = '*';
@@ -115,6 +121,7 @@ class CreateRuleCommand implements ValidationInterface, HasEventInterface
         $this->iTimeslotDatabaseId  = $iTimeslotDatabaseId;
         $this->bIsSingleDay         = $bIsSingleDay;
         $this->sRuleName            = $sRuleName;
+        $this->sRuleDescription     = $sRuleDescription;
     }
   
   
@@ -271,6 +278,18 @@ class CreateRuleCommand implements ValidationInterface, HasEventInterface
     {
         return $this->sRuleName;
     }
+    
+    /**
+     * A rule text description
+     * 
+     * @retun string the rule text description
+     */ 
+    public function getRuleDescription()
+    {
+        return $this->sRuleDescription;
+    }
+    
+    
   
     //---------------------------------------------------------
     # validation interface
@@ -298,7 +317,7 @@ class CreateRuleCommand implements ValidationInterface, HasEventInterface
                 ['is_single_day']    
             ]
             ,'lengthBetween' => [
-                ['rule_name',0,100]
+                ['rule_name',0,50], ['rule_description',0,500]
             ]
             
         ];
@@ -321,6 +340,7 @@ class CreateRuleCommand implements ValidationInterface, HasEventInterface
             'timeslot_id'       => $this->iTimeslotDatabaseId,
             'is_single_day'     => $this->bIsSingleDay,
             'rule_name'         => $this->sRuleName,  
+            'rule_description'  => $this->sRuleDescription,
         ];
     }
   

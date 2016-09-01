@@ -250,6 +250,8 @@ class RuleController extends CommonController implements ControllerProviderInter
         $bSingleDay         = $request->query->get('bSingleDay'); 
         $iOpenSlotMinute    = $request->query->get('iOpenSlotMinute'); 
         $iCloseSlotMinute   = $request->query->get('iCloseSlotMinute'); 
+        $sRuleName          = $request->query->get('sRuleName'); 
+        $sRuleDescription   = $request->query->get('sRuleDescription'); 
         
         
         $aDayTimeslots = $oDatabase->fetchAll("SELECT `timeslot_day_id`, `open_minute`, `close_minute` 
@@ -257,9 +259,6 @@ class RuleController extends CommonController implements ControllerProviderInter
                                                where timeslot_id = :iTimeSlotId
                                                ORDER BY `open_minute`",[':iTimeSlotId' => $iTimeslotId],[TYPE::INTEGER]);
     
-    
-    
-        
     
         
         $aTemplateParams = [
@@ -271,7 +270,8 @@ class RuleController extends CommonController implements ControllerProviderInter
             'aDayTimeslots'     => $aDayTimeslots,
             'iOpenSlotMinute'   => $iOpenSlotMinute,
             'iCloseSlotMinute'  => $iCloseSlotMinute,
-            
+            'sRuleName'         => $sRuleName,
+            'sRuleDescription'  => $sRuleDescription,
          
         ];
        
@@ -293,18 +293,30 @@ class RuleController extends CommonController implements ControllerProviderInter
      */ 
     public function onNewRulePageThree(Application $app, Request $request)
     {
+        $oDatabase           = $this->getDatabaseAdapter();
+        $oNow                = $this->getNow();
+        $aConfig             = $this->getExtensionConfig();
+        $sTimeslotSlotTable  = $aConfig['tablenames']['bm_timeslot_day'];
         
-        $bIsRepeat = (boolean) $request->query->get('bRepeatRule');
+        # process vars from page 2
+        $bSingleDay         = $request->query->get('bSingleDay'); 
+        $iOpenSlotMinute    = $request->query->get('iOpenSlotMinute'); 
+        $iCloseSlotMinute   = $request->query->get('iCloseSlotMinute'); 
+        $sRuleName          = $request->query->get('sRuleName'); 
+        $sRuleDescription   = $request->query->get('sRuleDescription'); 
+        $iTimeslotId        = $request->query->get('iTimeslotId');  
+        $iCalYear           = $request->query->get('iCalYear');
+        $sRuleTypeId        = $request->query->get('sRuleTypeId');
         
-        
-        if(false === $bIsRepeat) {
-            return $this->onRulePost($app, $request);    
-            
-        } 
         
         
         # load repeat view
+        
             
+            
+        # load single view
+        
+        
         
     }
 
