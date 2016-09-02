@@ -37,7 +37,7 @@ class RuleTable extends BaseTable
         $this->table->addColumn('is_single_day','boolean',    ['default' => false ]);
         
         $this->table->addColumn('rule_name','string', ['length'=> 50]);
-        $this->table->addColumn('rule_desc','string', ['length' =>500 ]);
+        $this->table->addColumn('rule_desc','string', ['length' =>500 ,'notnull' => false]);
         
         
         

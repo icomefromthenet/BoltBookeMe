@@ -91,6 +91,8 @@ class CronToQuery
         // 3 = Day Month
         // 4 = Month
         // 5 = Day of week 
+        
+        // 6 = Week of Year (extension) 
 
         //$aRanges[] = $oSegmentParser->parseSegment(ParsedRange::TYPE_MINUTE,  $oCommand->getRuleRepeatMinute());
         
@@ -101,6 +103,9 @@ class CronToQuery
         $aRanges[] = $oSegmentParser->parseSegment(ParsedRange::TYPE_MONTH,       $oCommand->getRuleRepeatMonth());
         
         $aRanges[] = $oSegmentParser->parseSegment(ParsedRange::TYPE_DAYOFWEEK,   $oCommand->getRuleRepeatDayOfWeek());
+   
+        $aRanges[] = $oSegmentParser->parseSegment(ParsedRange::TYPE_WEEKOFYEAR,   $oCommand->getRuleRepeatWeekOfYear());
+   
         
         $aFlatRanges = $this->flatten($aRanges);
         

@@ -271,6 +271,28 @@ class SlotFinder
             }
            
             $aSql[] = " ) ";
+            
+            $aWeekYearRanges = $this->extractRanges(ParsedRange::TYPE_WEEKOFYEAR,$aParsedRanges);
+            $aSql[] = " AND ( ";
+            foreach($aWeekYearRanges as $iIndex => $oRange) {
+                $sSql = '';
+                if($iIndex > 0) {
+                    $sSql .= 'OR ( ';    
+                } else {
+                    $sSql .=  '( ';
+                }
+                
+                $aMRanges = array_keys(array_fill($oRange->getRangeOpen(),($oRange->getRangeClose()-$oRange->getRangeOpen()),''));
+                
+                $sSql .= " `d`.`w` IN (".implode(',',$aMRanges).") AND `d`.`w` % ".$oRange->getModValue().' = 0';
+                
+                $sSql .=  ') ';
+                
+                $aSql[] = $sSql;    
+            }
+            $aSql[] = " ) ";
+          
+          
                
         }
 

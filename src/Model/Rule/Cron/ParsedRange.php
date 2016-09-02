@@ -19,7 +19,7 @@ class ParsedRange implements ValidationInterface
     const TYPE_DAYOFMONTH       = 'dayofmonth';
     const TYPE_DAYOFWEEK        = 'dayofweek';
     const TYPE_MONTH            = 'month';
-    
+    const TYPE_WEEKOFYEAR       = 'weekofyear';
     
     protected $iSegmentOrder;
     protected $iRangeOpen;
@@ -83,7 +83,7 @@ class ParsedRange implements ValidationInterface
                ['segment_order',1]
             ]
             ,'in' => [
-                ['range_type',[self::TYPE_DAYOFMONTH,self::TYPE_DAYOFWEEK,self::TYPE_HOUR,self::TYPE_MINUTE,self::TYPE_MONTH]]
+                ['range_type',[self::TYPE_DAYOFMONTH,self::TYPE_DAYOFWEEK,self::TYPE_HOUR,self::TYPE_MINUTE,self::TYPE_MONTH,self::TYPE_WEEKOFYEAR]]
             ]
             ,'numeric' =>[
                ['range_open'],['range_close']

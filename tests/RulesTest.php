@@ -71,6 +71,7 @@ class RulesTest extends ExtensionTest
        $this->SegmentParserMonthSegment();
        $this->SegmentParserDayMonthSegment();
        $this->SegmentParserDayWeekSegment();
+       $this->SegmentParserWeekYearSegment();
        $this->AssignRuleToScheduleCommand();
        $this->SlotFinderTest();
        $this->NewRuleTest();
@@ -384,6 +385,73 @@ class RulesTest extends ExtensionTest
       
     }
     
+    protected function SegmentParserWeekYearSegment()
+    {
+        $oContainer       = $this->getContainer();
+        $oSegmentParser   = $oContainer['bm.cronSegmentParser'];
+        
+        $sCronType  = ParsedRange::TYPE_WEEKOFYEAR;
+        $sCronExpr = '*';
+        $sCronExprA = '0-52/2';
+        $sCronExprB = '46/2';
+        $sCronExprC = '5-34,35-52';
+        $sCronExprD = '23';
+        $sCronExprE = '*/3';
+        
+        $aRange = $oSegmentParser->parseSegment($sCronType,$sCronExpr);    
+        
+        $this->assertCount(1,$aRange);
+        $this->assertEquals(0,$aRange[0]->getRangeOpen());
+        $this->assertEquals(52,$aRange[0]->getRangeClose());
+        $this->assertEquals(1,$aRange[0]->getModValue());
+       
+        
+        $aRange = $oSegmentParser->parseSegment($sCronType,$sCronExprA);    
+        
+        $this->assertCount(1,$aRange);
+        $this->assertEquals(0,$aRange[0]->getRangeOpen());
+        $this->assertEquals(52,$aRange[0]->getRangeClose());
+        $this->assertEquals(2,$aRange[0]->getModValue());
+        
+        $aRange = $oSegmentParser->parseSegment($sCronType,$sCronExprB);    
+        
+        $this->assertCount(1,$aRange);
+        $this->assertEquals(46,$aRange[0]->getRangeOpen());
+        $this->assertEquals(52,$aRange[0]->getRangeClose());
+        $this->assertEquals(2,$aRange[0]->getModValue());
+        
+        $aRange = $oSegmentParser->parseSegment($sCronType,$sCronExprC);    
+        
+        $this->assertCount(2,$aRange);
+        $this->assertEquals(5,$aRange[0]->getRangeOpen());
+        $this->assertEquals(34,$aRange[0]->getRangeClose());
+        $this->assertEquals(1,$aRange[0]->getModValue());
+        $this->assertEquals(35,$aRange[1]->getRangeOpen());
+        $this->assertEquals(52,$aRange[1]->getRangeClose());
+        $this->assertEquals(1,$aRange[1]->getModValue());
+    
+        
+         
+        $aRange = $oSegmentParser->parseSegment($sCronType,$sCronExprD);    
+        
+        $this->assertCount(1,$aRange);
+        $this->assertEquals(23,$aRange[0]->getRangeOpen());
+        $this->assertEquals(23,$aRange[0]->getRangeClose());
+        $this->assertEquals(1,$aRange[0]->getModValue());
+        
+        
+        
+        $aRange = $oSegmentParser->parseSegment($sCronType,$sCronExprE);    
+        
+        $this->assertCount(1,$aRange);
+        $this->assertEquals(0,$aRange[0]->getRangeOpen());
+        $this->assertEquals(52,$aRange[0]->getRangeClose());
+        $this->assertEquals(3,$aRange[0]->getModValue());
+       
+      
+      
+    }
+    
     
     protected function AssignRuleToScheduleCommand()
     {
@@ -423,6 +491,7 @@ class RulesTest extends ExtensionTest
         $oRangeMonth      = new ParsedRange(1,10,12,1,ParsedRange::TYPE_MONTH);
         $oRangeDayOfMonth = new ParsedRange(2,1,14,1,ParsedRange::TYPE_DAYOFMONTH);
         $oRangeDayOfWeek = new ParsedRange(3,0,6,1,ParsedRange::TYPE_DAYOFWEEK);
+        $oRangeWeekofYear = new ParsedRange(1,0,52,1,ParsedRange::TYPE_WEEKOFYEAR);
      
         // from june to the end of the year
         $oStartDate  = clone $oNow;
@@ -433,9 +502,9 @@ class RulesTest extends ExtensionTest
         $iClosingTimeslot = 1440;
         $iTimeslotId = $this->aDatabaseId['ten_minute'];
         
-        $oCommand = new CreateRuleCommand($oStartDate, $oEndDate, 1, $iTimeslotId, $iOpeningTimeslot, $iClosingTimeslot,'*', '1-14','10-12');
+        $oCommand = new CreateRuleCommand($oStartDate, $oEndDate, 1, $iTimeslotId, $iOpeningTimeslot, $iClosingTimeslot,'*', '1-14','10-12','*');
         
-        $oSlotFinder->findSlots($oCommand,array($oRangeMonth, $oRangeDayOfMonth, $oRangeDayOfWeek));
+        $oSlotFinder->findSlots($oCommand,array($oRangeMonth, $oRangeDayOfMonth, $oRangeDayOfWeek,$oRangeWeekofYear));
         
         $oDateType = Type::getType(Type::DATETIME);
         
@@ -472,7 +541,7 @@ class RulesTest extends ExtensionTest
         $sDescription = 'A short rule description';
         $sName        = 'A short rule name';
         
-        $oCommand = new CreateRuleCommand($oStartDate, $oEndDate, 1, $iTimeslotId, $iOpeningTimeslot, $iClosingTimeslot,'*', '1-14','10-12',false,$sName, $sDescription);
+        $oCommand = new CreateRuleCommand($oStartDate, $oEndDate, 1, $iTimeslotId, $iOpeningTimeslot, $iClosingTimeslot,'*', '1-14','10-12','*',false,$sName, $sDescription);
         
         $this->getCommandBus()->handle($oCommand);
         
@@ -510,7 +579,7 @@ class RulesTest extends ExtensionTest
         $sDescription = 'A short rule description';
         $sName        = 'A short rule name';
         
-        $oCommand = new CreateRuleCommand($oStartDate, $oEndDate, 1, $iTimeslotId, $iOpeningTimeslot, $iClosingTimeslot,'*', '*','*',true,$sName, $sDescription);
+        $oCommand = new CreateRuleCommand($oStartDate, $oEndDate, 1, $iTimeslotId, $iOpeningTimeslot, $iClosingTimeslot,'*', '*','*','*',true,$sName, $sDescription);
         
         $this->getCommandBus()->handle($oCommand);
         

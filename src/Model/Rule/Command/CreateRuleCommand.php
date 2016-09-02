@@ -43,6 +43,11 @@ class CreateRuleCommand implements ValidationInterface, HasEventInterface
     protected $sRepeatMonth;
 
     /**
+     * @var string repeat dsl for week of the year
+     */ 
+    protected $sRepeatWeekofyear;
+
+    /**
      * @var integer the opening slot during the day
      */ 
     protected $iOpeningSlot;
@@ -102,6 +107,7 @@ class CreateRuleCommand implements ValidationInterface, HasEventInterface
                               , $sRepeatDayofweek
                               , $sRepeatDayofmonth
                               , $sRepeatMonth
+                              , $sRepeatWeekofyear
                               , $bIsSingleDay = false
                               , $sRuleName  = null
                               , $sRuleDescription = null)
@@ -111,6 +117,7 @@ class CreateRuleCommand implements ValidationInterface, HasEventInterface
         $this->sRepeatDayofweek     = $sRepeatDayofweek;
         $this->sRepeatDayofmonth    = $sRepeatDayofmonth;
         $this->sRepeatMonth         = $sRepeatMonth; 
+        $this->sRepeatWeekofyear    = $sRepeatWeekofyear;
         
         
         $this->oStartFromDate       = $oStartFromDate;
@@ -219,6 +226,16 @@ class CreateRuleCommand implements ValidationInterface, HasEventInterface
     }
     
     /**
+     * Return the repear week of year rule
+     * 
+     * @return string
+     */ 
+    public function getRuleRepeatWeekOfYear()
+    {
+        return $this->sRepeatWeekofyear;
+    }
+    
+    /**
      * Return the opening slot minute
      * 
      * @return integer
@@ -308,7 +325,7 @@ class CreateRuleCommand implements ValidationInterface, HasEventInterface
                 ['closing_slot',(60*24)]
             ]
             ,'required' => [
-               ['rule_type_id'],['repeat_dayofweek'],['repeat_dayofmonth'],['repeat_month'],['timeslot_id']
+               ['rule_type_id'],['repeat_dayofweek'],['repeat_dayofmonth'],['repeat_month'],['repeat_weekofyear'],['timeslot_id'],['rule_name']
             ]
             ,'calendarSameYear' => [
                 ['end_at','start_from']
@@ -335,6 +352,7 @@ class CreateRuleCommand implements ValidationInterface, HasEventInterface
             'repeat_dayofweek'  => $this->sRepeatDayofweek,
             'repeat_dayofmonth' => $this->sRepeatDayofmonth,
             'repeat_month'      => $this->sRepeatMonth,
+            'repeat_weekofyear' => $this->sRepeatWeekofyear,
             'opening_slot'      => $this->iOpeningSlot,
             'closing_slot'      => $this->iClosingSlot,
             'timeslot_id'       => $this->iTimeslotDatabaseId,

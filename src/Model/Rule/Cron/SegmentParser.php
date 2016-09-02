@@ -202,7 +202,10 @@ class SegmentParser
             break;
             case 'month':      
                 $sCronRegex  = '/^([1-9]|[1-2][1-2])-([1-2][1-2]|[1-9])\/([0-9]+)$/';
-            break;    
+            break; 
+            case 'weekofyear' :
+                $sCronRegex  = '/^([0-9]|[1-4][0-9]|[5][1-2])-([0-9]|[1-4][0-9]|[5][1-2])\/([0-9]+)$/';
+            break;
             default: throw ParseCronException::parseCronFailed("Unable to match $sCronType ",$sCronString);
         }
         
@@ -234,7 +237,10 @@ class SegmentParser
             break;
             case 'month':      
                 $sCronRegex = '/^([1-2][1-2]|[1-9])\/([0-9]+)$/';
-            break;    
+            break;  
+            case 'weekofyear' :
+                $sCronRegex = '/^([0-9]|[1-4][0-9]|[5][1-2])\/([0-9]+)$/';
+            break;
             default: throw ParseCronException::parseCronFailed("Unable to match $sCronType ",$sCronString);
         }
         
@@ -265,7 +271,10 @@ class SegmentParser
             break;
             case 'month':      
                 $sCronRegex = '/^([1-2][0-2]|[1-9])-([1-2][1-2]|[1-9])$/';
-            break;    
+            break; 
+            case 'weekofyear' :
+                 $sCronRegex = '/^([0-9]|[1-4][0-9]|[5][1-2])-([0-9]|[1-4][0-9]|[5][1-2])$/';
+            break;
             default: throw ParseCronException::parseCronFailed("Unable to match $sCronType ",$sCronString);
         }
         
@@ -297,6 +306,9 @@ class SegmentParser
             case 'month':      
                 $sCronRegex = '/^([1-2][1-2]|[1-9])$/';
             break;    
+            case 'weekofyear':
+                $sCronRegex = '/^([0-9]|[1-4][0-9]|[5][1-2])$/';
+            break;
             default: throw ParseCronException::parseCronFailed("Unable to match $sCronType ",$sCronString);
         }
         
@@ -328,6 +340,9 @@ class SegmentParser
             case 'month':      
                 $sCronRegex = '/^([*])\/([0-9]+)$/';
             break;    
+            case 'weekofyear':
+                $sCronRegex = '/^([*])\/([0-9]+)$/';
+            break;
             default: throw ParseCronException::parseCronFailed("Unable to match $sCronType ",$sCronString);
         }
         
@@ -360,7 +375,10 @@ class SegmentParser
             break;
             case 'month':      
                 $iMinValue = 1;
-            break;    
+            break;
+            case 'weekofyear':      
+                $iMinValue = 0;
+            break;
             default: throw ParseCronException::parseCronFailed("Unable to find min for $sCronType ",$sCronString);
         }
         
@@ -393,7 +411,10 @@ class SegmentParser
             break;
             case 'month':      
                 $iMaxValue = 12;
-            break;    
+            break;   
+            case 'weekofyear':      
+                $iMaxValue = 52;
+            break;
             default: throw ParseCronException::parseCronFailed("Unable to find max for cron type $sCronType ",$sCronString);
         }
         
