@@ -297,6 +297,10 @@ class RuleController extends CommonController implements ControllerProviderInter
         $oNow                = $this->getNow();
         $aConfig             = $this->getExtensionConfig();
         $sTimeslotSlotTable  = $aConfig['tablenames']['bm_timeslot_day'];
+        $sCalWeekTable       = $aConfig['tablenames']['bm_calendar_weeks'];
+        $sCalTable           = $aConfig['tablenames']['bm_calendar'];
+        
+       
         
         # process vars from page 2
         $bSingleDay         = $request->query->get('bSingleDay'); 
@@ -309,15 +313,35 @@ class RuleController extends CommonController implements ControllerProviderInter
         $sRuleTypeId        = $request->query->get('sRuleTypeId');
         
         
+        #process vars from this page
+        
+        $sStartDate         = $request->query->get('sStartDate'); 
+        $sEndDate           = $request->query->get('sEndDate');
+        
         
         # load repeat view
-        
             
             
         # load single view
         
         
+          $aTemplateParams = [
+            'title'             => 'New Rule Page 3',
+            'iTimeslotId'       => $iTimeslotId,
+            'iCalYear'          => $iCalYear,
+            'sRuleTypeId'       => $sRuleTypeId,
+            'bSingleDay'        => $bSingleDay,
+            'iOpenSlotMinute'   => $iOpenSlotMinute,
+            'iCloseSlotMinute'  => $iCloseSlotMinute,
+            'sRuleName'         => $sRuleName,
+            'sRuleDescription'  => $sRuleDescription,
+            'sStartDate'        => $sStartDate,
+            'sEndDate'          => $sEndDate
+         
+         
+        ];
         
+        return $app['twig']->render('rule_page_three.twig', $aTemplateParams, []);
     }
 
 

@@ -51,8 +51,8 @@ class WorkerControllerTest extends ExtensionTest
     {
        $iCalYear = $this->getNow()->format('Y');
       
-       $this->AddTimeslotTest(30);
-       $this->AddCalendarYearTest($iCalYear+1);  
+       //$this->AddTimeslotTest(30);
+       //$this->AddCalendarYearTest($iCalYear+1);  
        
        
     }

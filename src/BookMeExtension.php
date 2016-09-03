@@ -195,6 +195,7 @@ class BookMeExtension extends SimpleExtension
     {
         return [
             // Web assets that will be loaded in the frontend
+        
           
             // Web assets that will be loaded in the backend
           

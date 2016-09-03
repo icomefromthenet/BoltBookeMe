@@ -1,0 +1,173 @@
+{% extends '_base/_page-nav.twig' %}
+
+{% block page_nav title %}
+
+{% block page_title __(title) %}
+
+{% block page_main %}
+
+
+<div class="row">
+  <div class="col-md-6">
+      
+      <div class="panel panel-default">
+        <div class="panel-heading">
+            <i class="fa fa-fw fa-bullhorn"></i>
+            Create New Rule Step 3   
+        </div>
+
+        <div class="panel-body">
+
+        <form style="" method="post" action="{{ path('bookme-rule') }}"> 
+           
+           {% if bSingleDay == false %}
+           
+           
+            <h4>Apply Dates</h4>
+         
+            <div class="form-inline">
+            
+                 <div class="form-group">
+                    <label for="sStartDate">Start Date</label>
+                    <input type="text" name="sStartDate" class="form-control" id="sStartDate" placeholder="dd/mm/yyyy">
+                 </div>
+            
+                 <div class="form-group">
+                    <label for="sEndDate">End Date</label>
+                    <input type="text"  name="sEndDate" class="form-control" id="sEndDate" placeholder="dd/mm/yyyy">
+                  </div>
+            </div>
+            
+            <hr />
+            
+            <h4>Repeat Rule - Days of the Week</h4>
+            
+            
+            
+            
+            
+            <hr />
+            
+            {% else %}
+            
+             <h4>Apply Date</h4>
+         
+            <div class="form-inline">
+            
+                 <div class="form-group">
+                    <label for="sStartDate">Start Date</label>
+                    <input type="text" name="sStartDate" class="form-control" id="sStartDate" placeholder="dd/mm/yyyy">
+                 </div>
+            
+            </div>
+                 
+            <hr />
+       
+            
+            {% endif %}
+            
+            
+            <!-- Details From Step One -->
+            <input type="hidden" name="iTimeslotId" value="{{ iTimeslotId }}" />
+            <input type="hidden" name="iCalYear"    value="{{ iCalYear }}" />
+            <input type="hidden" name="sRuleTypeId" value="{{ sRuleTypeId }}" />
+            
+            <!-- Details from Step Two -->
+            <input type="hidden" name="bSingleDay"       value="{{ bSingleDay }}" />
+            <input type="hidden" name="iOpenSlotMinute"  value="{{ iOpenSlotMinute }}" />
+            <input type="hidden" name="iCloseSlotMinute" value="{{ iCloseSlotMinute }}" />
+            <input type="hidden" name="sRuleName"        value="{{ sRuleName }}" />
+            <input type="hidden" name="sRuleDescription" value="{{ sRuleDescription }}" />
+            
+        
+            <input class="btn btn-primary" type="submit" value="Create Rule" /> 
+        </form>
+
+                
+        </div>
+    </div>
+  
+  </div>
+    <div class="col-md-6">
+    </div>
+
+</div>
+
+
+{% endblock page_main %}
+
+
+{% block page_script %}
+<script type="text/javascript">
+  var pageModule = function($) {
+    
+    var iCalYear    = 2000;
+    var bSingleDay  = false;
+    var oStartDate   = null;
+    var oEndDate     = null;
+    
+    var oDefaultDateOption = {
+        "changeMonth": true ,
+        "dateFormat" : 'dd/mm/yy',
+        "maxDate"    : null,
+        "minDate"    : null,
+    };
+    
+    var $startEl;
+    var $endEl;
+    
+    var onInit = function(options) {
+    
+      iCalYear   = options.iCalYear;
+      bSingleDay = options.bSingleDay;
+      oStartDate  = getDate({value : options.sStartDate});
+      oEndDate    = getDate({value : options.sEndDate});
+      
+      oDefaultDateOption.maxDate  = (new Date(iCalYear, 12-1, 31));
+      oDefaultDateOption.minDate  =  (new Date(iCalYear, 1-1, 1));
+    
+      
+      $startEl = $('#sStartDate');
+      $endEl   = $('#sEndDate');  
+      
+      $startEl.datepicker($.extend({'defaultDate':oStartDate}, oDefaultDateOption)).on('change',onStartDateChange);
+      $endEl.datepicker($.extend({'defaultDate': oEndDate}, oDefaultDateOption)).on('change',onEndDateChange);
+      
+      
+      
+    };
+    
+    
+    var onStartDateChange = function(event) {
+         $endEl.datepicker( "option", "minDate", getDate( this ) );
+    };
+    
+    
+    var onEndDateChange = function(event) {
+        $startEl.datepicker( "option", "maxDate", getDate( this ) );
+    };
+    
+    
+    // helpers
+    var getDate = function( element ) {
+      var date;
+      try {
+        date = $.datepicker.parseDate( oDefaultDateOption.dateFormat, element.value );
+      } catch( error ) {
+        date = null;
+      }
+ 
+      return date;
+    }
+    
+    return {
+      init : onInit
+    };
+    
+  }($);
+  
+  {% set oScriptOptions = { 'iCalYear': iCalYear , 'bSingleDay' : bSingleDay, 'sStartDate': sStartDate, 'sEndDate' : sEndDate  } %}
+  
+  pageModule.init({{ oScriptOptions|json_encode()|raw }});
+</script>
+{% endblock page_script %}
