@@ -317,10 +317,30 @@ class RuleController extends CommonController implements ControllerProviderInter
         
         $sStartDate         = $request->query->get('sStartDate'); 
         $sEndDate           = $request->query->get('sEndDate');
-        
+        $aRepeatDayofWeek   = $request->query->get('sRepeatDayofWeek');
+        $aRepeatDayofMonth  = $request->query->get('sRepeatDayofMonth');
+        $aRepeatsMonthofYear = $request->query->get('sRepeatsMonthofYear');
+        $aRepeatWeekofYear   = $request->query->get('sRepeatsWeekofYear');
         
         # load repeat view
-            
+        $aDayTimeslots = [];
+        $oSTH = $oDatabase->executeQuery("SELECT `w`, `open_date`, `close_date`
+                                               FROM $sCalWeekTable
+                                               where y = :y
+                                               ORDER BY `open_Date`",[':y' => $iCalYear],[TYPE::INTEGER]);
+        
+        $oInteger       = TYPE::getType(TYPE::INTEGER);
+        $oDate          = TYPE::getType(TYPE::DATE);
+        $oPlatform      = $oDatabase->getDatabasePlatform();
+        $aWeekTimeslots = [];
+        
+        while ($row = $oSTH->fetch()) {
+            $aWeekTimeslots[] = [
+             'w'           => $oInteger->convertToPHPValueSQL($row['w'], $oPlatform),
+             'open_date'   => $oDate->convertToPHPValueSQL($row['open_date'], $oPlatform),
+             'close_date'  => $oDate->convertToPHPValueSQL($row['close_date'], $oPlatform),
+            ];
+        }
             
         # load single view
         
@@ -336,9 +356,12 @@ class RuleController extends CommonController implements ControllerProviderInter
             'sRuleName'         => $sRuleName,
             'sRuleDescription'  => $sRuleDescription,
             'sStartDate'        => $sStartDate,
-            'sEndDate'          => $sEndDate
-         
-         
+            'sEndDate'          => $sEndDate,
+            'aRepeatDayofWeek'  => $aRepeatDayofWeek,
+            'aRepeatDayofMonth' => $aRepeatDayofMonth,
+            'aRepeatsMonthofYear' => $aRepeatsMonthofYear, 
+            'aRepeatWeekofYear'  => $aRepeatWeekofYear,
+            'aWeekTimeslots'    => $aWeekTimeslots,
         ];
         
         return $app['twig']->render('rule_page_three.twig', $aTemplateParams, []);
@@ -347,11 +370,38 @@ class RuleController extends CommonController implements ControllerProviderInter
 
     public function onRulePost(Application $app, Request $request)
     {
-       $oDatabase   = $this->getDatabaseAdapter();
-       $oNow        = $this->getNow();
-       $oCommandBus = $this->getCommandBus();
+       $oDatabase     = $this->getDatabaseAdapter();
+       $oNow          = $this->getNow();
+       $oCommandBus   = $this->getCommandBus();
+       $sStepThreeUrl = $app['url_generator']->generate('bookme-rule-new-three');
+        
        
-
+        $bSingleDay         = $request->request->get('bSingleDay'); 
+        $iOpenSlotMinute    = $request->request->get('iOpenSlotMinute'); 
+        $iCloseSlotMinute   = $request->request->get('iCloseSlotMinute'); 
+        $sRuleName          = $request->request->get('sRuleName'); 
+        $sRuleDescription   = $request->request->get('sRuleDescription'); 
+        $iTimeslotId        = $request->request->get('iTimeslotId');  
+        $iCalYear           = $request->request->get('iCalYear');
+        $sRuleTypeId        = $request->request->get('sRuleTypeId');
+        $sStartDate         = $request->request->get('sStartDate'); 
+        $sEndDate           = $request->request->get('sEndDate');
+        $aRepeatDayofWeek   = $request->request->get('sRepeatDayofWeek');
+        $aRepeatDayofMonth   = $request->request->get('sRepeatDayofMonth');
+        $aRepeatsMonthofYear = $request->query->get('sRepeatsMonthofYear');
+        $aRepeatWeekofYear   = $request->query->get('sRepeatsWeekofYear');
+      
+    
+        
+        // Convert Repeat Rules into Cron string
+        
+        $sRepeatDayofWeek = implode(',',$aRepeatDayofWeek);
+        $sRepeatDayofMonth = implode(',',$aRepeatDayofMonth);
+        $sRepeatMonthofYear = implode(',',$aRepeatsMonthofYear);
+        $sRepeatWeekofYear  = implode(',',$aRepeatWeekofYear);
+        
+        return $app->redirect($sStepThreeUrl.'?'.http_build_query($request->request->all()));
+    
     }
    
 }

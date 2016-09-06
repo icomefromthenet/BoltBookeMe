@@ -1,3 +1,6 @@
+
+
+
 {% extends '_base/_page-nav.twig' %}
 
 {% block page_nav title %}
@@ -8,7 +11,7 @@
 
 
 <div class="row">
-  <div class="col-md-6">
+  <div class="col-md-8">
       
       <div class="panel panel-default">
         <div class="panel-heading">
@@ -18,7 +21,7 @@
 
         <div class="panel-body">
 
-        <form style="" method="post" action="{{ path('bookme-rule') }}"> 
+        <form id="sNewRepeatRuleForm" style="" method="post" action="{{ path('bookme-rule') }}"> 
            
            {% if bSingleDay == false %}
            
@@ -42,11 +45,425 @@
             
             <h4>Repeat Rule - Days of the Week</h4>
             
+            <div>
+              <label class="checkbox-inline" for="sRepeatDayofWeekSunday">
+                <input type="checkbox" name="sRepeatDayofWeek[]" {% if  0 in aRepeatDayofWeek %} checked="checked"  {% endif %} value="0" id="sRepeatDayofWeekSunday" />
+                 Sunday
+              </label>
             
+             <label class="checkbox-inline" for="sRepeatDayofWeekMonday">
+                <input type="checkbox" name="sRepeatDayofWeek[]" {% if  1 in aRepeatDayofWeek %} checked="checked"  {% endif %} value="1" id="sRepeatDayofWeekMonday" /> 
+                Monday
+              </label>
             
+              <label class="checkbox-inline" for="sRepeatDayofWeekTuesday">
+                <input type="checkbox" name="sRepeatDayofWeek[]" {% if  2 in aRepeatDayofWeek %} checked="checked"  {% endif %} value="2" id="sRepeatDayofWeekTuesday" />
+                Tuesday
+              </label>
+
+              <label class="checkbox-inline" for="sRepeatDayofWeekWednesday">
+                <input type="checkbox" name="sRepeatDayofWeek[]" {% if  3 in aRepeatDayofWeek %} checked="checked"  {% endif %} value="3" id="sRepeatDayofWeekWednesday" />
+                Wednesday
+              </label>
+    
+              <label class="checkbox-inline" for="sRepeatDayofWeekThursday">
+                <input type="checkbox" name="sRepeatDayofWeek[]" {% if  4 in aRepeatDayofWeek %} checked="checked"  {% endif %} value="4" id="sRepeatDayofWeekThursday" />
+                Thursday
+              </label>
+    
+              <label class="checkbox-inline" for="sRepeatDayofWeekFriday">
+                <input type="checkbox" name="sRepeatDayofWeek[]" {% if  5 in aRepeatDayofWeek %} checked="checked"  {% endif %} value="5" id="sRepeatDayofWeekFriday" />
+                Friday
+              </label>
+    
+              <label class="checkbox-inline" for="sRepeatDayofWeekSaturday">
+                <input type="checkbox" name="sRepeatDayofWeek[]" {% if  6 in aRepeatDayofWeek %} checked="checked"  {% endif %} value="6" id="sRepeatDayofWeekSaturday" />
+                Saturday
+              </label>
+    
+            </div>
             
             
             <hr />
+    
+          <div class="row">
+            <div class="col-md-8">          
+              <h4> Repeat Day of Month </h4>
+    
+            </div>
+            <div class="col-md-4">
+              <label class="checkbox-inline" for="bSelectAllDayMonth">
+                  <input type="checkbox" name="bSelectAllDayMonth" value="1" id="bSelectAllDayMonth" />
+                  Toggle All Days
+              </label>
+            </div>
+          </div>
+      
+              <table  class="table">
+                <tr>
+                  <th>
+                    1st
+                  </th>
+                  <th>
+                    2nd
+                  </th>
+                  <th>
+                    3rd
+                  </th>
+                  <th>
+                    4th
+                  </th>
+                  <th>
+                    5th
+                  </th>
+                  <th>
+                    6th
+                  </th>
+                  <th>
+                    7th
+                  </th>
+                </tr>
+                <tr>
+                  <td>
+                      <input type="checkbox" value="1" name="sRepeatDayofMonth[]" {% if  1 in aRepeatDayofMonth %} checked="checked"  {% endif %}  />
+                  </td>
+                  <td>
+                      <input type="checkbox" value="2" name="sRepeatDayofMonth[]" {% if  2 in aRepeatDayofMonth %} checked="checked"  {% endif %} />
+                  </td>
+                  <td>
+                      <input type="checkbox" value="3" name="sRepeatDayofMonth[]" {% if  3 in aRepeatDayofMonth %} checked="checked"  {% endif %}  />
+                  </td>
+                  <td>
+                      <input type="checkbox" value="4" name="sRepeatDayofMonth[]" {% if  4 in aRepeatDayofMonth %} checked="checked"  {% endif %}  />
+                  </td>
+                  <td>
+                      <input type="checkbox" value="5" name="sRepeatDayofMonth[]" {% if  5 in aRepeatDayofMonth %} checked="checked"  {% endif %}  />
+                  </td>
+                  <td>
+                      <input type="checkbox" value="6" name="sRepeatDayofMonth[]" {% if  6 in aRepeatDayofMonth %} checked="checked"  {% endif %}  />
+                  </td>
+                  <td>
+                      <input type="checkbox" value="7" name="sRepeatDayofMonth[]" {% if  7 in aRepeatDayofMonth %} checked="checked"  {% endif %}  />
+                  </td>
+                </tr>
+                <tr>
+                  <th>
+                    8th
+                  </th>
+                  <th>
+                    9th
+                  </th>
+                  <th>
+                    10th
+                  </th>
+                  <th>
+                    11th
+                  </th>
+                  <th>
+                    12th
+                  </th>
+                  <th>
+                    13th
+                  </th>
+                  <th>
+                    14th
+                  </th>
+                </tr>
+                <tr>
+                  <td>
+                      <input type="checkbox" value="8" name="sRepeatDayofMonth[]" {% if  8 in aRepeatDayofMonth %} checked="checked"  {% endif %} />
+                  </td>
+                  <td>
+                      <input type="checkbox" value="9" name="sRepeatDayofMonth[]"  {% if  9 in aRepeatDayofMonth %} checked="checked"  {% endif %}/>
+                  </td>
+                  <td>
+                      <input type="checkbox" value="10" name="sRepeatDayofMonth[]" {% if  10 in aRepeatDayofMonth %} checked="checked"  {% endif %}   />
+                  </td>
+                  <td>
+                      <input type="checkbox" value="11" name="sRepeatDayofMonth[]" {% if  11 in aRepeatDayofMonth %} checked="checked"  {% endif %}  />
+                  </td>
+                  <td>
+                      <input type="checkbox" value="12" name="sRepeatDayofMonth[]" {% if  12 in aRepeatDayofMonth %} checked="checked"  {% endif %}  />
+                  </td>
+                  <td>
+                      <input type="checkbox" value="13" name="sRepeatDayofMonth[]" {% if  13 in aRepeatDayofMonth %} checked="checked"  {% endif %}  />
+                  </td>
+                  <td>
+                      <input type="checkbox" value="14" name="sRepeatDayofMonth[]" {% if  14 in aRepeatDayofMonth %} checked="checked"  {% endif %}  />
+                  </td>
+                </tr>
+                
+                 <tr>
+                  <th>
+                    15th
+                  </th>
+                  <th>
+                    16th
+                  </th>
+                  <th>
+                    17th
+                  </th>
+                  <th>
+                    18th
+                  </th>
+                  <th>
+                    19th
+                  </th>
+                  <th>
+                    20th
+                  </th>
+                  <th>
+                    21th
+                  </th>
+                </tr>
+                <tr>
+                  <td>
+                      <input type="checkbox" value="15" name="sRepeatDayofMonth[]" {% if  15 in aRepeatDayofMonth %} checked="checked"  {% endif %} />
+                  </td>
+                  <td>
+                      <input type="checkbox" value="16" name="sRepeatDayofMonth[]"  {% if  16 in aRepeatDayofMonth %} checked="checked"  {% endif %}/>
+                  </td>
+                  <td>
+                      <input type="checkbox" value="17" name="sRepeatDayofMonth[]" {% if  17 in aRepeatDayofMonth %} checked="checked"  {% endif %}   />
+                  </td>
+                  <td>
+                      <input type="checkbox" value="18" name="sRepeatDayofMonth[]" {% if  18 in aRepeatDayofMonth %} checked="checked"  {% endif %}  />
+                  </td>
+                  <td>
+                      <input type="checkbox" value="19" name="sRepeatDayofMonth[]" {% if  19 in aRepeatDayofMonth %} checked="checked"  {% endif %}  />
+                  </td>
+                  <td>
+                      <input type="checkbox" value="20" name="sRepeatDayofMonth[]" {% if  20 in aRepeatDayofMonth %} checked="checked"  {% endif %}  />
+                  </td>
+                  <td>
+                      <input type="checkbox" value="21" name="sRepeatDayofMonth[]" {% if  21 in aRepeatDayofMonth %} checked="checked"  {% endif %}  />
+                  </td>
+                </tr>
+                
+                <tr>
+                  <th>
+                    22nd
+                  </th>
+                  <th>
+                    23rd
+                  </th>
+                  <th>
+                    24th
+                  </th>
+                  <th>
+                    25th
+                  </th>
+                  <th>
+                    26th
+                  </th>
+                  <th>
+                    27th
+                  </th>
+                  <th>
+                    28th
+                  </th>
+                </tr>
+                <tr>
+                  <td>
+                      <input type="checkbox" value="22" name="sRepeatDayofMonth[]" {% if  22 in aRepeatDayofMonth %} checked="checked"  {% endif %} />
+                  </td>
+                  <td>
+                      <input type="checkbox" value="23" name="sRepeatDayofMonth[]"  {% if  23 in aRepeatDayofMonth %} checked="checked"  {% endif %}/>
+                  </td>
+                  <td>
+                      <input type="checkbox" value="24" name="sRepeatDayofMonth[]" {% if  24 in aRepeatDayofMonth %} checked="checked"  {% endif %}   />
+                  </td>
+                  <td>
+                      <input type="checkbox" value="25" name="sRepeatDayofMonth[]" {% if  25 in aRepeatDayofMonth %} checked="checked"  {% endif %}  />
+                  </td>
+                  <td>
+                      <input type="checkbox" value="26" name="sRepeatDayofMonth[]" {% if  26 in aRepeatDayofMonth %} checked="checked"  {% endif %}  />
+                  </td>
+                  <td>
+                      <input type="checkbox" value="27" name="sRepeatDayofMonth[]" {% if  27 in aRepeatDayofMonth %} checked="checked"  {% endif %}  />
+                  </td>
+                  <td>
+                      <input type="checkbox" value="28" name="sRepeatDayofMonth[]" {% if  28 in aRepeatDayofMonth %} checked="checked"  {% endif %}  />
+                  </td>
+                </tr>
+                
+                <tr>
+                  <th>
+                    29nd
+                  </th>
+                  <th>
+                    30rd
+                  </th>
+                  <th>
+                    31th
+                  </th>
+                  <th>&nbsp;</th>
+                  <th>&nbsp;</th>
+                  <th>&nbsp;</th>
+                  <th>&nbsp;</th>
+                </tr>
+                <tr>
+                  <td>
+                      <input type="checkbox" value="29" name="sRepeatDayofMonth[]" {% if  29 in aRepeatDayofMonth %} checked="checked"  {% endif %} />
+                  </td>
+                  <td>
+                      <input type="checkbox" value="30" name="sRepeatDayofMonth[]" {% if  30 in aRepeatDayofMonth %} checked="checked"  {% endif %}/>
+                  </td>
+                  <td>
+                      <input type="checkbox" value="31" name="sRepeatDayofMonth[]" {% if  31 in aRepeatDayofMonth %} checked="checked"  {% endif %}   />
+                  </td>
+                  <td>
+                    &nbsp;
+                  </td>
+                  <td>
+                    &nbsp;
+                  </td>
+                  <td>
+                    &nbsp;
+                  </td>
+                  <td>
+                    &nbsp;
+                  </td>
+                </tr>
+                
+              </table>
+            
+            
+            <hr />
+            
+              <div class="row">
+            <div class="col-md-8">          
+               <h4>Months of the Year</h4>
+    
+            </div>
+            <div class="col-md-4">
+              <label class="checkbox-inline" for="bSelectAllMonth">
+                  <input type="checkbox" name="bSelectAllMonth" value="1" id="bSelectAllMonth" />
+                  Toggle All Days
+              </label>
+            </div>
+          </div>
+            
+           <table class="table">
+             <tr>
+              <td>
+                <label class="checkbox-inline" for="sRepeatMonthofYearJan">
+                  <input type="checkbox" name="sRepeatMonthofYear[]" {% if  1 in aRepeatMonthofYear %} checked="checked"  {% endif %} value="1" id="sRepeatMonthofYearJan" />
+                   Janruary
+                </label>
+              </td>
+              <td>
+                <label class="checkbox-inline" for="sRepeatMonthofYearFeb">
+                <input type="checkbox" name="sRepeatMonthofYear[]" {% if  2 in aRepeatMonthofYear %} checked="checked"  {% endif %} value="2" id="sRepeatMonthofYearFeb" />
+                 February
+                </label>
+              </td>
+              <td>
+              <label class="checkbox-inline" for="sRepeatMonthofYearMar">
+                <input type="checkbox" name="sRepeatMonthofYear[]" {% if  3 in aRepeatMonthofYear %} checked="checked"  {% endif %} value="3" id="sRepeatMonthofYearMar" />
+                 March
+              </label>
+              </td>
+              <td>
+              <label class="checkbox-inline" for="sRepeatMonthofYearApr">
+                <input type="checkbox" name="sRepeatMonthofYear[]" {% if  4 in aRepeatMonthofYear %} checked="checked"  {% endif %} value="4" id="sRepeatMonthofYearApr" />
+                 April
+              </label>
+             </td>
+             <td>
+              <label class="checkbox-inline" for="sRepeatMonthofYearMay">
+                <input type="checkbox" name="sRepeatMonthofYear[]" {% if  5 in aRepeatMonthofYear %} checked="checked"  {% endif %} value="5" id="sRepeatMonthofYearMay" />
+                 May
+              </label>
+             </td>
+             <td>
+               <label class="checkbox-inline" for="sRepeatMonthofYearJun">
+              <input type="checkbox" name="sRepeatMonthofYear[]" {% if  6 in aRepeatMonthofYear %} checked="checked"  {% endif %} value="6" id="sRepeatMonthofYearJun" />
+               June
+              </label>
+             </td>
+             </tr>
+             
+             <tr>
+               <td>
+                <label class="checkbox-inline" for="sRepeatMonthofYearJul">
+                <input type="checkbox" name="sRepeatMonthofYear[]" {% if  7 in aRepeatMonthofYear %} checked="checked"  {% endif %} value="7" id="sRepeatMonthofYearJul" />
+                 July
+                </label>
+               </td>
+               <td>
+                <label class="checkbox-inline" for="sRepeatMonthofYearAug">
+                  <input type="checkbox" name="sRepeatMonthofYear[]" {% if  8 in aRepeatMonthofYear %} checked="checked"  {% endif %} value="8" id="sRepeatMonthofYearAug" />
+                 August
+                </label>
+               </td>
+               <td>
+                <label class="checkbox-inline" for="sRepeatMonthofYearSep">
+                <input type="checkbox" name="sRepeatMonthofYear[]" {% if  9 in aRepeatMonthofYear %} checked="checked"  {% endif %} value="9" id="sRepeatMonthofYearSep" />
+                 September
+                </label>
+               </td>   
+               <td>
+                  <label class="checkbox-inline" for="sRepeatMonthofYearOct">
+                      <input type="checkbox" name="sRepeatMonthofYear[]" {% if  10 in aRepeatMonthofYear %} checked="checked"  {% endif %} value="10" id="sRepeatMonthofYearOct" />
+                       October
+                  </label>
+                </td>
+                <td>
+                  <label class="checkbox-inline" for="sRepeatMonthofYearNov">
+                    <input type="checkbox" name="sRepeatMonthofYear[]" {% if  11 in aRepeatMonthofYear %} checked="checked"  {% endif %} value="11" id="sRepeatMonthofYearNov" />
+                    November
+                  </label>
+                </td> 
+                <td>
+                  <label class="checkbox-inline" for="sRepeatMonthofYearDec">
+                      <input type="checkbox" name="sRepeatMonthofYear[]" {% if  12 in aRepeatMonthofYear %} checked="checked"  {% endif %} value="12" id="sRepeatMonthofYearDec" />
+                       December
+                  </label>
+                </td>
+             </tr>
+           </table>
+           
+           
+            
+            
+            <hr />
+            
+            <h4>Weeks of the Year</h4>
+            
+            <table class="table">
+            <thead>
+              <tr>
+                <th>
+                  Select
+                </th>
+                <th>
+                      <label class="checkbox-inline" for="bSelectAllWeek">
+                        <input type="checkbox" name="bSelectAllWeek" value="1" id="bSelectAllWeek" />
+                        Toggle All Weeks
+                      </label>
+                </th>
+              </tr>
+            </thead>
+            <tbody>
+            {% for oTimeslot in aWeekTimeslots %}
+            <tr>
+                <td>
+                <input type="checkbox" name="sRepeatsWeekofYear[]", id="sRepeatsWeekofYear{{ oTimeslot.w }}" value="{{ oTimeslot.w }}" {% if oTimeslot.w in aWeekTimeslots %} checked="checked" {% endif %}  />
+              </td>
+          
+              <td class="info">
+                  <label for="sRepeatsWeekofYear{{ oTimeslot.w }}">
+                    Week {{ oTimeslot.w }} || {{ oTimeslot.open_date|date('d F') }} - {{ oTimeslot.close_date|date('d F') }}        
+                  </label>       
+                </td>
+            </tr>
+            
+            {% endfor %}
+            </tbody>
+            </table>
+            
+            <hr >
             
             {% else %}
             
@@ -115,6 +532,10 @@
     
     var $startEl;
     var $endEl;
+    var $toggleWeekEl;
+    var $formEl;
+    var $toggleAllDayMonthEl;
+    var $toggleAllMonthEl;
     
     var onInit = function(options) {
     
@@ -127,13 +548,18 @@
       oDefaultDateOption.minDate  =  (new Date(iCalYear, 1-1, 1));
     
       
-      $startEl = $('#sStartDate');
-      $endEl   = $('#sEndDate');  
+      $startEl    = $('#sStartDate');
+      $endEl      = $('#sEndDate'); 
+      $toggleWeekEl = $('#bSelectAllWeek');
+      $formEl     = $('#sNewRepeatRuleForm');
+      $toggleAllDayMonthEl = $('#bSelectAllDayMonth');
+      $toggleAllMonthEl = $('#bSelectAllMonth');
       
       $startEl.datepicker($.extend({'defaultDate':oStartDate}, oDefaultDateOption)).on('change',onStartDateChange);
       $endEl.datepicker($.extend({'defaultDate': oEndDate}, oDefaultDateOption)).on('change',onEndDateChange);
-      
-      
+      $toggleWeekEl.on('change',onToggleAllWeeksChange);
+      $toggleAllDayMonthEl.on('change',onToggleAllDayMonthChange);
+      $toggleAllMonthEl.on('change',onToggleAllMonthChange);
       
     };
     
@@ -147,6 +573,45 @@
         $startEl.datepicker( "option", "maxDate", getDate( this ) );
     };
     
+    
+    var onToggleAllWeeksChange = function(event) {
+      
+      if($toggleWeekEl.is(':checked')) {
+          $formEl.find(':input[name="sRepeatsWeekofYear[]"]').prop('checked',true);    
+      } else {
+        $formEl.find(':input[name="sRepeatsWeekofYear[]"]').prop('checked',false);   
+      }
+      
+      return true;
+    
+    };
+    
+    var onToggleAllDayMonthChange = function(event) {
+      
+      
+      if($toggleAllDayMonthEl.is(':checked')) {
+          $formEl.find(':input[name="sRepeatDayofMonth[]"]').prop('checked',true);    
+      } else {
+        $formEl.find(':input[name="sRepeatDayofMonth[]"]').prop('checked',false);   
+      }
+      
+      return true;
+    
+    };
+    
+    
+    var onToggleAllMonthChange = function(event) {
+      
+      if($toggleAllMonthEl.is(':checked')) {
+          $formEl.find(':input[name="sRepeatMonthofYear[]"]').prop('checked',true);    
+      } else {
+        $formEl.find(':input[name="sRepeatMonthofYear[]"]').prop('checked',false);   
+      }
+      
+      return true;
+      
+      
+    };
     
     // helpers
     var getDate = function( element ) {
