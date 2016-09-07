@@ -12,6 +12,8 @@ use Symfony\Component\HttpFoundation\Response;
 use Bolt\Storage\Database\Connection;
 
 use Bolt\Extension\IComeFromTheNet\BookMe\Model\Rule\RuleException;
+use Bolt\Extension\IComeFromTheNet\BookMe\BookMeException;
+use Bolt\Extension\IComeFromTheNet\BookMe\Bus\Middleware\ValidationException;
 use Bolt\Extension\IComeFromTheNet\BookMe\Model\Rule\Command\CreateRuleCommand;
 
 
@@ -228,7 +230,7 @@ class RuleController extends CommonController implements ControllerProviderInter
         
         $iTimeslotId        = $request->query->get('iTimeslotId');  
         $iCalYear           = $request->query->get('iCalYear');
-        $sRuleTypeId        = $request->query->get('sRuleTypeId');
+        $iRuleTypeId        = $request->query->get('iRuleTypeId');
         
         if(true === empty($iTimeslotId)) {
             $this->getFlash()->error('A Timeslot has not been selected');
@@ -240,7 +242,7 @@ class RuleController extends CommonController implements ControllerProviderInter
             return $this->onNewRulePageOne($app, $request);
         }
         
-        if(true === empty($sRuleTypeId)) {
+        if(true === empty($iRuleTypeId)) {
             $this->getFlash()->error('A Rule Type has not been selected');
             return $this->onNewRulePageOne($app, $request);
         }
@@ -265,7 +267,7 @@ class RuleController extends CommonController implements ControllerProviderInter
             'title'             => 'New Rule Page 2',
             'iTimeslotId'       => $iTimeslotId,
             'iCalYear'          => $iCalYear,
-            'sRuleTypeId'       => $sRuleTypeId,
+            'iRuleTypeId'       => $iRuleTypeId,
             'bSingleDay'        => $bSingleDay,
             'aDayTimeslots'     => $aDayTimeslots,
             'iOpenSlotMinute'   => $iOpenSlotMinute,
@@ -310,7 +312,7 @@ class RuleController extends CommonController implements ControllerProviderInter
         $sRuleDescription   = $request->query->get('sRuleDescription'); 
         $iTimeslotId        = $request->query->get('iTimeslotId');  
         $iCalYear           = $request->query->get('iCalYear');
-        $sRuleTypeId        = $request->query->get('sRuleTypeId');
+        $iRuleTypeId        = $request->query->get('iRuleTypeId');
         
         
         #process vars from this page
@@ -319,7 +321,7 @@ class RuleController extends CommonController implements ControllerProviderInter
         $sEndDate           = $request->query->get('sEndDate');
         $aRepeatDayofWeek   = $request->query->get('sRepeatDayofWeek');
         $aRepeatDayofMonth  = $request->query->get('sRepeatDayofMonth');
-        $aRepeatsMonthofYear = $request->query->get('sRepeatsMonthofYear');
+        $aRepeatsMonthofYear = $request->query->get('sRepeatMonthofYear');
         $aRepeatWeekofYear   = $request->query->get('sRepeatsWeekofYear');
         
         # load repeat view
@@ -349,7 +351,7 @@ class RuleController extends CommonController implements ControllerProviderInter
             'title'             => 'New Rule Page 3',
             'iTimeslotId'       => $iTimeslotId,
             'iCalYear'          => $iCalYear,
-            'sRuleTypeId'       => $sRuleTypeId,
+            'iRuleTypeId'       => $iRuleTypeId,
             'bSingleDay'        => $bSingleDay,
             'iOpenSlotMinute'   => $iOpenSlotMinute,
             'iCloseSlotMinute'  => $iCloseSlotMinute,
@@ -359,7 +361,7 @@ class RuleController extends CommonController implements ControllerProviderInter
             'sEndDate'          => $sEndDate,
             'aRepeatDayofWeek'  => $aRepeatDayofWeek,
             'aRepeatDayofMonth' => $aRepeatDayofMonth,
-            'aRepeatsMonthofYear' => $aRepeatsMonthofYear, 
+            'aRepeatMonthofYear' => $aRepeatsMonthofYear, 
             'aRepeatWeekofYear'  => $aRepeatWeekofYear,
             'aWeekTimeslots'    => $aWeekTimeslots,
         ];
@@ -376,32 +378,96 @@ class RuleController extends CommonController implements ControllerProviderInter
        $sStepThreeUrl = $app['url_generator']->generate('bookme-rule-new-three');
         
        
-        $bSingleDay         = $request->request->get('bSingleDay'); 
-        $iOpenSlotMinute    = $request->request->get('iOpenSlotMinute'); 
-        $iCloseSlotMinute   = $request->request->get('iCloseSlotMinute'); 
-        $sRuleName          = $request->request->get('sRuleName'); 
-        $sRuleDescription   = $request->request->get('sRuleDescription'); 
-        $iTimeslotId        = $request->request->get('iTimeslotId');  
-        $iCalYear           = $request->request->get('iCalYear');
-        $sRuleTypeId        = $request->request->get('sRuleTypeId');
-        $sStartDate         = $request->request->get('sStartDate'); 
-        $sEndDate           = $request->request->get('sEndDate');
-        $aRepeatDayofWeek   = $request->request->get('sRepeatDayofWeek');
+        $bSingleDay         = filter_var($request->request->get('bSingleDay'),FILTER_VALIDATE_BOOLEAN); 
+        $iOpenSlotMinute    = filter_var($request->request->get('iOpenSlotMinute'),FILTER_VALIDATE_INT); 
+        $iCloseSlotMinute   = filter_var($request->request->get('iCloseSlotMinute'),FILTER_VALIDATE_INT); 
+        $sRuleName          = filter_var($request->request->get('sRuleName'),FILTER_SANITIZE_STRING); 
+        $sRuleDescription   = filter_var($request->request->get('sRuleDescription'),FILTER_SANITIZE_STRING); 
+        $iTimeslotId        = filter_var($request->request->get('iTimeslotId'),FILTER_VALIDATE_INT);  
+        $iCalYear           = filter_var($request->request->get('iCalYear'),FILTER_VALIDATE_INT);
+        $iRuleTypeId        = filter_var($request->request->get('iRuleTypeId'),FILTER_VALIDATE_INT);
+        $sStartDate         = filter_var($request->request->get('sStartDate'),FILTER_SANITIZE_STRING); 
+        $sEndDate           = filter_var($request->request->get('sEndDate'),FILTER_SANITIZE_STRING);
+        $aRepeatDayofWeek    = $request->request->get('sRepeatDayofWeek');
         $aRepeatDayofMonth   = $request->request->get('sRepeatDayofMonth');
-        $aRepeatsMonthofYear = $request->query->get('sRepeatsMonthofYear');
-        $aRepeatWeekofYear   = $request->query->get('sRepeatsWeekofYear');
+        $aRepeatsMonthofYear = $request->request->get('sRepeatMonthofYear');
+        $aRepeatWeekofYear   = $request->request->get('sRepeatsWeekofYear');
       
-    
         
         // Convert Repeat Rules into Cron string
+        if(false == $bSingleDay) {
+            
+            $sRepeatDayofWeek   = implode(',',$aRepeatDayofWeek);
+            $sRepeatDayofMonth  = implode(',',$aRepeatDayofMonth);
+            $sRepeatMonthofYear = implode(',',$aRepeatsMonthofYear);
+            $sRepeatWeekofYear  = implode(',',$aRepeatWeekofYear);
+            
+        } else {
+              
+            $sRepeatDayofWeek   = '*';
+            $sRepeatDayofMonth  = '*';
+            $sRepeatMonthofYear = '*';
+            $sRepeatWeekofYear  = '*';
+            
+        }
         
-        $sRepeatDayofWeek = implode(',',$aRepeatDayofWeek);
-        $sRepeatDayofMonth = implode(',',$aRepeatDayofMonth);
-        $sRepeatMonthofYear = implode(',',$aRepeatsMonthofYear);
-        $sRepeatWeekofYear  = implode(',',$aRepeatWeekofYear);
+        // Convert the dates into dateTime
+        if(empty($sStartDate) || empty($sEndDate)) {
+             $this->getFlash()->warning('Start or stop date has not been provided');
+             
+             return $app->redirect($sStepThreeUrl.'?'.http_build_query($request->request->all()));
+             
+        } else {
+            $oStartDate  = date_create_from_format('d/m/Y',$sStartDate);
+            $oEndDate    = date_create_from_format('d/m/Y',$sEndDate);
+        }
         
-        return $app->redirect($sStepThreeUrl.'?'.http_build_query($request->request->all()));
-    
+        // Execute the command
+        
+        try {
+            $oCommand = new CreateRuleCommand($oStartDate,$oEndDate, $iRuleTypeId, $iTimeslotId, $iOpenSlotMinute, $iCloseSlotMinute, $sRepeatDayofWeek, $sRepeatDayofMonth, $sRepeatMonthofYear, $sRepeatWeekofYear,$bSingleDay, $sRuleName, $sRuleDescription);
+           
+            $oCommandBus->handle($oCommand);                     
+        }
+        catch(ValidationException $e) {
+            
+            // print validation message to the user
+            return $app['twig']->render('validation_error.twig', [
+                 'title'             => 'Error: Unable to Save New Rule',
+                'aFieldMap' =>  [
+                    'rule_type_id'      => 'Rule Type',
+                    'start_from'        => 'Start Date',
+                    'end_at'            => 'End Date',
+                    'repeat_minute'     => 'Repeat Minute',
+                    'repeat_hour'       => 'Repeat Hour',
+                    'repeat_dayofweek'  => 'Repeat Day of Week',
+                    'repeat_dayofmonth' => 'Repeat Day of Month',
+                    'repeat_month'      => 'Repeat Month',
+                    'repeat_weekofyear' => 'Repeat Week of Year',
+                    'opening_slot'      => 'Opening Timeslot',
+                    'closing_slot'      => 'Closing Timeslot',
+                    'timeslot_id'       => 'Timeslot',
+                    'is_single_day'     => 'Singe or Repeat',
+                    'rule_name'         => 'Rule Name',  
+                    'rule_description'  => 'Rule Description',
+                ],
+                'aErrors'   => $e->getValidationFailures(),
+                'sBackBtnUrl'  => $sStepThreeUrl.'?'.http_build_query($request->request->all()),
+                'sBackBtnText' => 'Back to New Rule Page 3',    
+            ], []);
+ 
+            
+        }
+        catch(BookMeException $e) {
+            
+            $this->getFlash()->error('Unable to save new rule with error ::'.$e->getMessage());
+            
+            return $app->redirect($sStepThreeUrl.'?'.http_build_query($request->request->all()));
+
+        }
+        
+        $this->getFlash()->info('Saved new Rule at id::'.$oCommandBus->getRuleId());
+        
     }
    
 }

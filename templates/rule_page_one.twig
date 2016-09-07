@@ -23,7 +23,7 @@
             <!-- Rule Type -->    
             <div class="form-group">
                 <label for="bookeMeRuleType">Rule Type</label>
-                <select class="form-control" name="sRuleTypeId" id="bookeMeRuleType">
+                <select class="form-control" name="iRuleTypeId" id="bookeMeRuleType">
                     {% for oRuleType in aRuleTypeList %}
                         <option value="{{ oRuleType.rule_type_id }}" {% if sRequestRuleType == oRuleType.rule_code %} selected="selected" {% endif %}>{{ oRuleType.rule_code|ucfirst }}</option>,
                     {% endfor %}

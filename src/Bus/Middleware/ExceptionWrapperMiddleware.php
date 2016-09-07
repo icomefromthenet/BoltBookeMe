@@ -34,7 +34,12 @@ class ExceptionWrapperMiddleware implements Middleware
             $returnValue = $next($oCommand);
         
         } catch(\RuntimeException $e) {
-            throw new BookMeException($e->getMessage(),0,$e);
+            if(!$e instanceof BookMeException) {
+                throw new BookMeException($e->getMessage(),0,$e);    
+            } else {
+                throw $e;
+            }
+            
         }
         
         return $returnValue;
