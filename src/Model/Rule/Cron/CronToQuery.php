@@ -97,7 +97,6 @@ class CronToQuery
         //$aRanges[] = $oSegmentParser->parseSegment(ParsedRange::TYPE_MINUTE,  $oCommand->getRuleRepeatMinute());
         
         //$aRanges[] = $oSegmentParser->parseSegment(ParsedRange::TYPE_HOUR,    $oCommand->getRuleRepeatHour());
-                
         $aRanges[] = $oSegmentParser->parseSegment(ParsedRange::TYPE_DAYOFMONTH,  $oCommand->getRuleRepeatDayOfMonth());
         
         $aRanges[] = $oSegmentParser->parseSegment(ParsedRange::TYPE_MONTH,       $oCommand->getRuleRepeatMonth());

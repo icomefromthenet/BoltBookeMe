@@ -1,10 +1,10 @@
 <?php 
-namespace IComeFromTheNet\BookMe\Cron;
+namespace Bolt\Extension\IComeFromTheNet\BookMe\Model\Rule\Cron;
 
 use DateTime;
 use Doctrine\DBAL\DBALException;
-use IComeFromTheNet\BookMe\BookMeException;
-use IComeFromTheNet\BookMe\Bus\Command\CreateRuleCommand;
+use Bolt\Extension\IComeFromTheNet\BookMe\BookMeException;
+use Bolt\Extension\IComeFromTheNet\BookMe\Model\Rule\Command\CreateRuleCommand;
 
 
 /**

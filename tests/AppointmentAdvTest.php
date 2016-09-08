@@ -95,7 +95,7 @@ class AppointmentAdvTest extends ExtensionTest
       $iFivePmSlot = (12*17)*5;
       $iTenPmSlot  = (12*20)*5;    
         
-      $iRepeatWorkDayRule    = $oService->createRepeatingWorkDayRule($oDayWorkDayRuleStart,$oDayWorkDayRuleEnd,$iFiveMinuteTimeslot,$iNineAmSlot,$iFivePmSlot,'1-5','*','2-12','*','Repeat Work Day Rule');
+      $iRepeatWorkDayRule    = $oService->createRepeatingWorkDayRule($oDayWorkDayRuleStart,$oDayWorkDayRuleEnd,$iFiveMinuteTimeslot,$iNineAmSlot,$iFivePmSlot,'*','*','2-12','*','Repeat Work Day Rule');
       $iSingleWorkDayRule    = $oService->createSingleWorkDayRule($oSingleDate,$iFiveMinuteTimeslot,$iFivePmSlot,$iTenPmSlot,'Single Work Day Rule'); 
       
       $iMidaySlot = (12*12)*5;

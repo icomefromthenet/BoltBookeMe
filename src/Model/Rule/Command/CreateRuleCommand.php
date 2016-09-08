@@ -129,6 +129,7 @@ class CreateRuleCommand implements ValidationInterface, HasEventInterface
         $this->bIsSingleDay         = $bIsSingleDay;
         $this->sRuleName            = $sRuleName;
         $this->sRuleDescription     = $sRuleDescription;
+        
     }
   
   

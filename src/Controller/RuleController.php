@@ -323,6 +323,11 @@ class RuleController extends CommonController implements ControllerProviderInter
         $aRepeatDayofMonth  = $request->query->get('sRepeatDayofMonth');
         $aRepeatsMonthofYear = $request->query->get('sRepeatMonthofYear');
         $aRepeatWeekofYear   = $request->query->get('sRepeatsWeekofYear');
+        $bSelectAllDayofWeek = $request->query->get('bSelectAllDayofWeek');
+        $bSelectAllDayMonth  = $request->query->get('bSelectAllDayMonth');
+        $bSelectAllWeek      = $request->query->get('bSelectAllWeek');
+        $bSelectAllMonth     = $request->query->get('bSelectAllMonth');
+        
         
         # load repeat view
         $aDayTimeslots = [];
@@ -364,6 +369,11 @@ class RuleController extends CommonController implements ControllerProviderInter
             'aRepeatMonthofYear' => $aRepeatsMonthofYear, 
             'aRepeatWeekofYear'  => $aRepeatWeekofYear,
             'aWeekTimeslots'    => $aWeekTimeslots,
+            
+            'bSelectAllDayofWeek' => $bSelectAllDayofWeek,
+            'bSelectAllDayMonth'  => $bSelectAllDayMonth,
+            'bSelectAllWeek'      => $bSelectAllWeek,
+            'bSelectAllMonth'     => $bSelectAllMonth,
         ];
         
         return $app['twig']->render('rule_page_three.twig', $aTemplateParams, []);
@@ -392,7 +402,8 @@ class RuleController extends CommonController implements ControllerProviderInter
         $aRepeatDayofMonth   = $request->request->get('sRepeatDayofMonth');
         $aRepeatsMonthofYear = $request->request->get('sRepeatMonthofYear');
         $aRepeatWeekofYear   = $request->request->get('sRepeatsWeekofYear');
-      
+        
+        $bSelectAllDayofWeek = $request->request->get('bSelectAllDayofWeek');
         
         // Convert Repeat Rules into Cron string
         if(false == $bSingleDay) {
@@ -461,7 +472,7 @@ class RuleController extends CommonController implements ControllerProviderInter
         catch(BookMeException $e) {
             
             $this->getFlash()->error('Unable to save new rule with error ::'.$e->getMessage());
-            
+          
             return $app->redirect($sStepThreeUrl.'?'.http_build_query($request->request->all()));
 
         }

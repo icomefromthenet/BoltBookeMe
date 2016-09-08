@@ -216,7 +216,10 @@ class SlotFinder
                     $sSql .=  '( ';
                 }
                 
-                $aMRanges = array_keys(array_fill($oRange->getRangeOpen(),($oRange->getRangeClose()-$oRange->getRangeOpen()),''));
+                $iFill = ($oRange->getRangeClose() - $oRange->getRangeOpen())+1;
+          
+                
+                $aMRanges = array_keys(array_fill($oRange->getRangeOpen(),$iFill,''));
                 
                 $sSql .= " `d`.`m` IN (".implode(',',$aMRanges).") AND `d`.`m` % ".$oRange->getModValue().' = 0';
                 
@@ -238,7 +241,10 @@ class SlotFinder
                     $sSql .=  '( ';
                 }
                 
-                $aMRanges = array_keys(array_fill($oRange->getRangeOpen(),$oRange->getRangeClose(),''));
+                $iFill = ($oRange->getRangeClose() - $oRange->getRangeOpen()) +1;
+                
+                
+                $aMRanges = array_keys(array_fill($oRange->getRangeOpen(),$iFill,''));
                 
                 $sSql .= " `d`.`d` IN (".implode(',',$aMRanges).") AND `d`.`d` % ".$oRange->getModValue().' = 0';
                 
@@ -247,9 +253,12 @@ class SlotFinder
                 $aSql[] = $sSql;    
             }
             
-            $aSql[] = " ) ";
             
-            // Limit Day of Week Values
+            $aSql[] = " ) ";
+     
+           
+            
+            // Limit Day of Week Values which zero based in cron but 1 based in sql
             $aDayWeekRanges = $this->extractRanges(ParsedRange::TYPE_DAYOFWEEK,$aParsedRanges);
             $aSql[] = " AND ( ";
             foreach($aDayWeekRanges as $iIndex => $oRange) {
@@ -260,7 +269,9 @@ class SlotFinder
                     $sSql .=  '( ';
                 }
                 
-                $aMRanges = array_keys(array_fill($oRange->getRangeOpen()+1,($oRange->getRangeClose()+1),''));
+                $iFill = ($oRange->getRangeClose() - $oRange->getRangeOpen())+1;
+                
+                $aMRanges = array_keys(array_fill($oRange->getRangeOpen()+1,$iFill,''));
                 
                 // dw are 1 based while cron their 0 based
                 $sSql .= " (`d`.`dw`) IN (".implode(',',$aMRanges).") AND (`d`.`dw`) % ".$oRange->getModValue().' = 0';
@@ -282,7 +293,10 @@ class SlotFinder
                     $sSql .=  '( ';
                 }
                 
-                $aMRanges = array_keys(array_fill($oRange->getRangeOpen(),($oRange->getRangeClose()-$oRange->getRangeOpen()),''));
+                $iFill = ($oRange->getRangeClose() - $oRange->getRangeOpen())+1;
+            
+                
+                $aMRanges = array_keys(array_fill($oRange->getRangeOpen(),$iFill,''));
                 
                 $sSql .= " `d`.`w` IN (".implode(',',$aMRanges).") AND `d`.`w` % ".$oRange->getModValue().' = 0';
                 
@@ -295,7 +309,8 @@ class SlotFinder
           
                
         }
-
+        
+        
         try {
             $oAppLogger->debug('Running slotFinder query table');
            

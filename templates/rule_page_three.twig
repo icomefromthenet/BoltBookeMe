@@ -41,60 +41,79 @@
                   </div>
             </div>
             
-            <hr />
+            <br /><br />
             
-            <h4>Repeat Rule - Days of the Week</h4>
-            
-            <div>
-              <label class="checkbox-inline" for="sRepeatDayofWeekSunday">
-                <input type="checkbox" name="sRepeatDayofWeek[]" {% if  0 in aRepeatDayofWeek %} checked="checked"  {% endif %} value="0" id="sRepeatDayofWeekSunday" />
-                 Sunday
-              </label>
-            
-             <label class="checkbox-inline" for="sRepeatDayofWeekMonday">
-                <input type="checkbox" name="sRepeatDayofWeek[]" {% if  1 in aRepeatDayofWeek %} checked="checked"  {% endif %} value="1" id="sRepeatDayofWeekMonday" /> 
-                Monday
-              </label>
-            
-              <label class="checkbox-inline" for="sRepeatDayofWeekTuesday">
-                <input type="checkbox" name="sRepeatDayofWeek[]" {% if  2 in aRepeatDayofWeek %} checked="checked"  {% endif %} value="2" id="sRepeatDayofWeekTuesday" />
-                Tuesday
-              </label>
-
-              <label class="checkbox-inline" for="sRepeatDayofWeekWednesday">
-                <input type="checkbox" name="sRepeatDayofWeek[]" {% if  3 in aRepeatDayofWeek %} checked="checked"  {% endif %} value="3" id="sRepeatDayofWeekWednesday" />
-                Wednesday
-              </label>
-    
-              <label class="checkbox-inline" for="sRepeatDayofWeekThursday">
-                <input type="checkbox" name="sRepeatDayofWeek[]" {% if  4 in aRepeatDayofWeek %} checked="checked"  {% endif %} value="4" id="sRepeatDayofWeekThursday" />
-                Thursday
-              </label>
-    
-              <label class="checkbox-inline" for="sRepeatDayofWeekFriday">
-                <input type="checkbox" name="sRepeatDayofWeek[]" {% if  5 in aRepeatDayofWeek %} checked="checked"  {% endif %} value="5" id="sRepeatDayofWeekFriday" />
-                Friday
-              </label>
-    
-              <label class="checkbox-inline" for="sRepeatDayofWeekSaturday">
-                <input type="checkbox" name="sRepeatDayofWeek[]" {% if  6 in aRepeatDayofWeek %} checked="checked"  {% endif %} value="6" id="sRepeatDayofWeekSaturday" />
-                Saturday
-              </label>
+            <div class="row">
+            <div class="col-md-10">          
+               <h4>Repeat Rule - Days of the Week</h4>
     
             </div>
+            <div class="col-md-2">
+              <label class="checkbox-inline" for="bSelectAllDayofWeek">
+                  <input type="checkbox" name="bSelectAllDayofWeek" {% if bSelectAllDayofWeek %} checked="checked" {% endif %} value="1" id="bSelectAllDayofWeek" />
+                  Toggle All 
+              </label>
+            </div>
+          </div>
             
+           <table class="table">
+             <tr>
+               <td>
+                <label class="checkbox-inline" for="sRepeatDayofWeekSunday">
+                  <input type="checkbox" name="sRepeatDayofWeek[]" {% if  0 in aRepeatDayofWeek %} checked="checked"  {% endif %} value="0" id="sRepeatDayofWeekSunday" />
+                   Sunday
+                </label>
+              </td>
+              <td>
+               <label class="checkbox-inline" for="sRepeatDayofWeekMonday">
+                  <input type="checkbox" name="sRepeatDayofWeek[]" {% if  1 in aRepeatDayofWeek %} checked="checked"  {% endif %} value="1" id="sRepeatDayofWeekMonday" /> 
+                  Monday
+                </label>
+              </td>
+              <td>
+                <label class="checkbox-inline" for="sRepeatDayofWeekTuesday">
+                  <input type="checkbox" name="sRepeatDayofWeek[]" {% if  2 in aRepeatDayofWeek %} checked="checked"  {% endif %} value="2" id="sRepeatDayofWeekTuesday" />
+                  Tuesday
+                </label>
+              </td>
+              <td>
+                <label class="checkbox-inline" for="sRepeatDayofWeekWednesday">
+                  <input type="checkbox" name="sRepeatDayofWeek[]" {% if  3 in aRepeatDayofWeek %} checked="checked"  {% endif %} value="3" id="sRepeatDayofWeekWednesday" />
+                  Wednesday
+                </label>
+              </td>
+              <td>
+                <label class="checkbox-inline" for="sRepeatDayofWeekThursday">
+                  <input type="checkbox" name="sRepeatDayofWeek[]" {% if  4 in aRepeatDayofWeek %} checked="checked"  {% endif %} value="4" id="sRepeatDayofWeekThursday" />
+                  Thursday
+                </label>
+              </td>
+              <td>
+                <label class="checkbox-inline" for="sRepeatDayofWeekFriday">
+                  <input type="checkbox" name="sRepeatDayofWeek[]" {% if  5 in aRepeatDayofWeek %} checked="checked"  {% endif %} value="5" id="sRepeatDayofWeekFriday" />
+                  Friday
+                </label>
+              </td>
+              <td>
+                <label class="checkbox-inline" for="sRepeatDayofWeekSaturday">
+                  <input type="checkbox" name="sRepeatDayofWeek[]" {% if  6 in aRepeatDayofWeek %} checked="checked"  {% endif %} value="6" id="sRepeatDayofWeekSaturday" />
+                  Saturday
+                </label>
+              </td>  
+            </tr>
+            </table>
             
-            <hr />
-    
+            <br /><br />
+         
           <div class="row">
-            <div class="col-md-8">          
+            <div class="col-md-10">          
               <h4> Repeat Day of Month </h4>
     
             </div>
-            <div class="col-md-4">
+            <div class="col-md-2">
               <label class="checkbox-inline" for="bSelectAllDayMonth">
-                  <input type="checkbox" name="bSelectAllDayMonth" value="1" id="bSelectAllDayMonth" />
-                  Toggle All Days
+                  <input type="checkbox" name="bSelectAllDayMonth" {% if bSelectAllDayMonth %} checked="checked" {% endif %} value="1" id="bSelectAllDayMonth" />
+                  Toggle All
               </label>
             </div>
           </div>
@@ -328,18 +347,17 @@
                 
               </table>
             
-            
-            <hr />
-            
-              <div class="row">
-            <div class="col-md-8">          
+            <br /><br />
+             
+            <div class="row">
+            <div class="col-md-10">          
                <h4>Months of the Year</h4>
     
             </div>
-            <div class="col-md-4">
+            <div class="col-md-2">
               <label class="checkbox-inline" for="bSelectAllMonth">
-                  <input type="checkbox" name="bSelectAllMonth" value="1" id="bSelectAllMonth" />
-                  Toggle All Days
+                  <input type="checkbox" name="bSelectAllMonth"  {% if bSelectAllMonth %} checked="checked" {% endif %} value="1" id="bSelectAllMonth" />
+                  Toggle All
               </label>
             </div>
           </div>
@@ -424,32 +442,28 @@
              </tr>
            </table>
            
+           <br /><br />
            
+             <div class="row">
+            <div class="col-md-10">          
+              <h4>Weeks of the Year</h4>
+    
+            </div>
+            <div class="col-md-2">
+              <label class="checkbox-inline" for="bSelectAllWeek">
+                  <input type="checkbox" name="bSelectAllWeek" {% if bSelectAllWeek %} checked="checked" {% endif %} value="1" id="bSelectAllWeek" />
+                  Toggle All
+                </label>
+            </div>
+          </div>
             
             
-            <hr />
-            
-            <h4>Weeks of the Year</h4>
-            
-            <table class="table">
-            <thead>
-              <tr>
-                <th>
-                  Select
-                </th>
-                <th>
-                      <label class="checkbox-inline" for="bSelectAllWeek">
-                        <input type="checkbox" name="bSelectAllWeek" value="1" id="bSelectAllWeek" />
-                        Toggle All Weeks
-                      </label>
-                </th>
-              </tr>
-            </thead>
+          <table class="table">
             <tbody>
             {% for oTimeslot in aWeekTimeslots %}
             <tr>
                 <td>
-                <input type="checkbox" name="sRepeatsWeekofYear[]", id="sRepeatsWeekofYear{{ oTimeslot.w }}" value="{{ oTimeslot.w }}" {% if oTimeslot.w in aWeekTimeslots %} checked="checked" {% endif %}  />
+                <input type="checkbox" name="sRepeatsWeekofYear[]", id="sRepeatsWeekofYear{{ oTimeslot.w }}" value="{{ oTimeslot.w }}" {% if oTimeslot.w in aRepeatWeekofYear %} checked="checked" {% endif %}  />
               </td>
           
               <td class="info">
@@ -536,6 +550,7 @@
     var $formEl;
     var $toggleAllDayMonthEl;
     var $toggleAllMonthEl;
+    var $toggleAllDayofWeekEl;
     
     var onInit = function(options) {
     
@@ -554,12 +569,14 @@
       $formEl     = $('#sNewRepeatRuleForm');
       $toggleAllDayMonthEl = $('#bSelectAllDayMonth');
       $toggleAllMonthEl = $('#bSelectAllMonth');
+      $toggleAllDayofWeekEl = $('#bSelectAllDayofWeek');
       
       $startEl.datepicker($.extend({'defaultDate':oStartDate}, oDefaultDateOption)).on('change',onStartDateChange);
       $endEl.datepicker($.extend({'defaultDate': oEndDate}, oDefaultDateOption)).on('change',onEndDateChange);
       $toggleWeekEl.on('change',onToggleAllWeeksChange);
       $toggleAllDayMonthEl.on('change',onToggleAllDayMonthChange);
       $toggleAllMonthEl.on('change',onToggleAllMonthChange);
+      $toggleAllDayofWeekEl.on('change',onToggleAllDayofWeekChange);
       
     };
     
@@ -610,6 +627,19 @@
       
       return true;
       
+      
+    };
+    
+    
+    var onToggleAllDayofWeekChange = function(event) {
+     
+       if($toggleAllDayofWeekEl.is(':checked')) {
+          $formEl.find(':input[name="sRepeatDayofWeek[]"]').prop('checked',true);    
+      } else {
+        $formEl.find(':input[name="sRepeatDayofWeek[]"]').prop('checked',false);   
+      }
+      
+      return true;
       
     };
     
