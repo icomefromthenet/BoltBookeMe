@@ -10,6 +10,7 @@ use Bolt\Events\StorageEvent;
 use Bolt\Events\StorageEvents;
 use Bolt\Extension\SimpleExtension;
 use Bolt\Extension\DatabaseSchemaTrait;
+use Bolt\Extension\StorageTrait;
 use Bolt\Menu\MenuEntry;
 use Silex\ControllerCollection;
 use Symfony\Component\EventDispatcher\EventDispatcherInterface;
@@ -43,6 +44,10 @@ use Bolt\Extension\IComeFromTheNet\BookMe\Schema\ActivityTable;
 use Bolt\Extension\IComeFromTheNet\BookMe\Schema\AppointmentStatusTable;
 use Bolt\Extension\IComeFromTheNet\BookMe\Schema\AppointmentTable;
 
+
+use Bolt\Extension\IComeFromTheNet\BookMe\Model\Rule\RuleEntity;
+use Bolt\Extension\IComeFromTheNet\BookMe\Model\Rule\RuleRepository;
+
 // Load this extension composer dep autoloader
 // since bolt does not download packagist repo when does a merge
 // this extension must manage its own dependecies
@@ -58,6 +63,7 @@ class BookMeExtension extends SimpleExtension
 {
     
     use DatabaseSchemaTrait;
+    use StorageTrait;
     
     
     //--------------------------------------------------------------------------
@@ -136,12 +142,21 @@ class BookMeExtension extends SimpleExtension
     protected function registerServices(Application $app)
     {
         $this->extendDatabaseSchemaServices();
-        
+        $this->extendRepositoryMapping();
  
         
         return $app;
     }
     
+    /**
+     * {@inheritdoc}
+     */
+    protected function registerRepositoryMappings()
+    {
+        return [
+            'bm_rule' => [RuleEntity::class => RuleRepository::class],
+        ];
+    }
     
      /**
      * {@inheritdoc}
