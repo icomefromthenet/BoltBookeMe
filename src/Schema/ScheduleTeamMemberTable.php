@@ -13,7 +13,7 @@ class ScheduleTeamMemberTable extends BaseTable
     protected function addColumns()
     {
        
-        $this->table->addOption('Used to group members into teams');
+        $this->table->addOption('comment','Used to group members into teams');
 
         $this->table->addColumn('team_id',           'integer',  ['notnull' => true,'comment' =>'Table Primary key and Fk to team table', 'unsigned' => true ]);
         $this->table->addColumn('membership_id',     'integer',  ['notnull' => true,'comment' =>'Table Primary key and Fk to membership table', 'unsigned' => true ]);

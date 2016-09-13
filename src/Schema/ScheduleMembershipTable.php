@@ -13,7 +13,7 @@ class ScheduleMembershipTable extends BaseTable
     protected function addColumns()
     {
        
-        $this->table->addOption('Used to group schedules by externel membership entity');
+        $this->table->addOption('comment','Used to group schedules by externel membership entity');
         
         $this->table->addColumn('membership_id',     'integer',  ['notnull' => true,'comment' =>'Table Primary key', 'autoincrement' => true, 'unsigned' => true ]);
         $this->table->addColumn('registered_date',   'datetime',   ['notnull' => true, 'comment' =>'Date membership was created' ]);

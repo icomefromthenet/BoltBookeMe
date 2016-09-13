@@ -322,11 +322,11 @@ class BookMeExtension extends SimpleExtension
      /**
      * {@inheritdoc}
      */
-    protected function getDefaultConfig()
+    public function getDefaultConfig()
     {
         return [
             'apptnumber' => [
-                 'suffix'       => ''    
+                 'suffix'       => '#'    
                 ,'prefix'       => 'A'    
                 ,'starting'     => 1000
             ]

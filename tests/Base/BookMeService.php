@@ -83,21 +83,6 @@ class BookMeService
     {
        $this->oContainer = $oContainer;
        $this->aConfig    = $aConfig;
-       $aProviders = [
-            new Provider\CronParseProvider($aConfig),
-            new Provider\CustomValidationProvider($aConfig),
-            new Provider\ExtrasProvider($aConfig),
-            new Provider\CommandBusProvider($aConfig),
-        ];
-        
-        foreach($aProviders as $aProvider) {
-            $aProvider->register($oContainer);
-        }
-        
-        foreach($aProviders as $aProvider) {
-            $aProvider->boot($oContainer);
-        }
-        
         
     }
 

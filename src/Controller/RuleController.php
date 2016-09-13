@@ -477,7 +477,8 @@ class RuleController extends CommonController implements ControllerProviderInter
 
         }
         
-        $this->getFlash()->info('Saved new Rule at id::'.$oCommandBus->getRuleId());
+        $this->getFlash()->info('Saved new Rule at id::'.$oCommand->getRuleId());
+        
         
     }
    

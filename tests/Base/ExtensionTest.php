@@ -49,7 +49,7 @@ class ExtensionTest extends \PHPUnit_Framework_TestCase
         $this->setAppPaths($config);
         $config->verify();
 
-        $bolt = new Application(['resources' => $config]);
+        $bolt = new MockApp(['resources' => $config]);
 
         // Change the database
         $bolt['config']->set(
@@ -77,54 +77,6 @@ class ExtensionTest extends \PHPUnit_Framework_TestCase
         return $bolt;
     }
     
-    protected function getAppConfig()
-    {
-        return [
-            'apptnumber' => [
-                 'suffix'       => '#'    
-                ,'prefix'       => 'A'    
-                ,'starting'     => 1000
-            ]
-           ,'tablenames' => [
-                 'bm_ints'              => 'bolt_ints'   
-                ,'bm_calendar'          => 'bolt_bm_calendar'    
-                ,'bm_calendar_weeks'    => 'bolt_bm_calendar_weeks'      
-                ,'bm_calendar_months'   => 'bolt_bm_calendar_months'  
-                ,'bm_calendar_quarters' => 'bolt_bm_calendar_quarters'  
-                ,'bm_calendar_years'    => 'bolt_bm_calendar_years'
-                
-                ,'bm_timeslot'          => 'bolt_bm_timeslot'
-                ,'bm_timeslot_day'      => 'bolt_bm_timeslot_day'
-                ,'bm_timeslot_year'     => 'bolt_bm_timeslot_year'
-                
-                ,'bm_schedule_membership' => 'bolt_bm_schedule_membership'
-                ,'bm_schedule_team'       => 'bolt_bm_schedule_team'
-                ,'bm_schedule'            => 'bolt_bm_schedule'
-                ,'bm_schedule_slot'       => 'bolt_bm_schedule_slot'
-                ,'bm_schedule_team_members' => 'bolt_bm_schedule_team_members'
-                
-                
-                ,'bm_booking'             => 'bolt_bm_booking' 
-                ,'bm_booking_conflict'    => 'bolt_bm_booking_conflict'
-                
-                ,'bm_rule_type'           => 'bolt_bm_rule_type'
-                ,'bm_rule'                => 'bolt_bm_rule'
-                ,'bm_rule_series'         => 'bolt_bm_rule_series'
-                ,'bm_rule_schedule'       => 'bolt_bm_rule_schedule'
-                
-                ,'bm_tmp_rule_series'     => 'bm_tmp_rule_series'
-                
-                ,'bm_customer'            => 'bolt_bm_customer'
-                ,'bm_activity'            => 'bolt_bm_activity'
-                ,'bm_appointment_status'  => 'bolt_bm_appointment_status'
-                ,'bm_appointment'         => 'bolt_bm_appointment'
-                
-            ],
-            'leadtime' => 'P1D'
-       
-       ];
-        
-    }
     
     protected function getApp($boot = true)
     {
@@ -134,19 +86,18 @@ class ExtensionTest extends \PHPUnit_Framework_TestCase
         
          if (!$this->app) {
             $app = $this->makeApp();
-            
-           
+         
             $app->initialize();
             
-   
+        
             if ($boot) {
                 $app->boot();
             }
         }
       
          
-        $aConfig = $this->getAppConfig();
-     
+        $aConfig = $app['extensions']->get('IComeFromTheNet/BookMe')->getDefaultConfig();
+        
         $this->oTestAPI = new BookMeService($app, $aConfig);
         
         return $this->app = $app;
@@ -156,6 +107,7 @@ class ExtensionTest extends \PHPUnit_Framework_TestCase
     {
         # Truncate the Tables
         $aConfig = $this->getAppConfig();
+        
         $oDatabase = $this->getDatabaseAdapter();
         
         // Truncate the Tables
@@ -232,6 +184,14 @@ class ExtensionTest extends \PHPUnit_Framework_TestCase
         return $this->getApp();
     }
     
+    
+    protected function getAppConfig()
+    {
+        return $this->getApp()
+                        ->offsetGet('extensions')
+                        ->get('IComeFromTheNet/BookMe')
+                        ->getDefaultConfig();
+    }
 }
 /* End of Unit Test */
 

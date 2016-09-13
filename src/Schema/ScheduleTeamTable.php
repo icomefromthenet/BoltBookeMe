@@ -13,7 +13,7 @@ class ScheduleTeamTable extends BaseTable
     protected function addColumns()
     {
        
-        $this->table->addOption('Group schedules together with a common timeslot');
+        $this->table->addOption('comment','Group schedules together with a common timeslot');
         
         $this->table->addColumn('team_id',     'integer',  ['notnull' => true,'comment' =>'Table Primary key', 'autoincrement' => true, 'unsigned' => true ]);
         $this->table->addColumn('registered_date',   'datetime',   ['notnull' => true, 'comment' =>'Date membership was created' ]);
