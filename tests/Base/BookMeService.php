@@ -359,13 +359,14 @@ class BookMeService
      * @param integer   $iOpeningSlot        The slot number during the day to start 
      * @param integer   $iClosingSlot        The closing slot number to stop after
      * @param string    $sRuleName           A Name for the rule
+     * @param string    $sRuleDesc           A Description for the rule
      */ 
-    public function createSingleWorkDayRule(DateTime $oDate, $iTimeslotDatabaseId, $iOpeningSlot, $iClosingSlot, $sRuleName)
+    public function createSingleWorkDayRule(DateTime $oDate, $iTimeslotDatabaseId, $iOpeningSlot, $iClosingSlot, $sRuleName, $sRuleDesc = null)
     {
         $oStartDate = clone $oDate;
         $oEndDate  = clone $oDate;
         
-        $oCommand = new CreateRuleCommand($oStartDate, $oEndDate, 1, $iTimeslotDatabaseId, $iOpeningSlot, $iClosingSlot, '*', '*', '*', '*', true, $sRuleName);
+        $oCommand = new CreateRuleCommand($oStartDate, $oEndDate, 1, $iTimeslotDatabaseId, $iOpeningSlot, $iClosingSlot, '*', '*', '*', '*', true, $sRuleName, $sRuleDesc);
         
         try {
             $this->getCommandBus()->handle($oCommand);
@@ -392,10 +393,11 @@ class BookMeService
      * @param string    $sRepeatMonth       The month cron def
      * @param string    $sRepeatWeekofyear  the week of year cron def
      * @param string    $sRuleName          A name for the rule
+     * @param string    $sRuleDesc          A Description for the rule
      */ 
-    public function createRepeatingWorkDayRule(DateTime $oStartFromDate, DateTime $oEndtAtDate, $iTimeslotDatabaseId, $iOpeningSlot, $iClosingSlot, $sRepeatDayofweek, $sRepeatDayofmonth, $sRepeatMonth, $sRepeatWeekofyear, $sRuleName)
+    public function createRepeatingWorkDayRule(DateTime $oStartFromDate, DateTime $oEndtAtDate, $iTimeslotDatabaseId, $iOpeningSlot, $iClosingSlot, $sRepeatDayofweek, $sRepeatDayofmonth, $sRepeatMonth, $sRepeatWeekofyear, $sRuleName , $sRuleDesc = null)
     {
-        $oCommand = new CreateRuleCommand($oStartFromDate, $oEndtAtDate, 1, $iTimeslotDatabaseId, $iOpeningSlot, $iClosingSlot, $sRepeatDayofweek,$sRepeatDayofmonth,$sRepeatMonth,$sRepeatWeekofyear,false, $sRuleName);
+        $oCommand = new CreateRuleCommand($oStartFromDate, $oEndtAtDate, 1, $iTimeslotDatabaseId, $iOpeningSlot, $iClosingSlot, $sRepeatDayofweek,$sRepeatDayofmonth,$sRepeatMonth,$sRepeatWeekofyear,false, $sRuleName, $sRuleDesc);
         
         try {
              $this->getCommandBus()->handle($oCommand);
@@ -418,13 +420,14 @@ class BookMeService
      * @param integer   $iOpeningSlot        The slot number during the day to start 
      * @param integer   $iClosingSlot        The closing slot number to stop after
      * @param string    $sRuleName           A Name for the rule
+     * @param string    $sRuleDesc          A Description for the rule
      */ 
-    public function createSingleBreakRule(DateTime $oDate, $iTimeslotDatabaseId, $iOpeningSlot, $iClosingSlot, $sRuleName) 
+    public function createSingleBreakRule(DateTime $oDate, $iTimeslotDatabaseId, $iOpeningSlot, $iClosingSlot, $sRuleName, $sRuleDesc = null) 
     {
         $oStartDate = clone $oDate;
         $oEndDate  = clone $oDate;
         
-        $oCommand = new CreateRuleCommand($oStartDate, $oEndDate, 2, $iTimeslotDatabaseId, $iOpeningSlot, $iClosingSlot, '*', '*', '*', '*', true, $sRuleName);
+        $oCommand = new CreateRuleCommand($oStartDate, $oEndDate, 2, $iTimeslotDatabaseId, $iOpeningSlot, $iClosingSlot, '*', '*', '*', '*', true, $sRuleName, $sRuleDesc);
         
         try {
             $this->getCommandBus()->handle($oCommand);
@@ -450,11 +453,12 @@ class BookMeService
      * @param string    $sRepeatMonth       The month cron def
      * @param string    $sRepeatWeekofyear  The week of year cron def
      * @param string    $sRuleName          A name for the rule
+     * @param string    $sRuleDesc          A Description for the rule
      */ 
-    public function createRepeatingBreakRule(DateTime $oStartFromDate, DateTime $oEndtAtDate, $iTimeslotDatabaseId, $iOpeningSlot, $iClosingSlot, $sRepeatDayofweek, $sRepeatDayofmonth, $sRepeatMonth, $sRepeatWeekofyear, $sRuleName)
+    public function createRepeatingBreakRule(DateTime $oStartFromDate, DateTime $oEndtAtDate, $iTimeslotDatabaseId, $iOpeningSlot, $iClosingSlot, $sRepeatDayofweek, $sRepeatDayofmonth, $sRepeatMonth, $sRepeatWeekofyear, $sRuleName, $sRuleDesc = null)
     {
         
-        $oCommand = new CreateRuleCommand($oStartFromDate, $oEndtAtDate, 2, $iTimeslotDatabaseId, $iOpeningSlot, $iClosingSlot, $sRepeatDayofweek,$sRepeatDayofmonth,$sRepeatMonth, $sRepeatWeekofyear, false, $sRuleName);
+        $oCommand = new CreateRuleCommand($oStartFromDate, $oEndtAtDate, 2, $iTimeslotDatabaseId, $iOpeningSlot, $iClosingSlot, $sRepeatDayofweek,$sRepeatDayofmonth,$sRepeatMonth, $sRepeatWeekofyear, false, $sRuleName, $sRuleDesc);
         
         try {
             
@@ -477,13 +481,14 @@ class BookMeService
      * @param integer   $iOpeningSlot        The slot number during the day to start 
      * @param integer   $iClosingSlot        The closing slot number to stop after
      * @param string    $sRuleName           A name for the rule
-     */ 
-    public function createSingleHolidayRule(DateTime $oDate, $iTimeslotDatabaseId, $iOpeningSlot, $iClosingSlot, $sRuleName)
+     * @param string    $sRuleDesc          A Description for the rule
+     */     
+    public function createSingleHolidayRule(DateTime $oDate, $iTimeslotDatabaseId, $iOpeningSlot, $iClosingSlot, $sRuleName, $sRuleDesc = null)
     {
         $oStartDate = clone $oDate;
         $oEndDate  = clone $oDate;
         
-        $oCommand = new CreateRuleCommand($oStartDate, $oEndDate, 3, $iTimeslotDatabaseId, $iOpeningSlot, $iClosingSlot, '*', '*', '*', '*', true, $sRuleName);
+        $oCommand = new CreateRuleCommand($oStartDate, $oEndDate, 3, $iTimeslotDatabaseId, $iOpeningSlot, $iClosingSlot, '*', '*', '*', '*', true, $sRuleName, $sRuleDesc);
         
         try {
             
@@ -510,12 +515,13 @@ class BookMeService
      * @param string    $sRepeatMonth       The month cron def
      * @param string    $sRepeatWeekofyear  The week of year cron def
      * @param string    $sRuleName          A name for the rule
+     * @param string    $sRuleDesc           A Description for the rule
      */ 
-    public function createRepeatingHolidayRule(DateTime $oStartFromDate, DateTime $oEndtAtDate, $iTimeslotDatabaseId, $iOpeningSlot, $iClosingSlot, $sRepeatDayofweek, $sRepeatDayofmonth, $sRepeatMonth,$sRepeatWeekofyear, $sRuleName)
+    public function createRepeatingHolidayRule(DateTime $oStartFromDate, DateTime $oEndtAtDate, $iTimeslotDatabaseId, $iOpeningSlot, $iClosingSlot, $sRepeatDayofweek, $sRepeatDayofmonth, $sRepeatMonth,$sRepeatWeekofyear, $sRuleName, $sRuleDesc = null)
     {
         
         
-        $oCommand = new CreateRuleCommand($oStartFromDate, $oEndtAtDate, 3, $iTimeslotDatabaseId, $iOpeningSlot, $iClosingSlot, $sRepeatDayofweek,$sRepeatDayofmonth,$sRepeatMonth,$sRepeatWeekofyear,false, $sRuleName);
+        $oCommand = new CreateRuleCommand($oStartFromDate, $oEndtAtDate, 3, $iTimeslotDatabaseId, $iOpeningSlot, $iClosingSlot, $sRepeatDayofweek,$sRepeatDayofmonth,$sRepeatMonth,$sRepeatWeekofyear,false, $sRuleName, $sRuleDesc);
         
         try {
             
@@ -538,13 +544,14 @@ class BookMeService
      * @param integer   $iOpeningSlot        The slot number during the day to start 
      * @param integer   $iClosingSlot        The closing slot number to stop after
      * @param string    $sRuleName           A name for the rule
+     * @param string    $sRuleDesc           A Description for the rule
      */ 
-    public function createSingleOvertmeRule(DateTime $oDate, $iTimeslotDatabaseId, $iOpeningSlot, $iClosingSlot, $sRuleName)
+    public function createSingleOvertmeRule(DateTime $oDate, $iTimeslotDatabaseId, $iOpeningSlot, $iClosingSlot, $sRuleName, $sRuleDesc = null)
     {
         $oStartDate = clone $oDate;
         $oEndDate  = clone $oDate;
         
-        $oCommand = new CreateRuleCommand($oStartDate, $oEndDate, 4, $iTimeslotDatabaseId, $iOpeningSlot, $iClosingSlot, '*', '*', '*', '*', true, $sRuleName);
+        $oCommand = new CreateRuleCommand($oStartDate, $oEndDate, 4, $iTimeslotDatabaseId, $iOpeningSlot, $iClosingSlot, '*', '*', '*', '*', true, $sRuleName, $sRuleDesc);
         
         try {
             
@@ -572,11 +579,12 @@ class BookMeService
      * @param string    $sRepeatMonth       The month cron def
      * @param string    $sRepeatWeekofyear  The week of year cron def
      * @param string    $sRuleName          A name for the rule
+     * @param string    $sRuleDesc           A Description for the rule
      */ 
-    public function createRepeatingOvertimeRule(DateTime $oStartFromDate, DateTime $oEndtAtDate, $iTimeslotDatabaseId, $iOpeningSlot, $iClosingSlot, $sRepeatDayofweek, $sRepeatDayofmonth, $sRepeatMonth, $sRepeatWeekofyear, $sRuleName)
+    public function createRepeatingOvertimeRule(DateTime $oStartFromDate, DateTime $oEndtAtDate, $iTimeslotDatabaseId, $iOpeningSlot, $iClosingSlot, $sRepeatDayofweek, $sRepeatDayofmonth, $sRepeatMonth, $sRepeatWeekofyear, $sRuleName, $sRuleDesc = null)
     {
         
-        $oCommand = new CreateRuleCommand($oStartFromDate, $oEndtAtDate, 4, $iTimeslotDatabaseId, $iOpeningSlot, $iClosingSlot, $sRepeatDayofweek,$sRepeatDayofmonth,$sRepeatMonth, $sRepeatWeekofyear, false, $sRuleName);
+        $oCommand = new CreateRuleCommand($oStartFromDate, $oEndtAtDate, 4, $iTimeslotDatabaseId, $iOpeningSlot, $iClosingSlot, $sRepeatDayofweek,$sRepeatDayofmonth,$sRepeatMonth, $sRepeatWeekofyear, false, $sRuleName, $sRuleDesc);
         
         try {
         

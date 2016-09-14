@@ -58,6 +58,7 @@ class CreateRuleHandler
                 ':repeatDayOfWeek'  => $oCommand->getRuleRepeatDayOfWeek(),
                 ':repeatDayOfMonth' => $oCommand->getRuleRepeatDayOfMonth(),
                 ':repeatMonth'      => $oCommand->getRuleRepeatMonth(),
+                'repeatWeekOfYear'  => $oCommand->getRuleRepeatWeekOfYear(),
                 ':oStartFrom'       => $oCommand->getCalendarStart(),
                 ':oEndAt'           => $oCommand->getCalendarEnd(),
                 ':iTimeslotId'      => $oCommand->getTimeSlotId(),
@@ -68,6 +69,7 @@ class CreateRuleHandler
                 ':sRuleName'        => $oCommand->getRuleName(), 
                 ':sRuleDesc'        => $oCommand->getRuleDescription(),
             ];
+          
             
             $aType = [
               ':iRuleTypeId'        => TYPE::INTEGER,
@@ -76,6 +78,7 @@ class CreateRuleHandler
               ':repeatDayOfWeek'    => TYPE::STRING,
               ':repeatDayOfMonth'   => TYPE::STRING,
               ':repeatMonth'        => TYPE::STRING,
+              ':repeatWeekOfYear'   => TYPE::STRING,
               ':oStartFrom'         => TYPE::DATE,
               ':oEndAt'             => TYPE::DATE,
               ':iTimeslotId'        => TYPE::INTEGER,
@@ -87,8 +90,8 @@ class CreateRuleHandler
               ':sRuleDesc'          => TYPE::STRING,
             ];
             
-            $sSql  =" INSERT INTO $sRuleTableName (`rule_id`, `rule_type_id`, `repeat_minute`, `repeat_hour`, `repeat_dayofweek`, `repeat_dayofmonth`, `repeat_month`, `start_from`, `end_at`, `timeslot_id`, `open_slot`, `close_slot`, `cal_year`, `is_single_day`, `rule_name`,`rule_desc`) ";
-	        $sSql .=" VALUES (null, :iRuleTypeId, :repeatMinute, :repeatHour, :repeatDayOfWeek, :repeatDayOfMonth, :repeatMonth, :oStartFrom, :oEndAt, :iTimeslotId, :iOpenSlot, :iCloseSlot, :iCalYear, :bIsSingleDay, :sRuleName, :sRuleDesc )";   
+            $sSql  =" INSERT INTO $sRuleTableName (`rule_id`, `rule_type_id`, `repeat_minute`, `repeat_hour`, `repeat_dayofweek`, `repeat_dayofmonth`, `repeat_month`, `repeat_weekofyear` , `start_from`, `end_at`, `timeslot_id`, `open_slot`, `close_slot`, `cal_year`, `is_single_day`, `rule_name`,`rule_desc`) ";
+	        $sSql .=" VALUES (null, :iRuleTypeId, :repeatMinute, :repeatHour, :repeatDayOfWeek, :repeatDayOfMonth, :repeatMonth, :repeatWeekOfYear , :oStartFrom, :oEndAt, :iTimeslotId, :iOpenSlot, :iCloseSlot, :iCalYear, :bIsSingleDay, :sRuleName, :sRuleDesc )";   
 	        
 	        
 	        $iAffectedRows = $oDatabase->executeUpdate($sSql, $aBind, $aType);

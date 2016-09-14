@@ -52,11 +52,11 @@ class RolloverRulesHandler
         
         // This assumes that the schedules that have been created in this new calendar year already have their is_carryover flag nulled by the rollover schedule routine
         // Where only looking for rules that require a rollover and belong to a schedule in last calendar year that was rolledover in earlier operation. 
-        $aSql[] = " INSERT INTO $sRuleTable (rule_id, rule_type_id, timeslot_id, repeat_minute, repeat_hour, repeat_dayofweek, repeat_dayofmonth, repeat_month,  start_from, end_at, open_slot, close_slot, cal_year, is_single_day, carry_from_id)";
+        $aSql[] = " INSERT INTO $sRuleTable (rule_id, rule_type_id, timeslot_id, repeat_minute, repeat_hour, repeat_dayofweek, repeat_dayofmonth, repeat_month, repeat_weekofyear, start_from, end_at, open_slot, close_slot, cal_year, is_single_day, carry_from_id, rule_name, rule_desc)";
         $aSql[] = " SELECT NULL, `r`.`rule_type_id`, `r`.`timeslot_id`, `r`.`repeat_minute`,  `r`.`repeat_hour`, ";
-        $aSql[] = "        `r`.`repeat_dayofweek`, `r`.`repeat_dayofmonth`, `r`.`repeat_month`, ";
+        $aSql[] = "        `r`.`repeat_dayofweek`, `r`.`repeat_dayofmonth`, `r`.`repeat_month`, `r`.`repeat_weekofyear`, ";
         $aSql[] = " date_add(`r`.`start_from`,INTERVAL 1 YEAR), date_add(`r`.`end_at`, INTERVAL 1 YEAR), ";
-        $aSql[] = "        `r`.`open_slot`, `r`.`close_slot`,  :iNextCalendarYear, `r`.`is_single_day`, `r`.`rule_id`, `r`.`rule_name` ";
+        $aSql[] = "        `r`.`open_slot`, `r`.`close_slot`,  :iNextCalendarYear, `r`.`is_single_day`, `r`.`rule_id`, `r`.`rule_name`, `r`.`rule_desc` ";
         $aSql[] = " FROM $sRuleTable r ";
         $aSql[] = " WHERE `r`.rule_id IN ( ";
                                         $aSql[] = " SELECT distinct(`rs`.`rule_id`) AS rule_id ";
@@ -112,8 +112,8 @@ class RolloverRulesHandler
         
         // This query will find rules in the calendar year that do not have series information. 
         
-        $aQuery[]  = " SELECT `rule_id`, `rule_type_id`, `timeslot_id`, `repeat_minute`, `repeat_hour`,`repeat_dayofweek`, `repeat_dayofmonth` ,`repeat_month`, ";
-        $aQuery[]  = "        `start_from`, `end_at`, `open_slot`, `close_slot`, `cal_year`,`is_single_day`,`carry_from_id` ";
+        $aQuery[]  = " SELECT `rule_id`, `rule_type_id`, `timeslot_id`, `repeat_minute`, `repeat_hour`,`repeat_dayofweek`, `repeat_dayofmonth` ,`repeat_month`, `repeat_weekofyear` , ";
+        $aQuery[]  = "        `start_from`, `end_at`, `open_slot`, `close_slot`, `cal_year`,`is_single_day`,`carry_from_id`, `rule_name`, `rule_description` ";
         $aQuery[]  = " FROM $sRuleTable r ";
         $aQuery[]  = " WHERE `r`.`cal_year` = :iNextCalYear ";
         $aQuery[]  = " AND NOT EXISTS (SELECT 1 FROM bm_rule_series rs WHERE r.rule_id = rs.rule_id) ";
@@ -125,6 +125,8 @@ class RolloverRulesHandler
         # Process each rule to build the new series.
         
         while ($row = $oQuery->fetch()) {
+            $sRuleName              = $row['rule_name'];
+            $sRuleDescription       = $row['rule_desc'];
             $iRuleId                = $oIntegerType->convertToPHPValue($row['rule_id'],$oPlatform);
             $oStartFromDate         = $oDateType->convertToPHPValue($row['start_from'],$oPlatform);
             $oEndtAtDate            = $oDateType->convertToPHPValue($row['end_at'],$oPlatform);
@@ -135,9 +137,10 @@ class RolloverRulesHandler
             $sRepeatDayofweek       = $row['repeat_dayofweek'];
             $sRepeatDayofmonth      = $row['repeat_dayofmonth'];
             $sRepeatMonth           = $row['repeat_month'];
+            $sRepeatWeekofyear      = $row['repeat_weekofyear'];
             $bIsSingleDay           = $oBoolType->convertToPHPValue($row['is_single_day'],$oPlatform);
             
-            $oNewCommand = new CreateRuleCommand($oStartFromDate, $oEndtAtDate, $iRuleTypeId, $iTimeslotDatabaseId, $iOpeningSlot, $iClosingSlot, $sRepeatDayofweek,$sRepeatDayofmonth,$sRepeatMonth,$bIsSingleDay);
+            $oNewCommand = new CreateRuleCommand($oStartFromDate, $oEndtAtDate, $iRuleTypeId, $iTimeslotDatabaseId, $iOpeningSlot, $iClosingSlot, $sRepeatDayofweek,$sRepeatDayofmonth,$sRepeatMonth,$sRepeatWeekofyear,$bIsSingleDay, $sRuleName, $sRuleDescription);
             $oNewCommand->setRuleId($iRuleId);
             
             $this->oCronToQuery->parse($oNewCommand);

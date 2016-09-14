@@ -25,6 +25,8 @@ class RuleTable extends BaseTable
         $this->table->addColumn('repeat_dayofweek',  'string',    ['notnull' => true, 'comment' =>'Cron day of week segment' ,'length' => 45]);
         $this->table->addColumn('repeat_dayofmonth', 'string',    ['notnull' => true, 'comment' =>'Cron day of month segment' ,'length' => 45]);
         $this->table->addColumn('repeat_month',      'string',    ['notnull' => true, 'comment' =>'Cron month segment' ,'length' => 45]);
+        $this->table->addColumn('repeat_weekofyear', 'string',    ['notnull' => true, 'comment' =>'Cron week of year segment (not standard)' ,'length' => 45]);
+        
         
         $this->table->addColumn('start_from',      'datetime',    ['notnull' => true, 'comment' =>'start date for rule']);
         $this->table->addColumn('end_at',          'datetime',    ['notnull' => true, 'comment' =>'end date for rule']);

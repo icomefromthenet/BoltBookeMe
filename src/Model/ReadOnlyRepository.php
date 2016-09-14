@@ -1,5 +1,5 @@
 <?php
-namespace Bolt\Extension\IComeFromTheNet\BookMe\Model\Rule;
+namespace Bolt\Extension\IComeFromTheNet\BookMe\Model;
 
 use Doctrine\Common\Persistence\ObjectRepository;
 use Bolt\Storage\Repository;

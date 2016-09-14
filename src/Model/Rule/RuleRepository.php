@@ -32,7 +32,7 @@ class RuleRepository extends ReadOnlyRepository implements ObjectRepository
             $select = $alias . '.*';
         }
 
-        $oQuery = new RuleQuery($this->oConnection, $this);
+        $oQuery = new RuleQuery($this->getEntityManager()->getConnection(), $this);
         $oQuery->select($select)->from($this->getTableName(), $alias);
             
         return $oQuery;
@@ -48,8 +48,8 @@ class RuleRepository extends ReadOnlyRepository implements ObjectRepository
      */
     public function find($id)
     {
-         $qb = $this->getLoadQuery();
-        $result = $qb->where($this->getAlias() . 'rule_id = :iRuleId')
+        $qb = $this->getLoadQuery();
+        $result = $qb->where($this->getAlias() . '.rule_id = :iRuleId')
             ->setParameter(':iRuleId', $id)
             ->execute()
             ->fetch();
