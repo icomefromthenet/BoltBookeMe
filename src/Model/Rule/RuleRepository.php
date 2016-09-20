@@ -9,6 +9,7 @@ use Doctrine\DBAL\DBALException;
 use Bolt\Extension\IComeFromTheNet\BookMe\Model\ReadOnlyRepository;
 
 
+
 class RuleRepository extends ReadOnlyRepository implements ObjectRepository
 {
    
@@ -32,7 +33,7 @@ class RuleRepository extends ReadOnlyRepository implements ObjectRepository
             $select = $alias . '.*';
         }
 
-        $oQuery = new RuleQuery($this->getEntityManager()->getConnection(), $this);
+        $oQuery = new RuleQueryBuilder($this->getEntityManager()->getConnection(), $this);
         $oQuery->select($select)->from($this->getTableName(), $alias);
             
         return $oQuery;
@@ -63,6 +64,12 @@ class RuleRepository extends ReadOnlyRepository implements ObjectRepository
     }
 
   
+  //----------------------------------------------------------------------------
+  
+  public function createRuleQuery()
+  {
+      return new RuleQuery($this->createQueryBuilder(), $this->getAlias());
+  }
     
 }
 /* End of Class */

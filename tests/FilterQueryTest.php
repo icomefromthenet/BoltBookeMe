@@ -8,7 +8,7 @@ use Bolt\Extension\IComeFromTheNet\BookMe\Bus\Middleware\ValidationException;
 
 
 
-class CustomRepoTest extends ExtensionTest
+class FilterQueryTest extends ExtensionTest
 {
     
     
@@ -202,47 +202,18 @@ class CustomRepoTest extends ExtensionTest
     public function testCustomRepo()
     {
        
-       $this->RuleRepoTest($this->aDatabaseId['work_repeat']);
+       $this->TestRuleQuery();
        
     }
     
-    protected function RuleRepoTest($iRuleId)
+    protected function TestRuleQuery()
     {
         
         $oApp = $this->getContainer();
     
-        $oRuleRepo = $oApp['storage']->getRepository('Bolt\Extension\IComeFromTheNet\BookMe\Model\Rule\RuleEntity');    
-    
-        $this->assertInstanceOf('Bolt\Extension\IComeFromTheNet\BookMe\Model\Rule\RuleRepository',$oRuleRepo);
-        
-        $oRuleQueryBuilder = $oRuleRepo->createQueryBuilder();
-        
-        $this->assertInstanceOf('Bolt\Extension\IComeFromTheNet\BookMe\Model\Rule\RuleQueryBuilder',$oRuleQueryBuilder);
-        
-        
-        $oWorkDayRule = $oRuleRepo->find($iRuleId);
-  
-        $this->assertEquals($iRuleId,$oWorkDayRule->getRuleId());
-        $this->assertEquals("Repeat Work Day Rule",$oWorkDayRule->getRuleName());
-        $this->assertEquals(false, $oWorkDayRule->getSingleDayFlag());
-        $this->assertEquals(2016,$oWorkDayRule->getCalendarYear());
-        $this->assertEquals(540,$oWorkDayRule->getDayOpenSlot());
-        $this->assertEquals(1020, $oWorkDayRule->getDayCloseSlot());
-        $this->assertEquals("2016-12-31" , $oWorkDayRule->getEndAt()->format('Y-m-d'));
-        $this->assertEquals("2016-01-01" , $oWorkDayRule->getStartFrom()->format('Y-m-d'));
-        $this->assertEquals('short rule description', $oWorkDayRule->getRuleDescription());
-        $this->assertEquals("2-12", $oWorkDayRule->getRepeatMonth());
-        $this->assertEquals("*", $oWorkDayRule->getRepeatDayOfMonth());
-        $this->assertEquals("1-5", $oWorkDayRule->getRepeatDayOfWeek());
-        $this->assertEquals("*", $oWorkDayRule->getRepeatWeekOfYear());
-        $this->assertEquals(1, $oWorkDayRule->getTimeslotId());
-        $this->assertEquals(1, $oWorkDayRule->getRuleTypeId());
-        
-        
-        
         // Test a filter run 
         
-        $oRuleQuery = $oRuleRepo->createRuleQuery();
+        $oRuleQuery = $oApp['bm.query.rule'];
         
         $this->assertInstanceOf('Bolt\Extension\IComeFromTheNet\BookMe\Model\Rule\RuleQuery',$oRuleQuery);
         

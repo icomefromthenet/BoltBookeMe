@@ -45,6 +45,7 @@ use Bolt\Extension\IComeFromTheNet\BookMe\Schema\AppointmentStatusTable;
 use Bolt\Extension\IComeFromTheNet\BookMe\Schema\AppointmentTable;
 
 
+
 use Bolt\Extension\IComeFromTheNet\BookMe\Model\Rule\RuleEntity;
 use Bolt\Extension\IComeFromTheNet\BookMe\Model\Rule\RuleRepository;
 
@@ -130,6 +131,7 @@ class BookMeExtension extends SimpleExtension
             new Provider\CronParseProvider($this->getConfig()),
             new Provider\CustomValidationProvider($this->getConfig()),
             new Provider\ExtrasProvider($this->getConfig()),
+            new Provider\FilterQueryProvider($this->getConfig()),
         ];
 
         return array_merge($parentProviders,$localProviders);
