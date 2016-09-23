@@ -54,5 +54,16 @@ abstract class CommonController
         return $this->oContainer->offsetGet('logger.flash');
     }
     
+    /**
+     * Load a menu builder from DI container 
+     *  
+     * @return Bolt\Extension\IComeFromTheNet\BookMe\Menu\MenuBuilder
+     * @param string    $sMenuKey   The di name
+     */
+    protected function getMenu($sMenuKey)
+    {
+        return $this->oContainer->offsetGet('bm.menu.'.$sMenuKey);
+    }
+    
 }
 /* End of Calendar Admin Controller */

@@ -1,0 +1,96 @@
+{% import '_macros.twig' as m %}
+    
+{% set aMenGroups = menubuilder.getMenuGroups() %}
+{% set iCols = 3 %}
+    
+{% for oMenuGroup in aMenGroups %}
+        
+    {% if loop.index % iCols == 0 %}
+    <div class="row">
+    {% endif %}
+    
+       
+        {% set aMenuItems = oMenuGroup.getMenuItems() %}
+        
+        <div class="col-md-4">
+          <h4>{{ oMenuGroup.getGroupName() }}</h4>
+            
+                <ul>
+                     {% for oMenuItem in aMenuItems %}
+                        <li>
+                            
+                            {{ m.link(oMenuItem.getMenuItemName(),url(oMenuItem.getRouteName()), '',  oMenuItem.getQueryParams() ) }}
+                        </li>
+    
+                    {% endfor %}
+                    
+                    
+                </ul>
+                
+        </div>
+        
+    {% if loop.index % iCols == 0 %}
+        </div>
+    {% endif %}
+        
+{% endfor %}
+    
+
+
+{#
+<div class="col-md-4">
+      <h4> Tasks </h4>
+     <ul>
+         <li>
+            Appointment Search 
+         </li>
+         <li>
+            Today's Appointments 
+         </li>
+         <li>
+            Today's Schedules
+         </li>
+         <li>
+            Tomorrows Appointments 
+         </li>
+         <li>
+            Tomorrows Schedules
+         </li>
+     </ul>
+  </div>
+  <div class="col-md-4">
+      <h4> Managment </h4>
+    <ul>
+        <li>
+             Workers 
+        </li>
+        <li>
+          <a href="{{ url('bookme-rule-new-one') }}?sRuleTypeCode=workday"> WorkDay Rules </a>
+        </li>
+        <li>
+            <a href="{{ url('bookme-rule-new-one') }}?sRuleTypeCode=holiday"> Holiday Rules </a> 
+        </li>
+        <li>
+            <a href="{{ url('bookme-rule-new-one') }}?sRuleTypeCode=break"> Lunch/Break Rules </a> 
+        </li>
+        <li>
+             <a href="{{ url('bookme-rule-new-one') }}?sRuleTypeCode=overtime"> After Hours Rules  </a>
+        </li>
+    </ul>
+  </div>
+  <div class="col-md-4">
+      <h4> Setup </h4>
+     <ul>
+         <li>
+            <a href="{{ url('bookme-setup-calendar') }}">Calendars</a>
+         </li>
+         <li>
+            <a href="{{ url('bookme-setup-timeslot') }}">Timeslots</a>
+         </li>
+         <li>
+             Email Notifications
+         </li>
+     </ul>
+  </div>
+  
+#}

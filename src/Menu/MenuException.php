@@ -18,6 +18,22 @@ class MenuException extends BookMeException
      */ 
     public $aErrors;
     
+    
+    public static function getClassName($oClass)
+    {
+        if ($oClass instanceof MenuItem) {
+            return get_class($oClass) . '::'. $oClass->getMenuItemName();
+            
+        } elseif ($oClass instanceof MenuGroup) {
+            
+            return get_class($oClass) . '::'. $oClass->getGroupName();
+        }
+        else {
+            
+            return get_class($oClass);
+        }
+    }
+    
     /**
      * @param mixed $invalidCommand
      *
@@ -26,7 +42,7 @@ class MenuException extends BookMeException
     public static function hasFailedValidation($item, array $aErrors)
     {
         $exception = new static(
-            'Validation has failed for menu '. get_class($item)
+            'Validation has failed for menu '. self::getClassName($item)
         );
         
         $exception->oItem = $item;

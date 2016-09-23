@@ -8,63 +8,8 @@
 
 {% block page_main %}
 
+{% include '_menu_generator.twig' with { 'menubuilder' : menubuilder } %}
 
-<!-- Actions -->
-<div class="row">
-  <div class="col-md-4">
-      <h4> Tasks </h4>
-     <ul>
-         <li>
-            Appointment Search 
-         </li>
-         <li>
-            Today's Appointments 
-         </li>
-         <li>
-            Today's Schedules
-         </li>
-         <li>
-            Tomorrows Appointments 
-         </li>
-         <li>
-            Tomorrows Schedules
-         </li>
-     </ul>
-  </div>
-  <div class="col-md-4">
-      <h4> Managment </h4>
-    <ul>
-        <li>
-             Workers 
-        </li>
-        <li>
-          <a href="{{ url('bookme-rule-new-one') }}?sRuleTypeCode=workday"> WorkDay Rules </a>
-        </li>
-        <li>
-            <a href="{{ url('bookme-rule-new-one') }}?sRuleTypeCode=holiday"> Holiday Rules </a> 
-        </li>
-        <li>
-            <a href="{{ url('bookme-rule-new-one') }}?sRuleTypeCode=break"> Lunch/Break Rules </a> 
-        </li>
-        <li>
-             <a href="{{ url('bookme-rule-new-one') }}?sRuleTypeCode=overtime"> After Hours Rules  </a>
-        </li>
-    </ul>
-  </div>
-  <div class="col-md-4">
-      <h4> Setup </h4>
-     <ul>
-         <li>
-            <a href="{{ url('bookme-setup-calendar') }}">Calendars</a>
-         </li>
-         <li>
-            <a href="{{ url('bookme-setup-timeslot') }}">Timeslots</a>
-         </li>
-         <li>
-             Email Notifications
-         </li>
-     </ul>
-  </div>
-</div>
+
 
 {% endblock page_main %}

@@ -48,8 +48,11 @@ class HomeController extends CommonController implements ControllerProviderInter
        $oNow      = $this->getNow();
        
       
+       $oMenuBuilder  = $this->getMenu('home');
+      
+      
        
-       return $app['twig']->render('home.twig', ['title' => 'BookMe Home'], []);
+       return $app['twig']->render('home.twig', ['title' => 'BookMe Home','menubuilder'=> $oMenuBuilder], []);
     }
 
    

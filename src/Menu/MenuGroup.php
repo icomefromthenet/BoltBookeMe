@@ -9,10 +9,11 @@ namespace Bolt\Extension\IComeFromTheNet\BookMe\Menu;
  * @author Lewis Dyer <getintouch@icomefromthenet.com>
  * @since 1.0
  */ 
-class MenuGroup implements ValidationRulesInterface
+class MenuGroup implements ValidationRulesInterface, MenuOrderInterface, \IteratorAggregate
 {
     
     use ValidateMenuTrait;
+    use SortMenuTrait;
     
     protected $aMenuItems;
     protected $iOrder;
@@ -37,7 +38,7 @@ class MenuGroup implements ValidationRulesInterface
     {
         $this->sortMenu();
         
-        return $this->aMenuItems;
+        return  $this->getIterator();
     }
     
     public function getOrder()
@@ -51,21 +52,7 @@ class MenuGroup implements ValidationRulesInterface
         return $this->sGroupName;
     }
     
-    //---------------------------------------------------
-    # Sort Helpers
-    
-    protected function sortMenu() 
-    {
-        usort($this->aMenuItems,[$this,'compareMenuItemOrder']);    
-    }
-    
-    public function compareMenuItemOrder($a, $b)
-    {
-        if ($a == $b) {
-            return 0;
-        }
-        return ($a < $b) ? -1 : 1;
-    }
+  
     
     //---------------------------------------------------------
     // Validation Interface
@@ -73,7 +60,20 @@ class MenuGroup implements ValidationRulesInterface
     
     public function getRules()
     {
-        
+         return [
+            'integer' => [
+                ['group_order']
+            ]
+            ,'min' => [
+                ['group_order',1]
+            ]
+            ,'lengthMax' => [
+                ['group_name',100]
+            ]
+            ,'required' => [
+                ['group_name'],['group_order']
+            ]
+        ];
     }
     
     
@@ -87,6 +87,14 @@ class MenuGroup implements ValidationRulesInterface
         
     }
     
+    
+    //-------------------------------------------------------------------------
+    #IteratorAggregate
+    
+    public function getIterator()
+    {
+        return new \ArrayIterator($this->aMenuItems);
+    }
 }
 /* End Class */
 

@@ -1,0 +1,11 @@
+{% macro input(name, value, type, size) %}
+    <input type="{{ type|default('text') }}" name="{{ name }}" value="{{ value|e }}" size="{{ size|default(20) }}" />
+{% endmacro %}
+
+{% macro link(sText, sLink,  sClass, oParams) %}
+    <a class="{{ sClass }}" 
+       href="{{ sLink }}?{{ oParams|url_encode  }}" 
+     >
+        {{ sText }}
+    </a>
+{% endmacro %}

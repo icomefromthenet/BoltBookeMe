@@ -15,10 +15,12 @@ use Valitron\Validator;
  * @author Lewis Dyer <getintouch@icomefromthenet.com>
  * @since 1.0
  */ 
-class MenuItem implements ValidationRulesInterface
+class MenuItem implements ValidationRulesInterface, MenuOrderInterface
 {
     
     use ValidateMenuTrait;
+    use SortMenuTrait;
+    
     
     protected $sMenuName;
     protected $sSubText;
@@ -40,7 +42,7 @@ class MenuItem implements ValidationRulesInterface
     }
     
     
-    public function getMenuName()
+    public function getMenuItemName()
     {
         return $this->sMenuName;
     }
@@ -85,7 +87,7 @@ class MenuItem implements ValidationRulesInterface
                 ['item_order',1]
             ]
             ,'lengthMax' => [
-                ['item_route',100],['item_name',20],['item_subtext',150],['item_icon',20]
+                ['item_route',100],['item_name',50],['item_subtext',150],['item_icon',50]
             ]
             ,'required' => [
                 ['item_name'],['item_icon'],['item_order'],['item_route']
@@ -106,7 +108,6 @@ class MenuItem implements ValidationRulesInterface
         ];
         
     }
-    
     
     
 }
