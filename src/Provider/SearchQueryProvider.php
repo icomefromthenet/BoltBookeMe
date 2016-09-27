@@ -4,7 +4,10 @@ namespace Bolt\Extension\IComeFromTheNet\BookMe\Provider;
 use DateTime;
 use Silex\Application;
 use Silex\ServiceProviderInterface;
-use Bolt\Extension\IComeFromTheNet\BookMe\Model\Rule\RuleQuery;
+
+use Bolt\Extension\IComeFromTheNet\BookMe\Model\Rule\DataTable\RuleSearchQuery;
+use Bolt\Extension\IComeFromTheNet\BookMe\Model\Rule\DataTable\RuleSearchQueryBuilder;
+
 
 /**
  * Bootstrap Filter Query classes found in Bolt\Extension\IComeFromTheNet\BookMe\Model\XXXXX
@@ -13,7 +16,7 @@ use Bolt\Extension\IComeFromTheNet\BookMe\Model\Rule\RuleQuery;
  * 
  * @author Lewis Dyer <getintouch@icomefromthenet.com>
  */
-class FilterQueryProvider implements ServiceProviderInterface
+class SearchQueryProvider implements ServiceProviderInterface
 {
     /** @var array */
     private $config;
@@ -41,7 +44,7 @@ class FilterQueryProvider implements ServiceProviderInterface
         
         $app['bm.query.rule'] = function($c) use ($aConfig) {
             
-            return $c['storage']->getRepository('Bolt\Extension\IComeFromTheNet\BookMe\Model\Rule\RuleEntity')->createRuleQuery(); 
+            return new RuleSearchQuery(new RuleSearchQueryBuilder($c['db'],$aConfig['tablenames']),'r');
         };
         
         

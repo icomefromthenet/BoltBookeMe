@@ -8,8 +8,67 @@
 
 {% block page_main %}
 
-{% include '_menu_generator.twig' with { 'menubuilder' : menubuilder } %}
+<!-- Useful Stats -->
+<div class="row">
+    
+    <div class="col-md-4">
+        <div class="panel panel-default">
+            <div class="panel-heading">
+                Appointments Booked Today
+            </div>
+            <div class="panel-body">
+                
+            </div>
+        </div>
+        
+    </div>
+    
+    <div class="col-md-4">
+        <div class="panel panel-default">
+            <div class="panel-heading">
+                Appointments on Waiting List
+            </div>
+            <div class="panel-body">
+                
+            </div>
+        </div>
+        
+    </div>
+    
+    <div class="col-md-4">
+        <div class="panel panel-default">
+            <div class="panel-heading">
+                Booking Conflicts
+            </div>
+            <div class="panel-body">
+                
+            </div>
+        </div>
+        
+    </div>
+    
+</div>
+
+<!-- Menu -->
+<div class="row">
+    <div class="col-md-12">
+        {% include '_menu_generator.twig' with { 'menubuilder' : menubuilder, 'sMenuHeading' : 'Booking Screens' } %}
+    </div>
+</div>
 
 
+<div class="row">
+    <div class="col-md-12">
+            <div class="panel panel-default">
+            <div class="panel-heading">
+                Getting Started
+            </div>
+            <div class="panel-body">
+                
+            </div>
+        </div>
+
+    </div>
+</div>
 
 {% endblock page_main %}

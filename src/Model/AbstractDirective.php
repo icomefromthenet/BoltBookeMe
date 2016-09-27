@@ -6,12 +6,12 @@ use Bolt\Storage\Query\QueryInterface;
 use Doctrine\DBAL\Query\QueryBuilder;
 
 /**
- * Filter that used by SelectQuery.
+ * Directive that used by SelectQuery.
  * 
  * @author Lewis Dyer <getintouch@icomefromthenet.com>
  * @since 1.0.0
  */ 
-class AbstractFilter implements QueryInterface
+class AbstractDirective implements QueryInterface
 {
     
     protected $qb;

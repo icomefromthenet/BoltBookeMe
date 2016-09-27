@@ -131,7 +131,7 @@ class BookMeExtension extends SimpleExtension
             new Provider\CronParseProvider($this->getConfig()),
             new Provider\CustomValidationProvider($this->getConfig()),
             new Provider\ExtrasProvider($this->getConfig()),
-            new Provider\FilterQueryProvider($this->getConfig()),
+            new Provider\SearchQueryProvider($this->getConfig()),
             new Provider\MenuProvider($this->getConfig()),
         ];
 

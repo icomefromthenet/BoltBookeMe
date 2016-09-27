@@ -1,5 +1,5 @@
 <?php
-namespace Bolt\Extension\IComeFromTheNet\BookMe\Model\Rule\Filter;
+namespace Bolt\Extension\IComeFromTheNet\BookMe\Model\Rule\DataTable\Filter;
 
 use Bolt\Extension\IComeFromTheNet\BookMe\Model\AbstractFilter;
 use Doctrine\DBAL\Connection;

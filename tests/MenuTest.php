@@ -44,7 +44,7 @@ class MenuTest extends ExtensionTest
         $this->assertEquals($sRouteName, $oItem->getRouteName());
         $this->assertEquals($sIconName, $oItem->getIconName());
         $this->assertEquals($iOrder, $oItem->getOrder());
-        $this->assertEquals($aQueryParams, $oItem->getQueryParams());
+        $this->assertEquals($aQueryParams, $oItem->getQueryParams()->all());
        
         # Test Validation Data
         
@@ -144,6 +144,38 @@ class MenuTest extends ExtensionTest
         
    }
    
+   
+   public function testMenuBuilderAddParam()
+   {
+        $oMenuGroupOne  = new MenuGroup('Group 1', 1);
+        $oMenuGroupTwo  = new MenuGroup('Group 2', 2);
+
+        $oGroupOneItemA = new MenuItem('Group One Menu Item A','Example Menu Item', 'bla', 'bla.png', 2, []);
+        $oGroupOneItemB = new MenuItem('Menu One Item B','Example Menu Item', 'bla', 'bla.png', 1, []);
+        
+        $oGroupTwoItemA = new MenuItem('Group Two Menu Item A','Example Menu Item', 'bla', 'bla.png', 2, []);
+        $oGroupTwoItemB = new MenuItem('Group Two Menu Item B','Example Menu Item', 'bla', 'bla.png', 1, []);
+        
+        $oMenuGroupOne->addMenuItem($oGroupOneItemA);
+        $oMenuGroupOne->addMenuItem($oGroupOneItemB);
+        
+        $oMenuGroupTwo->addMenuItem($oGroupTwoItemA);
+        $oMenuGroupTwo->addMenuItem($oGroupTwoItemB);
+        
+        $oMenuBuilder = new MenuBuilder();
+        
+        $oMenuBuilder->addMenuGroup($oMenuGroupOne);
+        $oMenuBuilder->addMenuGroup($oMenuGroupTwo);
+       
+        $oMenuBuilder->addQueryParam('entity',1);
+        
+        $this->assertEquals(1,$oGroupOneItemA->getQueryParams()->get('entity'));
+        $this->assertEquals(1,$oGroupOneItemB->getQueryParams()->get('entity'));
+        $this->assertEquals(1,$oGroupTwoItemA->getQueryParams()->get('entity'));
+        $this->assertEquals(1,$oGroupTwoItemB->getQueryParams()->get('entity'));
+        
+       
+   }
    
    public function testMenuBuilderValidationSuccess()
    {

@@ -14,7 +14,7 @@ use Doctrine\DBAL\DBALException;
  * @author Lewis Dyer <getintouch@icomefromthenet.com>
  * @since 1.0.0
  */ 
-class AbstractQuery extends QueryBuilder
+class AbstractRepoQuery extends QueryBuilder
 {
     /**
      * @var array Table Alias used

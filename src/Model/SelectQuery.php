@@ -3,6 +3,7 @@ namespace Bolt\Extension\IComeFromTheNet\BookMe\Model;
 
 use Bolt\Storage\Query\QueryInterface;
 use Doctrine\DBAL\Query\QueryBuilder;
+use Doctrine\DBAL\Types\Type;
 
 /**
  * Override the original as we want to pass the query builder into each filter so
@@ -18,7 +19,9 @@ class SelectQuery implements QueryInterface
     protected $params;
     protected $filters = [];
     protected $contenttype;
-
+    protected $aTypeMap = [];
+    protected $aDirective = [];
+    protected $sIdField = '';     
 
     protected function setupDefaults()
     {
@@ -26,6 +29,17 @@ class SelectQuery implements QueryInterface
         
     }
 
+
+    /**
+     * Return type from a factory
+     * 
+     * @return Doctrine\DBAL\Types\Type
+     */ 
+    protected function getTypeFromFactory($sTypeName)
+    {
+        return Type::getType($sTypeName);
+    }
+   
 
     /**
      * Constructor.
@@ -40,6 +54,7 @@ class SelectQuery implements QueryInterface
         
         
         $this->setupDefaults();
+    
     }
 
     
@@ -75,8 +90,8 @@ class SelectQuery implements QueryInterface
     {
         return $this->qb;
     }
-
-    /**
+    
+     /**
      * Allows replacing the default querybuilder
      *
      * @return QueryBuilder
@@ -87,6 +102,10 @@ class SelectQuery implements QueryInterface
         
         return $this;
     }
+
+    //--------------------------------------------------------------------------
+    # Query Parameters
+
 
     /**
      * Sets the parameters that will filter / alter the query
@@ -99,6 +118,9 @@ class SelectQuery implements QueryInterface
         
         return $this;
     }
+    
+    //--------------------------------------------------------------------------
+    # Query Filters
     
     /**
      * @param QueryInterface $filter
@@ -122,6 +144,79 @@ class SelectQuery implements QueryInterface
     }
     
     
+    //--------------------------------------------------------------------------
+    # Result Type Map
+    
+    /**
+     * Sets the a doctrine Type Map to use to convert database valeus to php
+     * 
+     * @return void
+     * @param string                    $sColumnName the exact column name in the result set
+     * @param Doctrine\DBAL\Types\Type  $oType the doctrine DBAL type
+     */ 
+    public function addMap($sColumnName, Type $oType)
+    {
+        $this->aTypeMap[$sColumnName] = $oType;
+    }
+
+    
+    /**
+     * Check if a mapping has been set
+     * 
+     * @return true if map at column been set
+     * @param string    $sColumnName    The map to look for
+     */ 
+    public function hasMap($sColumnName) 
+    {
+        return isset($this->aTypeMap[$sColumnName]);
+    }
+    
+    /**
+     * Return the type map for this select query
+     *  
+     * @return array[$sColumnName => Type]
+     */ 
+    public function getMapping()
+    {
+        return $this->aTypeMap;
+    }
+    
+    /**
+     * Return the column mapping
+     * 
+     * @return string   $sColumnName    The database column name
+     * @return Doctrine\DBAL\Types\Type
+     */ 
+    public function getMap($sColumnName)
+    {
+        return $this->aTypeMap[$sColumnName];
+    }
+    
+    //--------------------------------------------------------------------------
+    # Query Directive
+    
+    /**
+     * Adds a new Query Directive which define the joins and select list
+     * 
+     * @return void
+     * @param QueryInterface    $oDirective     The instance of directive
+     */ 
+    public function addDirective(QueryInterface $oDirective)
+    {
+        $this->aDirective[] = $oDirective;
+    }
+    
+    /**
+     * Return the all query Directive
+     * 
+     * @return array[QueryInterface]
+     */ 
+    public function getDirectivies()
+    {
+        return $this->aDirective;
+    }
+ 
+    
     /**
      * Part of the QueryInterface this turns all the input into a query
      * using filters which themselves are QueryInterfaces
@@ -132,13 +227,22 @@ class SelectQuery implements QueryInterface
     {
         $query = $this->qb;
        
-        foreach($this->filters as $oFilter) {
+        // run directives
+        foreach($this->getDirectivies() as $oDirective) {
+            $oDirective->setParameters($this->params);
+            $oDirective->build();
+        }
+        
+        
+        // run filters
+        foreach($this->getFilters() as $oFilter) {
             $oFilter->setParameters($this->params);
             $oFilter->build();
         }
        
         return $query;
     }
+    
 
     /**
      * @return string String representation of query
@@ -150,8 +254,25 @@ class SelectQuery implements QueryInterface
         return $query->getSQL();
     }
     
+    /**
+     * Return the row id field specified
+     * 
+     * @return string
+     */ 
+    public function getRowIdColumnName()
+    {
+        return $this->sIdField;
+    }
     
-   
-    
+    /**
+     * Sets the row id field
+     * 
+     * @param string $sidField  the row database field that unique
+     * @return void
+     */ 
+    public function setRowIdColumnName($sIdField)
+    {
+        $this->sIdField = $sIdField;
+    }
 }
 /* End of Class */

@@ -2,8 +2,14 @@
     
 {% set aMenGroups = menubuilder.getMenuGroups() %}
 {% set iCols = 3 %}
-    
-{% for oMenuGroup in aMenGroups %}
+
+
+<div class="panel panel-default"> 
+    <div class="panel-heading">
+        {{ sMenuHeading }}
+    </div>
+    <div class="panel-body">
+    {% for oMenuGroup in aMenGroups %}
         
     {% if loop.index % iCols == 0 %}
     <div class="row">
@@ -34,7 +40,10 @@
     {% endif %}
         
 {% endfor %}
-    
+ </div>
+
+</div>
+       
 
 
 {#

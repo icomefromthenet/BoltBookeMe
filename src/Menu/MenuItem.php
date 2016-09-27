@@ -2,6 +2,7 @@
 namespace Bolt\Extension\IComeFromTheNet\BookMe\Menu;
 
 use Valitron\Validator;
+use Symfony\Component\HttpFoundation\ParameterBag;
 
 /**
  * This item which will generate into a menu link.
@@ -26,7 +27,7 @@ class MenuItem implements ValidationRulesInterface, MenuOrderInterface
     protected $sSubText;
     protected $sRouteName;
     protected $sIconName;
-    protected $aQueryParams;
+    protected $oQueryParams;
     protected $iOrder;
     
     
@@ -37,7 +38,7 @@ class MenuItem implements ValidationRulesInterface, MenuOrderInterface
         $this->sSubText  = $sSubText;
         $this->sRouteName = $sRouteName;
         $this->sIconName  = $sIconName;
-        $this->aQueryParams = $aQueryParams;
+        $this->oQueryParams = new ParameterBag($aQueryParams);
         $this->iOrder     = $iOrder;
     }
     
@@ -64,13 +65,14 @@ class MenuItem implements ValidationRulesInterface, MenuOrderInterface
     
     public function getQueryParams()
     {
-        return $this->aQueryParams;
+        return $this->oQueryParams;
     }
     
     public function getOrder()
     {
         return $this->iOrder;
     }
+    
     
     //---------------------------------------------------------
     // Validation Interface
@@ -103,7 +105,7 @@ class MenuItem implements ValidationRulesInterface, MenuOrderInterface
           'item_order'      => $this->iOrder,
           'item_icon'       => $this->sIconName,
           'item_subtext'    => $this->sSubText,
-          'item_params'     => $this->aQueryParams,
+          'item_params'     => $this->oQueryParams->all(),
           'item_route'      => $this->sRouteName,    
         ];
         

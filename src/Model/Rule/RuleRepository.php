@@ -64,12 +64,6 @@ class RuleRepository extends ReadOnlyRepository implements ObjectRepository
     }
 
   
-  //----------------------------------------------------------------------------
-  
-  public function createRuleQuery()
-  {
-      return new RuleQuery($this->createQueryBuilder(), $this->getAlias());
-  }
-    
+   
 }
 /* End of Class */

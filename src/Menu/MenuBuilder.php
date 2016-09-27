@@ -50,6 +50,22 @@ class MenuBuilder implements \IteratorAggregate
         return true;
     }
     
+    /**
+     * Used to set a query param on all menu items
+     *  
+     * @param string    $sParamName
+     * @param mixed     $sParamValue
+     */ 
+    public function addQueryParam($sParamName, $sParamValue) 
+    {
+        foreach($this->getIterator() as $oMenuGroup) {
+           foreach($oMenuGroup as $oMenuItem) {
+                $oMenuItem->getQueryParams()->set($sParamName,$sParamValue);  
+           }
+            
+        }
+        
+    }
     
     
    //-------------------------------------------------------------------------

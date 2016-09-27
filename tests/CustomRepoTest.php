@@ -5,7 +5,10 @@ use Doctrine\DBAL\Types\Type;
 use Bolt\Extension\IComeFromTheNet\BookMe\Tests\Base\ExtensionTest;
 use Bolt\Extension\IComeFromTheNet\BookMe\Bus\Middleware\ValidationException;
 
+use Bolt\Extension\IComeFromTheNet\BookMe\Model\SelectQueryHandler;
 
+use Bolt\Extension\IComeFromTheNet\BookMe\Model\Rule\DataTable\RuleSearchQuery;
+use Bolt\Extension\IComeFromTheNet\BookMe\Model\Rule\DataTable\RuleSearchQueryBuilder;
 
 
 class CustomRepoTest extends ExtensionTest
@@ -203,6 +206,7 @@ class CustomRepoTest extends ExtensionTest
     {
        
        $this->RuleRepoTest($this->aDatabaseId['work_repeat']);
+       $this->RuleSearchQueryTest();
        
     }
     
@@ -218,6 +222,7 @@ class CustomRepoTest extends ExtensionTest
         $oRuleQueryBuilder = $oRuleRepo->createQueryBuilder();
         
         $this->assertInstanceOf('Bolt\Extension\IComeFromTheNet\BookMe\Model\Rule\RuleQueryBuilder',$oRuleQueryBuilder);
+        
         
         
         $oWorkDayRule = $oRuleRepo->find($iRuleId);
@@ -240,16 +245,25 @@ class CustomRepoTest extends ExtensionTest
         
         
         
-        // Test a filter run 
+    }
+    
+    
+    public function RuleSearchQueryTest()
+    {
+        # Fetch Search Query From Container
         
-        $oRuleQuery = $oRuleRepo->createRuleQuery();
+        $oSearchHandler = new SelectQueryHandler($this->getContainer());
+        $oRuleQuery     = $oSearchHandler->getQuery('rule');
         
-        $this->assertInstanceOf('Bolt\Extension\IComeFromTheNet\BookMe\Model\Rule\RuleQuery',$oRuleQuery);
+        $this->assertInstanceOf('Bolt\Extension\IComeFromTheNet\BookMe\Model\Rule\DataTable\RuleSearchQuery',$oRuleQuery);
+        
+        # Do a Dry run and verify filters and directives are applied
         
         $aParams =[
             'oApplyFrom' => new \DateTime(),
             'oEndBefore' => new \DateTime(),    
         ];
+        
         
         $oQueryBuilder     = $oRuleQuery->setParameters($aParams)->build();
         
@@ -259,21 +273,38 @@ class CustomRepoTest extends ExtensionTest
         $this->assertNotEmpty($sRuleFilterQuery);
         $this->assertNotEmpty($aRuleFilterParams);
         
-        
+        # Test timeslot Join Directive
+        $this->assertRegExp('/INNER JOIN bolt_bm_timeslot tslot/', $sRuleFilterQuery);
+        $this->assertRegExp('/INNER JOIN bolt_bm_rule_type rt/', $sRuleFilterQuery);
         
         # Test the start from
-        $this->assertRegExp('/rule_entity.start_from/', $sRuleFilterQuery);
+        $this->assertRegExp('/r.start_from/', $sRuleFilterQuery);
         $this->assertEquals($aParams['oApplyFrom'], $aRuleFilterParams['StartFrom']);
         
         # Test Apply Before
-        $this->assertRegExp('/rule_entity.end_at/', $sRuleFilterQuery);
+        $this->assertRegExp('/r.end_at/', $sRuleFilterQuery);
         $this->assertEquals($aParams['oEndBefore'], $aRuleFilterParams['EndAt']);
         
         
+        # Execute a query using handler and test rule mapping 
+        $aParams            = [];
+        $oRuleQuery         = $oSearchHandler->getQuery('rule');
+        
+        $aQueryResultSet = $oSearchHandler->executeQuery($oRuleQuery,$aParams);
+        
+        $this->assertGreaterThanOrEqual(2,count($aQueryResultSet));
+        
+        # Test Dates columns are mapped which means its iterating over mapping rules
+        $oRecord = $aQueryResultSet->get(1);
+
+        $this->assertInstanceOf('\DateTime',$oRecord['start_from']);
+        $this->assertInstanceOf('\DateTime',$oRecord['end_at']);
+        
         
     }
-    
   
+  
+        
     
 }
 /* end of file */
