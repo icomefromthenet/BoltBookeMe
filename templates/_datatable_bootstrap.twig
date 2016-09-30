@@ -1,0 +1,15 @@
+{#
+ Bootstrap a jQuery DataTable Requires the following params
+
+ sConfigString : The javascript config struct
+ sElement : ID of element to bind the dataTable on
+ 
+ 
+ This should be included at the bottom of the page using the Page Script Block
+ 
+ The Template _datatable_bootstrap.twig must be included too
+#}
+
+<script type="text/javascript">
+jQuery({{ sElement }}).DataTable( {{ sConfigString }});
+</script>

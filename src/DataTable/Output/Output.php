@@ -78,7 +78,14 @@ abstract class Output
    * @return void
    */
   public abstract function appendToken($bytes);
-
+  
+  /**
+   * Returns the output
+   *
+   * @param  string $bytes
+   * @return void
+   */
+  public abstract function bytes();
   
 }
 /* End of Class */
