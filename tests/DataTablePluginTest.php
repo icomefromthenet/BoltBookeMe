@@ -5,6 +5,7 @@ use Doctrine\DBAL\Types\Type;
 use Bolt\Extension\IComeFromTheNet\BookMe\Tests\Base\ExtensionTest;
 use Bolt\Extension\IComeFromTheNet\BookMe\DataTable\Plugin\FixedHeaderPlugin;
 use Bolt\Extension\IComeFromTheNet\BookMe\DataTable\Plugin\FixedColumnPlugin;
+use Bolt\Extension\IComeFromTheNet\BookMe\DataTable\Plugin\ScrollerPlugin;
 use Bolt\Extension\IComeFromTheNet\BookMe\DataTable\General\AjaxOptions;
 use Bolt\Extension\IComeFromTheNet\BookMe\DataTable\Schema\ColumnRenderFunc;
 use Bolt\Extension\IComeFromTheNet\BookMe\DataTable\Schema\ColumnRenderOption;
@@ -59,6 +60,27 @@ class DataTablePluginTest extends ExtensionTest
         $this->assertEquals('window.func',$aStruct['fixedColumns']['fnDrawCallback']->getValue());
         $this->assertEquals('auto',$aStruct['fixedColumns']['sHeightMatch']);
     }
+    
+     public function testFixedScrollerPlugin()
+    {
+        
+        $oPlugin = new ScrollerPlugin();
+        
+        $oPlugin->setUseTrace(true);
+        $oPlugin->setRowHeight(100);
+        $oPlugin->setUseLoadingIndicator(true);
+        $oPlugin->setDisplayBuffer(200);
+        $oPlugin->setBoundryScale(1.0);
+        
+        $aStruct = $oPlugin->getStruct();
+        
+        $this->assertEquals(true,$aStruct['scroller']['trace']);
+        $this->assertEquals(100,$aStruct['scroller']['rowHeight']);
+        $this->assertEquals(true,$aStruct['scroller']['loadingIndicator']);
+        $this->assertEquals(200,$aStruct['scroller']['displayBuffer']);
+        $this->assertEquals(1.0,$aStruct['scroller']['boundaryScale']);
+        
+    }
        
     
     public function testGeneralAjaxOptions()
@@ -102,14 +124,14 @@ class DataTablePluginTest extends ExtensionTest
         
         $oPlugin = new ColumnRenderOption();
        
-        $sDefault = '-';
+        $sDefault = 'column_c';
         $sFilter = 'column_a';
         $sDisplay = 'column_b';
         
        
         $oPlugin->setDisplayIndex($sDisplay);
         $oPlugin->setFilterIndex($sFilter);
-        $oPlugin->setEmptyDefault($sDefault);
+        $oPlugin->setDefaultIndex($sDefault);
         
         $aStruct = $oPlugin->getStruct();
        
@@ -118,5 +140,8 @@ class DataTablePluginTest extends ExtensionTest
         $this->assertEquals($sFilter,$aStruct['render']['filter']);
         
     }
+    
+    
+    
 }
 /* end of file */

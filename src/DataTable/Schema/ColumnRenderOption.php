@@ -60,14 +60,14 @@ class ColumnRenderOption implements DataTableOptionInterface
    }
    
     /**
-    * Set the value to display if column value is missing
+    * Set the default column to display if column display is missing
     * 
     * @return self
-    * @param string    $sEmptyValue      The default value to display e.g 'n/a'
+    * @param string    $sIndex      The default column index
     */ 
-   public function setEmptyDefault($sEmptyValue)
+   public function setDefaultIndex($sIndex)
    {
-       $this->aConfigStruct['_'] = $sEmptyValue;
+       $this->aConfigStruct['_'] = $sIndex;
        
        return $this;
    }
