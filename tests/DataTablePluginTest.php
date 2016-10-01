@@ -6,6 +6,8 @@ use Bolt\Extension\IComeFromTheNet\BookMe\Tests\Base\ExtensionTest;
 use Bolt\Extension\IComeFromTheNet\BookMe\DataTable\Plugin\FixedHeaderPlugin;
 use Bolt\Extension\IComeFromTheNet\BookMe\DataTable\Plugin\FixedColumnPlugin;
 use Bolt\Extension\IComeFromTheNet\BookMe\DataTable\Plugin\ScrollerPlugin;
+use Bolt\Extension\IComeFromTheNet\BookMe\DataTable\Plugin\SelectPlugin;
+
 use Bolt\Extension\IComeFromTheNet\BookMe\DataTable\General\AjaxOptions;
 use Bolt\Extension\IComeFromTheNet\BookMe\DataTable\Schema\ColumnRenderFunc;
 use Bolt\Extension\IComeFromTheNet\BookMe\DataTable\Schema\ColumnRenderOption;
@@ -61,7 +63,7 @@ class DataTablePluginTest extends ExtensionTest
         $this->assertEquals('auto',$aStruct['fixedColumns']['sHeightMatch']);
     }
     
-     public function testFixedScrollerPlugin()
+    public function testFixedScrollerPlugin()
     {
         
         $oPlugin = new ScrollerPlugin();
@@ -81,7 +83,67 @@ class DataTablePluginTest extends ExtensionTest
         $this->assertEquals(1.0,$aStruct['scroller']['boundaryScale']);
         
     }
-       
+    
+    public function testSelectPlugin()
+    {
+        
+        $oPlugin = new SelectPlugin();
+        
+        
+        $oPlugin->setSelectStyleSingleRow();
+        $aStruct = $oPlugin->getStruct();
+        $this->assertEquals('single',$aStruct['select']['style']);
+        
+        $oPlugin->setSelectStyleDefault();
+        $aStruct = $oPlugin->getStruct();
+        $this->assertEquals('api',$aStruct['select']['style']);
+        
+        $oPlugin->setSelectStyleHybrid();
+        $aStruct = $oPlugin->getStruct();
+        $this->assertEquals('multi+shift',$aStruct['select']['style']);
+        
+        $oPlugin->setSelectStyleOS();
+        $aStruct = $oPlugin->getStruct();
+        $this->assertEquals('os',$aStruct['select']['style']);
+        
+        $oPlugin->setSelectStyleMultiRow();
+        $aStruct = $oPlugin->getStruct();
+        $this->assertEquals('multi',$aStruct['select']['style']);
+        
+        $oPlugin->setSelectStyleSingleRow();
+        $aStruct = $oPlugin->getStruct();
+        $this->assertEquals('single',$aStruct['select']['style']);
+        
+        $oPlugin->setItemRows();
+        $aStruct = $oPlugin->getStruct();
+        $this->assertEquals('row',$aStruct['select']['items']);
+        
+        
+        $oPlugin->setItemColumns();
+        $aStruct = $oPlugin->getStruct();
+        $this->assertEquals('column',$aStruct['select']['items']);
+    
+        $oPlugin->setItemCells();
+        $aStruct = $oPlugin->getStruct();
+        $this->assertEquals('cell',$aStruct['select']['items']);
+        
+        $oPlugin->setBlurable(true);
+        $aStruct = $oPlugin->getStruct();
+        $this->assertEquals(true,$aStruct['select']['blurable']);
+        
+        $oPlugin->setSelectCssClassName('bob');
+        $aStruct = $oPlugin->getStruct();
+        $this->assertEquals('bob',$aStruct['select']['className']);
+        
+        $oPlugin->setSelectedInfoDisplayed(false);
+        $aStruct = $oPlugin->getStruct();
+        $this->assertEquals(false,$aStruct['select']['info']);
+        
+        $oPlugin->setSelectorFilter('.test1');
+        $aStruct = $oPlugin->getStruct();
+        $this->assertEquals('.test1',$aStruct['select']['selector']);
+        
+    }   
     
     public function testGeneralAjaxOptions()
     {

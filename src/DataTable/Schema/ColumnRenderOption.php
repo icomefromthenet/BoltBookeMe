@@ -25,7 +25,7 @@ class ColumnRenderOption implements DataTableOptionInterface
    public function __construct()
    {
        $this->aConfigStruct = [
-             "_" => null,
+             "_"      => null,
             "filter"  => null,
             "display" => null
        ];

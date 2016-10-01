@@ -1,7 +1,6 @@
 <?php
 namespace Bolt\Extension\IComeFromTheNet\BookMe\DataTable;
 
-use Bolt\Extension\IComeFromTheNet\BookMe\DataTable\StringOutput;
 
 /**
  * Defines the expected interface of object that configure Datatable
