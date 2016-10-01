@@ -141,9 +141,9 @@ class DataTableEventRegistry
     * @param string     $sFilter    A selection filter that jquery understands
     * 
     */ 
-   public function registerEvent($sEvent, $sFuncRef, $sFilter = null) 
+   public function addEvent($sEvent, $sFuncRef, $sFilter = null) 
    {
-       if(isset($this->aRegistry[$sEvent])) {
+       if(false === isset($this->aRegistry[$sEvent])) {
            $this->aRegistry[$sEvent] = [];
        }
        
@@ -188,8 +188,8 @@ class DataTableEventRegistry
     */ 
    public function removeEvent($sEvent,$sFuncRef)
    {
-        if(false === $this->hasEventRegistered()) {
-            DataTableException::errorEventDoesNotExist($sEvent, $sFuncRef);
+        if(false === $this->hasEventRegistered($sEvent, $sFuncRef)) {
+            throw DataTableException::errorEventDoesNotExist($sEvent, $sFuncRef);
         } 
         
         $bFoundIndex = null;
@@ -202,6 +202,27 @@ class DataTableEventRegistry
        unset($this->aRegistry[$sEvent][$bFoundIndex]);
        
        return $self;
+   }
+   
+   /**
+    * Fetch the events to bind
+    * 
+    * @return array of events
+    */ 
+   public function getRegistry()
+   {
+       $aFlatArray = array();
+       
+       foreach($this->aRegistry as $aEvents) {
+           if(true === is_array($aEvents)) {
+               $aFlatArray = array_merge($aFlatArray,$aEvents);
+           } else  {
+               $aFlatArray[] = $aEvents;
+           }
+           
+       }
+       
+       return $aFlatArray;
    }
     
 }

@@ -35,7 +35,7 @@ class ColumnRenderFunc implements DataTableOptionInterface
     */ 
    public function getStruct()
    {
-       return ["render" => $this->sFunctionName];
+       return ["render" => new FunctionReferenceType($this->sFunctionName)];
    }
    
     

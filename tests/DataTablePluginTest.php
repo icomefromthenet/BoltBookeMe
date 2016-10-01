@@ -3,6 +3,8 @@ namespace  Bolt\Extension\IComeFromTheNet\BookMe\Tests;
 
 use Doctrine\DBAL\Types\Type;
 use Bolt\Extension\IComeFromTheNet\BookMe\Tests\Base\ExtensionTest;
+use Bolt\Extension\IComeFromTheNet\BookMe\DataTable\DataTableException;
+use Bolt\Extension\IComeFromTheNet\BookMe\DataTable\DataTableEventRegistry;
 use Bolt\Extension\IComeFromTheNet\BookMe\DataTable\Plugin\FixedHeaderPlugin;
 use Bolt\Extension\IComeFromTheNet\BookMe\DataTable\Plugin\FixedColumnPlugin;
 use Bolt\Extension\IComeFromTheNet\BookMe\DataTable\Plugin\ScrollerPlugin;
@@ -203,6 +205,51 @@ class DataTablePluginTest extends ExtensionTest
         
     }
     
+    
+    public function testEventRegistry()
+    {
+        $oRegistry = new DataTableEventRegistry();
+        
+        # test event not found
+        $this->assertFalse($oRegistry->hasEventRegistered('aaa','window.func'));
+        
+        # test add event
+        $oRegistry->addEvent('aaa','window.func','#aa');
+        
+        $this->assertTrue($oRegistry->hasEventRegistered('aaa','window.func'));
+        
+        # test the get method
+        
+        $aEvents = $oRegistry->getRegistry();
+        
+        $this->assertCount(1,$aEvents);
+        
+        # test remove event
+        
+        $oRegistry->removeEvent('aaa','window.func');
+        
+        $aEvents = $oRegistry->getRegistry();
+        
+        $this->assertCount(0,$aEvents);
+        
+        # test exception thrown when removing not exists event
+        try {
+            $oRegistry->removeEvent('aaa','window.func');
+            $this->assertFalse(true,'exception expected to be thrown when event does not exist');
+        } catch(DataTableException $e) {
+            $this->assertTrue(true);
+        }
+        
+        # Test add multiple
+        
+        $oRegistry->addEvent('aaa','window.funcA');
+        $oRegistry->addEvent('aaa','window.funcB');
+        
+        $aEvents = $oRegistry->getRegistry();
+        
+        $this->assertCount(2,$aEvents);
+      
+    }
     
     
 }

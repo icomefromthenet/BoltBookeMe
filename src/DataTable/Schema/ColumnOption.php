@@ -54,7 +54,7 @@ class ColumnOption implements DataTableOptionInterface
     */ 
    public function setRenderOption(ColumnRenderOption $oOption)
    {
-       $this->aConfigStruct['render'] = $sDefault;
+       $this->aConfigStruct['render'] = $oOption;
        
        return $this;
    }
@@ -65,9 +65,9 @@ class ColumnOption implements DataTableOptionInterface
     * @return self
     * @param string    $sDefault      The default content
     */ 
-   public function setRenderFunc(ColumnRenderFunc $oFunc)
+   public function setRenderFunc(ColumnRenderFunc $oOption)
    {
-       $this->aConfigStruct['render'] = $sDefault;
+       $this->aConfigStruct['render'] = $oOption;
        
        return $this;
    }

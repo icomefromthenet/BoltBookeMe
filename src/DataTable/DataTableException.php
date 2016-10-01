@@ -1,7 +1,7 @@
 <?php 
 namespace Bolt\Extension\IComeFromTheNet\BookMe\DataTable;
 
-use Bolt\Extension\IComeFromTheNet\BookMe\BookMeExcpetion;
+use Bolt\Extension\IComeFromTheNet\BookMe\BookMeException;
 
 
 /**
@@ -10,11 +10,11 @@ use Bolt\Extension\IComeFromTheNet\BookMe\BookMeExcpetion;
  * @modified Lewis Dyer <getintouch@icomefromthenet.com>
  * @since  1.0.0
  */
-class DataTableException extends BookMeExcpetion
+class DataTableException extends BookMeException
 {
     
      /**
-     * Error raised when Deregister event that does not exist
+     * Error raised when event that does not exist
      * 
      * @return static
      */
@@ -22,6 +22,20 @@ class DataTableException extends BookMeExcpetion
     {
         $exception = new static(
             "Unable to remove event at $sEventName for handler $sFuncRef", null, null
+        );
+        
+        return $exception;
+    }
+    
+    /**
+     * Error raised when column event that does not exist
+     * 
+     * @return static
+     */
+    public static function errorColumnDoesNotExist($sColumnName)
+    {
+        $exception = new static(
+            "Unable to load column at $sColumnName ", null, null
         );
         
         return $exception;

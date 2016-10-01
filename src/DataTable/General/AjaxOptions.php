@@ -97,7 +97,7 @@ class AjaxOptions implements DataTableOptionInterface
     */ 
    public function getStruct()
    {
-       return ["ajax" => $this->aConfigStruct];
+       return ["ajax" => $this->aConfigStruct, "serverSide"  => false];
    }
    
     

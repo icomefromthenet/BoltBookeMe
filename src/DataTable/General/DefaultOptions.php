@@ -25,7 +25,6 @@ class DefaultOptions implements DataTableOptionInterface
    public function __construct()
    {
        $this->aConfigStruct = [
-          "serverSide"  => false, 
           "scrollX"     => false,
           "scrollY"     => false,
         ];
