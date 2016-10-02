@@ -2,6 +2,7 @@
 namespace Bolt\Extension\IComeFromTheNet\BookMe\Controller;
 
 use Silex\Application;
+use Bolt\Extension\ExtensionInterface;
 
 /**
  * Common controller
@@ -20,12 +21,22 @@ abstract class CommonController
      */ 
     protected $oContainer;
     
+    /**
+     * @var ExtensionInterface
+     */ 
+    protected $oExtension;
     
     
-    public function __construct(array $aConfig, Application $oContainer)
+    public function __construct(array $aConfig, Application $oContainer, ExtensionInterface $oExtension)
     {
         $this->aConfig    = $aConfig;
         $this->oContainer = $oContainer;
+        $this->oExtension = $oExtension;
+    }
+    
+    protected function getExtension()
+    {
+        return $this->oExtension;
     }
 
     protected function getExtensionConfig()

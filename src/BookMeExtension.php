@@ -66,7 +66,7 @@ class BookMeExtension extends SimpleExtension
     use DatabaseSchemaTrait;
     use StorageTrait;
     
-    
+   
     //--------------------------------------------------------------------------
     # Properties
   
@@ -123,19 +123,36 @@ class BookMeExtension extends SimpleExtension
      */ 
     public function getServiceProviders()
     {
-            
+        # Process core    
+        $aConfig = $this->getConfig();
        
         $parentProviders = parent::getServiceProviders();
         $localProviders = [
-            new Provider\CommandBusProvider($this->getConfig()),
-            new Provider\CronParseProvider($this->getConfig()),
-            new Provider\CustomValidationProvider($this->getConfig()),
-            new Provider\ExtrasProvider($this->getConfig()),
-            new Provider\SearchQueryProvider($this->getConfig()),
-            new Provider\MenuProvider($this->getConfig()),
+            new Provider\CommandBusProvider($aConfig),
+            new Provider\CronParseProvider($aConfig),
+            new Provider\CustomValidationProvider($aConfig),
+            new Provider\ExtrasProvider($aConfig),
+            new Provider\SearchQueryProvider($aConfig),
+            new Provider\MenuProvider($aConfig),
         ];
-
-        return array_merge($parentProviders,$localProviders);
+        
+        $aBunldes = [];
+        
+        # Process bundles
+        foreach($aConfig['bundle'] as $sBundle => $bUseBundle) {
+            if($bUseBundle) {
+                $sClass =  'Bolt\\Extension\\IComeFromTheNet\\BookMe\\Bundle\\'.$sBundle.'\\'.$sBundle.'Bundle';
+                $oClass =  new $sClass();
+                
+                $oClass->setBaseDirectory($this->getBaseDirectory());
+                $oClass->setWebDirectory($this->getWebDirectory());
+                
+                $aBunldes[] =  $oClass;
+            }
+        }
+        
+    
+        return array_merge($parentProviders,$localProviders,$aBunldes);
     }
     
      
@@ -322,12 +339,12 @@ class BookMeExtension extends SimpleExtension
         $config = $this->getConfig();
       
         return [
-            'extend/bookme/home'          => new Controller\HomeController($config, $app),
-            'extend/bookme/setup'         => new Controller\SetupController($config, $app),
-            'extend/bookme/worker'        => new Controller\WorkerController($config, $app),
-            'extend/bookme/appointment'   => new Controller\AppointmentController($config, $app),
-            'extend/bookme/schedule'      => new Controller\ScheduleController($config, $app),
-            'extend/bookme/rule'          => new Controller\RuleController($config, $app),
+            'extend/bookme/home'          => new Controller\HomeController($config, $app, $this),
+            'extend/bookme/setup'         => new Controller\SetupController($config, $app, $this),
+            'extend/bookme/worker'        => new Controller\WorkerController($config, $app, $this),
+            'extend/bookme/appointment'   => new Controller\AppointmentController($config, $app, $this),
+            'extend/bookme/schedule'      => new Controller\ScheduleController($config, $app, $this),
+            'extend/bookme/rule'          => new Controller\RuleController($config, $app, $this),
         ];
         
         
@@ -384,7 +401,10 @@ class BookMeExtension extends SimpleExtension
             ]
             ,'leadtime' => 'PT1D'
             
-            
+            ,'bundle' => [
+                'AuditTrail' => true,
+                    
+            ]
         ];
     }
    

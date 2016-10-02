@@ -178,12 +178,12 @@ class DataTablePluginTest extends ExtensionTest
         
         $aStruct = $oPlugin->getStruct();
        
-        $this->assertEquals('window.func',$aStruct['render']);
+        $this->assertEquals('window.func',$aStruct['render']->getValue());
         
     }
     
     
-     public function testGeneralColumnRenderOption()
+    public function testGeneralColumnRenderOption()
     {
         
         $oPlugin = new ColumnRenderOption();

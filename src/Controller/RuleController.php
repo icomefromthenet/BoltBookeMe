@@ -202,6 +202,8 @@ class RuleController extends CommonController implements ControllerProviderInter
           'iTimeslotId'         => $iTimeslotId,
         ];
        
+        
+        
         return $app['twig']->render('rule_page_one.twig', $aTemplateParams, []);
             
     }

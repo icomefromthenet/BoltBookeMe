@@ -21,6 +21,7 @@ use Bolt\Extension\IComeFromTheNet\BookMe\Tests\Mock\TestDataTable;
 use Bolt\Extension\IComeFromTheNet\BookMe\DataTable\Output\DenseFormat;
 use Bolt\Extension\IComeFromTheNet\BookMe\DataTable\Output\StringOutput;
 
+
 class DataTableManagerTest extends ExtensionTest
 {
     
@@ -36,15 +37,29 @@ class DataTableManagerTest extends ExtensionTest
         $oMockTable = new  TestDataTable(new StringOutput(new DenseFormat()));
         
         # test accessors
-        
+        $this->assertInstanceOf('Bolt\Extension\IComeFromTheNet\BookMe\DataTable\General\AjaxOptions',$oMockTable->getOptionSet('AjaxOptions'));
+       
+        $this->assertInstanceOf('Bolt\Extension\IComeFromTheNet\BookMe\DataTable\General\DefaultOptions',$oMockTable->getOptionSet('DefaultOptions'));
+   
+        $this->assertInstanceOf('Bolt\Extension\IComeFromTheNet\BookMe\DataTable\Plugin\ScrollerPlugin',$oMockTable->getPlugin('ScrollerPlugin'));
+   
+        $this->assertInstanceOf('Bolt\Extension\IComeFromTheNet\BookMe\DataTable\Schema\ColumnSchema',$oMockTable->getSchema());
+   
+        $this->assertInstanceOf('Bolt\Extension\IComeFromTheNet\BookMe\DataTable\Output\StringOutput',$oMockTable->getOutputWriter());
         
         # test the config output expected
         $aConfig = $oMockTable->getStruct();
         
+        foreach(array('ajax','scrollX','columns','scroller') as $sIndex) {
+            $this->assertArrayHasKey($sIndex,$aConfig);
+        }
         $sConfig = $oMockTable->writeConfig();
+        $this->assertNotEmpty($sConfig);
         
         # test the event output as expected
-        
+        $aEvents = $oMockTable->getEvents();
+        $this->assertCount(1,$aEvents);
+        $this->assertEquals(DataTableEventRegistry::CORE_INIT,$aEvents[0][0]);
         
     }
     

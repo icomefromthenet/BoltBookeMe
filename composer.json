@@ -24,7 +24,8 @@
     "prefer-stable": true,
     "autoload": {
         "psr-4": {
-            "Bolt\\Extension\\IComeFromTheNet\\BookMe\\": "src"
+            "Bolt\\Extension\\IComeFromTheNet\\BookMe\\": "src",
+            "Bolt\\Extension\\IComeFromTheNet\\BookMe\\Bundle": "bundle"
         }
     },
     "autoload-dev": {
