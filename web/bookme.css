@@ -1,0 +1,39 @@
+.bm-menu {
+    
+}
+
+.bm-menu_linklist {
+    padding-left:0px;
+    margin-left:0px;
+}
+
+
+.bm-menu_linklistheading {
+    padding:5px;
+}
+
+.bm-menu_linkitem {
+    margin-top:10px;
+    list-style-type:none;
+    margin-left:2px;
+}
+
+.bm-menu_link {
+    color:green;
+}
+
+
+.bm-menu_linkdesc {
+    
+}
+
+
+.bm-menu_linklistheading-setup {
+     border-left: 5px solid #1b809e;
+     background-color:#d9edf7;
+}
+
+.bm-menu_linklistheading-rule {
+     border-left: 5px solid #f7de59;
+     background-color:#fcf8e3;
+}

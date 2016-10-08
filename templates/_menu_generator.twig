@@ -8,24 +8,27 @@
     <div class="panel-heading">
         {{ sMenuHeading }}
     </div>
-    <div class="panel-body">
+    <div class="panel-body bm-menu">
     {% for oMenuGroup in aMenGroups %}
         
     {% if loop.index % iCols == 0 %}
-    <div class="row">
+    <div class="row ">
     {% endif %}
     
-       
         {% set aMenuItems = oMenuGroup.getMenuItems() %}
         
-        <div class="col-md-4">
-          <h4>{{ oMenuGroup.getGroupName() }}</h4>
+        <div class="col-md-4 ">
+          
+          
+          <h4 class="bm-menu_linklistheading {{ oMenuGroup.getGroupStyle() }}">{{ oMenuGroup.getGroupName() }}</h4>
             
-                <ul>
+                <ul class="bm-menu_linklist">
                      {% for oMenuItem in aMenuItems %}
-                        <li>
-                            
-                            {{ m.link(oMenuItem.getMenuItemName(),url(oMenuItem.getRouteName()), '',  oMenuItem.getQueryParams() ) }}
+                        <li class="bm-menu_linkitem">
+                            {{ m.link(oMenuItem.getMenuItemName(),url(oMenuItem.getRouteName()), 'bm-menu_link',  oMenuItem.getQueryParams().all() ) }}
+                            <br />
+                            <small class="menu_linkdesc"> {{ oMenuItem.getSubText() }}</small>
+                        
                         </li>
     
                     {% endfor %}

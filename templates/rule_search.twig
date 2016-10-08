@@ -1,0 +1,31 @@
+{% extends '_base/_page-nav.twig' %}
+
+{% block page_nav title %}
+
+{% block page_title __(title) %}
+
+{% block page_main %}
+
+
+<div class="row">
+  <!-- Search Block -->
+  <div class="col-md-12">
+    <div class="panel panel-default">
+          <div class="panel-heading">
+              <i class="fa fa-fw fa-bullhorn"></i>
+             Rule Search
+          </div>
+  
+          <div class="panel-body">
+    
+          <form method="post" {{ form_enctype(grouped_form.form) }}>
+              {% include '_grouped_form.twig' with { 'grouped_form': grouped_form } %}
+          </form>
+    
+          </div>
+    </div>
+  </div>
+
+    
+
+{% endblock page_main %}

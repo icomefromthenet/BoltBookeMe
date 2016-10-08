@@ -1,0 +1,25 @@
+{% form_theme grouped_form.form '_bootstrap_3_layout.twig' %}
+
+
+
+<ul class="nav nav-tabs">
+    {% block tabs_header %}
+        {% for name in grouped_form.groupNames %}
+            <li{{ loop.first ? ' class="active"' : null }}>
+                <a class="{{ not grouped_form.valid(name) ? 'text-error' : null }}" href="#{{ name|slugify }}" data-toggle="tab">{{ name }}</a>
+            </li>
+        {% endfor %}
+    {% endblock %}
+</ul>
+
+<div class="tab-content">
+    {% block tabs_content %}
+        {% for name, group in grouped_form.groups %}
+            <div class="tab-pane{{ loop.first ? ' active' : null }}" id="{{ name|slugify }}">
+                {% for field in group %}
+                    {{ form_row(field) }}
+                {% endfor %}
+            </div>
+        {% endfor %}
+    {% endblock %}
+</div>

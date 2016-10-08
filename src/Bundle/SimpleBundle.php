@@ -67,6 +67,15 @@ class SimpleBundle implements ExtensionInterface, ServiceProviderInterface, Even
     protected $vendor;
     /** @var string */
     protected $namespace;
+    /** @var array */
+    protected $aParentConfig;
+
+
+    public function __construct(array $aConfig)
+    {
+        $this->aParentConfig = $aConfig;
+    }
+
 
     /**
      * {@inheritdoc}
@@ -276,6 +285,19 @@ class SimpleBundle implements ExtensionInterface, ServiceProviderInterface, Even
             ],
         ];
     }
+    
+    
+    /**
+     * Return the BookMe Extension config
+     *
+     * @return array
+     */
+    protected function getDefaultConfig()
+    {
+        return $this->aParentConfig;
+    }
+    
+    
     
 }
 /* End of Class */

@@ -40,27 +40,51 @@ class MenuProvider implements ServiceProviderInterface
         
         $app['bm.menu.home'] = $app->share(function($c) use ($aConfig) {
              
-        
-            $oMenuGroupOne  = new MenuGroup('Group 1', 1);
-            $oMenuGroupTwo  = new MenuGroup('Group 2', 2);
-    
-            $oGroupOneItemA = new MenuItem('Group One Menu Item A','Example Menu Item', 'bookme-rule-new-one', 'bla.png', 2, []);
-            $oGroupOneItemB = new MenuItem('Menu One Item B','Example Menu Item', 'bookme-rule-new-one', 'bla.png', 1, []);
-            
-            $oGroupTwoItemA = new MenuItem('Group Two Menu Item A','Example Menu Item', 'bookme-rule-new-one', 'bla.png', 2, []);
-            $oGroupTwoItemB = new MenuItem('Group Two Menu Item B','Example Menu Item', 'bookme-rule-new-one', 'bla.png', 1, []);
-            
-            $oMenuGroupOne->addMenuItem($oGroupOneItemA);
-            $oMenuGroupOne->addMenuItem($oGroupOneItemB);
-            
-            $oMenuGroupTwo->addMenuItem($oGroupTwoItemA);
-            $oMenuGroupTwo->addMenuItem($oGroupTwoItemB);
-            
-           
             $oMenuBuilder = new MenuBuilder();
             
-            $oMenuBuilder->addMenuGroup($oMenuGroupOne);
-            $oMenuBuilder->addMenuGroup($oMenuGroupTwo);
+            // -------------------------------------------------------------
+            //Setup 
+        
+            $oMenuSetupGroup  = new MenuGroup('Setup Book Me', 100, 'bm-menu_linklistheading-setup');
+            $oSetupGroupItemA = new MenuItem('Calendar Setup','Create new Calendar Years', 'bookme-setup-calendar', 'bla.png', 10, []);
+            $oSetupGroupItemB = new MenuItem('Timeslot Setup','Manage Timeslots used in schedules', 'bookme-setup-timeslot', 'bla.png', 20, []);
+
+            $oMenuSetupGroup->addMenuItem($oSetupGroupItemA);
+            $oMenuSetupGroup->addMenuItem($oSetupGroupItemB);
+        
+    
+            $oMenuBuilder->addMenuGroup($oMenuSetupGroup);
+      
+    
+    
+            //----------------------------------------------------------------
+            // Rules
+        
+            $oMenuRulesGroup  = new MenuGroup('Schedule Rules', 10, 'bm-menu_linklistheading-rule');
+            $oRulesGroupItemA = new MenuItem('Create Availability Rule','Rules that define when your available for bookings', 'bookme-rule-new-one', 'bla.png', 10, ['sRuleTypeCode' =>'workday']);
+            $oRulesGroupItemB = new MenuItem('Create Holiday Rule','Rule that define when on holiday', 'bookme-rule-new-one', 'bla.png', 20, ['sRuleTypeCode' =>'holiday']);
+            $oRulesGroupItemC = new MenuItem('Create Break Rule','Rule that define when your on break during day', 'bookme-rule-new-one', 'bla.png', 30, ['sRuleTypeCode' =>'break']);
+            $oRulesGroupItemD = new MenuItem('Create Overtime Rule','Rule that define when ready for extra work', 'bookme-rule-new-one', 'bla.png', 40, ['sRuleTypeCode' =>'overtime']);
+            $oRulesGroupItemE = new MenuItem('Search Schedule Rules','Find a Rule upcoming and past ', 'bookme-rule-search', 'bla.png', 50, []);
+            $oRulesGroupItemF = new MenuItem('List Schedule Rules','List rules that intersect with current calendar week ', 'bookme-rule-list', 'bla.png', 60, []);
+    
+         
+            $oMenuRulesGroup->addMenuItem($oRulesGroupItemA);
+            $oMenuRulesGroup->addMenuItem($oRulesGroupItemB);
+            $oMenuRulesGroup->addMenuItem($oRulesGroupItemC);
+            $oMenuRulesGroup->addMenuItem($oRulesGroupItemD);
+            $oMenuRulesGroup->addMenuItem($oRulesGroupItemE);
+            $oMenuRulesGroup->addMenuItem($oRulesGroupItemF);
+         
+         
+            $oMenuBuilder->addMenuGroup($oMenuRulesGroup);
+        
+            
+            
+            //----------------------------------------------------------------
+            // Schedule
+           
+            
         
             
             return $oMenuBuilder;

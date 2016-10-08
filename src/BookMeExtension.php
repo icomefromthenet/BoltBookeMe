@@ -132,6 +132,7 @@ class BookMeExtension extends SimpleExtension
             new Provider\CronParseProvider($aConfig),
             new Provider\CustomValidationProvider($aConfig),
             new Provider\ExtrasProvider($aConfig),
+            new Provider\FormProvider($aConfig),
             new Provider\SearchQueryProvider($aConfig),
             new Provider\MenuProvider($aConfig),
         ];
@@ -142,7 +143,7 @@ class BookMeExtension extends SimpleExtension
         foreach($aConfig['bundle'] as $sBundle => $bUseBundle) {
             if($bUseBundle) {
                 $sClass =  'Bolt\\Extension\\IComeFromTheNet\\BookMe\\Bundle\\'.$sBundle.'\\'.$sBundle.'Bundle';
-                $oClass =  new $sClass();
+                $oClass =  new $sClass($aConfig);
                 
                 $oClass->setBaseDirectory($this->getBaseDirectory());
                 $oClass->setWebDirectory($this->getWebDirectory());
@@ -228,12 +229,18 @@ class BookMeExtension extends SimpleExtension
      */
     protected function registerAssets()
     {
+        $oAppCssAsset = new Stylesheet();
+        $oAppCssAsset->setFileName('bookme.css')
+            ->setLate(true)
+            ->setPriority(99)
+            ->setZone(Zone::BACKEND);
+        
         return [
             // Web assets that will be loaded in the frontend
         
           
             // Web assets that will be loaded in the backend
-          
+            $oAppCssAsset
           
         ];
     }

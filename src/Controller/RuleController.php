@@ -17,6 +17,7 @@ use Bolt\Extension\IComeFromTheNet\BookMe\Bus\Middleware\ValidationException;
 use Bolt\Extension\IComeFromTheNet\BookMe\Model\Rule\Command\CreateRuleCommand;
 
 
+
 /**
  * View and manage schedule rules
  * 
@@ -39,6 +40,10 @@ class RuleController extends CommonController implements ControllerProviderInter
         $oCtr->get('list',[$this,'onRuleList'])
               ->bind('bookme-rule-list');
    
+     $oCtr->get('search',[$this,'onRuleSearch'])
+              ->bind('bookme-rule-search');
+   
+   
         $oCtr->get('new/one',[$this,'onNewRulePageOne'])
               ->bind('bookme-rule-new-one');
    
@@ -59,6 +64,24 @@ class RuleController extends CommonController implements ControllerProviderInter
     }
 
     /**
+     * search for a schedule rule 
+     *
+     * @param Application   $app
+     * @param Request       $request
+     * @return Response
+     */
+    public function onRuleSearch(Application $app, Request $request)
+    {
+       
+        $oDatabase           = $this->getDatabaseAdapter();
+        $oNow                = $this->getNow();
+        $aConfig             = $this->getExtensionConfig();
+
+
+        return $app['twig']->render('rule_search.twig', ['title' => 'Search Schedule Rules','grouped_form' => $app['bm.form.rule.view'] ], []);
+    }
+    
+    /**
      * Load a list of schedule rules
      *
      * @param Application   $app
@@ -68,65 +91,12 @@ class RuleController extends CommonController implements ControllerProviderInter
     public function onRuleList(Application $app, Request $request)
     {
        
-       $oDatabase           = $this->getDatabaseAdapter();
-       $oNow                = $this->getNow();
-       $aConfig             = $this->getExtensionConfig();
-       $sRuleTable          = $aConfig['tablenames']['bm_rule'];
-       
-       // these two are mutually exclusive
-       $sRuleOnStartAfter   = $oRequest->query->get(':sRuleOnStartAfter');
-       $sRuleOnFinishBefore = $oRequest->query->get(':sRuleOnFinishBefore');
-       
-       $sRuleType           = $oRequest->query->get(':sRuleType');
-       $sRuleNameFilter     = $oRequest->query->get(':sRuleNameFilter');
-       $iCalYearFilter      = $oRequest->query->get(':iCalYear');
-      
-       $aQuery              = [];
-       $aParams             = [':sRuleType' => $sRuleType];
-       $aTypes              = [':sRuleType' => Type::STRING];
-       
-       $aQuery[] = ' select  r.* ';
-       $aQuery[] = " $sRuleTable r ";
-       $aQuery[] = " WHERE `r`.`sRuleType` = :sRuleType ";
-       
-       if(false === empty($sRuleOnStartAfter) && true == empty($sRuleOnFinishBefore)) {
-            $aParams[':sRuleOnStartAfter'] =  date_create_from_format('YYYYMMDD',$sRuleOnStartAfter);
-            $aTypes[':sRuleOnStartAfter']  = Type::DATE;
-            
-            $aQuery[] = " AND `r`.`start_from` >= :sRuleOnStartAfter ";    
-       }
-       
-       if(false === empty($sRuleOnFinishBefore) && true === empty($sRuleOnStartAfter)) {
-            $aParams[':sRuleOnFinishBefore'] =  date_create_from_format('YYYYMMDD',$sRuleOnFinishBefore);
-            $aTypes[':sRuleOnFinishBefore']  = Type::DATE;
-            
-            $aQuery[] = " AND `r`.`end_at` <= :sRuleOnFinishBefore ";
-       }
-      
-       if(false === empty($sRuleNameFilter)) {
-           $aParams[':sRuleOnStartAfter'] =  $sRuleNameFilter;
-            $aTypes[':sRuleOnStartAfter']  = Type::STRING;
-            
-            $aQuery[] = " AND `r`.`rule_name` >= concat(:sRuleOnStartAfter,'%') ";  
-           
-       }
-       
-       if(false === empty($iCalYearFilter)) {
-           $aParams[':iCalYear'] =  $iCalYearFilter;
-            $aTypes[':iCalYear']  = Type::getType(Type::INTEGER);
-            
-            $aQuery[] = " AND `r`.`cal_year` >= :iCalYear ";  
-       }
-        
-      
-       
-       $sQuery  = implode(PHP_EOL,$aQuery);
-      
-      
-       $aResult = $oDatabase->fetchAll($sQuery,$aParams,$aTypes);
-        
-      
-       //return $app['twig']->render('admin_calendar.twig', ['title' => 'Setup Calendars','calendars' => $aCalendarYearList, 'nextYear' => $iNextCalendarYear, 'timeslots' => $aTimeslots], []);
+        $oDatabase           = $this->getDatabaseAdapter();
+        $oNow                = $this->getNow();
+        $aConfig             = $this->getExtensionConfig();
+
+
+        return $app['twig']->render('rule_list.twig', ['title' => 'List Schedule Rules'], []);
     }
 
 

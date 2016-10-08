@@ -18,13 +18,14 @@ class MenuGroup implements ValidationRulesInterface, MenuOrderInterface, \Iterat
     protected $aMenuItems;
     protected $iOrder;
     protected $sGroupName;
+    protected $sGroupStyleClasses;
     
-    
-    public function __construct($sGroupName, $iOrder)
+    public function __construct($sGroupName, $iOrder, $sGroupStyleClasses)
     {
         $this->iOrder       = $iOrder;
         $this->sGroupName   = $sGroupName;
         $this->aMenuItems   = [];
+        $this->sGroupStyleClasses = $sGroupStyleClasses;
     }
 
     
@@ -52,6 +53,10 @@ class MenuGroup implements ValidationRulesInterface, MenuOrderInterface, \Iterat
         return $this->sGroupName;
     }
     
+    public function getGroupStyle()
+    {
+        return $this->sGroupStyleClasses;
+    }
   
     
     //---------------------------------------------------------
@@ -82,6 +87,7 @@ class MenuGroup implements ValidationRulesInterface, MenuOrderInterface, \Iterat
         return [
             'group_name'  => $this->sGroupName, 
             'group_order' => $this->iOrder,
+            'group_style' => $this->sGroupStyleClasses,
             
         ];
         

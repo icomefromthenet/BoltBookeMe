@@ -10,6 +10,8 @@ use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Bolt\Storage\Database\Connection;
 
+
+
 /**
  * The Portal Page for extension
  * 
@@ -49,10 +51,9 @@ class HomeController extends CommonController implements ControllerProviderInter
        
       
        $oMenuBuilder  = $this->getMenu('home');
-      
-      
        
-       return $app['twig']->render('home.twig', ['title' => 'BookMe Home','menubuilder'=> $oMenuBuilder], []);
+       
+        return $app['twig']->render('home.twig', ['title' => 'BookMe Home','menubuilder'=> $oMenuBuilder], []);
     }
 
    
