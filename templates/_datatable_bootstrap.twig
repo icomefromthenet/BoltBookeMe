@@ -3,7 +3,7 @@
 
  sConfigString : The javascript config struct
  sElement : ID of element to bind the dataTable on
- 
+ aEvents  : array of event handlers that need t generate
  
  This should be included at the bottom of the page using the Page Script Block
  
@@ -11,5 +11,5 @@
 #}
 
 <script type="text/javascript">
-jQuery({{ sElement }}).DataTable( {{ sConfigString }});
+jQuery('{{ sElement|raw }}').DataTable( {{ sConfigString|raw }});
 </script>

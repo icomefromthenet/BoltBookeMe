@@ -1,0 +1,23 @@
+{% extends '_base/_page-nav.twig' %}
+
+{% block page_nav title %}
+
+{% block page_title __(title) %}
+
+
+{% block page_main %}
+
+<div id="QueueActivityTable">
+    
+   
+</div>
+
+
+{% endblock page_main %}
+
+{% block page_script %}
+
+    {% include '_datatable_bootstrap.twig' with {'sConfigString' : sConfigString , 'sElement' : '#QueueActivityTable' , 'aEvents' : aEvents } %}
+
+{% endblock page_script %}
+

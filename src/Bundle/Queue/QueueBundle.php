@@ -8,6 +8,7 @@ use Bolt\Extension\IComeFromTheNet\BookMe\Bundle\Queue\Schema\QueueTransitionTab
 use Bolt\Extension\IComeFromTheNet\BookMe\Bundle\Queue\Schema\QueueTable;
 use Bolt\Extension\IComeFromTheNet\BookMe\Bundle\Queue\Schema\QueueMonitorTable;
 use Bolt\Extension\IComeFromTheNet\BookMe\Bundle\Queue\Provider;
+use Bolt\Extension\IComeFromTheNet\BookMe\Bundle\Queue\Controller;
 
 
 class QueueBundle extends SimpleBundle
@@ -21,6 +22,8 @@ class QueueBundle extends SimpleBundle
 
         $localProviders = [
              new Provider\QueueServiceProvider($aConfig),
+             new Provider\QueueMenuProvider($aConfig),
+             new Provider\QueueDataTableProvider($aConfig),
         ];
     
         return $localProviders;
@@ -60,7 +63,8 @@ class QueueBundle extends SimpleBundle
      */
     protected function registerTwigPaths()
     {
-        return ['bundle/Queue/Resources/view' => ['namespace' => 'Queue']];
+        
+        return ['/src/Bundle/Queue/Resources/view' => ['namespace' => 'Queue']];
     }
 
     /**
@@ -138,7 +142,8 @@ class QueueBundle extends SimpleBundle
         $config = $this->getConfig();
       
         return [
-        
+          'extend/bookme/queue/activities' =>  new Controller\QueueActivityController($config,$app,$this),
+          
         ];
         
         

@@ -135,6 +135,7 @@ class BookMeExtension extends SimpleExtension
             new Provider\FormProvider($aConfig),
             new Provider\SearchQueryProvider($aConfig),
             new Provider\MenuProvider($aConfig),
+            new Provider\DataTableProvider($aConfig),
         ];
         
         $aBunldes = [];
@@ -235,13 +236,28 @@ class BookMeExtension extends SimpleExtension
             ->setPriority(99)
             ->setZone(Zone::BACKEND);
         
+        $oDataTableCssAsset = new Stylesheet();
+        $oDataTableCssAsset->setFileName('datatables.min.css')
+            ->setLate(true)
+            ->setPriority(50)
+            ->setZone(Zone::BACKEND);
+        
+        $oDataTableJsAsset = new JavaScript();
+        $oDataTableJsAsset->setFileName('datatables.min.js')
+            ->setLate(true)
+            ->setPriority(50)
+            ->setZone(Zone::BACKEND);
+
+        
+        
         return [
             // Web assets that will be loaded in the frontend
         
           
             // Web assets that will be loaded in the backend
-            //$oAppCssAsset
-          
+            $oDataTableJsAsset,
+            $oDataTableCssAsset,
+            $oAppCssAsset,
         ];
     }
     

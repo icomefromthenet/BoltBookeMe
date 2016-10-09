@@ -54,7 +54,7 @@ class AuditTrailBundle extends SimpleBundle
      */
     protected function registerTwigPaths()
     {
-        return ['bundle/AuditTrail/Resources/view' => ['namespace' => 'AuditTrail']];
+        return ['/src/Bundle/AuditTrail/Resources/view' => ['namespace' => 'AuditTrail']];
     }
 
     /**
