@@ -226,6 +226,7 @@ class SimpleBundle implements ExtensionInterface, ServiceProviderInterface, Even
         $this->extendNutService();
 
         $this->registerServices($app);
+        
     }
 
     /**
@@ -244,6 +245,11 @@ class SimpleBundle implements ExtensionInterface, ServiceProviderInterface, Even
      */
     protected function registerServices(Application $app)
     {
+        
+        foreach($this->getServiceProviders() as $oProvider) {
+            $oProvider->register($app);        
+        }
+        
     }
 
     /**

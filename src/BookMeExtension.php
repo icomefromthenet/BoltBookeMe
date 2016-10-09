@@ -240,7 +240,7 @@ class BookMeExtension extends SimpleExtension
         
           
             // Web assets that will be loaded in the backend
-            $oAppCssAsset
+            //$oAppCssAsset
           
         ];
     }
@@ -405,12 +405,31 @@ class BookMeExtension extends SimpleExtension
                 ,'bm_activity'            => 'bolt_bm_activity'
                 ,'bm_appointment_status'  => 'bolt_bm_appointment_status'
                 ,'bm_appointment'         => 'bolt_bm_appointment'
+                
+                ,'bm_queue'               => 'bolt_bm_queue'
+                ,'bm_queue_monitor'       => 'bolt_bm_queue_monitor'
+                ,'bm_queue_transition'    => 'bolt_bm_queue_transition'
+
             ]
             ,'leadtime' => 'PT1D'
             
             ,'bundle' => [
                 'AuditTrail' => true,
-                    
+                'Queue'      => true,    
+            ]
+            ,'queue' => [
+                'worker' => [
+                        'jobs_process'      => 300,
+                        'mean_runtime'      => (60*60*1),
+                        'cron_script'       => '*/5 * * * *',
+                        'job_lock_timeout'  => (60*60*4),
+                        'worker_name'       => 'scheduleprocess'
+                ],
+                'queue' => [
+                        'mean_service_time' => (60*60*1),
+                        'max_retry'         => 3,
+                        'retry_timer'       => (60*60*1)
+                ]
             ]
         ];
     }

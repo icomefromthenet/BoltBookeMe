@@ -36,7 +36,7 @@ class ExtensionTest extends \PHPUnit_Framework_TestCase
         $config->setPath('app', PHPUNIT_WEBROOT . '/app');
         $config->setPath('config', PHPUNIT_WEBROOT . '/app/config');
         $config->setPath('cache', PHPUNIT_WEBROOT . '/app/cache');
-        $config->setPath('web', PHPUNIT_WEBROOT . '/');
+        $config->setPath('web', PHPUNIT_WEBROOT . '/web');
         $config->setPath('files', PHPUNIT_WEBROOT . '/files');
         $config->setPath('themebase', PHPUNIT_WEBROOT . '/theme/');
         $config->setPath('extensionsconfig', PHPUNIT_WEBROOT . '/config/extensions');
@@ -72,7 +72,7 @@ class ExtensionTest extends \PHPUnit_Framework_TestCase
         $bolt['config']->set('general/canonical', 'bolt.dev');
         $bolt['slugify'] = Slugify::create();
 
-        $this->setAppPaths($bolt['resources']);
+       //$this->setAppPaths($bolt['resources']);
      
         return $bolt;
     }

@@ -9,17 +9,22 @@ class AuditTrailBundle extends SimpleBundle
 {
     
     
+    public function getServiceProviders() {
+    
+        $aConfig = $this->getConfig();
+
+        $localProviders = [
+            
+        ];
+    
+        return $localProviders;
+    }
+    
     protected function registerServices(Application $app)
     {
-    
-        $parentProviders = parent::getServiceProviders();
-        $localProviders = [
-    
-        ];
-        
-
-        return array_merge($parentProviders,$localProviders);
-        
+         //$this->extendDatabaseSchemaServices();
+       
+         parent::registerServices($app);
     }
     
     
