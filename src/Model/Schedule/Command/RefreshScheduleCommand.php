@@ -25,13 +25,17 @@ class RefreshScheduleCommand implements  ValidationInterface
     */ 
     protected $iScheduleDatabaseId;
     
+    /**
+     * @var boolean if this refresh should use the jobqueue
+     */ 
+    protected $bSendToQueue;
     
     
     
-    public function __construct($iScheduleDatabaseId)
+    public function __construct($iScheduleDatabaseId, $bSendToQueue = true)
     {
         $this->iScheduleDatabaseId = $iScheduleDatabaseId;
-        
+        $this->bSendToQueue        = $bSendToQueue;
     }
     
     
@@ -40,14 +44,23 @@ class RefreshScheduleCommand implements  ValidationInterface
      * Fetches the database id of the schedule to use
      * 
      * @access public
+     * @return integer  The schedule Database id
      */ 
     public function getScheduleId()
     {
         return $this->iScheduleDatabaseId;
     }
     
-    
-   
+    /**
+     * If this refresh should sent to the Schedule Rebuild Queue
+     * 
+     * @return boolean  true if sent to queue
+     * @access public
+     */ 
+    public function sendToQueue()
+    {
+        return $this->bSendToQueue;
+    }
     
     //---------------------------------------------------------
     # validation interface

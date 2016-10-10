@@ -23,7 +23,7 @@ class QueueMonitorTable extends BaseTable
         $this->table->addColumn('worker_mean_time','integer',array("unsigned" => true, 'notnull' => false));
         $this->table->addColumn('worker_mean_throughput','integer',array("unsigned" => true, 'notnull' => false));
         $this->table->addColumn('worker_max_throughput','integer',array("unsigned" => true, 'notnull' => false));
-        $this->table->addColumn('worker_mean_utilization','float',array("unsigned" => true, 'notnull' => false));
+        $this->table->addColumn('worker_mean_utilization','decimal',array('notnull' => false));
         
         # queue stats
         $this->table->addColumn('queue_no_waiting_jobs','integer',array("unsigned" => true, 'notnull' => false));

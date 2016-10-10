@@ -11,5 +11,7 @@
 #}
 
 <script type="text/javascript">
+console.log({{ sConfigString|raw }});
+
 jQuery('{{ sElement|raw }}').DataTable( {{ sConfigString|raw }});
 </script>

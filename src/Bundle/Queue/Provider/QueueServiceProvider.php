@@ -40,13 +40,14 @@ class QueueServiceProvider extends BaseQueueServiceProvider implements ServicePr
         $aConfig   = $this->config;
         
         # expects options to be part of the container
-        $app[$this->index.'.options'] = $aConfig['queue'];
-      
-        $app[$this->index.'.options']['db'] = [
+        $aConfig['queue']['db'] = [
             'transition_table' => $aConfig['tablenames']['bm_queue_transition'],
             'queue_table'      => $aConfig['tablenames']['bm_queue'],
             'monitor_table'    => $aConfig['tablenames']['bm_queue_monitor'], 
         ];
+      
+        $app[$this->index.self::OPTIONS] = $aConfig['queue'];
+      
       
         # regester the parent implementation
         parent::register($app);

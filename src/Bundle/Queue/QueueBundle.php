@@ -1,7 +1,10 @@
 <?php
 namespace Bolt\Extension\IComeFromTheNet\BookMe\Bundle\Queue;
 
+use DateTime;
 use Silex\Application;
+use LaterJob\Exception as LaterJobException;
+use Bolt\Events\CronEvents;
 use Bolt\Extension\DatabaseSchemaTrait;
 use Bolt\Extension\IComeFromTheNet\BookMe\Bundle\SimpleBundle;
 use Bolt\Extension\IComeFromTheNet\BookMe\Bundle\Queue\Schema\QueueTransitionTable;
@@ -9,6 +12,9 @@ use Bolt\Extension\IComeFromTheNet\BookMe\Bundle\Queue\Schema\QueueTable;
 use Bolt\Extension\IComeFromTheNet\BookMe\Bundle\Queue\Schema\QueueMonitorTable;
 use Bolt\Extension\IComeFromTheNet\BookMe\Bundle\Queue\Provider;
 use Bolt\Extension\IComeFromTheNet\BookMe\Bundle\Queue\Controller;
+use  Bolt\Extension\IComeFromTheNet\BookMe\Bus\Middleware\ValidationException;
+use Bolt\Extension\IComeFromTheNet\BookMe\Model\Schedule\ScheduleException;
+use Bolt\Extension\IComeFromTheNet\BookMe\Model\Schedule\Command\RefreshScheduleCommand;
 
 
 class QueueBundle extends SimpleBundle
@@ -24,6 +30,7 @@ class QueueBundle extends SimpleBundle
              new Provider\QueueServiceProvider($aConfig),
              new Provider\QueueMenuProvider($aConfig),
              new Provider\QueueDataTableProvider($aConfig),
+             new Provider\QueueCommandBusProvider($aConfig),
         ];
     
         return $localProviders;
@@ -32,6 +39,13 @@ class QueueBundle extends SimpleBundle
     protected function registerServices(Application $app)
     {
          $this->extendDatabaseSchemaServices();
+       
+         // register monitor
+         $app['dispatcher']->addListener(CronEvents::CRON_HOURLY, array($this, 'executeMonitorWorker'));
+       
+         // register processor 
+         $app['dispatcher']->addListener(CronEvents::CRON_HOURLY, array($this, 'executeRebuildWorker'));
+       
        
          parent::registerServices($app);
     }
@@ -148,6 +162,91 @@ class QueueBundle extends SimpleBundle
         
         
     }
+    
+    //--------------------------------------------------------------------------
+    # Register Workers
+    
+    public function executeRebuildWorker()
+    {
+        $oQueue = $this->getContainer()->offsetGet('bm.queue.queue');
+        $oNow   = $this->getContainer()->offsetGet('bm.now');
+        $oBus   = $this->getContainer()->offsetGet('bm.commandBus');
+        $worker = $oQueue->worker();
+        
+        
+        try {
+            // start the worker with the assigned date
+            $worker->start($oNow);
+            
+            $allocator = $worker->receive($oNow);
+            
+            $handle = $worker->getId();
+            
+            foreach($allocator as $job) {
+            
+                try {
+                    
+                    // since time can pass between job finishing we need
+                    // use a new datetime so we know how much has passed since
+                    // started processing
+                    $job->start($handle, new DateTime());
+                 
+                    $iScheduleId = $job->getData();
+                 
+                    // Create new Refresh Command
+                    $oCommand = new RefreshScheduleCommand($iScheduleId,false);
+                    
+                    // Pass command to bus for procesing, will throw schedueException
+                    // if unable to process this schedule or validate failure
+                    $oBus->handle($oCommand);
+                    
+                    
+                    // Mark this job as finished, using new date time
+                    // so we know how much time has passed
+                    $job->finish($handle,new DateTime());
+                }
+                catch(LaterJobException $e) {
+                    
+                    if($job->getRetryCount() > 0) {
+                        $job->error($handle,new DateTime(),$e->getMessage());    
+                    }
+                    else {
+                        $job->fail($handle,new DateTime(),$e->getMessage());    
+                    }
+                }
+                catch (ScheduleException $e) {
+                    if($job->getRetryCount() > 0) {
+                        $job->error($handle,new DateTime(),$e->getMessage());    
+                    }
+                    else {
+                        $job->fail($handle,new DateTime(),$e->getMessage());    
+                    }
+                }
+                catch(ValidationException $e) {
+                     // validation failure this job will never process os
+                     // lets fail it now.
+                     $job->fail($handle,new DateTime(),$e->getMessage().' For Schedule at::'.$iScheduleId);  
+                }
+                
+            }
+            
+            // finish the worker with a new date so we know how much
+            // time has passed since start time
+            $worker->finish(new DateTime());
+            
+        } catch(LaterJobException $e) {
+            $worker->error($handle,new DateTime(),$e->getMessage());
+            throw $e;            
+        }
 
+    }
+    
+    public function executeMonitorWorker()
+    {
+        
+        
+    }
+
+    //--------------------------------------------------------------------------
 }
 /* End of Class */

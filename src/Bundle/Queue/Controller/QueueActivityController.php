@@ -22,7 +22,10 @@ class QueueActivityController extends ActivityProvider implements ControllerProv
     {
         $this->aConfig    = $aConfig;
         $this->oContainer = $oContainer;
+        $this->app        = $oContainer; // needed for ActivityProvider
         $this->oExtension = $oExtension;
+        
+        parent::__construct('bm.queue');
     }
     
     

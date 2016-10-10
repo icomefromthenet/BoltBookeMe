@@ -213,7 +213,7 @@ class ScheduleAdvanceTest extends ExtensionTest
         
         $oCommandBus = $this->getCommandBus(); 
        
-        $oCommand = new RefreshScheduleCommand($iScheduleId);
+        $oCommand = new RefreshScheduleCommand($iScheduleId, false);
        
         $this->getCommandBus()->handle($oCommand);
         

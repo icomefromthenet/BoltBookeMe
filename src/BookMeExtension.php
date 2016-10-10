@@ -238,13 +238,13 @@ class BookMeExtension extends SimpleExtension
         
         $oDataTableCssAsset = new Stylesheet();
         $oDataTableCssAsset->setFileName('datatables.min.css')
-            ->setLate(true)
+            ->setLate(false)
             ->setPriority(50)
             ->setZone(Zone::BACKEND);
         
         $oDataTableJsAsset = new JavaScript();
         $oDataTableJsAsset->setFileName('datatables.min.js')
-            ->setLate(true)
+            ->setLate(false)
             ->setPriority(50)
             ->setZone(Zone::BACKEND);
 
@@ -255,9 +255,9 @@ class BookMeExtension extends SimpleExtension
         
           
             // Web assets that will be loaded in the backend
-            $oDataTableJsAsset,
-            $oDataTableCssAsset,
-            $oAppCssAsset,
+            //$oDataTableJsAsset,
+            //$oDataTableCssAsset,
+            //$oAppCssAsset,
         ];
     }
     

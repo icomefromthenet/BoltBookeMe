@@ -660,7 +660,7 @@ class BookMeService
      */ 
     public function resfreshSchedule($iScheduleDatabaseId)
     {
-        $oCommand = new RefreshScheduleCommand($iScheduleDatabaseId);
+        $oCommand = new RefreshScheduleCommand($iScheduleDatabaseId, false);
         
         try {
             $this->getCommandBus()->handle($oCommand);

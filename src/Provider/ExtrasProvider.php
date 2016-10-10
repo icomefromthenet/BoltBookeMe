@@ -64,9 +64,9 @@ class ExtrasProvider implements ServiceProviderInterface
      */
     public function boot(Application $app)
     {
-        
-          
-        
+        if(false === isset($app['bm.now'])) {
+            $app['bm.now'] = new DateTime('now');
+        }
     }
 }
 /* End of Service Provider */
