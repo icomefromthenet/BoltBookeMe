@@ -1,14 +1,15 @@
 <?php
 namespace  Bolt\Extension\IComeFromTheNet\BookMe\Tests;
 
+use DateTime;
+use Silex\Application;
 use Doctrine\DBAL\Types\Type;
 use Bolt\Extension\IComeFromTheNet\BookMe\Tests\Base\ExtensionTest;
-use Bolt\Extension\IComeFromTheNet\BookMe\Bundle\Queue\Model\RefreshScheduleDecorator;
-use Bolt\Extension\IComeFromTheNet\BookMe\Model\Schedule\Handler\RefreshScheduleHandler;
 use Bolt\Extension\IComeFromTheNet\BookMe\Model\Schedule\Command\RefreshScheduleCommand;
+use Bolt\Extension\IComeFromTheNet\BookMe\Model\Schedule\Handler\RefreshScheduleHandler;
+use Bolt\Extension\IComeFromTheNet\BookMe\Bundle\Queue\Model\RefreshScheduleDecorator;
 
-
-class QueueBundleTest extends ExtensionTest
+class QueueWorkerTest extends ExtensionTest
 {
     
     
@@ -194,57 +195,55 @@ class QueueBundleTest extends ExtensionTest
    }  
    
    
-   public function testQueueBundle()
+   public function testQueueWorkers()
    {
-      $this->QueueBuildsSucessfulyTest();
-      $this->QueueRefreshHandlerTest($this->aDatabaseId['schedule_member_one']);
+        $oApp = $this->getContainer();
+        $oBus = $this->getCommandBus();
+        $oWorker = $oApp['bm.queue.worker.rebuild'];
+        $oMonitorWorker = $oApp['bm.queue.worker.monitor'];
+        $oPurgeWorker = $oApp['bm.queue.worker.purge'];
+        
+        // Add some jobs onto the queue
+        
+        
+        foreach($this->aDatabaseId as $key => $value) {
+            
+            if (true === in_array($key,['schedule_member_one','schedule_member_two','schedule_member_three','schedule_member_four'])) {
+                $oCommand   = new RefreshScheduleCommand($value,true);
+                
+                $oBus->handle($oCommand);
+            }
+            
+        }
+        
+        $phpunit = $this;
+        
+        // override the command bus handler and ensure that handle been called
+        $oApp['bm.model.schedule.handler.refresh'] = $oApp->share($oApp->extend('bm.model.schedule.handler.refresh',
+            function($oRefreshHandler, Application $container) use ($phpunit){
+                $oMock =  $phpunit->getMockBuilder('Bolt\Extension\IComeFromTheNet\BookMe\Bundle\Queue\Model\RefreshScheduleDecorator')
+                                ->disableOriginalConstructor()
+                                ->getMock(); 
+                                
+                $oMock->expects($phpunit->exactly(4))
+                      ->method('handle');
+
+                return $oMock;
+        }));
+        
+        
+        // Execute the worker and assert items have completed.
+        $oWorker();
+        
+        
+        //Execute Monitor Worker
+        $oMonitorWorker();
+        
+        
+        //Execute Purge Worker
+        $oPurgeWorker();
+        
    }
-   
-    
-   public function QueueBuildsSucessfulyTest()
-   {
-       $oQueue = $this->getContainer()->offsetGet('bm.queue.queue');
-       
-       $this->assertInstanceOf('LaterJob\Queue',$oQueue);
-   }
-   
-   
-   public function QueueRefreshHandlerTest($iScheduleID)
-   {
-      $oCommand = new RefreshScheduleCommand($iScheduleID,true);
-      $oDatabase = $this->getDatabaseAdapter();
-      $oRefreshScheduleHandler = $this->getMockBuilder('Bolt\Extension\IComeFromTheNet\BookMe\Model\Schedule\Handler\RefreshScheduleHandler')
-                                      ->disableOriginalConstructor()
-                                      ->getMock();
-      $aConfig = $this->getAppConfig();
-      
-      $sQueueActivityTable = $aConfig['tablenames']['bm_queue'];
-                                                  
-      $oRefreshScheduleHandler = new RefreshScheduleDecorator($oRefreshScheduleHandler
-      , $aConfig['tablenames']
-      , $oDatabase
-      , $this->getContainer()->offsetGet('bm.queue.queue')
-      , $this->getContainer()->offsetGet('bm.now'));
-      
-      
-      // Can we inert into queue
-      $oRefreshScheduleHandler->handle($oCommand);
-      
-      //verify job is in queue
-      
-      $aResult = $oDatabase->fetchAssoc("SELECT job_id, job_data from $sQueueActivityTable"); 
-      
-      $this->assertNotEmpty($aResult);
-      
-      $aJobData = unserialize($aResult['job_data']);
-      
-      $this->assertEquals(1,$aJobData);
-      
-      
-   }
-   
-   
-  
    
    
 }

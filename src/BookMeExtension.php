@@ -255,9 +255,9 @@ class BookMeExtension extends SimpleExtension
         
           
             // Web assets that will be loaded in the backend
-            //$oDataTableJsAsset,
-            //$oDataTableCssAsset,
-            //$oAppCssAsset,
+            $oDataTableJsAsset,
+            $oDataTableCssAsset,
+            $oAppCssAsset,
         ];
     }
     
@@ -439,13 +439,15 @@ class BookMeExtension extends SimpleExtension
                         'mean_runtime'      => (60*60*1),
                         'cron_script'       => '*/5 * * * *',
                         'job_lock_timeout'  => (60*60*4),
-                        'worker_name'       => 'scheduleprocess'
+                        'worker_name'       => 'scheduleprocess',
+                        'purge_days'        => 30,
                 ],
                 'queue' => [
                         'mean_service_time' => (60*60*1),
                         'max_retry'         => 3,
                         'retry_timer'       => (60*60*1)
-                ]
+                ],
+                
             ]
         ];
     }

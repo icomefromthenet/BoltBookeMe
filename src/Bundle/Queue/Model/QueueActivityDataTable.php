@@ -38,27 +38,32 @@ class QueueActivityDataTable extends AbstractDataTableManager
         # set Ajax Options
         $oAjaxOption = new General\AjaxOptions();
         $oAjaxOption->setDataUrl($this->sDataUrl);
+        $oAjaxOption->setHttpRequestMethod('GET');
+        $oAjaxOption->setResponseDataType('json');
+        
         $this->addOptionSet($oAjaxOption);
         
         # set the Scroller Plugin
         $oScrollerPlugin = new Plugin\ScrollerPlugin();    
         $oScrollerPlugin->setUseLoadingIndicator(true);
-        $oScrollerPlugin->setUseTrace(true);
+        $oScrollerPlugin->setUseTrace(false);
+        
         
         $this->addPlugin($oScrollerPlugin);
         
         # Setup Column Schema
-        $oColumnA = new Schema\ColumnOption();
-        $oColumnRenderWithOption = new Schema\ColumnRenderOption();
-        $oColumnRenderWithOption->setFilterIndex('columna_filter');
-        $oColumnRenderWithOption->setDisplayIndex('columna_display');
-        $oColumnA->setRenderOption($oColumnRenderWithOption);
+       
+        $oJobIdColumn = new Schema\ColumnOption();
+        $oJobIdColumnRender = new Schema\ColumnRenderOption();
+        $oJobIdColumnRender->setFilterIndex('jobId');
+        $oJobIdColumnRender->setDisplayIndex('jobId');
+        $oJobIdColumn->setRenderOption($oJobIdColumnRender);
         
         $oColumnB = new Schema\ColumnOption();
         $oColumnRednerWithCallback = new Schema\ColumnRenderFunc('window.func');
         $oColumnB->setRenderFunc($oColumnRednerWithCallback);
         
-        $this->getSchema()->addColumn('columnA',$oColumnA);
+        $this->getSchema()->addColumn('columnA',$oJobIdColumn);
         $this->getSchema()->addColumn('columnB',$oColumnB);
         
         

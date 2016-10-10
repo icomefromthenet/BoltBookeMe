@@ -192,6 +192,8 @@ class ExtensionTest extends \PHPUnit_Framework_TestCase
                         ->get('IComeFromTheNet/BookMe')
                         ->getDefaultConfig();
     }
+    
+    
 }
 /* End of Unit Test */
 

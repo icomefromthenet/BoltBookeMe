@@ -40,7 +40,7 @@ class QueueDataTableProvider implements ServiceProviderInterface
         
          $app['bm.datatable.table.queue-activity'] = $app->share(function($c) use ($aConfig) {
           
-            $sDataUrl = $c['url_generator']->generate('bookme-queue-list');
+            $sDataUrl = $c['url_generator']->generate('bookme-queue-jobs');
           
             return new QueueActivityDataTable($c['bm.datatable.output'],$sDataUrl);
              
