@@ -48,6 +48,17 @@ class AjaxOptions implements DataTableOptionInterface
        return $this;
    }
    
+   /**
+    * Sets the index in response to look for result set
+    * 
+    * @return string the object index
+    */ 
+   public function setResponseDataIndex($sIndex)
+   {
+      $this->aConfigStruct['dataSrc'] = $sIndex;
+      return $this;
+   }
+   
    
    /**
     * Set the http request method

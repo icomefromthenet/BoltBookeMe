@@ -27,10 +27,49 @@ class ColumnOption implements DataTableOptionInterface
             "defaultContent"  => null,
             "render"          => null,
             "data"            => null, // where going to use render default to null but still an option
+            "visible"         => true,
        ];
        
    }
    
+   /**
+    * if this column should be visible
+    * 
+    * @return self
+    * @param boolean     $bVisiable     If column should be seen
+    */
+   public function setColumnVisible($bVisiable)
+   {
+       $this->aConfigStruct["visible"] = (bool) $bVisiable;
+       
+       return $this;
+   }
+   
+   /**
+    * Title of the column to display in heading
+    * 
+    * @return self
+    * @param string     $sTitle     The column name
+    */
+   public function setColumnHeading($sTitle)
+   {
+        $this->aConfigStruct["title"] = $sTitle;
+        
+        return $this;   
+   }
+   
+   /**
+    * Set the internal name of the column
+    * 
+    * @return self
+    * @param string    $sDefault      The column name
+    */ 
+   public function setColumnName($sName)
+   {
+       $this->aConfigStruct['name'] = $sName;
+       
+       return $this;
+   }
    
    /**
     * Set the default content that used if the data has empty value
@@ -100,7 +139,7 @@ class ColumnOption implements DataTableOptionInterface
        
        
        if($aConfig['render'] instanceof DataTableOptionInterface) {
-           $aConfig['render'] = $aConfig['render']->getStruct();
+           $aConfig = array_merge($aConfig,$aConfig['render']->getStruct());
        }
        
        
