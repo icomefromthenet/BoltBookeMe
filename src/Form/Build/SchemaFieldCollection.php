@@ -21,8 +21,8 @@ class SchemaFieldCollection extends JSONObjectBuilder
     
     protected function setDefaults()
     {
-          $this->addPrimitive('type','object')
-          $this->addObjectValue('properties',OptionFactory::createObjectBuilder($this->oOutput);
+          $this->addPrimitive('type','object');
+          $this->addObjectValue('properties',OptionFactory::createObjectBuilder($this->oOutput));
     }
     
     
@@ -35,7 +35,7 @@ class SchemaFieldCollection extends JSONObjectBuilder
      */ 
     public function addField($sFieldName, SchemaField $oSchemaField)
     {
-        $this->getOption('properties')->addObjectValue($sFieldName, $oSchemaProperties);
+        $this->getOption('properties')->addObjectValue($sFieldName, $oSchemaField);
     
         return $this;
     }

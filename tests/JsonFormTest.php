@@ -6,6 +6,10 @@ use Bolt\Extension\IComeFromTheNet\BookMe\Tests\Base\ExtensionTest;
 use Bolt\Extension\IComeFromTheNet\BookMe\Form\OptionFactory;
 use Bolt\Extension\IComeFromTheNet\BookMe\Form\JSONObjectBuilder;
 use Bolt\Extension\IComeFromTheNet\BookMe\Form\JSONArrayBuilder;
+use Bolt\Extension\IComeFromTheNet\BookMe\Form\Build\FormContainer;
+use Bolt\Extension\IComeFromTheNet\BookMe\Form\Build\SchemaFieldFactory;
+use Bolt\Extension\IComeFromTheNet\BookMe\Form\Build\SchemaFieldItem;
+
 use Bolt\Extension\IComeFromTheNet\BookMe\DataTable\Output\DenseFormat;
 use Bolt\Extension\IComeFromTheNet\BookMe\DataTable\Output\StringOutput;
 use Bolt\Extension\IComeFromTheNet\BookMe\DataTable\Output\FunctionReferenceType;
@@ -106,6 +110,43 @@ class JsonFormTest extends ExtensionTest
          $this->assertEquals($oObjectBuilder,$oBuilder->getOption(3));
         $this->assertEquals(true,$oBuilder->hasOption(3));
         
+    }
+    
+    
+    public function testFormContainer()
+    {
+        $oOuput = new StringOutput( new DenseFormat());
+       
+        $oForm = new FormContainer($oOuput);
+        
+        $this->assertNotEmpty($oForm->getSchema());
+        $this->assertNotEmpty($oForm->getForm());
+        
+        $aStruct = $oForm->getStruct();
+        
+        $this->assertArrayHasKey('schema',$aStruct);
+        $this->assertArrayHasKey('form',$aStruct);
+        $this->assertArrayHasKey('type',$aStruct['schema']);
+        $this->assertArrayHasKey('properties',$aStruct['schema']);
+        
+        
+    }
+    
+    public function testSchemaField()
+    {
+        $oOuput = new StringOutput( new DenseFormat());
+        
+        $oForm = new FormContainer($oOuput);
+         
+        $oForm->getSchema()->addField('field1',SchemaFieldFactory::createIntegerField($oOuput)
+                                                                 ->setTitle('myfield')    
+        ); 
+        
+        $aStruct = $oForm->getSchema()->getField('field1')->getStruct();
+        
+        $this->assertArrayHasKey('title',$aStruct);
+        
+       
     }
 }
 /* end of file */
