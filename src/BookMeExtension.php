@@ -255,9 +255,9 @@ class BookMeExtension extends SimpleExtension
         
           
             // Web assets that will be loaded in the backend
-            $oDataTableJsAsset,
-            $oDataTableCssAsset,
-            $oAppCssAsset,
+            //$oDataTableJsAsset,
+            //$oDataTableCssAsset,
+            //$oAppCssAsset,
         ];
     }
     

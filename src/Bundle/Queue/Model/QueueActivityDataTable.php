@@ -52,13 +52,14 @@ class QueueActivityDataTable extends AbstractDataTableManager
         
         $this->addPlugin($oScrollerPlugin);
         
-        // {"jobId":"0b04e273-e130-39d2-8cb6-ff76abc2be45","retryCount":3,"dateAdded":{"date":"2016-10-10 00:00:00","timezone_type":3,"timezone":"UTC"},"stateId":3,"jobData":"1","lockTimeout":{"date":"2016-10-10 04:00:00","timezone_type":3,"timezone":"UTC"},"handle":"55fabc26-47ab-3db2-a5e9-1e80ec4f0621","retryLast":null}
+        // {"jobId":"","retryCount":3,"dateAdded":,"stateId":3,"jobData":"1","lockTimeout":{"date":"2016-10-10 04:00:00","timezone_type":3,"timezone":"UTC"},"handle":"55fabc26-47ab-3db2-a5e9-1e80ec4f0621","retryLast":null}
         //
         
         # Setup Column Schema
        
        
         // Job Id
+        // e.g 0b04e273-e130-39d2-8cb6-ff76abc2be45
         $oJobIdColumn = new Schema\ColumnOption();
         $oJobIdColumn->setDefaultContent('-')
                     ->setDataIndex('jobId')
@@ -66,6 +67,7 @@ class QueueActivityDataTable extends AbstractDataTableManager
                     ->setColumnName('job_id');
                    
         // Retry Count
+        // e.g 6
         $oRetryCountColumn = new Schema\ColumnOption();
         $oRetryCountColumn->setDefaultContent('-')
                             ->setDataIndex('retryCount')
@@ -74,6 +76,7 @@ class QueueActivityDataTable extends AbstractDataTableManager
         
         
         // dateAdded
+        // e.g {"date":"2016-10-10 00:00:00","timezone_type":3,"timezone":"UTC"}
         $oDateAddedColumn = new Schema\ColumnOption();
         $oDateAddedColumn->setDefaultContent('-');
         $oDateAddedColumn->setDataIndex('dateAdded.date')
@@ -81,6 +84,7 @@ class QueueActivityDataTable extends AbstractDataTableManager
                             ->setColumnName('date_added');
         
         // stateId
+        // e.g 2 
         $oStateIdColumn = new Schema\ColumnOption();
         $oStateIdColumn->setDefaultContent('-')
                         ->setDataIndex('stateId')
@@ -88,6 +92,7 @@ class QueueActivityDataTable extends AbstractDataTableManager
                         ->setColumnName('state_id');
         
         // jobData
+        // e.g 1
         $oJobDataColumn = new Schema\ColumnOption();
         $oJobDataColumn->setDefaultContent('-')
                         ->setDataIndex('jobData')
@@ -95,6 +100,7 @@ class QueueActivityDataTable extends AbstractDataTableManager
                         ->setColumnName('job_data');
         
         // lockTimeout
+        // e.g {"date":"2016-10-10 00:00:00","timezone_type":3,"timezone":"UTC"}
         $oLockoutColumn = new Schema\ColumnOption();
         $oLockoutColumn->setDefaultContent('-')
                        ->setDataIndex('lockTimeout.date')
@@ -102,6 +108,7 @@ class QueueActivityDataTable extends AbstractDataTableManager
                        ->setColumnName('lockout');
         
         // handle
+        // e.g 55fabc26-47ab-3db2-a5e9-1e80ec4f0621
         $oHandleColumn = new Schema\ColumnOption();
         $oHandleColumn->setDefaultContent('-')
                     ->setDataIndex('handle')
@@ -110,6 +117,7 @@ class QueueActivityDataTable extends AbstractDataTableManager
                     ->setColumnVisible(false);
         
         // retryLast
+        // e.g {"date":"2016-10-10 00:00:00","timezone_type":3,"timezone":"UTC"}
         $oLastRetry = new Schema\ColumnOption();
         $oLastRetry->setDefaultContent('-')
                     ->setDataIndex('retryLast.date')
