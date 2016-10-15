@@ -8,7 +8,9 @@ use Bolt\Extension\IComeFromTheNet\BookMe\Form\JSONObjectBuilder;
 use Bolt\Extension\IComeFromTheNet\BookMe\Form\JSONArrayBuilder;
 use Bolt\Extension\IComeFromTheNet\BookMe\Form\Build\FormContainer;
 use Bolt\Extension\IComeFromTheNet\BookMe\Form\Build\SchemaFieldFactory;
+use Bolt\Extension\IComeFromTheNet\BookMe\Form\Build\FormFieldFactory;
 use Bolt\Extension\IComeFromTheNet\BookMe\Form\Build\SchemaFieldItem;
+
 
 use Bolt\Extension\IComeFromTheNet\BookMe\DataTable\Output\DenseFormat;
 use Bolt\Extension\IComeFromTheNet\BookMe\DataTable\Output\StringOutput;
@@ -148,5 +150,25 @@ class JsonFormTest extends ExtensionTest
         
        
     }
+    
+    public function testFormField()
+    {
+       $oOuput = new StringOutput( new DenseFormat());
+        
+       $oForm = new FormContainer($oOuput);
+       
+       $oForm->getForm()->addField(FormFieldFactory::createEmailType($oOuput)
+                                                    ->setKey('email')); 
+
+        // Test field find by key    
+        $oFieldA = $oForm->getForm()->getField(0);    
+        $oFieldB = $oForm->getForm()->getFieldByName('email');
+        
+        $this->assertNotEmpty($oFieldA);
+        $this->assertNotEmpty($oFieldB);
+        $this->assertEquals($oFieldA,$oFieldB);
+        
+    }
+    
 }
 /* end of file */

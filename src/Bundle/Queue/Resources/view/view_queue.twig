@@ -7,6 +7,11 @@
 
 {% block page_main %}
 
+<form id="queueSearchForm">
+    
+</form>
+
+
 <table id="QueueActivityTable">
     
    
@@ -18,6 +23,7 @@
 {% block page_script %}
 
     {% include '_datatable_bootstrap.twig' with {'sConfigString' : sConfigString , 'sElement' : '#QueueActivityTable' , 'aEvents' : aEvents } %}
-
+    
+    {% include '_jsonform.twig' with {'sConfigString' : sFormConfigString , 'sElement' : '#queueSearchForm'} %}
 {% endblock page_script %}
 

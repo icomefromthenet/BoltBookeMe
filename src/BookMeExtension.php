@@ -249,15 +249,35 @@ class BookMeExtension extends SimpleExtension
             ->setZone(Zone::BACKEND);
 
         
+        $oJSONForm = new JavaScript();
+        $oJSONForm->setFileName('jsonform.js')
+            ->setLate(false)
+            ->setPriority(50)
+            ->setZone(Zone::BACKEND);
+
+        $oZSchema = new JavaScript();
+        $oZSchema->setFileName('ZSchema-browser.js')
+            ->setLate(false)
+            ->setPriority(99)
+            ->setZone(Zone::BACKEND);
+        
+        $oUnderScore = new JavaScript();
+        $oUnderScore->setFileName('underscore.js')
+            ->setLate(false)
+            ->setPriority(99)
+            ->setZone(Zone::BACKEND);
         
         return [
             // Web assets that will be loaded in the frontend
         
           
             // Web assets that will be loaded in the backend
-            //$oDataTableJsAsset,
-            //$oDataTableCssAsset,
-            //$oAppCssAsset,
+            $oDataTableJsAsset,
+            $oDataTableCssAsset,
+            $oAppCssAsset,
+            $oUnderScore,
+            $oZSchema,
+            $oJSONForm,
         ];
     }
     

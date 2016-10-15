@@ -174,7 +174,7 @@ class SchemaField extends JSONObjectBuilder
     
     
     //-------------------------------------------------------------------------
-    # Enum and items
+    # Enum 
     
     public function setEnum(JSONArrayBuilder $aValues)
     {

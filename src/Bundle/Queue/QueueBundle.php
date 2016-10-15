@@ -28,6 +28,7 @@ class QueueBundle extends SimpleBundle
              new Provider\QueueMenuProvider($aConfig),
              new Provider\QueueDataTableProvider($aConfig),
              new Provider\QueueCommandBusProvider($aConfig),
+             new Provider\QueueFormProvider($aConfig),
         ];
     
         return $localProviders;

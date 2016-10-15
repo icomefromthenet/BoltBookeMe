@@ -87,5 +87,17 @@ trait  CommonControllerTrait
         return $this->oContainer->offsetGet('bm.datatable.table.'.$sDataTableKey);
     }
     
+    /**
+     * Loads a Form 
+     * 
+     * Must be defined under the namespace bl.form.x
+     * 
+     * @return Bolt\Extension\IComeFromTheNet\BookeMe\Form\Build\FormContainer
+     * 
+     */ 
+    protected function getForm($sFormKey)
+    {
+        return $this->oContainer->offsetGet('bm.form.'.$sFormKey);
+    }
 }
 /* End of Calendar Admin Controller */

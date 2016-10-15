@@ -22,8 +22,9 @@ class FormContainer extends JSONObjectBuilder
     protected function setDefaults()
     {
         $this->addObjectValue('schema', new SchemaFieldCollection($this->oOutput))
-             ->addObjectValue('form', OptionFactory::createObjectBuilder($this->oOutput)); 
-            
+             ->addArrayValue('form', new FormFieldCollection($this->oOutput))
+             ->addObjectValue('params', OptionFactory::createObjectBuilder($this->oOutput))
+             ->addObjectValue('value', OptionFactory::createObjectBuilder($this->oOutput));
           
     }
     
@@ -73,6 +74,26 @@ class FormContainer extends JSONObjectBuilder
     public function getForm()
     {
         return $this->getOption('form');
+    }
+    
+    /**
+     * Fetch the params section of the container
+     * 
+     * @return JSONObjectBuilder
+     */ 
+    public function getParams()
+    {
+        return $this->getOption('params');
+    }
+    
+    /**
+     * Fetch the value section of the containe, used to set inital values
+     * 
+     * @return JSONObjectBuilder
+     */ 
+    public function getValues()
+    {
+        return $this->getOption('value');
     }
 }
 /* End of Class */

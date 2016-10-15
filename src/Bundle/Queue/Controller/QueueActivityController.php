@@ -63,11 +63,12 @@ class QueueActivityController extends ActivityProvider implements ControllerProv
         $oNow      = $this->getNow();
         
         $oDataTable = $this->getDataTable('queue-activity');
-        
+        $oSearchForm = $this->getForm('queue.jobsearch');
         
         $aDataTable = [
-            'sConfigString' => $oDataTable->writeConfig(), 
-            'aEvents' => $oDataTable->getEvents(),
+            'sConfigString'     => $oDataTable->writeConfig(), 
+            'aEvents'           => $oDataTable->getEvents(),
+            'sFormConfigString' => $oSearchForm->getJSON(),
         ];  
        
        return $app['twig']->render('@Queue/view_queue.twig', array_merge(['title' => 'Schedule Rebuild Queue'], $aDataTable), []);
