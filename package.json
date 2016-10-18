@@ -1,0 +1,31 @@
+{
+  "name": "boltbookme",
+  "version": "1.0.0",
+  "description": "Booking Extension for Bolt CMS",
+  "main": "index.js",
+  "directories": {
+    "test": "tests"
+  },
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/icomefromthenet/BoltBookeMe.git"
+  },
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/icomefromthenet/BoltBookeMe/issues"
+  },
+  "homepage": "https://github.com/icomefromthenet/BoltBookeMe#readme",
+  "devDependencies": {
+    "gulp-clean-css": "^2.0.13",
+    "gulp-concat": "^2.6.0",
+    "gulp-concat-css": "^2.3.0",
+    "gulp-css-url-adjuster": "^0.2.3",
+    "gulp-less": "^3.1.0",
+    "gulp-rename": "^1.2.2",
+    "gulp-uglify": "^2.0.0"
+  }
+}
