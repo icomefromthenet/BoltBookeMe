@@ -19,7 +19,7 @@ gulp.task('less', function() {
 
 // Minify compiled CSS
 gulp.task('minify-css', ['less'], function() {
-    return gulp.src('dist/css/*.css')
+    return gulp.src(['dist/css/*.css','!dist/css/*.min.css'])
         .pipe(cleanCSS({ compatibility: 'ie8' }))
         .pipe(rename({ suffix: '.min' }))
         .pipe(gulp.dest('dist/css'));
@@ -35,7 +35,7 @@ gulp.task('js', function() {
 
 // Minify JS
 gulp.task('minify-js', ['js'], function() {
-    return gulp.src('js/*.js')
+    return gulp.src(['js/*.js','!js/*.min.js'])
         .pipe(uglify())
         .pipe(rename({ suffix: '.min' }))
         .pipe(gulp.dest('dist/js'));
@@ -100,7 +100,14 @@ gulp.task('vendor-fonts', function() {
             .pipe(gulp.dest('dist/vendor/fonts/'));
 });
 
+
+gulp.task('copy-bolt-local', function() {
+    return gulp.src('dist/**/*')
+          .pipe(gulp.dest('/home/ubuntu/bolt/public/extensions/local/icomefromthenet/bookme/dist'));
+});
+
+
 // Run everything
-gulp.task('default', ['vendor-css','vendor-images','vendor-fonts','minify-css', 'minify-js']);
+gulp.task('default', ['vendor-css','vendor-images','vendor-fonts','vendor-js','minify-css', 'minify-js','copy-bolt-local']);
 
 

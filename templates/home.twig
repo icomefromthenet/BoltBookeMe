@@ -1,4 +1,4 @@
-{% extends '_base/_page-nav.twig' %}
+{% extends '@BookMe/_base/_page-nav.twig' %}
 
 {% block page_nav title %}
 
@@ -52,7 +52,7 @@
 <!-- Menu -->
 <div class="row">
     <div class="col-md-12">
-        {% include '_menu_generator.twig' with { 'menubuilder' : menubuilder, 'sMenuHeading' : 'Booking Screens' } %}
+        {% include '@BookMe/_menu/_menu_generator_page.twig' with { 'menubuilder' : menubuilder, 'sMenuHeading' : 'Booking Screens' } %}
     </div>
 </div>
 

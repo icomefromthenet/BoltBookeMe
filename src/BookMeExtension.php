@@ -231,53 +231,41 @@ class BookMeExtension extends SimpleExtension
     protected function registerAssets()
     {
         $oAppCssAsset = new Stylesheet();
-        $oAppCssAsset->setFileName('bookme.css')
-            ->setLate(true)
+        $oAppCssAsset->setFileName('dist/css/bookme.css')
+            ->setLate(false)
             ->setPriority(99)
             ->setZone(Zone::BACKEND);
         
-        $oDataTableCssAsset = new Stylesheet();
-        $oDataTableCssAsset->setFileName('datatables.min.css')
+        $oVendorCSSAsset = new Stylesheet();
+        $oVendorCSSAsset->setFileName('dist/vendor/css/vendor.css')
             ->setLate(false)
-            ->setPriority(50)
+            ->setPriority(98)
             ->setZone(Zone::BACKEND);
         
-        $oDataTableJsAsset = new JavaScript();
-        $oDataTableJsAsset->setFileName('datatables.min.js')
-            ->setLate(false)
-            ->setPriority(50)
-            ->setZone(Zone::BACKEND);
-
-        
-        $oJSONForm = new JavaScript();
-        $oJSONForm->setFileName('jsonform.js')
+        $oAppJsAsset = new JavaScript();
+        $oAppJsAsset->setFileName('dist/js/bookme.js')
             ->setLate(false)
             ->setPriority(50)
             ->setZone(Zone::BACKEND);
 
-        $oZSchema = new JavaScript();
-        $oZSchema->setFileName('ZSchema-browser.js')
-            ->setLate(false)
-            ->setPriority(99)
-            ->setZone(Zone::BACKEND);
         
-        $oUnderScore = new JavaScript();
-        $oUnderScore->setFileName('underscore.js')
+        $oVendorJSAsset = new JavaScript();
+        $oVendorJSAsset->setFileName('dist/vendor/vendor.js')
             ->setLate(false)
-            ->setPriority(99)
+            ->setPriority(45)
             ->setZone(Zone::BACKEND);
+
+      
         
         return [
             // Web assets that will be loaded in the frontend
         
           
             // Web assets that will be loaded in the backend
-            $oDataTableJsAsset,
-            $oDataTableCssAsset,
             $oAppCssAsset,
-            $oUnderScore,
-            $oZSchema,
-            $oJSONForm,
+            $oVendorCSSAsset,
+            $oAppJsAsset,
+            $oVendorJSAsset
         ];
     }
     
@@ -289,7 +277,7 @@ class BookMeExtension extends SimpleExtension
      */
     protected function registerTwigPaths()
     {
-        return ['templates'];
+        return ['/templates/' => ['namespace' => 'BookMe']];
     }
 
     /**

@@ -1,6 +1,7 @@
 .DS_*
 config.yml
 composer.lock
-vendor/
+/vendor/
+/thirdparty/vendor/
 tests/tmp/
 web/dist/*
