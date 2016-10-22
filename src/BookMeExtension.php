@@ -230,42 +230,14 @@ class BookMeExtension extends SimpleExtension
      */
     protected function registerAssets()
     {
-        $oAppCssAsset = new Stylesheet();
-        $oAppCssAsset->setFileName('dist/css/bookme.css')
-            ->setLate(false)
-            ->setPriority(99)
-            ->setZone(Zone::BACKEND);
         
-        $oVendorCSSAsset = new Stylesheet();
-        $oVendorCSSAsset->setFileName('dist/vendor/css/vendor.css')
-            ->setLate(false)
-            ->setPriority(98)
-            ->setZone(Zone::BACKEND);
-        
-        $oAppJsAsset = new JavaScript();
-        $oAppJsAsset->setFileName('dist/js/bookme.js')
-            ->setLate(false)
-            ->setPriority(50)
-            ->setZone(Zone::BACKEND);
-
-        
-        $oVendorJSAsset = new JavaScript();
-        $oVendorJSAsset->setFileName('dist/vendor/vendor.js')
-            ->setLate(false)
-            ->setPriority(45)
-            ->setZone(Zone::BACKEND);
-
-      
         
         return [
             // Web assets that will be loaded in the frontend
         
           
             // Web assets that will be loaded in the backend
-            $oAppCssAsset,
-            $oVendorCSSAsset,
-            $oAppJsAsset,
-            $oVendorJSAsset
+          
         ];
     }
     
@@ -286,7 +258,9 @@ class BookMeExtension extends SimpleExtension
     protected function registerTwigFunctions()
     {
         return [
-            'convertSlotTime' => 'convertSlotTime',
+            'convertSlotTime'   => 'convertSlotTime',
+            'bookMeCSSAsset'    => 'bookMeCSSAsset',
+            'bookMeScriptAsset' => 'bookMeScriptAsset',
         ];
     }
 
@@ -314,6 +288,78 @@ class BookMeExtension extends SimpleExtension
         }
         
         return $sValue;
+    }
+    
+    /**
+     * Render a url for the current extension web assets
+     * 
+     *  This does what AssetTrait::normalizeAsset
+     * 
+     * @return string he path be used as url after the domain
+     */ 
+    public function bookMeCSSAsset($path)
+    {
+       
+        $app = $this->getContainer();
+       
+        $asset = new Stylesheet();
+        $asset->setFileName($path)
+            ->setLate(false)
+            ->setZone(Zone::BACKEND);
+       
+       
+        // Any external resource does not need further normalisation
+        if (parse_url($path, PHP_URL_HOST) !== null) {
+            return $path;
+        }
+        
+        $file = $this->getWebDirectory()->getFile($asset->getPath());
+        
+        
+        if ($file->exists()) {
+            $asset->setPackageName('extensions')->setPath($file->getPath());
+        } else {
+            throw new BookMeException('Asset :: '.$file->getPath(). ' Does not Exists on filesystem');
+        }
+        
+        
+        return $app['asset.packages']->getUrl($asset->getPath(),'extensions');
+    
+    }
+    
+     /**
+     * Render a url for the current extension web assets
+     * 
+     *  This does what AssetTrait::normalizeAsset
+     * 
+     * @return string he path be used as url after the domain
+     */ 
+    public function bookMeScriptAsset($path)
+    {
+        $app = $this->getContainer();
+        
+        $asset = new JavaScript();
+        $asset->setFileName($path)
+            ->setLate(false)
+            ->setZone(Zone::BACKEND);
+       
+       
+        // Any external resource does not need further normalisation
+        if (parse_url($path, PHP_URL_HOST) !== null) {
+            return $path;
+        }
+
+        $file = $this->getWebDirectory()->getFile($asset->getPath());
+        
+        
+        if ($file->exists()) {
+            $asset->setPackageName('extensions')->setPath($file->getPath());
+        } else {
+            throw new BookMeException('Asset :: '.$file->getPath(). ' Does not Exists on filesystem');
+        }
+        
+        return $app['asset.packages']->getUrl($asset->getPath(),'extensions');
+
     }
     
     //--------------------------------------------------------------------------

@@ -1,4 +1,4 @@
-{% extends '_base/_page-nav.twig' %}
+{% extends '@BookMe/_base/_page-nav.twig' %}
 
 {% block page_nav title %}
 
@@ -12,7 +12,7 @@
 </form>
 
 
-<table id="QueueActivityTable">
+<table id="QueueActivityTable" class="table table-striped table-bordered table-hover">
     
    
 </table>
@@ -22,8 +22,8 @@
 
 {% block page_script %}
 
-    {% include '_datatable_bootstrap.twig' with {'sConfigString' : sConfigString , 'sElement' : '#QueueActivityTable' , 'aEvents' : aEvents } %}
+    {% include '@BookMe/_datatable_bootstrap.twig' with {'sConfigString' : sConfigString , 'sElement' : '#QueueActivityTable' , 'aEvents' : aEvents } %}
     
-    {% include '_jsonform.twig' with {'sConfigString' : sFormConfigString , 'sElement' : '#queueSearchForm'} %}
+    {% include '@BookMe/_jsonform.twig' with {'sConfigString' : sFormConfigString , 'sElement' : '#queueSearchForm'} %}
 {% endblock page_script %}
 

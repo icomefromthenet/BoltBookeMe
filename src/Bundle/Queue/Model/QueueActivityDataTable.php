@@ -32,7 +32,7 @@ class QueueActivityDataTable extends AbstractDataTableManager
     {
         # Set Default Options
         $oDefaultOptions = new General\DefaultOptions();
-        $oDefaultOptions->overrideDefault('scrollY','60vh');
+        //$oDefaultOptions->overrideDefault('scrollY','40vh');
         $this->addOptionSet($oDefaultOptions);
         
         
