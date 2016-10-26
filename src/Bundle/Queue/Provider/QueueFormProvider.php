@@ -6,7 +6,8 @@ use Silex\Application;
 use Silex\ServiceProviderInterface;
 use Bolt\Extension\IComeFromTheNet\BookMe\Form\GroupTypeExtension;
 
-use Bolt\Extension\IComeFromTheNet\BookMe\Form\Build\FormContainer;
+use Bolt\Extension\IComeFromTheNet\BookMe\Form\OptionFactory;
+use Bolt\Extension\IComeFromTheNet\BookMe\Form\Build\Custom\InlineFormContainer;
 use Bolt\Extension\IComeFromTheNet\BookMe\Form\Build\FormFieldFactory;
 use Bolt\Extension\IComeFromTheNet\BookMe\Form\Build\SchemaFieldFactory;
 use Bolt\Extension\IComeFromTheNet\BookMe\Form\JSONArrayBuilder;
@@ -56,22 +57,56 @@ class QueueFormProvider implements ServiceProviderInterface
         $app['bm.form.queue.jobsearch'] = $app->share(function ($c) use ($aConfig) {
             $oString = $c['bm.form.output'];
             
-            $oForm = new FormContainer($oString); 
+            $oForm = new InlineFormContainer($oString); 
             
-            $oForm->getSchema()->addField('name',SchemaFieldFactory::createStringField($oString)
-                                                 ->setTitle('name')
+            $oForm->getSchema()->addField('before',SchemaFieldFactory::createStringField($oString)
+                                                 ->setTitle('Occured After')
+                                                 ->setDescription('Job added to the Queue after or on this date')
                                                  ->setRequired(true)                 
             
             );
             
-            $oForm->getForm()->addField(FormFieldFactory::createTextType($oString)
-                                        ->setKey('name')
-                                        ->setTitle('Super Key')
-                            )
-                            ->addField(FormFieldFactory::createSubmitType($oString)
-                                        ->setTitle('Click to Submit')
-                            );
+            $oForm->getSchema()->addField('after',SchemaFieldFactory::createStringField($oString)
+                                                 ->setTitle('Occured Before')
+                                                 ->setDescription('Job added to the Queue before or on this date')
+                                                 ->setRequired(true)                 
             
+            );
+            
+            $oForm
+            ->getForm()
+            ->addField(
+                FormFieldFactory::createSectionType($oString)
+                ->setTitle("Job Dates")
+                ->addItems(
+                    FormFieldFactory::createFormFieldCollection($oString)
+                        ->addField(
+                            FormFieldFactory::createDateType($oString)
+                                ->setKey('before')
+                        )
+                        ->addField(
+                            FormFieldFactory::createDateType($oString)
+                            ->setKey('after')
+                        )
+                        ->addField(
+                                        FormFieldFactory::createSubmitType($oString)
+                                            ->setTitle('Submit Search')
+                                    
+                        )
+                )
+            );
+            
+            
+            
+            /*
+            $oForm->addObjectValue('defaultClasses',
+                OptionFactory::createObjectBuilder($oString)
+                    ->addPrimitive('labelClass','control-label col-sm-2')
+                    ->addPrimitive('controlClass','controls col-sm-6')
+                    ->addPrimitive('groupClass','form-group row')
+            );*/
+            
+
             return $oForm;
             
         });

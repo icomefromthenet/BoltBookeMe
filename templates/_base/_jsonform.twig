@@ -1,0 +1,29 @@
+{#
+ Bootstrap a JsonForm Schema
+
+ sConfigString : The javascript config struct
+ sElement : ID of element to bind the dataTable on
+ 
+ This should be included at the bottom of the page using the Page Script Block
+ 
+#}
+
+<script type="text/javascript">
+
+jQuery(function() {
+
+ var oConfig = {{ sConfigString|raw }};
+
+ if(oConfig.fieldTemplate) {
+   JSONForm.fieldTemplate = oConfig.fieldTemplate;
+   console.log('changed the fieldTemplate of Json Form');
+ }
+
+ console.log(oConfig);
+
+ jQuery('{{ sElement|raw }}').jsonForm( oConfig);
+
+
+});
+
+</script>

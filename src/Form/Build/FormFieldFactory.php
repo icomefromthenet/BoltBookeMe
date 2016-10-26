@@ -24,7 +24,7 @@ class FormFieldFactory extends OptionFactory
     public static function createActionsType(StringOutput $oOutput)
     {
         $oField = new FormField($oOutput);
-        return $oField->addPrimitive('type','action');
+        return $oField->addPrimitive('type','actions');
     }
     
     /**
@@ -225,6 +225,15 @@ class FormFieldFactory extends OptionFactory
         return $oField->addPrimitive('type','submit');
     }
     
+    /**
+     * Returns an empty field collection which array of fields
+     * 
+     * @return FormFieldCollection
+     */ 
+    public static function createFormFieldCollection(StringOutput $oOutput)
+    {
+        return new FormFieldCollection($oOutput);
+    }
     
 }
 /* End of class */

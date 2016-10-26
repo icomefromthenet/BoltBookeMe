@@ -230,14 +230,42 @@ class BookMeExtension extends SimpleExtension
      */
     protected function registerAssets()
     {
+        $oAppCssAsset = new Stylesheet();
+        $oAppCssAsset->setFileName('dist/css/bookme.css')
+            ->setLate(false)
+            ->setPriority(99)
+            ->setZone(Zone::BACKEND);
         
+        $oVendorCSSAsset = new Stylesheet();
+        $oVendorCSSAsset->setFileName('dist/vendor/css/vendor.css')
+            ->setLate(false)
+            ->setPriority(98)
+            ->setZone(Zone::BACKEND);
+        
+        $oAppJsAsset = new JavaScript();
+        $oAppJsAsset->setFileName('dist/js/bookme.js')
+            ->setLate(false)
+            ->setPriority(50)
+            ->setZone(Zone::BACKEND);
+
+        
+        $oVendorJSAsset = new JavaScript();
+        $oVendorJSAsset->setFileName('dist/vendor/js/vendor.js')
+            ->setLate(false)
+            ->setPriority(45)
+            ->setZone(Zone::BACKEND);
+
+      
         
         return [
             // Web assets that will be loaded in the frontend
         
           
             // Web assets that will be loaded in the backend
-          
+            $oAppCssAsset,
+            $oVendorCSSAsset,
+            $oAppJsAsset,
+            $oVendorJSAsset
         ];
     }
     

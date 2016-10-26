@@ -193,14 +193,20 @@ class FormField extends JSONObjectBuilder
      */ 
     public function addItems(FormFieldCollection $oFormFieldCollection)
     {
-        if(false === $this->hasField('items')) {
-            $this->addObjectValue('items',$oFormFieldCollection);
-         
-        }
+        $this->addArrayValue('items',$oFormFieldCollection);
         
         return $this;
     }
     
+    /**
+     * Return the bound items option, which array of child fields
+     * 
+     * @return array[FormField]
+     */ 
+    public function getItems()
+    {
+        return $this->getOption('items');
+    }
     
 }
 /* End of Class */

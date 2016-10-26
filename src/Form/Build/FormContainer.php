@@ -55,6 +55,8 @@ class FormContainer extends JSONObjectBuilder
         return $this->addFuncRef('onSubmit', $oFuncRef); 
     }
     
+    //--------------------------------------------------------------------------
+    
     /**
      * Fetch the schema which describes the data stored in form elements
      * 
@@ -95,5 +97,20 @@ class FormContainer extends JSONObjectBuilder
     {
         return $this->getOption('value');
     }
+    
+    //--------------------------------------------------------------------------
+    
+    /**
+     * Allows the default valdiation setting to be overwritten
+     * 
+     * @return JSONObjectBuilder
+     * @param boolean   $bUseValid      True to validation form, false to not
+     */
+    public function overrideDefaultValidation($bUseValid)
+    {
+        return $this->addPrimitive('validate',$bUseValid);
+    }
+    
+    
 }
 /* End of Class */
