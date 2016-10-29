@@ -65,6 +65,13 @@ class QueueActivityController extends ActivityProvider implements ControllerProv
         $oDataTable = $this->getDataTable('queue-activity');
         $oSearchForm = $this->getForm('queue.jobsearch');
         
+        //bind request vars to datatable data url
+        $oDataTable->getOptionSet('AjaxOptions')->setRequestParams($request->query->all());
+        
+        //incude request params as values to our form
+        $oSearchForm->setValuesFromRequest($request);
+        
+        
         $aDataTable = [
             'sConfigString'     => $oDataTable->writeConfig(), 
             'aEvents'           => $oDataTable->getEvents(),

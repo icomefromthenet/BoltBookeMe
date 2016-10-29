@@ -73,7 +73,7 @@ class AjaxOptions implements DataTableOptionInterface
        return $this;
    }
   
-  /**
+   /**
     * Add data that used in ajax request
     * 
     * @return self
@@ -83,6 +83,19 @@ class AjaxOptions implements DataTableOptionInterface
    public function setRequestParam($sIndex,$mValue)
    {
        $this->aConfigStruct['data'][$sIndex] = $mValue;
+       
+       return $this;
+   }
+   
+   /**
+    * Add data that used in ajax request
+    * 
+    * @return self
+    * @param array    $aParams      The index value struct of data for request
+    */ 
+   public function setRequestParams(array $aParams)
+   {
+       $this->aConfigStruct['data'] = $aParams;
        
        return $this;
    }

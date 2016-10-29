@@ -1,6 +1,7 @@
 <?php
 namespace Bolt\Extension\IComeFromTheNet\BookMe\Form\Build;
 
+use Symfony\Component\HttpFoundation\Request;
 use Bolt\Extension\IComeFromTheNet\BookMe\Form\OptionBuilderInterface;
 use Bolt\Extension\IComeFromTheNet\BookMe\Form\OptionFactory;
 use Bolt\Extension\IComeFromTheNet\BookMe\Form\JSONArrayBuilder;
@@ -111,6 +112,14 @@ class FormContainer extends JSONObjectBuilder
         return $this->addPrimitive('validate',$bUseValid);
     }
     
+    
+    //--------------------------------------------------------------------------
+    
+    public function setValuesFromRequest(Request $req)
+    {
+        # fetch vars from get request
+        return $this->addPrimitive('value',$req->query->all());
+    }
     
 }
 /* End of Class */

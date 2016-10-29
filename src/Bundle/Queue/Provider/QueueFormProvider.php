@@ -61,14 +61,14 @@ class QueueFormProvider implements ServiceProviderInterface
             
             $oForm->getSchema()->addField('before',SchemaFieldFactory::createStringField($oString)
                                                  ->setTitle('Occured After')
-                                                 ->setDescription('Job added to the Queue after or on this date')
+                                                 ->setDescription('')
                                                  ->setRequired(true)                 
             
             );
             
             $oForm->getSchema()->addField('after',SchemaFieldFactory::createStringField($oString)
                                                  ->setTitle('Occured Before')
-                                                 ->setDescription('Job added to the Queue before or on this date')
+                                                 ->setDescription('')
                                                  ->setRequired(true)                 
             
             );
@@ -81,16 +81,17 @@ class QueueFormProvider implements ServiceProviderInterface
                 ->addItems(
                     FormFieldFactory::createFormFieldCollection($oString)
                         ->addField(
-                            FormFieldFactory::createDateType($oString)
+                            FormFieldFactory::createDateTimeType($oString)
                                 ->setKey('before')
                         )
                         ->addField(
-                            FormFieldFactory::createDateType($oString)
+                            FormFieldFactory::createDateTimeType($oString)
                             ->setKey('after')
                         )
                         ->addField(
                                         FormFieldFactory::createSubmitType($oString)
                                             ->setTitle('Submit Search')
+                                            ->setContainerCSSClass('bm-search_submit')
                                     
                         )
                 )
@@ -98,13 +99,7 @@ class QueueFormProvider implements ServiceProviderInterface
             
             
             
-            /*
-            $oForm->addObjectValue('defaultClasses',
-                OptionFactory::createObjectBuilder($oString)
-                    ->addPrimitive('labelClass','control-label col-sm-2')
-                    ->addPrimitive('controlClass','controls col-sm-6')
-                    ->addPrimitive('groupClass','form-group row')
-            );*/
+          
             
 
             return $oForm;

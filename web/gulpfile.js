@@ -51,7 +51,7 @@ gulp.task('vendor-css', function() {
         aVendorPaths.push('vendor/'+value+'/css/*.css');
     });
     
-    gulp.src(aVendorPaths)
+   return gulp.src(aVendorPaths)
     .pipe(concatCss("vendor.css"))
     //.pipe(cleanCSS({ compatibility: 'ie8' }))
     .pipe(gulp.dest('dist/vendor/css'));

@@ -13,7 +13,7 @@ var bookme = {
                
                     /* Moving Label Inside Control Group */
                     '<% if (node.title && !elt.notitle && elt.inlinetitle !== true) { %>' +
-                      '<label class="<%= cls.labelClass %>" for="<%= node.id %>"><%= node.title %></label>' +
+                      '<label style="display:inline-block; margin-right:5px;" class="<%= cls.labelClass %>" for="<%= node.id %>"><%= node.title %></label>' +
                     '<% } %>' +
                   
                    
@@ -36,13 +36,13 @@ var bookme = {
                     '<% } %>' +
                   
                   '<% } %>' +
-                 
-                  inner +
-                 
-                  
+        
                     '<% if (node.description) { %>' +
                     '<span class="help-block jsonform-description"><%= node.description %></span>' +
                     '<% } %>' +
+        
+                 
+                  inner +
                  
                  
                   '<% if (node.append && node.append.indexOf("<button ") >= 0) { %>' +
