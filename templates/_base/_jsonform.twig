@@ -16,8 +16,11 @@ jQuery(function() {
 
  if(oConfig.fieldTemplate) {
    JSONForm.fieldTemplate = oConfig.fieldTemplate;
-   console.log('changed the fieldTemplate of Json Form');
  }
+ 
+ 
+ JSONForm.elementTypes.jdate = bookme.form.jDate;
+
 
  console.log(oConfig);
 

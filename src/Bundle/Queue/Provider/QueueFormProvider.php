@@ -73,6 +73,7 @@ class QueueFormProvider implements ServiceProviderInterface
             
             );
             
+            
             $oForm
             ->getForm()
             ->addField(
@@ -81,17 +82,17 @@ class QueueFormProvider implements ServiceProviderInterface
                 ->addItems(
                     FormFieldFactory::createFormFieldCollection($oString)
                         ->addField(
-                            FormFieldFactory::createDateTimeType($oString)
+                            FormFieldFactory::createJQueryDateType($oString)
                                 ->setKey('before')
                         )
                         ->addField(
-                            FormFieldFactory::createDateTimeType($oString)
+                            FormFieldFactory::createJQueryDateType($oString)
                             ->setKey('after')
                         )
                         ->addField(
-                                        FormFieldFactory::createSubmitType($oString)
-                                            ->setTitle('Submit Search')
-                                            ->setContainerCSSClass('bm-search_submit')
+                            FormFieldFactory::createSubmitType($oString)
+                                ->setTitle('Submit Search')
+                                ->setContainerCSSClass('bm-search_submit')
                                     
                         )
                 )
