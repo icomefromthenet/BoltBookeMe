@@ -75,31 +75,104 @@
       
   // Custom Date Field that uses Jquery UI Date Control
   bookme.form.jDate = {
-    'template': '<input type="jdate" ' +
-      'class="<%= fieldHtmlClass %> <%= cls.textualInputClass %> " ' +
-      'name="<%= node.name %>" value="<%= escape(value) %>" id="<%= id %>"' +
-      '<%= (node.disabled? " disabled" : "")%>' +
-      '<%= (node.isReadOnly() ? " readonly=\'readonly\'" : "") %>' +
-      '<%= (node.schemaElement && node.schemaElement.maxLength ? " maxlength=\'" + node.schemaElement.maxLength + "\'" : "") %>' +
-      '<%= (node.required ? " required=\'required\'" : "") %>' +
-      '<%= (node.placeholder? " placeholder=" + \'"\' + escape(node.placeholder) + \'"\' : "")%>' +
-      ' />',
+    'template': 
+    '<div class="input-group">' +
+      '<span class="input-group-btn">' +
+          '<button type="button"  name="jdate_calbtn"  class="btn btn-tertiary">' +
+                '<i class="fa fa-calendar"></i> '+
+           '</button>'+
+         '</span>' +
+        '<input type="jdate" ' +
+        'class="<%= fieldHtmlClass %> <%= cls.textualInputClass %> datepicker" ' +
+        'name="<%= node.name %>" value="<%= escape(value) %>" id="<%= id %>"' +
+        '<%= (node.disabled? " disabled" : "")%>' +
+        '<%= (node.isReadOnly() ? " readonly=\'readonly\'" : "") %>' +
+        '<%= (node.schemaElement && node.schemaElement.maxLength ? " maxlength=\'" + node.schemaElement.maxLength + "\'" : "") %>' +
+        '<%= (node.required ? " required=\'required\'" : "") %>' +
+        '<%= (node.placeholder? " placeholder=" + \'"\' + escape(node.placeholder) + \'"\' : "")%>' +
+        ' />' +
+      '</div>',
     'fieldtemplate': true,
     'inputfield': true,
      'onInsert': function(evt, node) {
            
-           var $input = $(node.el).find('input[type="jdate"]');
-           
-           var opt = {
-             dateFormat: "dd-mm-yy"
-             
-           };
-           
-            $input.datepicker(opt);
+       var $input = $(node.el).find('input[type="jdate"]');
+       
+       console.log($(node.el));
+       
+       var opt = {
+         dateFormat: "dd-mm-yy"
+         
+       };
+       
+        $input.datepicker(opt);
     }
     
-  }
+  };
   
+  // Custom Date Time that uses Jquery UI Date Control
+  bookme.form.jDateTime = {
+    'template': 
+    '<div class="input-group">' +
+      '<span class="input-group-btn">' +
+          '<button type="button" name="jdate_calbtn" class="btn btn-tertiary">' +
+                '<i class="fa fa-calendar"></i> '+
+           '</button>'+
+         '</span>' +
+        '<input type="input" ' +
+        'class="<%= fieldHtmlClass %> <%= cls.textualInputClass %> datepicker" ' +
+        'name="<%= node.name %>_date" value="" id="<%= id %>_date"' +
+        '<%= (node.disabled? " disabled" : "")%>' +
+        '<%= (node.isReadOnly() ? " readonly=\'readonly\'" : "") %>' +
+        '<%= (node.schemaElement && node.schemaElement.maxLength ? " maxlength=\'" + node.schemaElement.maxLength + "\'" : "") %>' +
+        '<%= (node.required ? " required=\'required\'" : "") %>' +
+        '<%= (node.placeholder? " placeholder=" + \'"\' + escape(node.placeholder) + \'"\' : "")%>' +
+        ' />' +
+        
+        '<input type="input" ' +
+        'class="<%= fieldHtmlClass %> <%= cls.textualInputClass %>" style="width: 93px;" ' +
+        'name="<%= node.name %>_time" value="" id="<%= id %>_time"' +
+        '<%= (node.disabled? " disabled" : "")%>' +
+        '<%= (node.isReadOnly() ? " readonly=\'readonly\'" : "") %>' +
+        '<%= (node.schemaElement && node.schemaElement.maxLength ? " maxlength=\'" + node.schemaElement.maxLength + "\'" : "") %>' +
+        '<%= (node.required ? " required=\'required\'" : "") %>' +
+        '<%= (node.placeholder? " placeholder=" + \'"\' + escape(node.placeholder) + \'"\' : "")%>' +
+        ' />' +
+        '<input type="hidden" name="<%= node.name %> value="<%= escape(value) %>" id="<%= id %>" />' +
+      '</div>',
+    'fieldtemplate': true,
+    'inputfield': true,
+    
+     'onInsert': function(evt, node) {
+           
+      // Start the Datepicker     
+           
+       var $input = $(node.el).find(':input[name$="_date"]');
+       
+       var opt = {
+         dateFormat: "dd-mm-yy"
+         
+       };
+       
+        $input.datepicker(opt);
+        
+       //bind date picker to button
+       $(node.el).find(':input[name="jdate_calbtn"]').click(function(event){
+         $input.datepicker('show');
+         
+       });
+       
+    },
+    
+    'onChange': function (event, elt) {
+    
+      // merge the date and the time element
+      console.log(event,elt);
+    }
+   
+    
+    
+  };
       
   
 

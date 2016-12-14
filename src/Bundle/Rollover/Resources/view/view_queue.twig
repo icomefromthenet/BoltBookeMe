@@ -1,8 +1,6 @@
 {% extends '_base/_page-nav.twig' %}
 
 
-
-
 {% block page_nav title %}
 
 {% block page_title __(title) %}
@@ -14,14 +12,14 @@
 
 {% form_theme oForm 'form_bolt_layout.twig' %}
 <div class="bm-search">
-    <span class="bm-search_heading">Quick Search</span>
+    <span class="bm-search_heading">Find Schedules</span>
 
 
     <form id="queueSearchForm" method="get" action="{{ path('bookme-queue-page')  }}"  class="bm-search_form form-inline">
         {{ form_widget(oForm) }}
        
        
-        <input type="submit" value="Search" name="submit" class="btn btn-primary bm-search_submit">
+        <input type="submit" value="Find Schedules" name="submit" class="btn btn-primary bm-search_submit">
     </form>
 
 </div>
@@ -42,9 +40,6 @@
 {% block page_script %}
 
     {% include '@BookMe/_base/_datatable.twig' with {'sConfigString' : sConfigString , 'sElement' : '#QueueActivityTable' , 'aEvents' : aEvents } %}
-{#    
-    {% include '@BookMe/_base/_jsonform.twig' with {'sConfigString' : sFormConfigString , 'sElement' : '#queueSearchForm'} %}
-#}
 
 {% endblock page_script %}
 

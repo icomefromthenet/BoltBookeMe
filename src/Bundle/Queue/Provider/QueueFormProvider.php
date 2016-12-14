@@ -16,6 +16,11 @@ use Bolt\Extension\IComeFromTheNet\BookMe\DataTable\Output\FunctionReferenceType
 use Bolt\Extension\IComeFromTheNet\BookMe\DataTable\Output\StringOutput;
 use Bolt\Extension\IComeFromTheNet\BookMe\DataTable\Output\DenseFormat;
 
+use Symfony\Component\Form\Extension\Core\Type\FormType;
+use Symfony\Component\Form\Form;
+use Symfony\Component\Form\FormBuilderInterface;
+use Symfony\Component\Form\FormTypeInterface;
+use Symfony\Component\Form\Extension\Core\Type;
 
 /**
  * Loads this Queue Bunles Search Forms.
@@ -47,14 +52,34 @@ class QueueFormProvider implements ServiceProviderInterface
     {
         $aConfig   = $this->config;
         
+        /*  
         $app['bm.form.output'] = function($c) {
             return new StringOutput(new DenseFormat());
-        };
+        }; */
  
         //----------------------------------------------------------------------
         # Rules Form
         
         $app['bm.form.queue.jobsearch'] = $app->share(function ($c) use ($aConfig) {
+            
+            $type = FormType::class;
+            $data = null;
+            $options = [];
+
+            
+            $oFormBuilder = $c['form.factory']->createBuilder($type, $data, $options);
+            
+            $oFormBuilder->add('task', Type\TextType::class)
+                         ->add('dueDate',Type\DateTimeType::class,
+                [
+                    'widget'   => 'single_text',
+                    'format'   => 'yyyy-MM-dd HH:mm:ss',
+                    'disabled' => false,
+                    'label'    => 'Activity From',
+                ]);
+            
+            
+            /*
             $oString = $c['bm.form.output'];
             
             $oForm = new InlineFormContainer($oString); 
@@ -82,11 +107,11 @@ class QueueFormProvider implements ServiceProviderInterface
                 ->addItems(
                     FormFieldFactory::createFormFieldCollection($oString)
                         ->addField(
-                            FormFieldFactory::createJQueryDateType($oString)
+                            FormFieldFactory::createJQueryDateTimeType($oString)
                                 ->setKey('before')
                         )
                         ->addField(
-                            FormFieldFactory::createJQueryDateType($oString)
+                            FormFieldFactory::createJQueryDateTimeType($oString)
                             ->setKey('after')
                         )
                         ->addField(
@@ -97,13 +122,10 @@ class QueueFormProvider implements ServiceProviderInterface
                         )
                 )
             );
-            
-            
-            
-          
+            */
             
 
-            return $oForm;
+            return $oFormBuilder;
             
         });
       

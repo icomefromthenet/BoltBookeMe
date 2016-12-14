@@ -4,7 +4,6 @@ namespace Bolt\Extension\IComeFromTheNet\BookMe\Provider;
 use DateTime;
 use Silex\Application;
 use Silex\ServiceProviderInterface;
-use Bolt\Extension\IComeFromTheNet\BookMe\Form\GroupTypeExtension;
 
 use Symfony\Component\Form\Extension\Core\Type\TextType;
 use Symfony\Component\Form\Extension\Core\Type\DateType;
@@ -49,7 +48,7 @@ class FormProvider implements ServiceProviderInterface
         }));
     
         $app['form.type.extensions'] = $app->share($app->extend('form.type.extensions', function ($extensions) use ($app) {
-            $extensions[] = new GroupTypeExtension();
+            $extensions = [];
         
             return $extensions;
         }));
@@ -83,7 +82,7 @@ class FormProvider implements ServiceProviderInterface
         });
       
         $app['bm.form.rule.view'] = function () use ($app) {
-            return new \Bolt\Extension\IComeFromTheNet\BookMe\Form\FormGroupView($app['bm.form.rule.builder']->getForm(),'Basic',['Baisc']);
+            return $app['bm.form.rule.builder']->getForm()->createView();
         };
         
         //----------------------------------------------------------------------
@@ -98,7 +97,7 @@ class FormProvider implements ServiceProviderInterface
         });
       
         $app['bm.form.member.view'] = function () use ($app) {
-            return new \Bolt\Extension\IComeFromTheNet\BookMe\Form\FormGroupView($app['bm.form.member.builder']->getForm(),'Basic',['Baisc']);
+            return $app['bm.form.member.builder']->getForm()->createView();
         };
         
         //----------------------------------------------------------------------
@@ -113,7 +112,7 @@ class FormProvider implements ServiceProviderInterface
         });
       
         $app['bm.form.customer.view'] = function () use ($app) {
-            return new \Bolt\Extension\IComeFromTheNet\BookMe\Form\FormGroupView($app['bm.form.customer.builder']->getForm(),'Basic',['Baisc']);
+            return $app['bm.form.customer.builder']->getForm()->createView();
         };
         
         //----------------------------------------------------------------------
@@ -128,7 +127,7 @@ class FormProvider implements ServiceProviderInterface
         });
       
         $app['bm.form.appt.view'] = function () use ($app) {
-            return new \Bolt\Extension\IComeFromTheNet\BookMe\Form\FormGroupView($app['bm.form.appt.builder']->getForm(),'Basic',['Baisc']);
+            return $app['bm.form.appt.builder']->getForm()->createView();
         };
         
         //----------------------------------------------------------------------
@@ -143,7 +142,7 @@ class FormProvider implements ServiceProviderInterface
         });
       
         $app['bm.form.schedule.view'] = function () use ($app) {
-            return new \Bolt\Extension\IComeFromTheNet\BookMe\Form\FormGroupView($app['bm.form.schedule.builder']->getForm(),'Basic',['Baisc']);
+            return $app['bm.form.schedule.builder']->getForm()->createView();
         };
     }
 

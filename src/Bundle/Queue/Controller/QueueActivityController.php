@@ -69,13 +69,14 @@ class QueueActivityController extends ActivityProvider implements ControllerProv
         $oDataTable->getOptionSet('AjaxOptions')->setRequestParams($request->query->all());
         
         //incude request params as values to our form
-        $oSearchForm->setValuesFromRequest($request);
+        //$oSearchForm->setValuesFromRequest($request);
         
         
         $aDataTable = [
             'sConfigString'     => $oDataTable->writeConfig(), 
             'aEvents'           => $oDataTable->getEvents(),
-            'sFormConfigString' => $oSearchForm->getJSON(),
+            //'sFormConfigString' => $oSearchForm->getJSON(),
+            'oForm'             =>  $oSearchForm->getForm()->createView(),
         ];  
        
        return $app['twig']->render('@Queue/view_queue.twig', array_merge(['title' => 'Schedule Rebuild Queue'], $aDataTable), []);

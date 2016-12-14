@@ -237,6 +237,18 @@ class FormFieldFactory extends OptionFactory
     }
     
     /**
+     * Create an Submit Button form field type
+     * 
+     * @return FormField
+     */ 
+    public static function createJQueryDateTimeType(StringOutput $oOutput)
+    {
+        $oField = new FormField($oOutput);
+        return $oField->addPrimitive('type','jDateTime');
+    }
+    
+    
+    /**
      * Returns an empty field collection which array of fields
      * 
      * @return FormFieldCollection

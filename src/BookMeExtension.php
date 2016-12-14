@@ -513,7 +513,8 @@ class BookMeExtension extends SimpleExtension
             
             ,'bundle' => [
                 'AuditTrail' => true,
-                'Queue'      => true,    
+                'Queue'      => true,   
+                'Rollover'   => true,
             ]
             ,'queue' => [
                 'worker' => [
