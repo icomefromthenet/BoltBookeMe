@@ -4,16 +4,17 @@ namespace Bolt\Extension\IComeFromTheNet\BookMe\Bundle\Rollover\Provider;
 use DateTime;
 use Silex\Application;
 use Silex\ServiceProviderInterface;
-use Bolt\Extension\IComeFromTheNet\BookMe\DataTable\Output\DenseFormat;
-use Bolt\Extension\IComeFromTheNet\BookMe\DataTable\Output\StringOutput;
+
+use Bolt\Extension\IComeFromTheNet\BookMe\Bundle\Rollover\DataTable\RolloverSearchQuery;
+use Bolt\Extension\IComeFromTheNet\BookMe\Bundle\Rollover\DataTable\RolloverSearchQueryBuilder;
+
 
 /**
- * Bootstrap The DataTable(s) for the Rollover Bundle
+ * Bootstrap Rollover Search Filter Query. 
  * 
  * @author Lewis Dyer <getintouch@icomefromthenet.com>
- * @since 1.0
  */
-class RolloverDataTableProvider implements ServiceProviderInterface
+class SearchQueryProvider implements ServiceProviderInterface
 {
     /** @var array */
     private $config;
@@ -37,8 +38,11 @@ class RolloverDataTableProvider implements ServiceProviderInterface
         $aConfig   = $this->config;
         
         
-        
-
+        $app['bm.query.rollover'] = function($c) use ($aConfig) {
+            
+            return new RolloverSearchQuery(new RolloverSearchQueryBuilder($c['db'],$aConfig['tablenames']),'r');
+        };
+       
     }
 
     /**

@@ -2,9 +2,9 @@
 namespace Bolt\Extension\IComeFromTheNet\BookMe\Schema;
 
 use Bolt\Storage\Database\Schema\Table\BaseTable;
+use Bolt\Extension\IComeFromTheNet\BookMe\Model\VirtualColumnTable;
 
-
-class CalendarYearTable extends BaseTable
+class CalendarYearTable extends VirtualColumnTable
 {
     
     /**
@@ -21,7 +21,15 @@ class CalendarYearTable extends BaseTable
         
         
     }
+    
+    
+    protected function addVirtualColumns()
+    {
+        $this->table->addVirtualColumn('current_year','boolean', ['notnull' => true, 'comment' =>'If this calendar year is current' ,'default' => false ]);
 
+    }
+    
+    
     /**
      * {@inheritdoc}
      */
@@ -37,5 +45,6 @@ class CalendarYearTable extends BaseTable
     {
         $this->table->setPrimaryKey(['y']);
     }
+    
 }
 /* End of Table */

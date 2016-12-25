@@ -48,6 +48,17 @@ use Bolt\Extension\IComeFromTheNet\BookMe\Schema\AppointmentTable;
 
 use Bolt\Extension\IComeFromTheNet\BookMe\Model\Rule\RuleEntity;
 use Bolt\Extension\IComeFromTheNet\BookMe\Model\Rule\RuleRepository;
+use Bolt\Extension\IComeFromTheNet\BookMe\Model\Schedule\ScheduleEntity;
+use Bolt\Extension\IComeFromTheNet\BookMe\Model\Schedule\ScheduleRepository;
+use Bolt\Extension\IComeFromTheNet\BookMe\Model\Member\MemberEntity;
+use Bolt\Extension\IComeFromTheNet\BookMe\Model\Member\MemberRepository;
+use Bolt\Extension\IComeFromTheNet\BookMe\Model\Customer\CustomerEntity;
+use Bolt\Extension\IComeFromTheNet\BookMe\Model\Customer\CustomerRepository;
+use Bolt\Extension\IComeFromTheNet\BookMe\Model\Setup\CalendarYearEntity;
+use Bolt\Extension\IComeFromTheNet\BookMe\Model\Setup\CalendarYearRepository;
+use Bolt\Extension\IComeFromTheNet\BookMe\Model\Setup\TimeslotEntity;
+use Bolt\Extension\IComeFromTheNet\BookMe\Model\Setup\TimeslotRepository;
+
 
 // Load this extension composer dep autoloader
 // since bolt does not download packagist repo when does a merge
@@ -128,6 +139,7 @@ class BookMeExtension extends SimpleExtension
        
         $parentProviders = parent::getServiceProviders();
         $localProviders = [
+            new Provider\StorageExtensionsProvider($aConfig),
             new Provider\CommandBusProvider($aConfig),
             new Provider\CronParseProvider($aConfig),
             new Provider\CustomValidationProvider($aConfig),
@@ -176,7 +188,12 @@ class BookMeExtension extends SimpleExtension
     protected function registerRepositoryMappings()
     {
         return [
-            'bm_rule' => [RuleEntity::class => RuleRepository::class],
+            'bm_rule'               => [RuleEntity::class => RuleRepository::class],
+            'bm_schedule'           => [ScheduleEntity::class => ScheduleRepository::class],
+            'bm_schedule_membership'=> [MemberEntity::class => MemberRepository::class],
+            'bm_customer'           => [CustomerEntity::class => CustomerRepository::class],
+            'bm_calendar_years'     => [CalendarYearEntity::class => CalendarYearRepository::class],
+            'bm_timeslot'           => [TimeslotEntity::class => TimeslotRepository::class],
         ];
     }
     
@@ -262,10 +279,10 @@ class BookMeExtension extends SimpleExtension
         
           
             // Web assets that will be loaded in the backend
-            $oAppCssAsset,
-            $oVendorCSSAsset,
-            $oAppJsAsset,
-            $oVendorJSAsset
+            //$oAppCssAsset,
+            //$oVendorCSSAsset,
+            //$oAppJsAsset,
+            //$oVendorJSAsset
         ];
     }
     

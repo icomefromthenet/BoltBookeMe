@@ -1,14 +1,12 @@
 <?php
 namespace  Bolt\Extension\IComeFromTheNet\BookMe\Tests;
 
+use DateTime;
 use Doctrine\DBAL\Types\Type;
 use Bolt\Extension\IComeFromTheNet\BookMe\Tests\Base\ExtensionTest;
 use Bolt\Extension\IComeFromTheNet\BookMe\Bus\Middleware\ValidationException;
-
 use Bolt\Extension\IComeFromTheNet\BookMe\Model\SelectQueryHandler;
 
-use Bolt\Extension\IComeFromTheNet\BookMe\Model\Rule\DataTable\RuleSearchQuery;
-use Bolt\Extension\IComeFromTheNet\BookMe\Model\Rule\DataTable\RuleSearchQueryBuilder;
 
 
 class CustomRepoTest extends ExtensionTest
@@ -168,6 +166,7 @@ class CustomRepoTest extends ExtensionTest
        // save identifiers for use below    
             
       $this->aDatabaseId = [
+        'start_year'             => $oStartYear,
         'five_minute'            => $iFiveMinuteTimeslot,
         'ten_minute'             => $iTenMinuteTimeslot,
         'fifteen_minute'         => $iFifteenMinuteTimeslot,
@@ -208,11 +207,21 @@ class CustomRepoTest extends ExtensionTest
        $this->RuleRepoTest($this->aDatabaseId['work_repeat']);
        $this->RuleSearchQueryTest();
        
+       $this->ScheduleRepoTest($this->aDatabaseId['schedule_member_one'], $this->aDatabaseId['five_minute'],$this->aDatabaseId['member_one']);
+       $this->RolloverSearchQueryTest();
+       
+       $this->MemberRepoTest($this->aDatabaseId['member_one']);
+       
+       $this->CustomerRepoTest($this->aDatabaseId['customer_1']);
+       
+       $this->CalendarYearRepoTest($this->aDatabaseId['start_year']);
+       
+       $this->TimeslotRepoTest($this->aDatabaseId['ten_minute']);
     }
     
     protected function RuleRepoTest($iRuleId)
     {
-        
+        $oNow         = $this->getNow();
         $oApp = $this->getContainer();
     
         $oRuleRepo = $oApp['storage']->getRepository('Bolt\Extension\IComeFromTheNet\BookMe\Model\Rule\RuleEntity');    
@@ -230,11 +239,11 @@ class CustomRepoTest extends ExtensionTest
         $this->assertEquals($iRuleId,$oWorkDayRule->getRuleId());
         $this->assertEquals("Repeat Work Day Rule",$oWorkDayRule->getRuleName());
         $this->assertEquals(false, $oWorkDayRule->getSingleDayFlag());
-        $this->assertEquals(2016,$oWorkDayRule->getCalendarYear());
+        $this->assertEquals($oNow->format('Y'),$oWorkDayRule->getCalendarYear());
         $this->assertEquals(540,$oWorkDayRule->getDayOpenSlot());
         $this->assertEquals(1020, $oWorkDayRule->getDayCloseSlot());
-        $this->assertEquals("2016-12-31" , $oWorkDayRule->getEndAt()->format('Y-m-d'));
-        $this->assertEquals("2016-01-01" , $oWorkDayRule->getStartFrom()->format('Y-m-d'));
+        $this->assertEquals($oNow->format('Y')."-12-31" , $oWorkDayRule->getEndAt()->format('Y-m-d'));
+        $this->assertEquals($oNow->format('Y')."-01-01" , $oWorkDayRule->getStartFrom()->format('Y-m-d'));
         $this->assertEquals('short rule description', $oWorkDayRule->getRuleDescription());
         $this->assertEquals("2-12", $oWorkDayRule->getRepeatMonth());
         $this->assertEquals("*", $oWorkDayRule->getRepeatDayOfMonth());
@@ -304,7 +313,139 @@ class CustomRepoTest extends ExtensionTest
     }
   
   
+    public function ScheduleRepoTest($iScheduleId,$iTimeSlotId, $iMemberId)
+    {
+        $oApp = $this->getContainer();
+    
+        $oRepo = $oApp['storage']->getRepository('Bolt\Extension\IComeFromTheNet\BookMe\Model\Schedule\ScheduleEntity');    
+    
+        $this->assertInstanceOf('Bolt\Extension\IComeFromTheNet\BookMe\Model\Schedule\ScheduleRepository',$oRepo);
         
+        $oQueryBuilder = $oRepo->createQueryBuilder();
+        
+        $this->assertInstanceOf('Bolt\Extension\IComeFromTheNet\BookMe\Model\Schedule\ScheduleQueryBuilder',$oQueryBuilder);
+        
+        
+        
+        $oSchedule = $oRepo->find($iScheduleId);
+  
+        $this->assertEquals($iScheduleId,$oSchedule->getScheduleId());
+        $this->assertEquals($iTimeSlotId, $oSchedule->getTimeslotId());
+        $this->assertEquals($iMemberId, $oSchedule->getMemberId());
+        
+        $this->assertNotEmpty($oSchedule->getCalendarYear());
+        $this->assertTrue($oSchedule->getCarryOver());
+        $this->assertNotEmpty($oSchedule->getRegisteredDate());
+        $this->assertEmpty($oSchedule->getCloseDate());
+            
+        
+    }
+        
+    
+    
+    public function RolloverSearchQueryTest()
+    {
+            
+        
+        
+    }
+        
+    
+    public function MemberRepoTest($iMemberId)
+    {
+        $oNow         = $this->getNow();
+        $oApp = $this->getContainer();
+    
+        $oRepo = $oApp['storage']->getRepository('Bolt\Extension\IComeFromTheNet\BookMe\Model\Member\MemberEntity');    
+    
+        $this->assertInstanceOf('Bolt\Extension\IComeFromTheNet\BookMe\Model\Member\MemberRepository',$oRepo);
+        
+        $oQueryBuilder = $oRepo->createQueryBuilder();
+        
+        $this->assertInstanceOf('Bolt\Extension\IComeFromTheNet\BookMe\Model\Member\MemberQueryBuilder',$oQueryBuilder);
+        
+        
+        
+        $oMember = $oRepo->find($iMemberId);
+  
+        $this->assertEquals($iMemberId,$oMember->getMembershipId());
+        $this->assertEquals($iMemberId,$oMember->getMemberId());
+        
+        $this->assertEquals($oNow->format('Y-m-d'), $oMember->getRegisteredDate()->format('Y-m-d'));
+        $this->assertEquals('Bob Builder',$oMember->getMemberName());
+        
+        
+        
+    }
+    
+    
+    public function CustomerRepoTest($iCustomerId)
+    {
+        $oNow         = $this->getNow();
+        $oApp = $this->getContainer();
+    
+        $oRepo = $oApp['storage']->getRepository('Bolt\Extension\IComeFromTheNet\BookMe\Model\Customer\CustomerEntity');    
+    
+        $this->assertInstanceOf('Bolt\Extension\IComeFromTheNet\BookMe\Model\Customer\CustomerRepository',$oRepo);
+        
+        $oQueryBuilder = $oRepo->createQueryBuilder();
+        
+        $this->assertInstanceOf('Bolt\Extension\IComeFromTheNet\BookMe\Model\Customer\CustomerQueryBuilder',$oQueryBuilder);
+        
+        
+        
+        $oCustomer = $oRepo->find($iCustomerId);
+  
+        $this->assertEquals($iCustomerId,$oCustomer->getCustomerId());
+    
+        
+    }
+    
+    
+    public function CalendarYearRepoTest(DateTime $oDate)
+    {
+        $oNow         = $oDate;
+        $oApp = $this->getContainer();
+    
+        $oRepo = $oApp['storage']->getRepository('Bolt\Extension\IComeFromTheNet\BookMe\Model\Setup\CalendarYearEntity');    
+    
+        $this->assertInstanceOf('Bolt\Extension\IComeFromTheNet\BookMe\Model\Setup\CalendarYearRepository',$oRepo);
+        
+        $oQueryBuilder = $oRepo->createQueryBuilder();
+        
+        $this->assertInstanceOf('Bolt\Extension\IComeFromTheNet\BookMe\Model\Setup\CalendarYearQueryBuilder',$oQueryBuilder);
+        
+        $oCalYear = $oRepo->find($oNow->format('Y'));
+        var_dump($oCalYear);
+        $this->assertEquals($oNow->format('Y'),$oCalYear->getCalendarYear());
+        $this->assertEquals($oNow->format('Y'), $oCalYear->getStartOfYear());
+        $this->assertEquals($oNow->format('Y'), $oCalYear->getEndOfYear());
+        $this->assertEquals(true, $oCalYear->getCurrentYearFlag());
+        
+        
+    }
+    
+    
+    public function TimeslotRepoTest($iTimeslotId)
+    {
+        $oNow         = $oDate;
+        $oApp = $this->getContainer();
+    
+        $oRepo = $oApp['storage']->getRepository('Bolt\Extension\IComeFromTheNet\BookMe\Model\Setup\TimeslotEntity');    
+    
+        $this->assertInstanceOf('Bolt\Extension\IComeFromTheNet\BookMe\Model\Setup\TimeslotRepository',$oRepo);
+        
+        $oQueryBuilder = $oRepo->createQueryBuilder();
+        
+        $this->assertInstanceOf('Bolt\Extension\IComeFromTheNet\BookMe\Model\Setup\TimeslotQueryBuilder',$oQueryBuilder);
+        
+        $oTimeSlot = $oRepo->find($iTimeslotId);
+    
+        $this->assertEquals($iTimeslotId,$oTimeSlot->getTimeslotId());
+        $this->assertEquals(10, $oTimeSlot->getSlotLength());
+        $this->assertEquals(false, $oTimeSlot->getActiviteStatus());
+      
+    }
     
 }
 /* end of file */

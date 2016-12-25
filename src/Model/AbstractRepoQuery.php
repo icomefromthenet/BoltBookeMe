@@ -109,5 +109,52 @@ class AbstractRepoQuery extends QueryBuilder
     }
     
     
+    //------------------------------------------------------------------
+    # Scopes helper 
+    
+    public function ifThen($bBool, $fn)
+    {
+        if(false === is_callable($fn)) {
+            throw new RuntimeException ('Expected a callable');
+        }
+        
+        // call the lambda with the query builder as argument
+        if(true === $bBool) {
+            $fn($this);
+        }
+        
+        return $this;
+    }
+
+    
+    public function ifThenElse($bBool, $fn1, $fn2)
+    {
+        if(false === is_callable($fn1) || false === is_callable($fn2)) {
+            throw new RuntimeException ('Expected a callable');
+        }
+        
+        // call the lambda with the query builder as argument
+        if(true === $bBool) {
+            $fn1($this);
+        } else {
+            $fn2($this);
+        }
+        
+        return $this;
+    }
+    
+    
+    
+    public function getField($sAlias, $sField) 
+    {
+        if(empty($sAlias)) {
+            return $sField;
+        }else {
+            return $sAlias.'.'.$sField;
+        }   
+        
+    }
+    
+    
 }
 /* End of File */
