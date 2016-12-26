@@ -2,10 +2,12 @@
 namespace  Bolt\Extension\IComeFromTheNet\BookMe\Tests;
 
 use Doctrine\DBAL\Types\Type;
+use Symfony\Component\Form\Forms;
+use Symfony\Component\Form\FormFactoryInterface;
+use Symfony\Component\EventDispatcher\EventDispatcher;
 use Bolt\Extension\IComeFromTheNet\BookMe\Tests\Base\ExtensionTest;
 use Bolt\Extension\IComeFromTheNet\BookMe\Bus\Middleware\ValidationException;
-
-
+use Bolt\Extension\IComeFromTheNet\BookMe\Model\Setup\Field\CalendarYearField;
 
 
 class FilterQueryTest extends ExtensionTest
@@ -13,12 +15,13 @@ class FilterQueryTest extends ExtensionTest
     
     
    protected $aDatabaseId;    
-    
+   
     
    protected function handleEventPostFixtureRun()
    {
       $oNow         = $this->getNow();
       $oService     = $this->getTestAPI();
+      
       
       $oStartYear = clone $oNow;
       $oStartYear->setDate($oNow->format('Y'),1,1);
@@ -206,6 +209,32 @@ class FilterQueryTest extends ExtensionTest
        
     }
     
+    public function testCustomFields()
+    {
+        
+        $this->TestCalendarYearField();
+    }
+    
+    protected function TestCalendarYearField()
+    {
+        $oApp           = $this->getContainer();
+        $oDispatcher    = $this->getMockBuilder('Symfony\Component\EventDispatcher\EventDispatcherInterface')->getMock();
+        $oFactory       = $oApp['form.factory'];
+        
+        
+        $form = $oFactory->create(CalendarYearField::class);
+
+        $formData = array(
+            'test' => 'test',
+            'test2' => 'test2',
+        );
+
+
+        //$object = TestObject::fromArray($formData);
+        
+        
+    }
+    
     protected function TestRuleQuery()
     {
         
@@ -215,7 +244,7 @@ class FilterQueryTest extends ExtensionTest
         
         $oRuleQuery = $oApp['bm.query.rule'];
         
-        $this->assertInstanceOf('Bolt\Extension\IComeFromTheNet\BookMe\Model\Rule\RuleQuery',$oRuleQuery);
+        $this->assertInstanceOf('Bolt\Extension\IComeFromTheNet\BookMe\Model\Rule\DataTable\RuleSearchQuery',$oRuleQuery);
         
         $aParams =[
             'oApplyFrom' => new \DateTime(),
@@ -233,11 +262,11 @@ class FilterQueryTest extends ExtensionTest
         
         
         # Test the start from
-        $this->assertRegExp('/rule_entity.start_from/', $sRuleFilterQuery);
+        $this->assertRegExp('/r.start_from >=/', $sRuleFilterQuery);
         $this->assertEquals($aParams['oApplyFrom'], $aRuleFilterParams['StartFrom']);
         
         # Test Apply Before
-        $this->assertRegExp('/rule_entity.end_at/', $sRuleFilterQuery);
+        $this->assertRegExp('/r.end_at <=/', $sRuleFilterQuery);
         $this->assertEquals($aParams['oEndBefore'], $aRuleFilterParams['EndAt']);
         
         

@@ -22,7 +22,7 @@ class EndBeforeFilter extends AbstractFilter
         
         if(isset($aParams['oEndBefore']) && is_a($aParams['oEndBefore'],'\DateTime') ) {
             
-            $oQuery->andWhere($oQuery->expr()->gte($this->getField('end_at'),':EndAt'))
+            $oQuery->andWhere($oQuery->expr()->lte($this->getField('end_at'),':EndAt'))
                    ->setParameter('EndAt',$aParams['oEndBefore'],Type::DATE);
         }
         

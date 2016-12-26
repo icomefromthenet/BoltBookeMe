@@ -14,20 +14,6 @@ class CalendarYearRepository extends ReadOnlyRepository implements ObjectReposit
 {
    
    
-    /**
-     * Initializes a new Repository.
-     *
-     * @param EntityManager $em            The EntityManager to use.
-     * @param ClassMetadata $classMetadata The class descriptor.
-     */
-    public function __construct($em, ClassMetadata $classMetadata)
-    {
-        var_dump(get_class($classMetadata));
-        
-        parent::__construct($em,$classMetadata);
-        
-    }
-   
     
     /**
      * Creates a new QueryBuilder instance that is prepopulated for this rule.
@@ -86,16 +72,17 @@ class CalendarYearRepository extends ReadOnlyRepository implements ObjectReposit
      *  
      * @return 
      */
-    public function findAllCalYears()
+    public function findAllCalendarYears()
     {
         $qb = $this->getLoadQuery();
         $sAlias = $this->getAlias();       
         $result = $qb->withCurrentYearColumn($sAlias)
+                     ->orderByYear($sAlias)
                      ->execute()
-                     ->fetch();
+                     ->fetchAll(\PDO::FETCH_ASSOC);
 
         if ($result) {
-            return $this->hydrate($result, $qb);
+            return $this->hydrateAll($result, $qb);
         }
 
         return false;

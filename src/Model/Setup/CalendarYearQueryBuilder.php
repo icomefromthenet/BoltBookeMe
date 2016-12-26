@@ -32,6 +32,19 @@ class CalendarYearQueryBuilder extends AbstractRepoQuery
        
        return $this;
    }
+   
+   /**
+    * Order by the year with future years appearing at the
+    * start of the result set
+    * 
+    * @return this
+    */ 
+   public function orderByYear($sAlias)
+   {
+      $this->orderBy($this->getField($sAlias,'y'),'DESC');
+      
+      return $this;
+   }
     
     
    

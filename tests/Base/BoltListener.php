@@ -251,6 +251,7 @@ class BoltListener implements \PHPUnit_Framework_TestListener
       
         // Create needed directories
         @$fs->mkdir(PHPUNIT_ROOT . '/resources/files/', 0777);
+        @$fs->mkdir(PHPUNIT_ROOT . '/resources/translations/', 0777);
         @$fs->mkdir(PHPUNIT_WEBROOT . '/app/cache/', 0777);
         @$fs->mkdir(PHPUNIT_WEBROOT . '/app/config/', 0777);
         @$fs->mkdir(PHPUNIT_WEBROOT . '/app/database/', 0777);

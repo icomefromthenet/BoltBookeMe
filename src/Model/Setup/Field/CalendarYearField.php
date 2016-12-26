@@ -7,7 +7,7 @@ use Symfony\Component\Form\Extension\Core\Type\ChoiceType;
 use Bolt\Extension\IComeFromTheNet\BookMe\Model\ReadOnlyRepository;
 
 
-class CalendarYearType extends AbstractType
+class CalendarYearField extends AbstractType
 {
     
     protected $oCalYearRepository;
@@ -21,13 +21,26 @@ class CalendarYearType extends AbstractType
     
     public function configureOptions(OptionsResolver $resolver)
     {
-        $aYears =$this->oCalYearRepository->createQueryBuilder();
+        $aChoices       = [];
+        $iCurrentYear   = null;
+    
+        $aYears     = $this->oCalYearRepository->findAllCalendarYears();
+        
+        foreach($aYears as $oYear) {
+            $iYear = $oYear->getCalendarYear();
+            
+            $aChoices[$iYear] = $iYear; 
+            
+            if($oYear->getCurrentYearFlag()) {
+                $iCurrentYear = $iYear
+            }
+        }
         
         
         $resolver->setDefaults(array(
-            'choices' => array(
-                'm' => 'Male',
-                'f' => 'Female',
+            'choices'     => $aChoices,
+            'required'    => true,
+            'empty_data'  => $iCurrentYear
             )
         ));
     }
@@ -36,4 +49,6 @@ class CalendarYearType extends AbstractType
     {
         return ChoiceType::class;
     }
+    
 }
+/* End of Class */
