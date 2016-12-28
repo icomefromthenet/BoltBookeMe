@@ -5,8 +5,6 @@ use DateTime;
 use Doctrine\DBAL\Types\Type;
 use Bolt\Extension\IComeFromTheNet\BookMe\Tests\Base\ExtensionTest;
 use Bolt\Extension\IComeFromTheNet\BookMe\Bus\Middleware\ValidationException;
-use Bolt\Extension\IComeFromTheNet\BookMe\Model\SelectQueryHandler;
-
 
 
 class CustomRepoTest extends ExtensionTest
@@ -205,10 +203,8 @@ class CustomRepoTest extends ExtensionTest
     {
        
        $this->RuleRepoTest($this->aDatabaseId['work_repeat']);
-       $this->RuleSearchQueryTest();
        
        $this->ScheduleRepoTest($this->aDatabaseId['schedule_member_one'], $this->aDatabaseId['five_minute'],$this->aDatabaseId['member_one']);
-       $this->RolloverSearchQueryTest();
        
        $this->MemberRepoTest($this->aDatabaseId['member_one']);
        
@@ -217,6 +213,8 @@ class CustomRepoTest extends ExtensionTest
        $this->CalendarYearRepoTest($this->aDatabaseId['start_year']);
        
        $this->TimeslotRepoTest($this->aDatabaseId['ten_minute']);
+       
+       $this->RuleTypeRepoTest();
     }
     
     protected function RuleRepoTest($iRuleId)
@@ -257,61 +255,6 @@ class CustomRepoTest extends ExtensionTest
     }
     
     
-    public function RuleSearchQueryTest()
-    {
-        # Fetch Search Query From Container
-        
-        $oSearchHandler = new SelectQueryHandler($this->getContainer());
-        $oRuleQuery     = $oSearchHandler->getQuery('rule');
-        
-        $this->assertInstanceOf('Bolt\Extension\IComeFromTheNet\BookMe\Model\Rule\DataTable\RuleSearchQuery',$oRuleQuery);
-        
-        # Do a Dry run and verify filters and directives are applied
-        
-        $aParams =[
-            'oApplyFrom' => new \DateTime(),
-            'oEndBefore' => new \DateTime(),    
-        ];
-        
-        
-        $oQueryBuilder     = $oRuleQuery->setParameters($aParams)->build();
-        
-        $sRuleFilterQuery  = $oQueryBuilder->getSQL();
-        $aRuleFilterParams = $oQueryBuilder->getParameters();
-        
-        $this->assertNotEmpty($sRuleFilterQuery);
-        $this->assertNotEmpty($aRuleFilterParams);
-        
-        # Test timeslot Join Directive
-        $this->assertRegExp('/INNER JOIN bolt_bm_timeslot tslot/', $sRuleFilterQuery);
-        $this->assertRegExp('/INNER JOIN bolt_bm_rule_type rt/', $sRuleFilterQuery);
-        
-        # Test the start from
-        $this->assertRegExp('/r.start_from/', $sRuleFilterQuery);
-        $this->assertEquals($aParams['oApplyFrom'], $aRuleFilterParams['StartFrom']);
-        
-        # Test Apply Before
-        $this->assertRegExp('/r.end_at/', $sRuleFilterQuery);
-        $this->assertEquals($aParams['oEndBefore'], $aRuleFilterParams['EndAt']);
-        
-        
-        # Execute a query using handler and test rule mapping 
-        $aParams            = [];
-        $oRuleQuery         = $oSearchHandler->getQuery('rule');
-        
-        $aQueryResultSet = $oSearchHandler->executeQuery($oRuleQuery,$aParams);
-        
-        $this->assertGreaterThanOrEqual(2,count($aQueryResultSet));
-        
-        # Test Dates columns are mapped which means its iterating over mapping rules
-        $oRecord = $aQueryResultSet->get(1);
-
-        $this->assertInstanceOf('\DateTime',$oRecord['start_from']);
-        $this->assertInstanceOf('\DateTime',$oRecord['end_at']);
-        
-        
-    }
-  
   
     public function ScheduleRepoTest($iScheduleId,$iTimeSlotId, $iMemberId)
     {
@@ -338,15 +281,6 @@ class CustomRepoTest extends ExtensionTest
         $this->assertNotEmpty($oSchedule->getRegisteredDate());
         $this->assertEmpty($oSchedule->getCloseDate());
             
-        
-    }
-        
-    
-    
-    public function RolloverSearchQueryTest()
-    {
-            
-        
         
     }
         
@@ -416,7 +350,7 @@ class CustomRepoTest extends ExtensionTest
         $this->assertInstanceOf('Bolt\Extension\IComeFromTheNet\BookMe\Model\Setup\CalendarYearQueryBuilder',$oQueryBuilder);
         
         $oCalYear = $oRepo->find($oNow->format('Y'));
-        var_dump($oCalYear);
+        
         $this->assertEquals($oNow->format('Y'),$oCalYear->getCalendarYear());
         $this->assertEquals($oNow->format('Y'), $oCalYear->getStartOfYear());
         $this->assertEquals($oNow->format('Y'), $oCalYear->getEndOfYear());
@@ -447,5 +381,28 @@ class CustomRepoTest extends ExtensionTest
       
     }
     
+    public function RuleTypeRepoTest()
+    {
+        $oNow         = $oDate;
+        $oApp = $this->getContainer();
+    
+        $oRepo = $oApp['storage']->getRepository('Bolt\Extension\IComeFromTheNet\BookMe\Model\Rule\RuleTypeEntity');    
+    
+        $this->assertInstanceOf('Bolt\Extension\IComeFromTheNet\BookMe\Model\Rule\RuleTypeRepository',$oRepo);
+        
+        $oQueryBuilder = $oRepo->createQueryBuilder();
+        
+        $this->assertInstanceOf('Bolt\Extension\IComeFromTheNet\BookMe\Model\Rule\RuleTypeQueryBuilder',$oQueryBuilder);
+        
+        $oRuleType = $oRepo->find(1);
+    
+        $this->assertEquals(1,$oRuleType->getRuleTypeId());
+        $this->assertTrue($oRuleType->getRuleTypeCode() !== null);
+        $this->assertTrue($oRuleType->getInclusionOverrideFlag() !== null);
+        $this->assertTrue($oRuleType->getWorkDayFlag() !== null);
+        $this->assertTrue($oRuleType->getExclusionFlag() !== null);
+        
+      
+    }
 }
 /* end of file */

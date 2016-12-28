@@ -6,19 +6,35 @@
 
 {% block page_main %}
 
-<div class="row">
-  
-  <!-- DataTable Block -->
-  <div class="col-md-12">
-  
-  </div>
+{% form_theme oForm '@BookMe/_base/_form_bookme_layout.twig' %}
+<div class="row bm-search">
+  <span class="bm-search_heading">Quick Search</span>
 
-
+  <form id="queueSearchForm" method="get" action="{{ path('bookme-rule-list')  }}"  class="bm-search_form form-inline">
+      {{ form_widget(oForm) }}
+     
+     
+      <input type="submit" value="Search" name="submit" class="btn btn-primary bm-search_submit">
+  </form>
 
 </div>
 
 
-  
-    
+<div class="row bm-table">
+
+    <table id="RuleTable" class="table table-striped table-bordered table-hover">
+        
+       
+    </table>
+
+</div>
 
 {% endblock page_main %}
+
+
+{% block page_script %}
+
+    {% include '@BookMe/_base/_datatable.twig' with {'sConfigString' : sConfigString , 'sElement' : '#RuleTable' , 'aEvents' : aEvents } %}
+
+{% endblock page_script %}
+

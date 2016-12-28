@@ -1,0 +1,37 @@
+{# overrides for the defaults in vendor/symfony/twig-bridge/Symfony/Bridge/Twig/Resources/views/Form/form_div_layout.html.twig #}
+
+{% block form_row %}
+    {% spaceless %}
+        <div class="form-group {% if errors|length > 0 %}has-error{% endif %} col-sm-6 col-md-4 col-lg-2">
+            {{ form_label(form, null, {'label_attr': {'class':'control-label' } }) }}
+            {{ form_widget(form, {'attr' : { 'class' : 'form-control large' } }) }}
+            {{ form_errors(form) }}
+        </div>
+    {% endspaceless %}
+{% endblock form_row %}
+
+{% block form_errors %}
+    {% spaceless %}
+        {% for error in errors %}
+            <span class="help-block">{{
+            error.messagePluralization is null
+            ? error.messageTemplate|trans(error.messageParameters, 'validators')
+            : error.messageTemplate|transchoice(error.messagePluralization, error.messageParameters, 'validators')
+            }}</span>
+        {% endfor %}
+    {% endspaceless %}
+{% endblock form_errors %}
+
+{% block choice_widget_expanded %}
+    {% spaceless %}
+        <div>
+            {% for child in form %}
+                <div class="checkbox">
+                    <label>
+                    {{ form_widget(child) }}{{ child.vars.label -}}
+                    </label>
+                </div>
+            {% endfor %}
+        </div>
+    {% endspaceless %}
+{% endblock choice_widget_expanded %}

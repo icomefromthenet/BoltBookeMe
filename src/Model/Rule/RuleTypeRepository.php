@@ -1,5 +1,5 @@
 <?php
-namespace Bolt\Extension\IComeFromTheNet\BookMe\Model\Setup;
+namespace Bolt\Extension\IComeFromTheNet\BookMe\Model\Rule;
 
 use Doctrine\Common\Persistence\ObjectRepository;
 use Doctrine\DBAL\Connection;
@@ -10,7 +10,7 @@ use Bolt\Extension\IComeFromTheNet\BookMe\Model\ReadOnlyRepository;
 
 
 
-class TimeslotRepository extends ReadOnlyRepository implements ObjectRepository
+class RuleTypeRepository extends ReadOnlyRepository implements ObjectRepository
 {
    
     
@@ -33,7 +33,7 @@ class TimeslotRepository extends ReadOnlyRepository implements ObjectRepository
             $select = $alias . '.*';
         }
 
-        $oQuery = new TimeslotQueryBuilder($this->getEntityManager()->getConnection(), $this);
+        $oQuery = new RuleTypeQueryBuilder($this->getEntityManager()->getConnection(), $this);
         $oQuery->select($select)->from($this->getTableName(), $alias);
             
         return $oQuery;
@@ -45,13 +45,13 @@ class TimeslotRepository extends ReadOnlyRepository implements ObjectRepository
      *
      * @param mixed $id The identifier.
      *
-     * @return object|null The object.
+     * @return object|bool The object.
      */
     public function find($id)
     {
         $qb = $this->getLoadQuery();
-        $result = $qb->where($this->getAlias() . '.timeslot_id = :iTimeslotId')
-            ->setParameter(':iTimeslotId', $id)
+        $result = $qb->where($this->getAlias() . '.rule_type_id = :iRuleTypeId')
+            ->setParameter(':iRuleTypeId', $id)
             ->execute()
             ->fetch();
 
@@ -64,17 +64,15 @@ class TimeslotRepository extends ReadOnlyRepository implements ObjectRepository
     }
 
     /**
-     * Finds All slots that are active
-     *
-     * @return collection|null The result.
-     */
-    public function findAllActiveSlots()
+     * Find all Rule Types
+     * 
+     * @return object|bool The object. 
+     */ 
+    public function findRuleTypes()
     {
         $qb = $this->getLoadQuery();
         $sAlias = $this->getAlias();       
-        $result = $qb->hideInactiveSlots($sAlias)
-                     ->orderBySlotLengthDesc($sAlias)
-                     ->execute()
+        $result = $qb->execute()
                      ->fetchAll(\PDO::FETCH_ASSOC);
 
         if ($result) {
@@ -84,7 +82,6 @@ class TimeslotRepository extends ReadOnlyRepository implements ObjectRepository
         return false;
         
     }
-  
    
 }
 /* End of Class */

@@ -60,6 +60,8 @@ class AbstractFilter implements QueryInterface
         $this->params = $params;
     }
     
+    
+    
     /**
      * Return the alias used on the entity table
      * 

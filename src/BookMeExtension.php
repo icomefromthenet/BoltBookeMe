@@ -48,6 +48,8 @@ use Bolt\Extension\IComeFromTheNet\BookMe\Schema\AppointmentTable;
 
 use Bolt\Extension\IComeFromTheNet\BookMe\Model\Rule\RuleEntity;
 use Bolt\Extension\IComeFromTheNet\BookMe\Model\Rule\RuleRepository;
+use Bolt\Extension\IComeFromTheNet\BookMe\Model\Rule\RuleTypeEntity;
+use Bolt\Extension\IComeFromTheNet\BookMe\Model\Rule\RuleTypeRepository;
 use Bolt\Extension\IComeFromTheNet\BookMe\Model\Schedule\ScheduleEntity;
 use Bolt\Extension\IComeFromTheNet\BookMe\Model\Schedule\ScheduleRepository;
 use Bolt\Extension\IComeFromTheNet\BookMe\Model\Member\MemberEntity;
@@ -58,6 +60,7 @@ use Bolt\Extension\IComeFromTheNet\BookMe\Model\Setup\CalendarYearEntity;
 use Bolt\Extension\IComeFromTheNet\BookMe\Model\Setup\CalendarYearRepository;
 use Bolt\Extension\IComeFromTheNet\BookMe\Model\Setup\TimeslotEntity;
 use Bolt\Extension\IComeFromTheNet\BookMe\Model\Setup\TimeslotRepository;
+
 
 
 // Load this extension composer dep autoloader
@@ -189,6 +192,7 @@ class BookMeExtension extends SimpleExtension
     {
         return [
             'bm_rule'               => [RuleEntity::class => RuleRepository::class],
+            'bm_rule_type'          => [RuleTypeEntity::class => RuleTypeRepository::class],
             'bm_schedule'           => [ScheduleEntity::class => ScheduleRepository::class],
             'bm_schedule_membership'=> [MemberEntity::class => MemberRepository::class],
             'bm_customer'           => [CustomerEntity::class => CustomerRepository::class],
@@ -279,10 +283,10 @@ class BookMeExtension extends SimpleExtension
         
           
             // Web assets that will be loaded in the backend
-            //$oAppCssAsset,
-            //$oVendorCSSAsset,
-            //$oAppJsAsset,
-            //$oVendorJSAsset
+            $oAppCssAsset,
+            $oVendorCSSAsset,
+            $oAppJsAsset,
+            $oVendorJSAsset
         ];
     }
     

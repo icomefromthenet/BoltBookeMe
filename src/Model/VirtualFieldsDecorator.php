@@ -13,7 +13,6 @@ use Doctrine\Common\Persistence\Mapping\ClassMetadata;
 use Doctrine\DBAL\Schema\Column;
 use Doctrine\DBAL\Schema\Table;
 
-
 /**
  * Decorates the built in MetadataDriver to add virtual fields mappings.
  * 
@@ -40,6 +39,7 @@ class VirtualFieldsDecorator extends MetadataDriver implements MappingDriver
         }
 
         
+        
         if(method_exists($table,'getVirtualColumns')) {
         
              foreach ($table->getVirtualColumns() as $colName => $column) {
@@ -59,7 +59,8 @@ class VirtualFieldsDecorator extends MetadataDriver implements MappingDriver
                 ];
     
                 $this->metadata[$className]['fields'][$colName] = $mapping;
-    
+                $contentKey = $this->getContenttypeFromAlias($table->getOption('alias'));
+                
                 if (isset($this->contenttypes[$contentKey]['fields'][$colName])) {
                     $this->metadata[$className]['fields'][$colName]['data'] = $this->contenttypes[$contentKey]['fields'][$colName];
                 }

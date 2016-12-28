@@ -46,8 +46,8 @@ class StorageExtensionsProvider implements ServiceProviderInterface
                 function ($oMetaDataDriver) use ($app) {
                     $meta = new VirtualFieldsDecorator(
                         $app['schema'],
-                        $app['config']->get('contenttypes'),
-                        $app['config']->get('taxonomy'),
+                        $app['storage.config.contenttypes'],
+                        $app['storage.config.taxonomy'],
                         $app['storage.typemap'],
                         $app['storage.namingstrategy']
                     );

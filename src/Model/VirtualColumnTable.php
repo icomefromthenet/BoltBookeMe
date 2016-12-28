@@ -10,6 +10,7 @@ abstract class VirtualColumnTable extends BaseTable
 {
     
     
+    
     public function buildTable(Schema $schema, $aliasName, $charset, $collate)
     {
            

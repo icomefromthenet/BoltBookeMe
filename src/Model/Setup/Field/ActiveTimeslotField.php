@@ -1,5 +1,5 @@
 <?php
-namespace Bolt\Extension\IComeFromTheNet\BookMe\Model\Rule\Field;
+namespace Bolt\Extension\IComeFromTheNet\BookMe\Model\Setup\Field;
 
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\OptionsResolver\OptionsResolver;
@@ -8,15 +8,15 @@ use Symfony\Component\Form\Extension\Core\ChoiceList\ChoiceList;
 use Bolt\Extension\IComeFromTheNet\BookMe\Model\ReadOnlyRepository;
 
 
-class RuleTypeField extends AbstractType
+class ActiveTimeslotField extends AbstractType
 {
     
-    protected $oRuleTypeRepository;
+    protected $oTimeslotRepository;
     
     
-    public function __construct(ReadOnlyRepository $oRuleTypeRepository)
+    public function __construct(ReadOnlyRepository $oTimeslotRepository)
     {
-        $this->oRuleTypeRepository = $oRuleTypeRepository;
+        $this->oTimeslotRepository = $oTimeslotRepository;
     }
     
     
@@ -24,19 +24,18 @@ class RuleTypeField extends AbstractType
     {
         $aChoices       = [];
       
-        $aRuleTypes     = $this->oRuleTypeRepository->findRuleTypes();
+        $aSlots     = $this->oTimeslotRepository->findAllActiveSlots();
         
-        
-        foreach($aRuleTypes as $oRuleType) {
-            $aChoices[$oRuleType->getRuleTypeId()] = ucfirst($oRuleType->getRuleTypeCode()); 
+        foreach($aSlots as $oSlot) {
+            $aChoices[$oSlot->getTimeslotId()] = $oSlot->getSlotLength(). ' Min'; 
         }
         
         $resolver->setDefaults([
             'choice_list' => new ChoiceList(array_keys($aChoices),array_values($aChoices)),
             'required'    => false,
             'empty_data'  => null,
-            'placeholder' => 'Select A Rule Type',
-           
+            'placeholder' => 'Select A Timeslot'
+            
         ]);
         
     }

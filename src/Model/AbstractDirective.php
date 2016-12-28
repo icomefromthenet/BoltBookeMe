@@ -13,10 +13,11 @@ use Doctrine\DBAL\Query\QueryBuilder;
  */ 
 class AbstractDirective implements QueryInterface
 {
-    
+ 
     protected $qb;
     protected $params;
     protected $sAlias;
+
 
     /**
      * Constructor.

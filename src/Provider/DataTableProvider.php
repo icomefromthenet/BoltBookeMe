@@ -7,6 +7,8 @@ use Silex\ServiceProviderInterface;
 use Bolt\Extension\IComeFromTheNet\BookMe\DataTable\Output\DenseFormat;
 use Bolt\Extension\IComeFromTheNet\BookMe\DataTable\Output\StringOutput;
 
+use Bolt\Extension\IComeFromTheNet\BookMe\Model\Rule\DataTable\RuleDataTable;
+
 /**
  * Bootstrap The DataTable(s) for the Queue Bundle
  * 
@@ -42,7 +44,14 @@ class DataTableProvider implements ServiceProviderInterface
          };
         
         
-         
+        
+        $app['bm.datatable.table.rule'] = $app->share(function($c) use ($aConfig) {
+          
+            $sDataUrl = $c['url_generator']->generate('bookme-rule-search');
+          
+            return new RuleDataTable($c['bm.datatable.output'],$sDataUrl);
+             
+         });
         
 
     }

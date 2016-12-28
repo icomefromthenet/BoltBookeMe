@@ -16,6 +16,7 @@ class ReadOnlyRepository extends Repository implements ObjectRepository
 {
    
    
+   
    /**
      * Creates a new QueryBuilder instance that is prepopulated for this rule.
      *

@@ -7,7 +7,11 @@ use Symfony\Component\Form\FormFactoryInterface;
 use Symfony\Component\EventDispatcher\EventDispatcher;
 use Bolt\Extension\IComeFromTheNet\BookMe\Tests\Base\ExtensionTest;
 use Bolt\Extension\IComeFromTheNet\BookMe\Bus\Middleware\ValidationException;
+use Bolt\Extension\IComeFromTheNet\BookMe\Model\SelectQueryHandler;
+
 use Bolt\Extension\IComeFromTheNet\BookMe\Model\Setup\Field\CalendarYearField;
+use Bolt\Extension\IComeFromTheNet\BookMe\Model\Setup\Field\ActiveTimeslotField;
+use Bolt\Extension\IComeFromTheNet\BookMe\Model\Rule\Field\RuleTypeField;
 
 
 class FilterQueryTest extends ExtensionTest
@@ -213,43 +217,89 @@ class FilterQueryTest extends ExtensionTest
     {
         
         $this->TestCalendarYearField();
+        $this->TestActiveTimeslotField();
+        $this->TestRuleTypeField();
+        
     }
     
     protected function TestCalendarYearField()
     {
         $oApp           = $this->getContainer();
-        $oDispatcher    = $this->getMockBuilder('Symfony\Component\EventDispatcher\EventDispatcherInterface')->getMock();
         $oFactory       = $oApp['form.factory'];
         
         
         $form = $oFactory->create(CalendarYearField::class);
 
         $formData = array(
-            'test' => 'test',
-            'test2' => 'test2',
+          'cal_year' => 2016
         );
-
-
-        //$object = TestObject::fromArray($formData);
         
+        $form->submit($formData);
+
+
+        //$this->assertTrue($form->isSynchronized());
+        //$this->assertEquals($formData, $form->getData());
         
     }
+    
+    protected function TestActiveTimeslotField()
+    {
+        $oApp           = $this->getContainer();
+        $oFactory       = $oApp['form.factory'];
+        
+        
+        $form = $oFactory->create(ActiveTimeslotField::class);
+
+        $formData = array(
+          '1' => 15
+        );
+        
+        $form->submit($formData);
+
+
+        //$this->assertTrue($form->isSynchronized());
+        //$this->assertEquals($formData, $form->getData());
+        
+    }
+  
+    protected function TestRuleTypeField()
+    {
+         $oApp           = $this->getContainer();
+        $oFactory       = $oApp['form.factory'];
+        
+        
+        $form = $oFactory->create(RuleTypeField::class);
+
+        $formData = array(
+          '1' => 2016
+        );
+        
+        $form->submit($formData);
+
+
+        //$this->assertTrue($form->isSynchronized());
+        //$this->assertEquals($formData, $form->getData());
+        
+    }
+    
     
     protected function TestRuleQuery()
     {
         
-        $oApp = $this->getContainer();
-    
-        // Test a filter run 
+        # Fetch Search Query From Container
         
-        $oRuleQuery = $oApp['bm.query.rule'];
+        $oSearchHandler = new SelectQueryHandler($this->getContainer());
+        $oRuleQuery     = $oSearchHandler->getQuery('rule');
         
         $this->assertInstanceOf('Bolt\Extension\IComeFromTheNet\BookMe\Model\Rule\DataTable\RuleSearchQuery',$oRuleQuery);
+        
+        # Do a Dry run and verify filters and directives are applied
         
         $aParams =[
             'oApplyFrom' => new \DateTime(),
             'oEndBefore' => new \DateTime(),    
         ];
+        
         
         $oQueryBuilder     = $oRuleQuery->setParameters($aParams)->build();
         
@@ -259,7 +309,9 @@ class FilterQueryTest extends ExtensionTest
         $this->assertNotEmpty($sRuleFilterQuery);
         $this->assertNotEmpty($aRuleFilterParams);
         
-        
+        # Test timeslot Join Directive
+        $this->assertRegExp('/INNER JOIN bolt_bm_timeslot tslot/', $sRuleFilterQuery);
+        $this->assertRegExp('/INNER JOIN bolt_bm_rule_type rt/', $sRuleFilterQuery);
         
         # Test the start from
         $this->assertRegExp('/r.start_from >=/', $sRuleFilterQuery);
@@ -268,6 +320,21 @@ class FilterQueryTest extends ExtensionTest
         # Test Apply Before
         $this->assertRegExp('/r.end_at <=/', $sRuleFilterQuery);
         $this->assertEquals($aParams['oEndBefore'], $aRuleFilterParams['EndAt']);
+        
+        
+        # Execute a query using handler and test rule mapping 
+        $aParams            = [];
+        $oRuleQuery         = $oSearchHandler->getQuery('rule');
+        
+        $aQueryResultSet = $oSearchHandler->executeQuery($oRuleQuery,$aParams);
+        
+        $this->assertGreaterThanOrEqual(2,count($aQueryResultSet));
+        
+        # Test Dates columns are mapped which means its iterating over mapping rules
+        $oRecord = $aQueryResultSet->get(1);
+
+        $this->assertInstanceOf('\DateTime',$oRecord['start_from']);
+        $this->assertInstanceOf('\DateTime',$oRecord['end_at']);
         
         
         

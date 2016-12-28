@@ -17,7 +17,31 @@ use Bolt\Extension\IComeFromTheNet\BookMe\Model\AbstractRepoQuery;
 class TimeslotQueryBuilder extends AbstractRepoQuery
 {
    
+    /**
+     * Order the query by the slot length putting longer slots at top of result
+     * 
+     * @return $this
+     * @param string $sAlias
+     */ 
+    public function orderBySlotLengthDesc($sAlias)
+    {
+        $this->orderBy($this->getField($sAlias,'timeslot_length'),'DESC');
+        
+        return $this;
+    }
     
+    /**
+     * Hide the inactive slots from this result
+     * 
+     * @return this
+     * @param string    $sAlias
+     */ 
+    public function hideInactiveSlots($sAlias)
+    {
+        $this->andWhere($this->getField($sAlias,'is_active_slot').'= 1');
+        
+        return $this;
+    }
     
 }
 /* End of File */

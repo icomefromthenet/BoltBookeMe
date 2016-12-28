@@ -10,12 +10,13 @@ use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Bolt\Storage\Database\Connection;
+use Bolt\Storage\Query\QueryResultset;
 
 use Bolt\Extension\IComeFromTheNet\BookMe\Model\Rule\RuleException;
 use Bolt\Extension\IComeFromTheNet\BookMe\BookMeException;
 use Bolt\Extension\IComeFromTheNet\BookMe\Bus\Middleware\ValidationException;
 use Bolt\Extension\IComeFromTheNet\BookMe\Model\Rule\Command\CreateRuleCommand;
-
+use Bolt\Extension\IComeFromTheNet\BookMe\Model\SelectQueryHandler;
 
 
 /**
@@ -40,7 +41,7 @@ class RuleController extends CommonController implements ControllerProviderInter
         $oCtr->get('list',[$this,'onRuleList'])
               ->bind('bookme-rule-list');
    
-     $oCtr->get('search',[$this,'onRuleSearch'])
+         $oCtr->get('search',[$this,'onRuleSearch'])
               ->bind('bookme-rule-search');
    
    
@@ -76,9 +77,28 @@ class RuleController extends CommonController implements ControllerProviderInter
         $oDatabase           = $this->getDatabaseAdapter();
         $oNow                = $this->getNow();
         $aConfig             = $this->getExtensionConfig();
-
-
-        return $app['twig']->render('rule_search.twig', ['title' => 'Search Schedule Rules','grouped_form' => $app['bm.form.rule.view'] ], []);
+        $oResult             = new QueryResultset();
+        $oForm               = $this->getForm('rule.builder')->getForm();
+        $aErrors             = [];
+        
+        $oForm->handleRequest($request);
+    
+        if ($oForm->isSubmitted() && $oForm->isValid()) {
+            $aSearch = $oForm->getData();
+            $oHandler = new SelectQueryHandler($this->oContainer);
+            $oResult = $oHandler->executeQuery($oHandler->getQuery('rule'),$aSearch);
+        
+        } else {
+            
+            $aErrors = [];
+            foreach ($oForm->getErrors(true, true) as $formError) {
+                $aErrors[] = $formError->getMessage();
+            }
+            
+        }
+        
+            
+        return $app->json(['results'=> $oResult->get(), 'errors' => $aErrors]);
     }
     
     /**
@@ -94,9 +114,24 @@ class RuleController extends CommonController implements ControllerProviderInter
         $oDatabase           = $this->getDatabaseAdapter();
         $oNow                = $this->getNow();
         $aConfig             = $this->getExtensionConfig();
+        $oDataTable          = $this->getDataTable('rule');
+        $oSearchForm         = $this->getForm('rule.builder')->getForm();
+     
+        //bind request vars to datatable data url
+        $oDataTable->getOptionSet('AjaxOptions')->setRequestParams($request->query->all());
+
+        //incude request params as values to our form
+        $oSearchForm->handleRequest($request);
+       
+        $aData = [
+            'oForm'         => $oSearchForm->createView(),    
+            'title'         => 'Search Schedule Rules',
+            'sConfigString' => $oDataTable->writeConfig(), 
+            'aEvents'       => $oDataTable->getEvents(),
+        ];
 
 
-        return $app['twig']->render('rule_list.twig', ['title' => 'List Schedule Rules'], []);
+        return $app['twig']->render('@BookMe/rule_list.twig', $aData, []);
     }
 
 
@@ -174,7 +209,7 @@ class RuleController extends CommonController implements ControllerProviderInter
        
         
         
-        return $app['twig']->render('rule_page_one.twig', $aTemplateParams, []);
+        return $app['twig']->render('@BookMe/rule_page_one.twig', $aTemplateParams, []);
             
     }
     
@@ -249,7 +284,7 @@ class RuleController extends CommonController implements ControllerProviderInter
          
         ];
        
-        return $app['twig']->render('rule_page_two.twig', $aTemplateParams, []);
+        return $app['twig']->render('@BookMe/rule_page_two.twig', $aTemplateParams, []);
     }
     
      /**
@@ -348,7 +383,7 @@ class RuleController extends CommonController implements ControllerProviderInter
             'bSelectAllMonth'     => $bSelectAllMonth,
         ];
         
-        return $app['twig']->render('rule_page_three.twig', $aTemplateParams, []);
+        return $app['twig']->render('@BookMe/rule_page_three.twig', $aTemplateParams, []);
     }
 
 

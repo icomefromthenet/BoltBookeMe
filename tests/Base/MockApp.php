@@ -14,11 +14,10 @@ class MockApp extends Application
     public function initExtensions()
     {
         
-        $oExtensionBaseDir = new Directory($this['filesystem'],BOOKME_EXTENSION_PATH);
-        $oWebDir           = new Directory($this['filesystem'],BOOKME_EXTENSION_PATH.'/web');
+        $oExtensionBaseDir = new Directory($this['filesystem'],'extensions://'.BOOKME_EXTENSION_PATH);
+        $oWebDir           = new Directory($this['filesystem'],'extensions://'.BOOKME_EXTENSION_PATH.'/web');
         
         $this['extensions']->add(new BookMeExtension(),$oExtensionBaseDir,$oWebDir);
-      
         $this['extensions']->addManagedExtensions();
         $this['extensions']->register($this);
     }

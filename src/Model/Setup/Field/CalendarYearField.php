@@ -23,7 +23,7 @@ class CalendarYearField extends AbstractType
     {
         $aChoices       = [];
         $iCurrentYear   = null;
-    
+      
         $aYears     = $this->oCalYearRepository->findAllCalendarYears();
         
         foreach($aYears as $oYear) {
@@ -32,17 +32,19 @@ class CalendarYearField extends AbstractType
             $aChoices[$iYear] = $iYear; 
             
             if($oYear->getCurrentYearFlag()) {
-                $iCurrentYear = $iYear
+                $iCurrentYear = $iYear;
             }
         }
         
-        
-        $resolver->setDefaults(array(
+        $resolver->setDefaults([
             'choices'     => $aChoices,
             'required'    => true,
-            'empty_data'  => $iCurrentYear
-            )
-        ));
+            'empty_data'  => $iCurrentYear,
+            'choice_label' => function ($value, $key, $index) {
+                return $value.' Year';
+            },
+        ]);
+        
     }
 
     public function getParent()

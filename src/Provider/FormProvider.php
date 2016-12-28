@@ -9,6 +9,10 @@ use Symfony\Component\Form\Extension\Core\Type\TextType;
 use Symfony\Component\Form\Extension\Core\Type\DateType;
 use Symfony\Component\Form\Extension\Core\Type\ChoiceType;
 
+use Bolt\Extension\IComeFromTheNet\BookMe\Model\Setup\Field\CalendarYearField;
+use Bolt\Extension\IComeFromTheNet\BookMe\Model\Setup\Field\ActiveTimeslotField;
+use Bolt\Extension\IComeFromTheNet\BookMe\Model\Rule\Field\RuleTypeField;
+
 
 /**
  * Loads this apps forms.
@@ -43,12 +47,22 @@ class FormProvider implements ServiceProviderInterface
           // Extensions
         
         $app['form.types'] = $app->share($app->extend('form.types', function ($types) use ($app) {
+          
+            $oCalYearRepo  = $app['storage']->getRepository('Bolt\Extension\IComeFromTheNet\BookMe\Model\Setup\CalendarYearEntity');     
+            $oTimeSlotRepo = $app['storage']->getRepository('Bolt\Extension\IComeFromTheNet\BookMe\Model\Setup\TimeslotEntity'); 
+            $oRuleTypeRepo = $app['storage']->getRepository('Bolt\Extension\IComeFromTheNet\BookMe\Model\Rule\RuleTypeEntity'); 
+          
+            $types[CalendarYearField::class]    = new CalendarYearField($oCalYearRepo);
+            $types[ActiveTimeslotField::class]  = new ActiveTimeslotField($oTimeSlotRepo);
+            $types[RuleTypeField::class]        = new RuleTypeField($oRuleTypeRepo);
            
             return $types;
         }));
     
         $app['form.type.extensions'] = $app->share($app->extend('form.type.extensions', function ($extensions) use ($app) {
-            $extensions = [];
+            $extensions = [
+                
+            ];
         
             return $extensions;
         }));
@@ -60,25 +74,12 @@ class FormProvider implements ServiceProviderInterface
         
         $app['bm.form.rule.builder'] = $app->share(function () use ($app) {
    
-            $aRuleRepeatChoice = [
-                'choices'  => [
-                    'Repeat Rules'     => 'r',
-                    'Single Day Rules' => 's',
-                    'Both'             => null,
-                ],    
-                ['group' => 'Basic']
-                
-            ];
-   
-   
-   
-              return $app['form.factory']->createBuilder('form',[])
-                    ->add('sRuleRepeatType', ChoiceType::class, $aRuleRepeatChoice)
-                    ->add('taskb', 'text', ['group' => 'Basic'])
-                    ->add('taskc', 'text', ['group' => 'Basic'])
-                    ->add('taskd', 'text', ['group' => 'Basic'])
-                    ->add('dueDate', 'text', ['group' => 'Basic']);
-            
+            return $app['form.factory']
+                    ->createBuilder('form',[])
+                    ->setMethod('GET')
+                    ->add('iCalYear',CalendarYearField::class, ['label' => 'Calendar Year:'])
+                    ->add('iTimeslotId',ActiveTimeslotField::class, ['label' => 'Timeslots:'])
+                    ->add('iRuleTypeId',RuleTypeField::class, ['label' => 'Rule Type:']);
         });
       
         $app['bm.form.rule.view'] = function () use ($app) {
