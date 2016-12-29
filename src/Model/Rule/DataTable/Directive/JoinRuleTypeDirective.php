@@ -38,7 +38,7 @@ class JoinRuleTypeDirective extends AbstractDirective
             ,$sRuleTypeAlias
             ,$oQuery->expr()->eq($this->getField('rule_type_id',$sDefaultAlias),$this->getField('rule_type_id',$sRuleTypeAlias))
         )
-        ->addSelect($this->getField('rule_code',$sRuleTypeAlias)); 
+        ->addSelect($this->getField('rule_code',$sRuleTypeAlias,'ruleCode')); 
         
     }
     

@@ -41,7 +41,7 @@ class RuleDataTable extends AbstractDataTableManager
         $oAjaxOption->setDataUrl($this->sDataUrl);
         $oAjaxOption->setHttpRequestMethod('GET');
         $oAjaxOption->setResponseDataType('json');
-        $oAjaxOption->setResponseDataIndex('result');
+        $oAjaxOption->setResponseDataIndex('results');
         
         $this->addOptionSet($oAjaxOption);
         
@@ -54,83 +54,121 @@ class RuleDataTable extends AbstractDataTableManager
         
         
         # Setup Column Schema
-       
-        // Job Id
-        // e.g 0b04e273-e130-39d2-8cb6-ff76abc2be45
-        $oJobIdColumn = new Schema\ColumnOption();
-        $oJobIdColumn->setDefaultContent('-')
-                    ->setDataIndex('jobId')
-                    ->setColumnHeading('Job Id')
-                    ->setColumnName('job_id');
+     
+        // RuleId
+        $oRuleIdColumn = new Schema\ColumnOption();
+        $oRuleIdColumn->setDefaultContent('-')
+                    ->setDataIndex('ruleId')
+                    ->setColumnHeading('Rule Id')
+                    ->setColumnName('ruleId');
                    
-        // Retry Count
-        // e.g 6
-        $oRetryCountColumn = new Schema\ColumnOption();
-        $oRetryCountColumn->setDefaultContent('-')
-                            ->setDataIndex('retryCount')
-                            ->setColumnHeading('Retry Count')
-                            ->setColumnName('retry_count');
+        // Rule Name
+        $oRuleNameColumn = new Schema\ColumnOption();
+        $oRuleNameColumn->setDefaultContent('-')
+                            ->setDataIndex('ruleName')
+                            ->setColumnHeading('Retry Name')
+                            ->setColumnName('ruleName');
+        
+        // Rule Description
+        $oRuleDescColumn = new Schema\ColumnOption();
+        $oRuleDescColumn->setDefaultContent('-')
+                        ->setDataIndex('ruleDesc')
+                        ->setColumnHeading('Rule Desc')
+                        ->setColumnName('ruleDesc');
         
         
-        // dateAdded
+        // Start Date 
         // e.g {"date":"2016-10-10 00:00:00","timezone_type":3,"timezone":"UTC"}
-        $oDateAddedColumn = new Schema\ColumnOption();
-        $oDateAddedColumn->setDefaultContent('-');
-        $oDateAddedColumn->setDataIndex('dateAdded.date')
-                            ->setColumnHeading('Date Added')
-                            ->setColumnName('date_added');
+        $oStartDateColumn = new Schema\ColumnOption();
+        $oStartDateColumn->setDefaultContent('-')
+                         ->setDataIndex('startFrom.date')
+                            ->setColumnHeading('Start Date')
+                            ->setColumnName('startFrom');
         
-        // stateId
-        // e.g 2 
-        $oStateIdColumn = new Schema\ColumnOption();
-        $oStateIdColumn->setDefaultContent('-')
-                        ->setDataIndex('stateId')
-                        ->setColumnHeading('Job Status')
-                        ->setColumnName('state_id');
+        // End Date
+        // e.g {"date":"2016-10-10 00:00:00","timezone_type":3,"timezone":"UTC"}
+        $oEndDateColumn = new Schema\ColumnOption();
+        $oEndDateColumn->setDefaultContent('-')
+                        ->setDataIndex('endAt.date')
+                        ->setColumnHeading('End Date')
+                        ->setColumnName('endAt');
         
-        // jobData
+        // Single Day Rule
         // e.g 1
-        $oJobDataColumn = new Schema\ColumnOption();
-        $oJobDataColumn->setDefaultContent('-')
-                        ->setDataIndex('jobData')
-                        ->setColumnHeading('Member Schedule Id')
-                        ->setColumnName('job_data');
+        $oSingleDayColumn = new Schema\ColumnOption();
+        $oSingleDayColumn->setDefaultContent('-')
+                        ->setDataIndex('isSingleDay')
+                        ->setColumnHeading('Singe Day Rule')
+                        ->setColumnName('isSingleDay');
         
-        // lockTimeout
-        // e.g {"date":"2016-10-10 00:00:00","timezone_type":3,"timezone":"UTC"}
-        $oLockoutColumn = new Schema\ColumnOption();
-        $oLockoutColumn->setDefaultContent('-')
-                       ->setDataIndex('lockTimeout.date')
-                       ->setColumnHeading('Lockout Timer')
-                       ->setColumnName('lockout');
+        // Calendar Year
+        $oCalendarYearColumn = new Schema\ColumnOption();
+        $oCalendarYearColumn->setDefaultContent('-')
+                       ->setDataIndex('calYear')
+                       ->setColumnHeading('Calendar Year')
+                       ->setColumnName('calYear')
+                       ->setColumnVisible(false);
         
-        // handle
-        // e.g 55fabc26-47ab-3db2-a5e9-1e80ec4f0621
-        $oHandleColumn = new Schema\ColumnOption();
-        $oHandleColumn->setDefaultContent('-')
-                    ->setDataIndex('handle')
-                    ->setColumnHeading('Worker Handler Id')
-                    ->setColumnName('handle_id')
-                    ->setColumnVisible(false);
+        // Rule Type Id
+        $oRuleTypeColumn = new Schema\ColumnOption();
+        $oRuleTypeColumn->setDefaultContent('-')
+                        ->setDataIndex('ruleTypeId')
+                        ->setColumnHeading('Rule Type Id')
+                        ->setColumnVisible(false)
+                        ->setColumnName('ruleTypeId');
+                        
         
-        // retryLast
-        // e.g {"date":"2016-10-10 00:00:00","timezone_type":3,"timezone":"UTC"}
-        $oLastRetry = new Schema\ColumnOption();
-        $oLastRetry->setDefaultContent('-')
-                    ->setDataIndex('retryLast.date')
-                    ->setColumnHeading('Last Retry Date')
-                     ->setColumnName('last_retry_date');
+        // Rule Type Code   
+        $oRuleTypeCodeColumn = new Schema\ColumnOption();
+        $oRuleTypeCodeColumn->setDefaultContent('-')
+                            ->setDataIndex('ruleCode')
+                            ->setColumnHeading('Rule Type')
+                            ->setColumnName('ruleCode')
+                            ->setColumnVisible(false);
+     
+        $oTimeslotIdColumn = new Schema\ColumnOption();
+        $oTimeslotIdColumn->setDefaultContent('-')
+                          ->setDataIndex('timeslotId')
+                          ->setColumnHeading('Timeslot Id')
+                          ->setColumnName('timeslotId')
+                          ->setColumnVisible(false);
+                          
         
+        $oOpenSlotColumn = new Schema\ColumnOption();
+        $oOpenSlotColumn->setDefaultContent('-')
+                        ->setDataIndex('openSlot')
+                        ->setColumnHeading('Start Time')
+                        ->setColumnName('openSlot');
+        
+        $oCloseSlotColumn = new Schema\ColumnOption();
+        $oCloseSlotColumn->setDefaultContent('-')
+                         ->setDataIndex('closeSlot')
+                         ->setColumnHeading('Finish Time')
+                         ->setColumnName('closeSlot');
+        
+        $oTimeslotLengthColumn = new Schema\ColumnOption();
+        $oTimeslotLengthColumn->setDefaultContent('-')
+                        ->setDataIndex('timeslotLength')
+                        ->setColumnHeading('Timeslot')
+                        ->setColumnName('timeslotLength')
+                        ->setRenderFunc(new Schema\ColumnRenderFunc('bookme.datatable.render.timeslotLength'));
+                        
+       
         
         // Append Columns
-        $this->getSchema()->addColumn('Job ID',$oJobIdColumn);
-        $this->getSchema()->addColumn('Retry Count', $oRetryCountColumn);
-        $this->getSchema()->addColumn('Date Added', $oDateAddedColumn);
-        $this->getSchema()->addColumn('Job Status',$oStateIdColumn);
-        $this->getSchema()->addColumn('Member Schedule Id',$oJobDataColumn);
-        $this->getSchema()->addColumn('Worker Handler Id',$oHandleColumn);
-        $this->getSchema()->addColumn('Date Last Retry',$oLastRetry);
-        $this->getSchema()->addColumn('Lockout Timer',$oLockoutColumn);
+        $this->getSchema()->addColumn('Rule Id',$oRuleIdColumn);
+        $this->getSchema()->addColumn('Rule Name',$oRuleNameColumn);
+        $this->getSchema()->addColumn('Rule Desc',$oRuleDescColumn);
+        $this->getSchema()->addColumn('Start Date',$oStartDateColumn);
+        $this->getSchema()->addColumn('End Date',$oEndDateColumn);
+        $this->getSchema()->addColumn('Single Day', $oSingleDayColumn);
+        $this->getSchema()->addColumn('Calendar Year',$oCalendarYearColumn);
+        $this->getSchema()->addColumn('Rule Type Id', $oRuleTypeColumn);
+        $this->getSchema()->addColumn('Rule Type Code',$oRuleTypeCodeColumn);
+        $this->getSchema()->addColumn('Timeslot Id', $oTimeslotIdColumn);
+        $this->getSchema()->addColumn('Timeslot Length', $oTimeslotLengthColumn);
+        $this->getSchema()->addColumn('Opening Slot', $oOpenSlotColumn);
+        $this->getSchema()->addColumn('Closing Slot', $oCloseSlotColumn);
         
         
         # add init listener event

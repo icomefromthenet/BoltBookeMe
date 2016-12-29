@@ -10,13 +10,14 @@ use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Bolt\Storage\Database\Connection;
-use Bolt\Storage\Query\QueryResultset;
+
 
 use Bolt\Extension\IComeFromTheNet\BookMe\Model\Rule\RuleException;
 use Bolt\Extension\IComeFromTheNet\BookMe\BookMeException;
 use Bolt\Extension\IComeFromTheNet\BookMe\Bus\Middleware\ValidationException;
 use Bolt\Extension\IComeFromTheNet\BookMe\Model\Rule\Command\CreateRuleCommand;
 use Bolt\Extension\IComeFromTheNet\BookMe\Model\SelectQueryHandler;
+use Bolt\Extension\IComeFromTheNet\BookMe\Model\BetterResultSet;
 
 
 /**
@@ -77,7 +78,7 @@ class RuleController extends CommonController implements ControllerProviderInter
         $oDatabase           = $this->getDatabaseAdapter();
         $oNow                = $this->getNow();
         $aConfig             = $this->getExtensionConfig();
-        $oResult             = new QueryResultset();
+        $oResult             = new BetterResultSet();
         $oForm               = $this->getForm('rule.builder')->getForm();
         $aErrors             = [];
         
@@ -97,8 +98,9 @@ class RuleController extends CommonController implements ControllerProviderInter
             
         }
         
+        
             
-        return $app->json(['results'=> $oResult->get(), 'errors' => $aErrors]);
+        return $app->json(['results'=> $oResult->getAll(), 'errors' => $aErrors]);
     }
     
     /**

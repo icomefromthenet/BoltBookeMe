@@ -29,6 +29,20 @@ class SelectQuery implements QueryInterface
         
     }
 
+    /**
+     * Allows the data to be that been read from the database 
+     * to have post process operations run.
+     * 
+     * This run after the doctrine dbal mapping been applied.
+     * 
+     * @return array of data given in first argument
+     * @param array the data read from the databases
+     */ 
+    public function onRowMappingComplete(array $aData)
+    {
+        return $aData;
+    }
+
 
     /**
      * Return type from a factory

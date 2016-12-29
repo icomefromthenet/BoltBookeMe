@@ -6,7 +6,7 @@ var uglify = require('gulp-uglify');
 var concatCss = require('gulp-concat-css');
 var concat = require('gulp-concat');
 
-var aVendors = ['jquery','underscore','jsonform','font-awesome','bootstrap','datatables','datatables-plugins','datatables-bootstrap','metisMenu'];
+var aVendors = ['jquery','underscore','font-awesome','datatables','datatables-plugins','datatables-bootstrap'];
 
 // Compile LESS files from /less into /css
 gulp.task('less', function() {

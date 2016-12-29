@@ -23,24 +23,24 @@ class BaseRuleDirective extends AbstractDirective
         $sAlias         = $this->getAlias();
             
         $oQuery->select(
-            $this->getField('rule_id',$sAlias),
-            $this->getField('rule_type_id',$sAlias),
-            $this->getField('timeslot_id',$sAlias),
-            $this->getField('repeat_minute',$sAlias),
-            $this->getField('repeat_hour',$sAlias),
-            $this->getField('repeat_dayofweek',$sAlias),
-            $this->getField('repeat_dayofmonth',$sAlias),
-            $this->getField('repeat_month',$sAlias),
-            $this->getField('repeat_weekofyear',$sAlias),
-            $this->getField('start_from',$sAlias),
-            $this->getField('end_at',$sAlias),
-            $this->getField('open_slot',$sAlias),
-            $this->getField('close_slot',$sAlias),
-            $this->getField('cal_year',$sAlias),
-            $this->getField('carry_from_id',$sAlias),
-            $this->getField('is_single_day',$sAlias),
-            $this->getField('rule_name',$sAlias),
-            $this->getField('rule_desc',$sAlias)
+            $this->getField('rule_id',$sAlias,'ruleId'),
+            $this->getField('rule_type_id',$sAlias, 'ruleTypeId'),
+            $this->getField('timeslot_id',$sAlias,'timeslotId'),
+            $this->getField('repeat_minute',$sAlias,'repeatMinute'),
+            $this->getField('repeat_hour',$sAlias,'repeatHour'),
+            $this->getField('repeat_dayofweek',$sAlias,'repeatDayOfWeek'),
+            $this->getField('repeat_dayofmonth',$sAlias,'repeatDayOfMonth'),
+            $this->getField('repeat_month',$sAlias,'repeatMonth'),
+            $this->getField('repeat_weekofyear',$sAlias,'repeatWeekOfYear'),
+            $this->getField('start_from',$sAlias,'startFrom'),
+            $this->getField('end_at',$sAlias,'endAt'),
+            $this->getField('open_slot',$sAlias,'openSlot'),
+            $this->getField('close_slot',$sAlias,'closeSlot'),
+            $this->getField('cal_year',$sAlias,'calYear'),
+            $this->getField('carry_from_id',$sAlias,'carryFromId'),
+            $this->getField('is_single_day',$sAlias,'isSingleDay'),
+            $this->getField('rule_name',$sAlias,'ruleName'),
+            $this->getField('rule_desc',$sAlias,'ruleDesc')
         )
         ->from($sRuleTableName,$sAlias);
 

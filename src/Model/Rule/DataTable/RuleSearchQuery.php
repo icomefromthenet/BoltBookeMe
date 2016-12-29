@@ -25,7 +25,7 @@ class RuleSearchQuery extends SelectQuery implements QueryInterface
         
         # Set the ID Column of the resultset
         
-        $this->setRowIdColumnName('rule_id');
+        $this->setRowIdColumnName('ruleId');
         
         # Directives
        
@@ -38,8 +38,9 @@ class RuleSearchQuery extends SelectQuery implements QueryInterface
         
         $this->addFilter(new Filter\ApplyFromFilter($this->getQueryBuilder(),$this->getContentType()));
         $this->addFilter(new Filter\EndBeforeFilter($this->getQueryBuilder(),$this->getContentType()));
-        
-        
+        $this->addFilter(new Filter\TimeslotFilter($this->getQueryBuilder(),$this->getContentType()));
+        $this->addFilter(new Filter\RuleTypeFilter($this->getQueryBuilder(),$this->getContentType()));
+        $this->addFilter(new Filter\CalendarYearFilter($this->getQueryBuilder(),$this->getContentType()));
         
         # Database to PHP Mapping
         
@@ -50,41 +51,40 @@ class RuleSearchQuery extends SelectQuery implements QueryInterface
         $oBoolean   = $this->getTypeFromFactory(TYPE::BOOLEAN);
         
         // Rule Details    
-        $this->addMap('rule_id', $oInteger);
+        $this->addMap('ruleId', $oInteger);
         
-        $this->addMap('repeat_minute',     $oString);
-        $this->addMap('repeat_hour',       $oString);
-        $this->addMap('repeat_dayofweek',  $oString);
-        $this->addMap('repeat_dayofmonth', $oString);
-        $this->addMap('repeat_month',      $oString);
-        $this->addMap('repeat_weekofyear', $oString); 
+        $this->addMap('repeatMinute',     $oString);
+        $this->addMap('repeatHour',       $oString);
+        $this->addMap('repeatDayOfWeek',  $oString);
+        $this->addMap('repeatDayOfMonth', $oString);
+        $this->addMap('repeatMonth',      $oString);
+        $this->addMap('repeatWeekOfYear', $oString); 
         
-        $this->addMap('rule_name',$oString);
-        $this->addMap('rule_desc',$oString);
-        $this->addMap('start_from', $oDateTime);
-        $this->addMap('end_at', $oDateTime);
+        $this->addMap('ruleName',$oString);
+        $this->addMap('ruleDesc',$oString);
+        $this->addMap('startFrom', $oDateTime);
+        $this->addMap('endAt', $oDateTime);
     
-        $this->addMap('is_single_day',$oBoolean);
-        $this->addMap('carry_from_id', $oBoolean);
+        $this->addMap('isSingleDay',$oBoolean);
+        $this->addMap('carryFromId', $oBoolean);
 
-        $this->addMap('cal_year',  $oInteger);
+        $this->addMap('calYear',  $oInteger);
      
         
         // Rule Type Details
-        $this->addMap('rule_type_id', $oInteger);
-        $this->addMap('rule_code',$oString);
+        $this->addMap('ruleTypeId', $oInteger);
+        $this->addMap('ruleCode',$oString);
         
         
         // Timeslot Details
-        $this->addMap('timeslot_id', $oInteger);
-        $this->addMap('open_slot',  $oInteger);
-        $this->addMap('close_slot',  $oInteger);
-        $this->addMap('timeslot_length',  $oInteger);
+        $this->addMap('timeslotId', $oInteger);
+        $this->addMap('openSlot',  $oInteger);
+        $this->addMap('closeSlot',  $oInteger);
+        $this->addMap('timeslotLength',  $oInteger);
         
         
         
     }
-    
     
    
     

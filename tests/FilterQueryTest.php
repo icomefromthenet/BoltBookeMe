@@ -333,8 +333,8 @@ class FilterQueryTest extends ExtensionTest
         # Test Dates columns are mapped which means its iterating over mapping rules
         $oRecord = $aQueryResultSet->get(1);
 
-        $this->assertInstanceOf('\DateTime',$oRecord['start_from']);
-        $this->assertInstanceOf('\DateTime',$oRecord['end_at']);
+        $this->assertInstanceOf('\DateTime',$oRecord['startFrom']);
+        $this->assertInstanceOf('\DateTime',$oRecord['endAt']);
         
         
         

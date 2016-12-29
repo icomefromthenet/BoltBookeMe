@@ -2,7 +2,7 @@
 namespace Bolt\Extension\IComeFromTheNet\BookMe\Model;
 
 use Pimple;
-use Bolt\Storage\Query\QueryResultset;
+
 
 /**
  * Execute a select Query and also has a short cut to pull query from the container.
@@ -40,12 +40,12 @@ class SelectQueryHandler
     /**
      * @param SelectQuery $oSelectQuery
      *
-     * @return QueryResultset
+     * @return BetterResultSet
      */
     public function executeQuery(SelectQuery $oSelectQuery, array $aParams = [])
     {
         
-        $oResult    = new QueryResultset();
+        $oResult    = new BetterResultSet();
         $oPlatofrm  = $oSelectQuery->getQueryBuilder()->getConnection()->getDatabasePlatform();
         $sIdColumn  = $oSelectQuery->getRowIdColumnName();
        
@@ -60,11 +60,18 @@ class SelectQueryHandler
         while($aData = $oSTH->fetch()) {
             
             foreach($aData as $sKey => &$mValue) {
+                
+                // Process Doctrine Mapping
                 if($oSelectQuery->hasMap($sKey)) {
                     $mValue = $oSelectQuery->getMap($sKey)->convertToPHPValue($mValue,$oPlatofrm);
                 }
+                
             }    
             
+            // Execute the post mapping handler
+            $aData = $oSelectQuery->onRowMappingComplete($aData);
+            
+            // Add result to reset set.
             $oResult->add($aData,$aData[$sIdColumn]);
         }
         
