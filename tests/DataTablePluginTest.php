@@ -9,10 +9,14 @@ use Bolt\Extension\IComeFromTheNet\BookMe\DataTable\Plugin\FixedHeaderPlugin;
 use Bolt\Extension\IComeFromTheNet\BookMe\DataTable\Plugin\FixedColumnPlugin;
 use Bolt\Extension\IComeFromTheNet\BookMe\DataTable\Plugin\ScrollerPlugin;
 use Bolt\Extension\IComeFromTheNet\BookMe\DataTable\Plugin\SelectPlugin;
+use Bolt\Extension\IComeFromTheNet\BookMe\DataTable\Plugin\ButtonsPlugin;
+use Bolt\Extension\IComeFromTheNet\BookMe\DataTable\Plugin\Button;
 
 use Bolt\Extension\IComeFromTheNet\BookMe\DataTable\General\AjaxOptions;
 use Bolt\Extension\IComeFromTheNet\BookMe\DataTable\Schema\ColumnRenderFunc;
 use Bolt\Extension\IComeFromTheNet\BookMe\DataTable\Schema\ColumnRenderOption;
+use Bolt\Extension\IComeFromTheNet\BookMe\DataTable\General\KeyboardKeyOption;
+
 
 
 
@@ -249,6 +253,142 @@ class DataTablePluginTest extends ExtensionTest
         
         $this->assertCount(2,$aEvents);
       
+    }
+    
+    
+    public function testKeybordKeyOption()
+    {
+        $oOption = new KeyboardKeyOption();
+        
+        // Test The Basic Key Option
+        
+        $oOption->setKeyboardKey('a');
+        
+        $this->assertEquals([
+           'shiftKey' => false,
+           'altKey'  => false,
+           'ctrlKey' => false,
+           'metaKey' => false,
+           'key'     => 'a',
+            
+        ],$oOption->getStruct());
+        
+        
+        // Test Alt Key
+        
+        $oOption->setRequiresAltKey(true);
+        
+        $this->assertEquals([
+           'shiftKey' => false,
+           'altKey'  => true,
+           'ctrlKey' => false,
+           'metaKey' => false,
+           'key'     => 'a',
+            
+        ],$oOption->getStruct());
+        
+        // Test Shift Key
+        
+        $oOption->setRequiresShiftKey(true);
+        
+        $this->assertEquals([
+           'shiftKey' => true,
+           'altKey'  => true,
+           'ctrlKey' => false,
+           'metaKey' => false,
+           'key'     => 'a',
+            
+        ],$oOption->getStruct());
+        
+        // Test the ctrl key
+        
+        
+        $oOption->setRequiresCtrlKey(true);
+        
+        $this->assertEquals([
+           'shiftKey' => true,
+           'altKey'  => true,
+           'ctrlKey' => true,
+           'metaKey' => false,
+           'key'     => 'a',
+            
+        ],$oOption->getStruct());
+        
+        // Test Meta Key
+        
+        $oOption->setRequiresMetaKey(true);
+        
+        $this->assertEquals([
+           'shiftKey' => true,
+           'altKey'  => true,
+           'ctrlKey' => true,
+           'metaKey' => true,
+           'key'     => 'a',
+            
+        ],$oOption->getStruct());
+        
+    }
+    
+    
+    public function testButtonsPlugin()
+    {
+        // Test Button Callbacks
+        
+        $oActionCallback = new Button\ActionCallback('window.func');
+        
+        $aStruct = $oActionCallback->getStruct();
+       
+        $this->assertEquals('window.func',$aStruct['action']->getValue());
+        
+        
+        // Test Init Callback
+        
+        $oInitCallback = new Button\InitCallback('windows.func');
+        
+        $aStruct = $oInitCallback->getStruct();
+       
+        $this->assertEquals('windows.func',$aStruct['init']->getValue());
+     
+     
+        // Test Standard Button
+        
+        $oButton = new Button\StandardButton();
+        
+        $oButton->setButtonText('Delete');
+        $oButton->setButtonSelector('buttonA');
+        $oButton->setInitialEnableState(false);
+        $oButton->setCSSClassName('newButton');
+       
+        $oKeyOption = new KeyboardKeyOption();
+        $oKeyOption->setKeyboardKey('a');
+        $oButton->setKeyboardKey($oKeyOption);
+        
+        $this->assertEquals([
+            'key' => [
+             'shiftKey' => false,
+             'altKey'  => false,
+             'ctrlKey' => false,
+             'metaKey' => false,
+             'key'     => 'a',    
+            ],
+            'text'     => 'Delete',
+            'name'     => 'buttonA',
+            'enabled'  => false,
+            'className' => 'newButton',
+          
+            
+        ],$oButton->getStruct());
+        
+        
+        $oButton->setActionCallback($oActionCallback);
+        $oButton->setInitCallback($oInitCallback);
+    
+        $aStruct = $oButton->getStruct();
+        
+    
+        $this->assertEquals('windows.func',$aStruct['init']->getValue());
+        $this->assertEquals('window.func',$aStruct['action']->getValue());
+        
     }
     
     

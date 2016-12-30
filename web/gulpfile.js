@@ -103,7 +103,7 @@ gulp.task('vendor-fonts', function() {
 
 gulp.task('copy-bolt-local', function() {
     return gulp.src('dist/**/*')
-          .pipe(gulp.dest('/home/ubuntu/bolt/public/extensions/local/icomefromthenet/bookme/dist'));
+          .pipe(gulp.dest('/home/ubuntu/bolt/extensions/local/icomefromthenet/bookme/web/dist'));
 });
 
 

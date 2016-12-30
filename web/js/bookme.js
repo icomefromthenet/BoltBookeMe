@@ -17,8 +17,21 @@
         }
         
         return data;
+    },
+    ruleDates : function ( data, type, row ) {
+        if(type === "display") {
+          data = data.replace('00:00:00','');
+        }
+       
+        return data;
+    },
+    slotTime : function ( data, type, row ) {
+        if(type === "display") {
+          data = moment().startOf('day').add(data,'minutes').format('hh:mm:ss A');
+        }
+       
+        return data;
     }
-    
     
     
   };

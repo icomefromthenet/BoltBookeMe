@@ -52,6 +52,17 @@ class RuleDataTable extends AbstractDataTableManager
         
         $this->addPlugin($oScrollerPlugin);
         
+          
+        # Setup Select Plugin
+        $oSelectPlugin = new Plugin\SelectPlugin();
+        $oSelectPlugin->setItemRows()
+                      ->setSelectStyleSingleRow()
+                      ->setSelectCssClassName('success');
+        
+        
+        $this->addPlugin($oSelectPlugin);
+        
+        
         
         # Setup Column Schema
      
@@ -83,7 +94,8 @@ class RuleDataTable extends AbstractDataTableManager
         $oStartDateColumn->setDefaultContent('-')
                          ->setDataIndex('startFrom.date')
                             ->setColumnHeading('Start Date')
-                            ->setColumnName('startFrom');
+                            ->setColumnName('startFrom')
+                            ->setRenderFunc(new Schema\ColumnRenderFunc('bookme.datatable.render.ruleDates'));
         
         // End Date
         // e.g {"date":"2016-10-10 00:00:00","timezone_type":3,"timezone":"UTC"}
@@ -91,7 +103,8 @@ class RuleDataTable extends AbstractDataTableManager
         $oEndDateColumn->setDefaultContent('-')
                         ->setDataIndex('endAt.date')
                         ->setColumnHeading('End Date')
-                        ->setColumnName('endAt');
+                        ->setColumnName('endAt')
+                            ->setRenderFunc(new Schema\ColumnRenderFunc('bookme.datatable.render.ruleDates'));
         
         // Single Day Rule
         // e.g 1
@@ -138,13 +151,15 @@ class RuleDataTable extends AbstractDataTableManager
         $oOpenSlotColumn->setDefaultContent('-')
                         ->setDataIndex('openSlot')
                         ->setColumnHeading('Start Time')
-                        ->setColumnName('openSlot');
+                        ->setColumnName('openSlot')
+                        ->setRenderFunc(new Schema\ColumnRenderFunc('bookme.datatable.render.slotTime'));
         
         $oCloseSlotColumn = new Schema\ColumnOption();
         $oCloseSlotColumn->setDefaultContent('-')
                          ->setDataIndex('closeSlot')
                          ->setColumnHeading('Finish Time')
-                         ->setColumnName('closeSlot');
+                         ->setColumnName('closeSlot')
+                         ->setRenderFunc(new Schema\ColumnRenderFunc('bookme.datatable.render.slotTime'));
         
         $oTimeslotLengthColumn = new Schema\ColumnOption();
         $oTimeslotLengthColumn->setDefaultContent('-')
@@ -175,7 +190,7 @@ class RuleDataTable extends AbstractDataTableManager
         
         $this->getEventRegistry()->addEvent(DataTableEventRegistry::CORE_INIT, 'window.func',null);
         
-        
+      
         
     }
 
