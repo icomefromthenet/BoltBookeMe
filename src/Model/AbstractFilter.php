@@ -85,7 +85,7 @@ class AbstractFilter implements QueryInterface
     }
 
 
-    public function getField($sField, $sAlias = '', $sAs = '') 
+    public function getField($sAlias = '', $sField, $sAs = '') 
     {
         if(true === empty($sAlias)) {
             $sAlias = $this->getAlias();

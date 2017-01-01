@@ -36,9 +36,9 @@ class JoinTimeslotDirective extends AbstractDirective
             $sDefaultAlias
             ,$sTimeslotTable
             ,$sTimeslotAlias
-            ,$oQuery->expr()->eq($this->getField('timeslot_id',$sDefaultAlias),$this->getField('timeslot_id',$sTimeslotAlias))
+            ,$oQuery->expr()->eq($this->getField($sDefaultAlias,'timeslot_id'),$this->getField($sTimeslotAlias,'timeslot_id'))
         )
-        ->addSelect($this->getField('timeslot_length',$sTimeslotAlias)); 
+        ->addSelect($this->getField($sTimeslotAlias,'timeslot_length')); 
         
     }
     

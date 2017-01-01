@@ -1,0 +1,42 @@
+{% extends '_base/_page-nav.twig' %}
+
+
+{% block page_nav title %}
+
+{% block page_title __(title) %}
+
+
+{% block page_main %}
+
+
+{% form_theme oForm '@BookMe/_base/_form_bookme_layout.twig' %}
+<div class="row bm-search">
+    <span class="bm-search_heading">Find Holidays</span>
+
+
+    <form id="queueSearchForm" method="get" action="{{ path('bookme-holidayrule-preview')  }}"  class="bm-search_form form-inline">
+        {{ form_widget(oForm) }}
+       
+       
+        <input type="submit" value="Find Schedules" name="submit" class="btn btn-primary bm-search_submit">
+    </form>
+
+</div>
+
+
+<div class="row panel panel-default">
+    <div class="panel-heading">Choose Holidays and Members</div>
+    <div class="panel-body bm-table">
+        
+        
+        
+    </div>
+</div>
+
+
+{% endblock page_main %}
+
+{% block page_script %}
+
+{% endblock page_script %}
+

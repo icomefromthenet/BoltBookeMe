@@ -35,9 +35,12 @@ class RuleController extends CommonController implements ControllerProviderInter
         $oCtr = $app['controllers_factory'];
 
         $oCtr->post('',[$this,'onRulePost']);
-        $oCtr->get('',[$this,'onRuleView'])
-             ->bind('bookme-rule');
         
+        $oCtr->get('',[$this,'onRuleRemoveConfirm'])
+             ->bind('bookme-rule-remove-confirm');
+        
+        $oCtr->post('',[$this,'onRuleRemove'])
+             ->bind('bookme-rule-remove');
 
         $oCtr->get('list',[$this,'onRuleList'])
               ->bind('bookme-rule-list');
@@ -58,12 +61,41 @@ class RuleController extends CommonController implements ControllerProviderInter
         return $oCtr;
     }
     
-    
-    public function onRuleView()
+    /**
+     * Render a delete confirmation page
+     *
+     * @param Application   $app
+     * @param Request       $request
+     * @return Response
+     */
+    public function onRuleRemoveConfirm(Application $app, Request $request)
+    {
+        $oDatabase           = $this->getDatabaseAdapter();
+        $oNow                = $this->getNow();
+        $aConfig             = $this->getExtensionConfig();
+        
+        $aData = [
+            'oForm'         => $oSearchForm->createView(),    
+            'title'         => 'Remove Rule',
+            'subtitle'      => 'Confirm removal of this rule',
+        ];
+        
+        return $app['twig']->render('@BookMe/rule_remove.twig', $aData, []);
+    }
+
+    /**
+     * Delete and rule 
+     *
+     * @param Application   $app
+     * @param Request       $request
+     * @return Response
+     */
+    public function onRuleRemove(Application $app, Request $request)
     {
         
         
     }
+
 
     /**
      * search for a schedule rule 
@@ -74,7 +106,6 @@ class RuleController extends CommonController implements ControllerProviderInter
      */
     public function onRuleSearch(Application $app, Request $request)
     {
-       
         $oDatabase           = $this->getDatabaseAdapter();
         $oNow                = $this->getNow();
         $aConfig             = $this->getExtensionConfig();
@@ -127,7 +158,8 @@ class RuleController extends CommonController implements ControllerProviderInter
        
         $aData = [
             'oForm'         => $oSearchForm->createView(),    
-            'title'         => 'Search Schedule Rules',
+            'title'         => 'Schedule Rules',
+            'subtitle'      => 'Review and Search Schedule Rules',
             'sConfigString' => $oDataTable->writeConfig(), 
             'aEvents'       => $oDataTable->getEvents(),
         ];

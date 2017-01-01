@@ -38,8 +38,8 @@ class JoinMemberDetailDirective extends AbstractDirective
             ,$sMemberTableAlias
             ,$oQuery->expr()->eq($this->getField('member_id',$sDefaultAlias),$this->getField('member_id',$sMemberTableAlias))
         )
-        ->addSelect($this->getField('member_name',$sMemberTableAlias))
-        ->addSelect($this->getField('registered_date',$sMemberTableAlias,'member_registered_date')); 
+        ->addSelect($this->getField($sMemberTableAlias, 'member_name'))
+        ->addSelect($this->getField($sMemberTableAlias, 'registered_date','member_registered_date')); 
         
     }
     

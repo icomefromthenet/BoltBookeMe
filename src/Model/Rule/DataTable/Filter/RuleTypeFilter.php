@@ -19,11 +19,12 @@ class RuleTypeFilter extends AbstractFilter
     {
         $aParams = $this->params;
         $oQuery  = $this->getQueryBuilder();
+        $sAlias  = $this->getAlias();
         
         if(isset($aParams['iRuleTypeId']) && !empty($aParams['iRuleTypeId'])) {
             
             
-            $oQuery->andWhere($oQuery->expr()->eq($this->getField('rule_type_id'),':iRuleTypeId'))
+            $oQuery->andWhere($oQuery->expr()->eq($this->getField($sAlias,'rule_type_id'),':iRuleTypeId'))
                    ->setParameter('iRuleTypeId',$aParams['iRuleTypeId'],Type::INTEGER);
         }
         

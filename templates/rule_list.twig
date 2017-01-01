@@ -4,6 +4,8 @@
 
 {% block page_title __(title) %}
 
+{% block page_subtitle subtitle %}
+
 {% block page_main %}
 
 {% form_theme oForm '@BookMe/_base/_form_bookme_layout.twig' %}
@@ -20,14 +22,17 @@
 </div>
 
 
-<div class="row bm-table">
 
-    <table id="RuleTable" class="table table-striped table-bordered table-hover">
-        
-       
-    </table>
+    <div class="row panel panel-default">
+        <div class="panel-heading"> Schedule Rules</div>
+        <div class="panel-body bm-table">
+             <table id="RuleTable" class="table table-striped table-bordered table-hover">
+            
+           
+            </table>
+        </div>
+    </div>
 
-</div>
 
 {% endblock page_main %}
 

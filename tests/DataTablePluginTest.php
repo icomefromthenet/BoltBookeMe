@@ -9,13 +9,14 @@ use Bolt\Extension\IComeFromTheNet\BookMe\DataTable\Plugin\FixedHeaderPlugin;
 use Bolt\Extension\IComeFromTheNet\BookMe\DataTable\Plugin\FixedColumnPlugin;
 use Bolt\Extension\IComeFromTheNet\BookMe\DataTable\Plugin\ScrollerPlugin;
 use Bolt\Extension\IComeFromTheNet\BookMe\DataTable\Plugin\SelectPlugin;
-use Bolt\Extension\IComeFromTheNet\BookMe\DataTable\Plugin\ButtonsPlugin;
+use Bolt\Extension\IComeFromTheNet\BookMe\DataTable\Plugin\ButtonPlugin;
 use Bolt\Extension\IComeFromTheNet\BookMe\DataTable\Plugin\Button;
 
 use Bolt\Extension\IComeFromTheNet\BookMe\DataTable\General\AjaxOptions;
 use Bolt\Extension\IComeFromTheNet\BookMe\DataTable\Schema\ColumnRenderFunc;
 use Bolt\Extension\IComeFromTheNet\BookMe\DataTable\Schema\ColumnRenderOption;
 use Bolt\Extension\IComeFromTheNet\BookMe\DataTable\General\KeyboardKeyOption;
+use Bolt\Extension\IComeFromTheNet\BookMe\DataTable\General\DomFormatOption;
 
 
 
@@ -389,6 +390,28 @@ class DataTablePluginTest extends ExtensionTest
         $this->assertEquals('windows.func',$aStruct['init']->getValue());
         $this->assertEquals('window.func',$aStruct['action']->getValue());
         
+        
+        // Test Button Collection Plugin
+        
+        $oPlugin = new ButtonPlugin();
+        
+        $oPlugin->addButton('a',$oButton);
+        
+        $this->assertEquals($oButton,$oPlugin->getButton('a'));
+        $this->assertEquals(null,$oPlugin->getButton('aaa'));
+        
+        $aStruct = $oPlugin->getStruct();
+        
+        $this->assertTrue(isset($aStruct['buttons']['buttons'][0]));
+        
+    }
+    
+    
+    public function testDomFormatOption()
+    {
+        $oOption = new DomFormatOption(DomFormatOption::TABLE_INFO_OPTION);
+        
+        $this->assertEquals(['dom' =>    DomFormatOption::TABLE_INFO_OPTION  ],$oOption->getStruct());
     }
     
     

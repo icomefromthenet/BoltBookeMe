@@ -12,6 +12,7 @@ use Bolt\Extension\IComeFromTheNet\BookMe\Model\SelectQueryHandler;
 use Bolt\Extension\IComeFromTheNet\BookMe\Model\Setup\Field\CalendarYearField;
 use Bolt\Extension\IComeFromTheNet\BookMe\Model\Setup\Field\ActiveTimeslotField;
 use Bolt\Extension\IComeFromTheNet\BookMe\Model\Rule\Field\RuleTypeField;
+use Bolt\Extension\IComeFromTheNet\BookMe\Model\Member\Field\ScheduleTeamField;
 
 
 class FilterQueryTest extends ExtensionTest
@@ -210,6 +211,7 @@ class FilterQueryTest extends ExtensionTest
     {
        
        $this->TestRuleQuery();
+       $this->TestMemberQuery();
        
     }
     
@@ -219,6 +221,7 @@ class FilterQueryTest extends ExtensionTest
         $this->TestCalendarYearField();
         $this->TestActiveTimeslotField();
         $this->TestRuleTypeField();
+        $this->TestScheduleTeamField();
         
     }
     
@@ -282,6 +285,25 @@ class FilterQueryTest extends ExtensionTest
         
     }
     
+    protected function TestScheduleTeamField()
+    {
+         $oApp           = $this->getContainer();
+        $oFactory       = $oApp['form.factory'];
+        
+        
+        $form = $oFactory->create(ScheduleTeamField::class);
+
+        $formData = array(
+          '1' => 2016
+        );
+        
+        $form->submit($formData);
+        
+         //$this->assertTrue($form->isSynchronized());
+        //$this->assertEquals($formData, $form->getData());
+
+    }
+    
     
     protected function TestRuleQuery()
     {
@@ -297,7 +319,10 @@ class FilterQueryTest extends ExtensionTest
         
         $aParams =[
             'oApplyFrom' => new \DateTime(),
-            'oEndBefore' => new \DateTime(),    
+            'oEndBefore' => new \DateTime(), 
+            'iRuleTypeId' => 1,
+            'iCalYear' => 2016,
+            'iTimeslotId' => 2,
         ];
         
         
@@ -321,6 +346,21 @@ class FilterQueryTest extends ExtensionTest
         $this->assertRegExp('/r.end_at <=/', $sRuleFilterQuery);
         $this->assertEquals($aParams['oEndBefore'], $aRuleFilterParams['EndAt']);
         
+        # Timeslot 
+        $this->assertRegExp('/r.timeslot_id =/', $sRuleFilterQuery);
+        $this->assertEquals($aParams['iTimeslotId'], $aRuleFilterParams['iTimeslotId']);
+       
+        
+        # Cal Year
+        $this->assertRegExp(preg_quote('/year(r.start_from) =/'), $sRuleFilterQuery);
+        $this->assertEquals($aParams['iCalYear'], $aRuleFilterParams['iCalYear']);
+       
+        
+        # Rule Type
+        $this->assertRegExp('/r.rule_type_id =/', $sRuleFilterQuery);
+        $this->assertEquals($aParams['iRuleTypeId'], $aRuleFilterParams['iRuleTypeId']);
+       
+        
         
         # Execute a query using handler and test rule mapping 
         $aParams            = [];
@@ -340,6 +380,53 @@ class FilterQueryTest extends ExtensionTest
         
     }
     
+    
+    public function TestMemberQuery()
+    {
+        $oSearchHandler = new SelectQueryHandler($this->getContainer());
+        $oQuery     = $oSearchHandler->getQuery('member');
+        
+        $this->assertInstanceOf('Bolt\Extension\IComeFromTheNet\BookMe\Model\Member\DataTable\MemberSearchQuery',$oQuery);
+        
+        # Do a Dry run and verify filters and directives are applied
+        
+        $aParams =[
+            'oCreatedAfter' => new \DateTime(), 
+            'oCreatedBefore'  => new \DateTime(),
+            'iCreatedYear'   => 2016,
+            'iCalYear'   => 2017,
+        ];
+        
+        
+        $oQueryBuilder = $oQuery->setParameters($aParams)->build();
+        
+        $sFilterQuery  = $oQueryBuilder->getSQL();
+        $aFilterParams = $oQueryBuilder->getParameters();
+        
+        $this->assertNotEmpty($sFilterQuery);
+        $this->assertNotEmpty($sFilterQuery);
+   
+        
+        # Created in Cal Year
+        $this->assertRegExp(preg_quote('/year(m.registered_date) =/'), $sFilterQuery);
+        $this->assertEquals($aParams['iCreatedYear'], $aFilterParams['iCreatedYear']);
+    
+        # Created Before
+        $this->assertRegExp(preg_quote('/m.registered_date <=/'), $sFilterQuery);
+        $this->assertEquals($aParams['oCreatedBefore'], $aFilterParams['oCreatedBefore']);
+     
+        
+        # Created After
+        $this->assertRegExp(preg_quote('/m.registered_date >=/'), $sFilterQuery);
+        $this->assertEquals($aParams['oCreatedAfter'], $aFilterParams['oCreatedAfter']);
+        
+        
+        # Last Schedule Cal Year Test
+        $this->assertRegExp(preg_quote('/(curSch.cal_year) = :iCalYear/'), $sFilterQuery);
+        $this->assertEquals($aParams['iCalYear'], $aFilterParams['iCalYear']);
+    
+        
+    }
   
     
 }

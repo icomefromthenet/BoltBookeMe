@@ -19,10 +19,11 @@ class ApplyFromFilter extends AbstractFilter
     {
         $aParams = $this->params;
         $oQuery  = $this->getQueryBuilder();
+        $sAlias  = $this->getAlias();
         
         if(isset($aParams['oApplyFrom']) && is_a($aParams['oApplyFrom'],'\DateTime') ) {
             
-            $oQuery->andWhere($oQuery->expr()->gte($this->getField('start_from'),':StartFrom'))
+            $oQuery->andWhere($oQuery->expr()->gte($this->getField($sAlias,'start_from'),':StartFrom'))
                    ->setParameter('StartFrom',$aParams['oApplyFrom'],Type::DATE);
         }
         

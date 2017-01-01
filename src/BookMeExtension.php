@@ -54,6 +54,8 @@ use Bolt\Extension\IComeFromTheNet\BookMe\Model\Schedule\ScheduleEntity;
 use Bolt\Extension\IComeFromTheNet\BookMe\Model\Schedule\ScheduleRepository;
 use Bolt\Extension\IComeFromTheNet\BookMe\Model\Member\MemberEntity;
 use Bolt\Extension\IComeFromTheNet\BookMe\Model\Member\MemberRepository;
+use Bolt\Extension\IComeFromTheNet\BookMe\Model\Member\TeamEntity;
+use Bolt\Extension\IComeFromTheNet\BookMe\Model\Member\TeamRepository;
 use Bolt\Extension\IComeFromTheNet\BookMe\Model\Customer\CustomerEntity;
 use Bolt\Extension\IComeFromTheNet\BookMe\Model\Customer\CustomerRepository;
 use Bolt\Extension\IComeFromTheNet\BookMe\Model\Setup\CalendarYearEntity;
@@ -198,6 +200,7 @@ class BookMeExtension extends SimpleExtension
             'bm_customer'           => [CustomerEntity::class => CustomerRepository::class],
             'bm_calendar_years'     => [CalendarYearEntity::class => CalendarYearRepository::class],
             'bm_timeslot'           => [TimeslotEntity::class => TimeslotRepository::class],
+            'bm_schedule_team'      => [TeamEntity::class => TeamRepository::class],
         ];
     }
     
@@ -536,6 +539,7 @@ class BookMeExtension extends SimpleExtension
                 'AuditTrail' => true,
                 'Queue'      => true,   
                 'Rollover'   => true,
+                'HolidayRule' => true,
             ]
             ,'queue' => [
                 'worker' => [

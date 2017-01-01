@@ -8,6 +8,9 @@ use Silex\ServiceProviderInterface;
 use Bolt\Extension\IComeFromTheNet\BookMe\Model\Rule\DataTable\RuleSearchQuery;
 use Bolt\Extension\IComeFromTheNet\BookMe\Model\Rule\DataTable\RuleSearchQueryBuilder;
 
+use Bolt\Extension\IComeFromTheNet\BookMe\Model\Member\DataTable\MemberSearchQuery;
+use Bolt\Extension\IComeFromTheNet\BookMe\Model\Member\DataTable\MemberSearchQueryBuilder;
+
 
 /**
  * Bootstrap Filter Query classes found in Bolt\Extension\IComeFromTheNet\BookMe\Model\XXXXX
@@ -48,6 +51,10 @@ class SearchQueryProvider implements ServiceProviderInterface
         };
         
         
+        $app['bm.query.member'] = function($c) use ($aConfig) {
+            
+            return new MemberSearchQuery(new MemberSearchQueryBuilder($c['db'],$aConfig['tablenames']),'m');
+        };
         
 
     }

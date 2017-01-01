@@ -12,7 +12,7 @@ use Symfony\Component\Form\Extension\Core\Type\ChoiceType;
 use Bolt\Extension\IComeFromTheNet\BookMe\Model\Setup\Field\CalendarYearField;
 use Bolt\Extension\IComeFromTheNet\BookMe\Model\Setup\Field\ActiveTimeslotField;
 use Bolt\Extension\IComeFromTheNet\BookMe\Model\Rule\Field\RuleTypeField;
-
+use Bolt\Extension\IComeFromTheNet\BookMe\Model\Member\Field\ScheduleTeamField;
 
 /**
  * Loads this apps forms.
@@ -51,10 +51,12 @@ class FormProvider implements ServiceProviderInterface
             $oCalYearRepo  = $app['storage']->getRepository('Bolt\Extension\IComeFromTheNet\BookMe\Model\Setup\CalendarYearEntity');     
             $oTimeSlotRepo = $app['storage']->getRepository('Bolt\Extension\IComeFromTheNet\BookMe\Model\Setup\TimeslotEntity'); 
             $oRuleTypeRepo = $app['storage']->getRepository('Bolt\Extension\IComeFromTheNet\BookMe\Model\Rule\RuleTypeEntity'); 
+            $oTeamTypeRepo = $app['storage']->getRepository('Bolt\Extension\IComeFromTheNet\BookMe\Model\Member\TeamEntity'); 
           
             $types[CalendarYearField::class]    = new CalendarYearField($oCalYearRepo);
             $types[ActiveTimeslotField::class]  = new ActiveTimeslotField($oTimeSlotRepo);
             $types[RuleTypeField::class]        = new RuleTypeField($oRuleTypeRepo);
+            $types[ScheduleTeamField::class]    = new ScheduleTeamField($oTeamTypeRepo);
            
             return $types;
         }));

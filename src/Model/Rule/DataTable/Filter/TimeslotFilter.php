@@ -19,11 +19,12 @@ class TimeslotFilter extends AbstractFilter
     {
         $aParams = $this->params;
         $oQuery  = $this->getQueryBuilder();
+        $sAlias  = $this->getAlias(); 
         
         if(isset($aParams['iTimeslotId']) && !empty($aParams['iTimeslotId'])) {
             
             
-            $oQuery->andWhere($oQuery->expr()->eq($this->getField('timeslot_id'),':iTimeslotId'))
+            $oQuery->andWhere($oQuery->expr()->eq($this->getField($sAlias,'timeslot_id'),':iTimeslotId'))
                    ->setParameter('iTimeslotId',$aParams['iTimeslotId'],Type::INTEGER);
         }
         

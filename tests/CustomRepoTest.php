@@ -215,6 +215,8 @@ class CustomRepoTest extends ExtensionTest
        $this->TimeslotRepoTest($this->aDatabaseId['ten_minute']);
        
        $this->RuleTypeRepoTest();
+       
+       $this->TeamRepoTest($this->aDatabaseId['team_one']);
     }
     
     protected function RuleRepoTest($iRuleId)
@@ -403,6 +405,29 @@ class CustomRepoTest extends ExtensionTest
         $this->assertTrue($oRuleType->getExclusionFlag() !== null);
         
       
+    }
+    
+    public function TeamRepoTest($iTeamId)
+    {
+        
+        $oNow         = $oDate;
+        $oApp = $this->getContainer();
+    
+        $oRepo = $oApp['storage']->getRepository('Bolt\Extension\IComeFromTheNet\BookMe\Model\Member\TeamEntity');    
+    
+        $this->assertInstanceOf('Bolt\Extension\IComeFromTheNet\BookMe\Model\Member\TeamRepository',$oRepo);
+        
+        $oQueryBuilder = $oRepo->createQueryBuilder();
+        
+        $this->assertInstanceOf('Bolt\Extension\IComeFromTheNet\BookMe\Model\Member\TeamQueryBuilder',$oQueryBuilder);
+        
+        $oTeam = $oRepo->find($iTeamId);
+    
+        $this->assertEquals($iTeamId,$oTeam->getTeamId());
+        $this->assertNotEmpty($oTeam->getRegisteredDate());
+        $this->assertNotEmpty($oTeam->getTeamName());
+      
+        
     }
 }
 /* end of file */

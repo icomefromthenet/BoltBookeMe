@@ -24,13 +24,13 @@ class BaseRolloverDirective extends AbstractDirective
          
 
         $oQuery->select(
-            $this->getField('schedule_id',$sAlias),
-            $this->getField('timeslot_id',$sAlias),
-            $this->getField('membership_id',$sAlias),
-            $this->getField('calendar_year',$sAlias),
-            $this->getField('is_carryover',$sAlias),
-            $this->getField('registered_date',$sAlias),
-            $this->getField('close_date',$sAlias)
+            $this->getField($sAlias, 'schedule_id'),
+            $this->getField($sAlias, 'timeslot_id'),
+            $this->getField($sAlias, 'membership_id'),
+            $this->getField($sAlias, 'calendar_year'),
+            $this->getField($sAlias, 'is_carryover'),
+            $this->getField($sAlias, 'registered_date'),
+            $this->getField($sAlias, 'close_date')
             
         )
         ->from($sRuleTableName,$sAlias);

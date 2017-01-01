@@ -36,9 +36,16 @@
     
   };
   
-
-
   
+  bookme.datatable.button = {
+    onRuleDelete : function ( e, dt, node, config ) {
+        alert( 'Activated!' );
+        //this.disable(); // disable button
+    } 
+    
+  };
+  
+
   
 
 // Expose the getFormValue method to the global object

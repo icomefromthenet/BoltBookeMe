@@ -24,6 +24,9 @@ class StandardButton implements DataTableOptionInterface
    {
        $this->aConfigStruct = [
          'enabled' => true,
+         'action'  => null,
+         'init'    => null,
+         'key'     => null,
        ];
        
    }
@@ -122,6 +125,18 @@ class StandardButton implements DataTableOptionInterface
       return $this;
    }
 
+   /**
+    * Set the HTML Title attribute on the button 
+    * 
+    * @return this
+    * @param string  $sTitle
+    */
+   public function setHtmlAttributeTitle($sTitle)
+   {
+      $this->aConfigStruct['titleAttr'] = $sTitle;
+      
+      return $this;
+   }
 
   
    /**
