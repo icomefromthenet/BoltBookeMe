@@ -58,6 +58,36 @@ class ButtonPlugin implements DataTableOptionInterface
       return null;
    }
    
+   /**
+    * Remove button if found.
+    * 
+    * @return this
+    * @param string  $sIndex
+    */ 
+   public function removeButton($sIndex)
+   {
+      if(isset($this->aConfigStruct['buttons'][$sIndex])) {
+        unset($this->aConfigStruct['buttons'][$sIndex]); 
+      }
+      
+      return $this;
+      
+   }
+   
+   /**
+    * Clear all buttons.
+    * 
+    * @return this
+    */ 
+   public function clearButtons()
+   {
+      unset($this->aConfigStruct['buttons']);
+      
+      $this->aConfigStruct['buttons'] = [];
+      
+      return $this;
+   }
+   
    
    /**
     * Return the config struct

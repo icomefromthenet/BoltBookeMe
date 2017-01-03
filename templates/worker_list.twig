@@ -1,0 +1,45 @@
+{% extends '_base/_page-nav.twig' %}
+
+{% block page_nav title %}
+
+{% block page_title __(title) %}
+
+{% block page_subtitle subtitle %}
+
+{% block page_main %}
+
+{% form_theme oForm '@BookMe/_base/_form_bookme_layout.twig' %}
+<div class="row bm-search">
+  <span class="bm-search_heading">Quick Search</span>
+
+  <form id="queueSearchForm" method="get" action="{{ path('bookme-worker-list')  }}"  class="bm-search_form form-inline">
+      {{ form_widget(oForm) }}
+     
+     
+      <input type="submit" value="Search" name="submit" class="btn btn-primary bm-search_submit">
+  </form>
+
+</div>
+
+
+
+    <div class="row panel panel-default">
+        <div class="panel-heading"> Schedule Rules</div>
+        <div class="panel-body bm-table">
+             <table id="RuleTable" class="table table-striped table-bordered table-hover">
+            
+           
+            </table>
+        </div>
+    </div>
+
+
+{% endblock page_main %}
+
+
+{% block page_script %}
+
+    {% include '@BookMe/_base/_datatable.twig' with {'sConfigString' : sConfigString , 'sElement' : '#RuleTable' , 'aEvents' : aEvents } %}
+
+{% endblock page_script %}
+

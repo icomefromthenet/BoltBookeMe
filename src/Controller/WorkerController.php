@@ -9,6 +9,9 @@ use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Bolt\Storage\Database\Connection;
+use Bolt\Extension\IComeFromTheNet\BookMe\Model\SelectQueryHandler;
+use Bolt\Extension\IComeFromTheNet\BookMe\Model\BetterResultSet;
+use Bolt\Extension\IComeFromTheNet\BookMe\Model\Member\MemberEntity;
 
 /**
  * The list and managment of schedule members and teams
@@ -17,6 +20,30 @@ use Bolt\Storage\Database\Connection;
  */
 class WorkerController extends CommonController implements ControllerProviderInterface
 {
+    
+    /**
+     * Convert Member Id in url to entity
+     * 
+     */ 
+    public function convertMemberIdToEntity($member, Request $request)
+    {
+        $app = $this->oContainer;
+        
+        if(true === empty($member)) {
+            $app->abort(404, 'Member param must not be empty', []);
+        }
+        
+        $oRepo = $this->getRepository('Bolt\Extension\IComeFromTheNet\BookMe\Model\Member\MemberEntity');
+    
+        $oMember = $oRepo->find($member);
+        
+        if(true === empty($oMember)) {
+            $app->abort(404,'Member at ID '.$member. ' has not been found');
+        }
+        
+        return $oMember;
+        
+    }
     
 
     public function connect(Application $app)
@@ -27,11 +54,62 @@ class WorkerController extends CommonController implements ControllerProviderInt
         $oCtr->get('',[$this,'onWorkerList'])
               ->bind('bookme-worker-list');
    
-   
+        $oCtr->get('search',[$this,'onWorkerSearch'])
+             ->bind('bookme-worker-search');
       
-    
+        // Edit Existing Schedule Member (bookme-worker-view-basic)
+      
+        $oCtr->get('edit/{member}/basic',[$this,'onWorkerDetailsEdit'])
+              ->convert('member', [$this,'convertMemberIdToEntity'])
+              ->bind('bookme-worker-view-basic');    
+        
+        $oCtr->post('edit/{member}/basic',[$this,'onWorkerDetailsSaveExisting'])
+              ->bind('bookme-worker-edit-basic');
+        
+        
+        // Create New Schedule Member (bookme-worker-create-basic)
+        $oCtr->get('edit/basic',[$this,'onWorkerDetailsCreate'])
+              ->bind('bookme-worker-create-basic');
+              
+        $oCtr->post('edit/basic',[$this,'onWorkerDetailsSaveNew'])
+              ->bind('bookme-worker-create-basic');
+              
+          
+            
         
         return $oCtr;
+    }
+    
+    public function onWorkerSearch(Application $app, Request $request)
+    {
+        $oDatabase           = $this->getDatabaseAdapter();
+        $oNow                = $this->getNow();
+        $aConfig             = $this->getExtensionConfig();
+        $oResult             = new BetterResultSet();
+        $oForm               = $this->getForm('member.builder')->getForm();
+        $aErrors             = [];
+        
+        $oForm->handleRequest($request);
+    
+        if ($oForm->isSubmitted() && $oForm->isValid()) {
+            $aSearch = $oForm->getData();
+            $oHandler = new SelectQueryHandler($this->oContainer);
+            $oResult = $oHandler->executeQuery($oHandler->getQuery('member'),$aSearch);
+        
+        } else {
+            
+            $aErrors = [];
+            foreach ($oForm->getErrors(true, true) as $formError) {
+                $aErrors[] = $formError->getMessage();
+            }
+            
+        }
+        
+        
+            
+        return $app->json(['results'=> $oResult->getAll(), 'errors' => $aErrors]);
+        
+        
     }
 
     /**
@@ -44,12 +122,117 @@ class WorkerController extends CommonController implements ControllerProviderInt
     public function onWorkerList(Application $app, Request $request)
     {
        
-       $oDatabase = $this->getDatabaseAdapter();
-       $oNow      = $this->getNow();
+       $oDatabase           = $this->getDatabaseAdapter();
+        $oNow                = $this->getNow();
+        $aConfig             = $this->getExtensionConfig();
+        $oDataTable          = $this->getDataTable('member');
+        $oSearchForm         = $this->getForm('member.builder')->getForm();
+     
+        //bind request vars to datatable data url
+        $oDataTable->getOptionSet('AjaxOptions')->setRequestParams($request->query->all());
+
+        //incude request params as values to our form
+        $oSearchForm->handleRequest($request);
        
-      
-       
-       //return $app['twig']->render('admin_calendar.twig', ['title' => 'Setup Calendars','calendars' => $aCalendarYearList, 'nextYear' => $iNextCalendarYear, 'timeslots' => $aTimeslots], []);
+        $aData = [
+            'oForm'         => $oSearchForm->createView(),    
+            'title'         => 'Member List',
+            'subtitle'      => 'Review Schedule Members',
+            'sConfigString' => $oDataTable->writeConfig(), 
+            'aEvents'       => $oDataTable->getEvents(),
+        ];
+
+
+        return $app['twig']->render('@BookMe/worker_list.twig', $aData, []);
+    }
+
+
+    /**
+     * Load a page that allow create a new of a Members Basic Details, which
+     * minimum info required for a new member
+     *
+     * @param Application   $app
+     * @param Request       $request
+     * @return Response
+     */
+    public function onWorkerDetailsCreate(Application $app, Request $request)
+    {
+        $oWorkerForm    = $this->getForm('memberdetails.builder')->getForm();
+        $oMenu          = $this->getMenu('member');
+        
+        
+        
+        
+        // Build Data for View
+        
+        
+        $aData = [
+          'title' => '',
+          'subtitle' => '',
+          'sMenuHeading' => 'Member Actions',
+          'oMenubuilder' => $oMenu,
+          'oForm' => $oWorkerForm->createView(),
+            
+        ];
+        
+        
+         return $app['twig']->render('@BookMe/worker_basic_details.twig', $aData, []);
+        
+    }
+
+    /**
+     * Load a page that allow editing of a Members Basic Details
+     *
+     * @param Application   $app
+     * @param Request       $request
+     * @param MemberEntity  $oMember
+     * @return Response
+     */
+    public function onWorkerDetailsEdit(Application $app, Request $request, MemberEntity $member)
+    {
+        
+        $oWorkerForm    = $this->getForm('memberdetails.builder')->getForm();
+        $oMenu          = $this->getMenu('member');
+        $oMember        = $member;
+        
+        
+        // Bind Details into the form
+        
+        $oWorkerForm->setData([
+            'iMembershipId' =>     $oMember->getMemberId(),
+            
+        ]);
+        
+        
+        // Build Data for View
+        $this->bindMenuParameters($oMenu,['member' => $oMember->getMembershipId()]);
+        
+        $aData = [
+          'title'            => 'Member Edit',
+          'subtitle'         => 'Edit Membes Basic Details',
+          'sMenuHeading'     => 'Member Actions',
+          'oMenubuilder'     => $oMenu,
+          'oForm'            => $oWorkerForm->createView(),
+          'oMember'          => $oMember,
+        ];
+        
+        
+        return $app['twig']->render('@BookMe/worker_basic_details.twig', $aData, []);
+        
+    }
+    
+    
+    public function onWorkerDetailsSaveNew(Application $app, Request $request)
+    { 
+        
+        
+    }
+
+
+    public function onWorkerDetailsSaveExisting(Application $app, Request $request, MemberEntity $oMember)
+    { 
+        
+        
     }
 
     

@@ -4,11 +4,10 @@ namespace Bolt\Extension\IComeFromTheNet\BookMe\Provider;
 use DateTime;
 use Silex\Application;
 use Silex\ServiceProviderInterface;
-
 use Symfony\Component\Form\Extension\Core\Type\TextType;
 use Symfony\Component\Form\Extension\Core\Type\DateType;
 use Symfony\Component\Form\Extension\Core\Type\ChoiceType;
-
+use Symfony\Component\Form\Extension\Core\Type\HiddenType;
 use Bolt\Extension\IComeFromTheNet\BookMe\Model\Setup\Field\CalendarYearField;
 use Bolt\Extension\IComeFromTheNet\BookMe\Model\Setup\Field\ActiveTimeslotField;
 use Bolt\Extension\IComeFromTheNet\BookMe\Model\Rule\Field\RuleTypeField;
@@ -93,13 +92,35 @@ class FormProvider implements ServiceProviderInterface
         
         $app['bm.form.member.builder'] = $app->share(function () use ($app) {
    
-              return $app['form.factory']->createBuilder('form',[])
-                    ->add('task', 'text', ['group' => 'Basic'])
-                    ->add('dueDate', 'text', ['group' => 'Basic']);
+            return $app['form.factory']
+                    ->createBuilder('form',[])
+                    ->setMethod('GET')
+                    ->add('iCalYear'        ,CalendarYearField::class,  ['label' => 'Schedule in Calendar Year'])
+                    ->add('iCreatedYear'    ,CalendarYearField::class,  ['label' => 'Created in Calendar Year', 'required' => false ,'placeholder' => 'Select a Year', 'empty_data' => null ])
+                    ->add('oCreatedAfter'   ,DateType::class,           ['label' => 'Created After', 'required' => false ,'placeholder' => ['year' => 'Year', 'month' => 'Month', 'day' => 'Day']])   
+                    ->add('oCreatedBefore'  ,DateType::class,           ['label' => 'Created Before','required' => false ,'placeholder' => ['year' => 'Year', 'month' => 'Month', 'day' => 'Day']])     
+                    ->add('iScheduleTeam'   ,ScheduleTeamField::class,  ['label' => 'Belongs in Team','required'=> false]);
             
         });
       
         $app['bm.form.member.view'] = function () use ($app) {
+            return $app['bm.form.member.builder']->getForm()->createView();
+        };
+        
+        //----------------------------------------------------------------------
+        # Members Details Form
+        
+        $app['bm.form.memberdetails.builder'] = $app->share(function () use ($app) {
+   
+            return $app['form.factory']
+                    ->createBuilder('form',[])
+                    ->setMethod('GET')
+                    ->add('iMembershipId',HiddenType::class,[]);
+            
+            
+        });
+      
+        $app['bm.form.memberdetails.view'] = function () use ($app) {
             return $app['bm.form.member.builder']->getForm()->createView();
         };
         

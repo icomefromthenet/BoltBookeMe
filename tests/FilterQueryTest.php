@@ -395,6 +395,7 @@ class FilterQueryTest extends ExtensionTest
             'oCreatedBefore'  => new \DateTime(),
             'iCreatedYear'   => 2016,
             'iCalYear'   => 2017,
+            'iScheduleTeam' => 2,
         ];
         
         
@@ -422,8 +423,12 @@ class FilterQueryTest extends ExtensionTest
         
         
         # Last Schedule Cal Year Test
-        $this->assertRegExp(preg_quote('/(curSch.cal_year) = :iCalYear/'), $sFilterQuery);
+        $this->assertRegExp(preg_quote('/(curSch.calendar_year = :iCalYear)/'), $sFilterQuery);
         $this->assertEquals($aParams['iCalYear'], $aFilterParams['iCalYear']);
+    
+        # Member in team
+        $this->assertRegExp(preg_quote('/st.team_id = :iScheduleTeam/'), $sFilterQuery);
+        $this->assertEquals($aParams['iScheduleTeam'], $aFilterParams['iScheduleTeam']);
     
         
     }

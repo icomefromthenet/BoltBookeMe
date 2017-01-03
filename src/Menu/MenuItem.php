@@ -30,6 +30,10 @@ class MenuItem implements ValidationRulesInterface, MenuOrderInterface
     protected $oQueryParams;
     protected $iOrder;
     
+    /**
+     * @var text | null unkown until url generator is un
+     */ 
+    protected $sFullUrl;
     
     
     public function __construct($sMenuName, $sSubText, $sRouteName, $sIconName, $iOrder = null ,array $aQueryParams = [])
@@ -73,6 +77,15 @@ class MenuItem implements ValidationRulesInterface, MenuOrderInterface
         return $this->iOrder;
     }
     
+    public function getFullUrl()
+    {
+        return $this->sFullUrl;
+    }
+    
+    public function setFullUrl($sUrl)
+    {
+        $this->sFullUrl = $sUrl;
+    }
     
     //---------------------------------------------------------
     // Validation Interface
@@ -111,6 +124,15 @@ class MenuItem implements ValidationRulesInterface, MenuOrderInterface
         
     }
     
+    
+    //--------------------------------------------------------------------------
+    # Visitor 
+    
+    
+    public function visit(MenuVisitorInterface $oVisitor)
+    {
+        $oVisitor->visitMenuItem($this);
+    }
     
 }
 /* End Class */

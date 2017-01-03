@@ -8,6 +8,7 @@ use Bolt\Extension\IComeFromTheNet\BookMe\DataTable\Output\DenseFormat;
 use Bolt\Extension\IComeFromTheNet\BookMe\DataTable\Output\StringOutput;
 
 use Bolt\Extension\IComeFromTheNet\BookMe\Model\Rule\DataTable\RuleDataTable;
+use Bolt\Extension\IComeFromTheNet\BookMe\Model\Member\DataTable\MemberDataTable;
 
 /**
  * Bootstrap The DataTable(s) for the Queue Bundle
@@ -53,6 +54,13 @@ class DataTableProvider implements ServiceProviderInterface
              
          });
         
+        $app['bm.datatable.table.member'] = $app->share(function($c) use ($aConfig) {
+          
+            $sDataUrl = $c['url_generator']->generate('bookme-worker-search');
+          
+            return new MemberDataTable($c['bm.datatable.output'],$sDataUrl);
+             
+         });
 
     }
 

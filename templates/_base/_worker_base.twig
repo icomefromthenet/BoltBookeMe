@@ -1,0 +1,38 @@
+{#
+    This file used by view files that edit a schedule member. 
+    
+    Have the following options
+    
+    1. title - Page Title
+    2. subtitle - Page subtitle
+    3. oMenubuilder - Menu Builder Class
+    4. sMenuHeading - Text heading for the menu
+    5. bNewMember   - If worker exists 
+    
+    Child templates will need to override the block worker_action.
+
+#}
+
+{% extends '_base/_page-nav.twig' %}
+
+{% block page_nav title %}
+
+{% block page_title __(title) %}
+
+{% block page_subtitle __(subtitle) %}
+
+
+
+{% block page_main %}
+<div class="row">
+    {% include '@BookMe/_base/_menu.twig' with { 'menubuilder' : oMenubuilder, 'sMenuHeading' : __(sMenuHeading) } %}
+</div>
+
+{#  This worker_action block exists to be overriden in the child templates #} 
+
+{% block worker_action %}
+
+{% endblock worker_action %}
+
+
+{% endblock page_main %}

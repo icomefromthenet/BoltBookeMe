@@ -45,7 +45,7 @@ abstract class AbstractDataTableManager implements DataTableConfigInterface
     * @return void
     */ 
     abstract public function setDefaults();
-    
+
     
     //------------------------------------------
     # API to add Config Options
@@ -110,6 +110,7 @@ abstract class AbstractDataTableManager implements DataTableConfigInterface
             }
        }
     }
+    
     
     /**
      * Return the column schema

@@ -69,6 +69,23 @@ class MenuException extends BookMeException
     }
     
     
+    /**
+     * @param item
+     * @param mixed $oException
+     *
+     * @return static
+     */
+    public static function routeFailedToGenerate($item, $oException = null)
+    {
+        $exception = new static($oException->getMessage(),0,$oException);
+        
+        $exception->oItem = $item;
+        $exception->aErrors  = [];
+        
+        return $exception;
+    }
+    
+    
     public function getMenuItem()
     {
         return $this->oItem;

@@ -25,7 +25,7 @@
                 <ul class="bm-menu_linklist">
                      {% for oMenuItem in aMenuItems %}
                         <li class="bm-menu_linkitem">
-                            {{ m.link(oMenuItem.getMenuItemName(),url(oMenuItem.getRouteName()), 'bm-menu_link',  oMenuItem.getQueryParams().all() ) }}
+                            {{ m.link(oMenuItem.getMenuItemName(),oMenuItem.getFullUrl(), 'bm-menu_link',  oMenuItem.getQueryParams().all() ) }}
                             <br />
                             <small class="menu_linkdesc"> {{ oMenuItem.getSubText() }}</small>
                         

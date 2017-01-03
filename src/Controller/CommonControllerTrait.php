@@ -3,6 +3,7 @@ namespace Bolt\Extension\IComeFromTheNet\BookMe\Controller;
 
 use Silex\Application;
 use Bolt\Extension\ExtensionInterface;
+use Bolt\Extension\IComeFromTheNet\BookMe\Menu\MenuBuilder;
 
 /**
  * Common controller
@@ -99,5 +100,39 @@ trait  CommonControllerTrait
     {
         return $this->oContainer->offsetGet('bm.form.'.$sFormKey);
     }
+    
+    /**
+     * Loads a repositry
+     * 
+     * @return and Entity
+     */ 
+    protected function getRepository($sEntityClass)
+    {
+        return $this->oContainer
+                    ->offsetGet('storage')
+                    ->getRepository($sEntityClass);
+        
+    }
+    
+    /**
+     * Bind menu params to a given MenuBuilder.
+     * 
+     * @return void
+     * @param   Bolt\Extension\IComeFromTheNet\BookMe\Menu\MenuBuilder $oMenuBuilder
+     * @param   array                                                  $aParams   
+     * 
+     */ 
+    protected function bindMenuParameters(MenuBuilder $oMenuBuilder, array $aParams)
+    {
+        $oGenerator = $this->oContainer->offsetGet('url_generator');
+        
+        
+        $oVisitor = new \Bolt\Extension\IComeFromTheNet\BookMe\Menu\UrlVisitor($oGenerator, $aParams);
+        
+        
+        $oMenuBuilder->visit($oVisitor);
+        
+    }
+    
 }
 /* End of Calendar Admin Controller */

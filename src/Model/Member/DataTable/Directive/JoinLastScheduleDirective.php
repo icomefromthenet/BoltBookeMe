@@ -33,11 +33,11 @@ class JoinLastScheduleDirective extends AbstractDirective
         
         // Join table
     
-        $oQuery->innerJoin(
+        $oQuery->leftJoin(
             $sDefaultAlias
-            ,"( SELECT dd.membership_id, dd.schedule_id, dd.cal_year, dd.is_carryover, dd.close_date
+            ,"( SELECT dd.membership_id, dd.schedule_id, dd.calendar_year, dd.is_carryover, dd.close_date
                 FROM $sScheduleTable dd
-                WHERE dd.cal_year = (SELECT MAX(kk.cal_year) 
+                WHERE dd.calendar_year = (SELECT MAX(kk.calendar_year) 
                                     FROM $sScheduleTable kk 
                                     WHERE dd.membership_id = kk.membership_id)
              )"
@@ -46,7 +46,7 @@ class JoinLastScheduleDirective extends AbstractDirective
         )
         ->addSelect(
             $this->getField($sScheduleAlias, 'schedule_id'  , 'scheduleId'),
-            $this->getField($sScheduleAlias, 'cal_year'     , 'calYear'),
+            $this->getField($sScheduleAlias, 'calendar_year', 'calYear'),
             $this->getField($sScheduleAlias, 'is_carryover' , 'isCarryover'),
             $this->getField($sScheduleAlias, 'close_date'   , 'closeDate')
             

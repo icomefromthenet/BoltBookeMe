@@ -7,6 +7,8 @@ use Bolt\Extension\IComeFromTheNet\BookMe\Menu\MenuItem;
 use Bolt\Extension\IComeFromTheNet\BookMe\Menu\MenuGroup;
 use Bolt\Extension\IComeFromTheNet\BookMe\Menu\MenuException;
 use Bolt\Extension\IComeFromTheNet\BookMe\Menu\MenuBuilder;
+use Bolt\Extension\IComeFromTheNet\BookMe\Menu\MenuVisitorInterface;
+use Bolt\Extension\IComeFromTheNet\BookMe\Menu\UrlVisitor;
 
 
 class MenuTest extends ExtensionTest
@@ -35,9 +37,11 @@ class MenuTest extends ExtensionTest
         $sIconName    = 'NameOne.png';
         $iOrder       = 100;
         $aQueryParams = ['a' =>'b'];
+        $sFullUrl     = 'http://wwww.fullurl.com.au';
         
         $oItem = new MenuItem($sMenuName, $sSubText, $sRouteName, $sIconName, $iOrder, $aQueryParams);
      
+        $oItem->setFullUrl($sFullUrl);
       
         $this->assertEquals($sMenuName,$oItem->getMenuItemName());
         $this->assertEquals($sSubText, $oItem->getSubText());
@@ -45,6 +49,7 @@ class MenuTest extends ExtensionTest
         $this->assertEquals($sIconName, $oItem->getIconName());
         $this->assertEquals($iOrder, $oItem->getOrder());
         $this->assertEquals($aQueryParams, $oItem->getQueryParams()->all());
+        $this->assertEquals($sFullUrl, $oItem->getFullUrl());
        
         # Test Validation Data
         
@@ -284,5 +289,82 @@ class MenuTest extends ExtensionTest
     }
     
    
+    public function testMenuGroupVisitor()
+    {
+        $oMenuGroupOne  = new MenuGroup('Group 1', 1);
+        $oGroupOneItemA = new MenuItem('Group One Menu Item A','Example Menu Item', 'bla', 'bla.png', 2, []);
+        
+        $oMenuGroupOne->addMenuItem($oGroupOneItemA); 
+         
+        $oMockVisitor   = $this->getMockBuilder('Bolt\Extension\IComeFromTheNet\BookMe\Menu\MenuVisitorInterface')
+                                ->setMethods(['visitMenuGroup','visitMenuItem'])
+                                ->getMock();
+                                
+        
+        $oMockVisitor->expects($this->once())
+                     ->method('visitMenuGroup');
+                     
+         $oMockVisitor->expects($this->once())
+                     ->method('visitMenuItem');
+                     
+        $oMenuGroupOne->visit($oMockVisitor);             
+    }
+    
+    
+    public function testUrlGenerator()
+    {
+       
+        $aParams        = ['a'=> 1,'c' => 3];
+        $sRoute         = 'route/{id}';
+        $oGroupOneItemA = new MenuItem('Group One Menu Item A','An item of Subtext', $sRoute, 'bla.png', 2, []);
+        
+        $oUrlGenerator = $this->getMockBuilder('Symfony\Component\Routing\Generator\UrlGeneratorInterface')
+                                ->disableOriginalConstructor()
+                                ->setMethods(['generate','setContext','getContext'])
+                                ->getMock();
+        
+        $oUrlGenerator->expects($this->once())
+                      ->method('generate')
+                      ->with($this->equalTo($sRoute), $this->equalTo($aParams));
+        
+        
+        $oVisitor  = new UrlVisitor($oUrlGenerator,$aParams);
+        
+        $oVisitor->visitMenuItem($oGroupOneItemA);
+        
+        
+        
+    }
+   
+    public function testUrlGeneratorWithException()
+    {
+        
+         $aParams        = ['a'=> 1,'c' => 3];
+        $sRoute         = 'route/{id}';
+        $oGroupOneItemA = new MenuItem('Group One Menu Item A','An item of Subtext', $sRoute, 'bla.png', 2, []);
+        
+        $oUrlGenerator = $this->getMockBuilder('Symfony\Component\Routing\Generator\UrlGeneratorInterface')
+                                ->disableOriginalConstructor()
+                                ->setMethods(['generate','setContext','getContext'])
+                                ->getMock();
+        
+        $oUrlGenerator->expects($this->once())
+                      ->method('generate')
+                      ->will($this->throwException(new \Exception('aaaaaa')));
+        
+        
+        $oVisitor  = new UrlVisitor($oUrlGenerator,$aParams);
+        
+        try {
+            
+            $oVisitor->visitMenuItem($oGroupOneItemA);
+            
+            $this->assertTrue(false,'Exception was not thrown when expected');
+        } catch (MenuException $e) {
+            
+            $this->assertTrue(true);
+        }
+        
+    }
 }
 /* end of file */

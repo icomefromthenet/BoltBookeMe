@@ -1,5 +1,5 @@
 <?php
-namespace  Bolt\Extension\IComeFromTheNet\BookMe\Model\Rule\DataTable;
+namespace  Bolt\Extension\IComeFromTheNet\BookMe\Model\Member\DataTable;
 
 use Bolt\Extension\IComeFromTheNet\BookMe\DataTable\AbstractDataTableManager;
 use Bolt\Extension\IComeFromTheNet\BookMe\DataTable\General;
@@ -9,12 +9,12 @@ use Bolt\Extension\IComeFromTheNet\BookMe\DataTable\DataTableEventRegistry;
 use Bolt\Extension\IComeFromTheNet\BookMe\DataTable\Output\Output;
 
 /**
- * DataTable for the Schedule Rules
+ * DataTable for the Members
  * 
  * @author Lewis Dyer <getintouch@icomefromthenet.com>
  * @since 1.0
  */
-class RuleDataTable extends AbstractDataTableManager
+class MemberDataTable extends AbstractDataTableManager
 {
     
     protected $sDataUrl;
@@ -87,124 +87,62 @@ class RuleDataTable extends AbstractDataTableManager
         
         # Setup Column Schema
      
-        // RuleId
-        $oRuleIdColumn = new Schema\ColumnOption();
-        $oRuleIdColumn->setDefaultContent('-')
-                    ->setDataIndex('ruleId')
-                    ->setColumnHeading('Rule Id')
-                    ->setColumnName('ruleId');
-                   
-        // Rule Name
-        $oRuleNameColumn = new Schema\ColumnOption();
-        $oRuleNameColumn->setDefaultContent('-')
-                            ->setDataIndex('ruleName')
-                            ->setColumnHeading('Retry Name')
-                            ->setColumnName('ruleName');
+        // membershipId
+        $oMemberIdColumn = new Schema\ColumnOption();
+        $oMemberIdColumn->setDefaultContent('-')
+                    ->setDataIndex('membershipId')
+                    ->setColumnHeading('Membership Id')
+                    ->setColumnName('membershipId');
         
-        // Rule Description
-        $oRuleDescColumn = new Schema\ColumnOption();
-        $oRuleDescColumn->setDefaultContent('-')
-                        ->setDataIndex('ruleDesc')
-                        ->setColumnHeading('Rule Desc')
-                        ->setColumnName('ruleDesc');
+        // registeredDate
+        $oMemberRegisterColumn = new Schema\ColumnOption();
+        $oMemberRegisterColumn->setDefaultContent('-')
+                    ->setDataIndex('registeredDate.date')
+                    ->setColumnHeading('Registration Date')
+                    ->setColumnName('registeredDate');
         
+        $oMemberNameColumn = new Schema\ColumnOption();
+        $oMemberNameColumn->setDefaultContent('-')
+                    ->setDataIndex('memberName')
+                    ->setColumnHeading('Member Name')
+                    ->setColumnName('memberName');
+                    
+        $oScheduleIdColumn = new Schema\ColumnOption();
+        $oScheduleIdColumn->setDefaultContent('-')
+                    ->setDataIndex('scheduleId')
+                    ->setColumnHeading('Schedule Id')
+                    ->setColumnVisible(false)
+                    ->setColumnName('scheduleId');
         
-        // Start Date 
-        // e.g {"date":"2016-10-10 00:00:00","timezone_type":3,"timezone":"UTC"}
-        $oStartDateColumn = new Schema\ColumnOption();
-        $oStartDateColumn->setDefaultContent('-')
-                         ->setDataIndex('startFrom.date')
-                            ->setColumnHeading('Start Date')
-                            ->setColumnName('startFrom')
-                            ->setRenderFunc(new Schema\ColumnRenderFunc('bookme.datatable.render.ruleDates'));
+        $oCalYearColumn = new Schema\ColumnOption();
+        $oCalYearColumn->setDefaultContent('-')
+                    ->setDataIndex('calYear')
+                    ->setColumnHeading('Current Schedule Year')
+                    ->setColumnName('calYear');
         
-        // End Date
-        // e.g {"date":"2016-10-10 00:00:00","timezone_type":3,"timezone":"UTC"}
-        $oEndDateColumn = new Schema\ColumnOption();
-        $oEndDateColumn->setDefaultContent('-')
-                        ->setDataIndex('endAt.date')
-                        ->setColumnHeading('End Date')
-                        ->setColumnName('endAt')
-                            ->setRenderFunc(new Schema\ColumnRenderFunc('bookme.datatable.render.ruleDates'));
+        $oCarryOverColumn = new Schema\ColumnOption();
+        $oCarryOverColumn->setDefaultContent('-')
+                    ->setDataIndex('isCarryover')
+                    ->setColumnHeading('Rollover Next Schedule')
+                    ->setColumnVisible(false)
+                    ->setColumnName('isCarryover');
         
-        // Single Day Rule
-        // e.g 1
-        $oSingleDayColumn = new Schema\ColumnOption();
-        $oSingleDayColumn->setDefaultContent('-')
-                        ->setDataIndex('isSingleDay')
-                        ->setColumnHeading('Singe Day Rule')
-                        ->setColumnName('isSingleDay');
+        $oScheduleStopDateColumn = new Schema\ColumnOption(); 
+        $oScheduleStopDateColumn->setDefaultContent('-')
+                    ->setDataIndex('closeDate.date')
+                    ->setColumnHeading('Schedule Stop Date')
+                    ->setColumnName('closeDate');
         
-        // Calendar Year
-        $oCalendarYearColumn = new Schema\ColumnOption();
-        $oCalendarYearColumn->setDefaultContent('-')
-                       ->setDataIndex('calYear')
-                       ->setColumnHeading('Calendar Year')
-                       ->setColumnName('calYear')
-                       ->setColumnVisible(false);
-        
-        // Rule Type Id
-        $oRuleTypeColumn = new Schema\ColumnOption();
-        $oRuleTypeColumn->setDefaultContent('-')
-                        ->setDataIndex('ruleTypeId')
-                        ->setColumnHeading('Rule Type Id')
-                        ->setColumnVisible(false)
-                        ->setColumnName('ruleTypeId');
-                        
-        
-        // Rule Type Code   
-        $oRuleTypeCodeColumn = new Schema\ColumnOption();
-        $oRuleTypeCodeColumn->setDefaultContent('-')
-                            ->setDataIndex('ruleCode')
-                            ->setColumnHeading('Rule Type')
-                            ->setColumnName('ruleCode')
-                            ->setColumnVisible(false);
-     
-        $oTimeslotIdColumn = new Schema\ColumnOption();
-        $oTimeslotIdColumn->setDefaultContent('-')
-                          ->setDataIndex('timeslotId')
-                          ->setColumnHeading('Timeslot Id')
-                          ->setColumnName('timeslotId')
-                          ->setColumnVisible(false);
-                          
-        
-        $oOpenSlotColumn = new Schema\ColumnOption();
-        $oOpenSlotColumn->setDefaultContent('-')
-                        ->setDataIndex('openSlot')
-                        ->setColumnHeading('Start Time')
-                        ->setColumnName('openSlot')
-                        ->setRenderFunc(new Schema\ColumnRenderFunc('bookme.datatable.render.slotTime'));
-        
-        $oCloseSlotColumn = new Schema\ColumnOption();
-        $oCloseSlotColumn->setDefaultContent('-')
-                         ->setDataIndex('closeSlot')
-                         ->setColumnHeading('Finish Time')
-                         ->setColumnName('closeSlot')
-                         ->setRenderFunc(new Schema\ColumnRenderFunc('bookme.datatable.render.slotTime'));
-        
-        $oTimeslotLengthColumn = new Schema\ColumnOption();
-        $oTimeslotLengthColumn->setDefaultContent('-')
-                        ->setDataIndex('timeslotLength')
-                        ->setColumnHeading('Timeslot')
-                        ->setColumnName('timeslotLength')
-                        ->setRenderFunc(new Schema\ColumnRenderFunc('bookme.datatable.render.timeslotLength'));
-                        
-       
         
         // Append Columns
-        $this->getSchema()->addColumn('Rule Id',$oRuleIdColumn);
-        $this->getSchema()->addColumn('Rule Name',$oRuleNameColumn);
-        $this->getSchema()->addColumn('Rule Desc',$oRuleDescColumn);
-        $this->getSchema()->addColumn('Start Date',$oStartDateColumn);
-        $this->getSchema()->addColumn('End Date',$oEndDateColumn);
-        $this->getSchema()->addColumn('Single Day', $oSingleDayColumn);
-        $this->getSchema()->addColumn('Calendar Year',$oCalendarYearColumn);
-        $this->getSchema()->addColumn('Rule Type Id', $oRuleTypeColumn);
-        $this->getSchema()->addColumn('Rule Type Code',$oRuleTypeCodeColumn);
-        $this->getSchema()->addColumn('Timeslot Id', $oTimeslotIdColumn);
-        $this->getSchema()->addColumn('Timeslot Length', $oTimeslotLengthColumn);
-        $this->getSchema()->addColumn('Opening Slot', $oOpenSlotColumn);
-        $this->getSchema()->addColumn('Closing Slot', $oCloseSlotColumn);
+    
+        $this->getSchema()->addColumn('membershipId',$oMemberIdColumn);
+        $this->getSchema()->addColumn('registeredDate',$oMemberRegisterColumn);
+        $this->getSchema()->addColumn('memberName', $oMemberNameColumn);
+        $this->getSchema()->addColumn('scheduleId', $oScheduleIdColumn);
+        $this->getSchema()->addColumn('calYear',$oCalYearColumn);
+        $this->getSchema()->addColumn('isCarryover', $oCarryOverColumn);
+        $this->getSchema()->addColumn('closeDate', $oScheduleStopDateColumn);
         
         
         # add init listener event

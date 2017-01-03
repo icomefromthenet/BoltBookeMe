@@ -37,7 +37,7 @@ class MemberSearchQuery extends SelectQuery implements QueryInterface
         
         $this->addFilter(new Filter\CreatedFilter($this->getQueryBuilder(),$this->getContentType()));
         $this->addFilter(new Filter\ScheduleCalendarYearFilter($this->getQueryBuilder(), $this->getContentType()));
-        
+        $this->addFilter(new Filter\ScheduleTeamFilter($this->getQueryBuilder(), $this->getContentType()));
         
         # Database to PHP Mapping
         
@@ -50,7 +50,7 @@ class MemberSearchQuery extends SelectQuery implements QueryInterface
         // Member Details  
         
         $this->addMap('membershipId', $oInteger);
-        $this->addMap('registeredDate', $oDate);
+        $this->addMap('registeredDate', $oDateTime);
         $this->addMap('memberName', $oString);
         
         // Last Schedule Details
@@ -58,7 +58,7 @@ class MemberSearchQuery extends SelectQuery implements QueryInterface
         $this->addMap('scheduleId',$oInteger);
         $this->addMap('calYear',$oInteger);
         $this->addMap('isCarryover',$oBoolean);
-        $this->addMap('closeDate',$oDate);
+        $this->addMap('closeDate',$oDateTime);
         
         
         

@@ -101,6 +101,25 @@ class MenuGroup implements ValidationRulesInterface, MenuOrderInterface, \Iterat
     {
         return new \ArrayIterator($this->aMenuItems);
     }
+    
+    
+    
+    
+    //--------------------------------------------------------------------------
+    # Visitor
+    
+    
+    public function visit(MenuVisitorInterface $oVisitor)
+    {
+        $oVisitor->visitMenuGroup($this);
+        
+        foreach($this->aMenuItems as $oItem) {
+            $oItem->visit($oVisitor);
+        }
+        
+    }
+    
+    
 }
 /* End Class */
 

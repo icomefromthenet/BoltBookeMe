@@ -8,7 +8,7 @@ use Bolt\Extension\IComeFromTheNet\BookMe\Menu\MenuItem;
 use Bolt\Extension\IComeFromTheNet\BookMe\Menu\MenuGroup;
 use Bolt\Extension\IComeFromTheNet\BookMe\Menu\MenuException;
 use Bolt\Extension\IComeFromTheNet\BookMe\Menu\MenuBuilder;
-
+use Bolt\Extension\IComeFromTheNet\BookMe\Menu\Custom\MemberActionMenu;
 /**
  * Bootstrap The Apps Extendable menus.
  * 
@@ -84,14 +84,49 @@ class MenuProvider implements ServiceProviderInterface
             //----------------------------------------------------------------
             // Schedule
            
-            
+            $oScheduleGroup   = new MenuGroup('Schedules',20, 'bm-menu_linklistheading-rule');
+            $oListMembersItem = new MenuItem('List Members','View workers who have schedules', 'bookme-worker-list', 'bla.png', 10, []);
+          
         
+    
+        
+            $oScheduleGroup->addMenuItem($oListMembersItem);
+    
+            $oMenuBuilder->addMenuGroup($oScheduleGroup);
+      
+            //------------------------------------------------------------------
+            // Done forget to validate 
+            
+            $oMenuBuilder->validate();
             
             return $oMenuBuilder;
         });
         
         
+        $app['bm.menu.member'] = $app->share(function($c) use ($aConfig) {
+            
+            $oMenuBuilder = new MenuBuilder();
+                
+                
+            $oMemberGroup  = new MenuGroup('Member Options', 100, 'bm-menu_linklistheading-setup');
+            $oMemberDetails = new MenuItem('Member Basic Details','Change Member Basic Details', 'bookme-worker-view-basic', 'bla.png', 10, []);  
+            
+    
+            // -----------------------------------------------------------------
+            // Do Links
+         
+         
+            $oMemberGroup->addMenuItem($oMemberDetails);
+            $oMenuBuilder->addMenuGroup($oMemberGroup);
+            
+            //------------------------------------------------------------------
+            // Done forget to validate 
+            
+            $oMenuBuilder->validate();
+            
+            return $oMenuBuilder;
         
+        });
 
     }
 

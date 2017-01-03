@@ -1,7 +1,7 @@
 <?php
 namespace Bolt\Extension\IComeFromTheNet\BookMe\Menu;
 
-use Bolt\Application;
+
 
 class MenuBuilder implements \IteratorAggregate
 {
@@ -12,9 +12,24 @@ class MenuBuilder implements \IteratorAggregate
     protected $aMenuItems;
     
     
+    /**
+     * This function can be used by children to do their menu configs
+     * 
+     * This is called by the constructor of this class.
+     * 
+     * @return void
+     */ 
+    protected function setDefaults()
+    {
+        
+        
+    }
+    
     public function __construct()
     {
         $this->aMenuItems = [];
+        
+        $this->setDefaults();
         
     }
     
@@ -74,6 +89,19 @@ class MenuBuilder implements \IteratorAggregate
     public function getIterator()
     {
         return new \ArrayIterator($this->aMenuItems);
+    }
+    
+    
+    
+    //-----------------------------------------------------------------------
+    # Visitor
+    
+    public function visit(MenuVisitorInterface $oVisitor)
+    {
+        foreach($this->aMenuItems as $oItem){
+            $oItem->visit($oVisitor);
+        }
+        
     }
     
 }
