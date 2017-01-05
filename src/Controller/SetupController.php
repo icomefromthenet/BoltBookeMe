@@ -82,7 +82,7 @@ class SetupController extends CommonController implements ControllerProviderInte
        }
     
        
-       return $app['twig']->render('setup_calendar.twig', ['title' => 'Setup Calendars','calendars' => $aCalendarYearList, 'nextYear' => $iNextCalendarYear], []);
+       return $app['twig']->render('@BookMe/setup_calendar.twig', ['title' => 'Setup Calendars','calendars' => $aCalendarYearList, 'nextYear' => $iNextCalendarYear], []);
     }
 
     
@@ -153,7 +153,7 @@ class SetupController extends CommonController implements ControllerProviderInte
                                            ORDER BY timeslot_length DESC");
      
        
-       return $app['twig']->render('setup_timeslot.twig', ['title' => 'Setup Timeslot','timeslots' => $aTimeslots], []);
+       return $app['twig']->render('@BookMe/setup_timeslot.twig', ['title' => 'Setup Timeslot','timeslots' => $aTimeslots], []);
     }
 
     /**

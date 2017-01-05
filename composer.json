@@ -7,7 +7,7 @@
         "reservations"
     ],
     "require": {
-        "bolt/bolt": "^3.0"
+        "bolt/bolt": "^3.2"
         
     },
     "require-dev": {

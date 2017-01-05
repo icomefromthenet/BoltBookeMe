@@ -50,6 +50,8 @@ class UrlVisitor implements MenuVisitorInterface
             
             $sUrl = $this->oUrlGenerator->generate($sRouteName,$this->aParams);
         
+            $oItem->setFullUrl($sUrl);
+        
             
         } catch (\Exception $e) {
             throw MenuException::routeFailedToGenerate($oItem,$e);

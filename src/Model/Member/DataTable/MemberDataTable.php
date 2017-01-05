@@ -67,22 +67,33 @@ class MemberDataTable extends AbstractDataTableManager
         
         $oButtonButton = new Plugin\ButtonPlugin();
         
-        $oDeleteRuleButton = new Plugin\Button\StandardButton();
-        $oDeleteRuleButton->setButtonText('<i class="fa fa-file-excel-o"></i> Remove Rule')
-                          ->setInitialEnableState(true)
-                          ->setActionCallback(new Plugin\Button\ActionCallback('bookme.datatable.button.onRuleDelete'))
-                          ->setCSSClassName('btn-danger')
-                          ->setHtmlAttributeTitle('Remove Rule');
         
-        $oButtonButton->addButton('delete',$oDeleteRuleButton);
+        $oAddMember = new Plugin\Button\StandardButton();
+        $oAddMember->setButtonText('<i class="fa fa-address-card"></i> Add Member')
+                          ->setInitialEnableState(true)
+                          ->setActionCallback(new Plugin\Button\ActionCallback('bookme.datatable.button.onMemberAdd'))
+                          ->setCSSClassName('btn-primary')
+                          ->setHtmlAttributeTitle('Add New Member');
+        
+        $oButtonButton->addButton('add',$oAddMember);
+        
+        $oEditMember  = new Plugin\Button\StandardButton();
+        $oEditMember->setButtonText('<i class="fa fa-pencil-square"></i> Edit Member')
+                    ->setInitialEnableState(true)
+                    ->setActionCallback(new Plugin\Button\ActionCallback('bookme.datatable.button.onMemberEdit'))
+                    ->setCSSClassName('btn-default')
+                    ->setHtmlAttributeTitle('Edit Member');
+        
+        
+        $oButtonButton->addButton('edit',$oEditMember);
         
         $this->addPlugin($oButtonButton);
         
         
         # Setup Table Dom Formatting
-        $oDomFormat = new General\DomFormatOption('<Bf<t>ip>');
+        //$oDomFormat = new General\DomFormatOption('<Bf<t>ip>');
         
-        $this->addOptionSet($oDomFormat);
+        //$this->addOptionSet($oDomFormat);
         
         
         # Setup Column Schema

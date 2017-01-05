@@ -41,7 +41,13 @@
     onRuleDelete : function ( e, dt, node, config ) {
         alert( 'Activated!' );
         //this.disable(); // disable button
-    } 
+    },
+    onMemberAdd :  function ( e, dt, node, config ) {
+      
+    },
+    onMemberEdit :  function ( e, dt, node, config ) {
+      console.log(dt.row().data());
+    }
     
   };
   

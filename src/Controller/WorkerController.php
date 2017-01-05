@@ -191,7 +191,7 @@ class WorkerController extends CommonController implements ControllerProviderInt
     public function onWorkerDetailsEdit(Application $app, Request $request, MemberEntity $member)
     {
         
-        $oWorkerForm    = $this->getForm('memberdetails.builder')->getForm();
+        $oWorkerForm    = $this->getForm('memberdetails.builder');
         $oMenu          = $this->getMenu('member');
         $oMember        = $member;
         
@@ -199,7 +199,8 @@ class WorkerController extends CommonController implements ControllerProviderInt
         // Bind Details into the form
         
         $oWorkerForm->setData([
-            'iMembershipId' =>     $oMember->getMemberId(),
+            'iMembershipId' => $oMember->getMemberId(),
+            'sMemberName'   => $oMember->getMemberName(),
             
         ]);
         
@@ -212,7 +213,7 @@ class WorkerController extends CommonController implements ControllerProviderInt
           'subtitle'         => 'Edit Membes Basic Details',
           'sMenuHeading'     => 'Member Actions',
           'oMenubuilder'     => $oMenu,
-          'oForm'            => $oWorkerForm->createView(),
+          'oForm'            => $oWorkerForm->getForm()->createView(),
           'oMember'          => $oMember,
         ];
         

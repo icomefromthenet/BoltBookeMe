@@ -11,7 +11,49 @@
 #}
 
 <script type="text/javascript">
+
 console.log({{ sConfigString|raw }});
+
+
+
+
+(function( $, window, document, undefined ) {
+ 
+ var DataTable = $.fn.dataTable;
+ 
+ /* Set the defaults for DataTables initialisation */
+$.extend( true, DataTable.defaults, {
+	dom:
+		"<'row'<'col-sm-6'B><'col-sm-6'f>>" +
+		"<'row'<'col-sm-12'tr>>" +
+		"<'row'<'col-sm-5'i><'col-sm-7'p>>",
+	renderer: 'bootstrap'
+} );
+ 
+ $.extend( true, DataTable.Buttons.defaults, {
+ 	dom: {
+ 		container: {
+ 			className: 'dt-buttons btn-group'
+ 		},
+ 		button: {
+ 			className: 'btn'
+ 		},
+ 		collection: {
+ 			tag: 'ul',
+ 			className: 'dt-button-collection dropdown-menu',
+ 			button: {
+ 				tag: 'li',
+ 				className: 'dt-button'
+ 			},
+ 			buttonLiner: {
+ 				tag: 'a',
+ 				className: ''
+ 			}
+ 		}
+ 	}
+ } );
+
+})($,window,document,undefined);
 
 jQuery('{{ sElement|raw }}').DataTable( {{ sConfigString|raw }});
 </script>

@@ -46,13 +46,15 @@ class HomeController extends CommonController implements ControllerProviderInter
     public function onHomeGet(Application $app, Request $request)
     {
        
-       $oDatabase = $this->getDatabaseAdapter();
-       $oNow      = $this->getNow();
-       
-      
-       $oMenuBuilder  = $this->getMenu('home');
-       
-       
+        $oDatabase = $this->getDatabaseAdapter();
+        $oNow      = $this->getNow();
+        
+        
+        $oMenuBuilder  = $this->getMenu('home');
+        
+        
+        $this->bindMenuParameters($oMenuBuilder,[]);
+        
         return $app['twig']->render('@BookMe/home.twig', ['title' => 'BookMe Home','menubuilder'=> $oMenuBuilder], []);
     }
 

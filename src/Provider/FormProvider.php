@@ -13,6 +13,9 @@ use Bolt\Extension\IComeFromTheNet\BookMe\Model\Setup\Field\ActiveTimeslotField;
 use Bolt\Extension\IComeFromTheNet\BookMe\Model\Rule\Field\RuleTypeField;
 use Bolt\Extension\IComeFromTheNet\BookMe\Model\Member\Field\ScheduleTeamField;
 
+use Symfony\Component\Validator\Constraints\Length;
+use Symfony\Component\Validator\Constraints\NotBlank;
+
 /**
  * Loads this apps forms.
  *
@@ -115,8 +118,8 @@ class FormProvider implements ServiceProviderInterface
             return $app['form.factory']
                     ->createBuilder('form',[])
                     ->setMethod('GET')
-                    ->add('iMembershipId',HiddenType::class,[]);
-            
+                    ->add('iMembershipId', HiddenType::class, [])
+                    ->add('sMemberName', TextType::class, ['label' => 'Member Name' ,'constraints' => [new NotBlank(),new Length(array('min' => 3))],'required' => true]);
             
         });
       
