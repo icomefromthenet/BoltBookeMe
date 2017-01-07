@@ -31,21 +31,70 @@ class QueryWithRoutesTest extends ExtensionTest
    public function testRouteGenerate()
    {
        $oDatabase = $this->getDatabaseAdapter();
+       $aData     = [];
+       $sLink     = 'http//www.google.com';
+       $sRel      = 'test-route-a';
        
        $oRoute = $this->getMockBuilder('Bolt\Extension\IComeFromTheNet\BookMe\Model\ActionRoute')
-                      ->setConstructorArgs(['test-route-a'])
+                      ->setConstructorArgs([$sRel])
                       ->setMethods(['getUrl'])
                       ->getMock();
        
        $oUrlGenerator = $this->getMockBuilder('Symfony\Component\Routing\Generator\UrlGeneratorInterface')
-                             ->setMethods('generate')
+                             ->setMethods(['generate','setContext','getContext'])
                              ->getMock();
        
-       $oQuery =  $this->getMockBuilder('Bolt\Extension\IComeFromTheNet\BookMe\Model\SelectQueryWithRoutes')
-                      ->setConstructorArgs([new QueryBuilder($oDatabase),'a',$oUrlGenerator])
-                      ->setMethods(['doRowMappingComplete'])
-                      ->getMock();
+       $oQuery =  new SelectQueryWithRoutes(new QueryBuilder($oDatabase),'a',$oUrlGenerator); 
+                      
+                      
+       $oQuery->addActionRoute($oRoute);
+      
+      
+       $oRoute->expects($this->once())
+                    ->method('getUrl')
+                    ->with($this->equalTo($oUrlGenerator),$this->isType('array'))
+                    ->will($this->returnValue($sLink));   
+      
+      
+      $aData = $oQuery->onRowMappingComplete($aData);
        
+      $this->assertTrue(isset($aData['links']));
+      $this->assertEquals($sRel,$aData['links'][0]['rel']);
+      $this->assertEquals($sLink,$aData['links'][0]['link']);
+      
+      
+      
+   }
+   
+   
+   public function testHasAndRemoveRouteMethods()
+   {
+      $oDatabase = $this->getDatabaseAdapter();
+      $aData     = [];
+      $sLink     = 'http//www.google.com';
+      $sRel      = 'test-route-a';
+      
+      $oRoute = $this->getMockBuilder('Bolt\Extension\IComeFromTheNet\BookMe\Model\ActionRoute')
+                   ->setConstructorArgs([$sRel])
+                   ->setMethods(['getUrl'])
+                   ->getMock();
+      
+      $oUrlGenerator = $this->getMockBuilder('Symfony\Component\Routing\Generator\UrlGeneratorInterface')
+                          ->setMethods(['generate','setContext','getContext'])
+                          ->getMock();
+      
+      $oQuery =  new SelectQueryWithRoutes(new QueryBuilder($oDatabase),'a',$oUrlGenerator); 
+                   
+                   
+      $oQuery->addActionRoute($oRoute);
+      
+      $this->assertTrue($oQuery->hasActionRoute($sRel));
+      
+      $oQuery->removeActionRoute($sRel);
+      
+      $this->assertFalse($oQuery->hasActionRoute($sRel));
+      
+      
    }
    
 }

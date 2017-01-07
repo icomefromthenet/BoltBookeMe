@@ -15,7 +15,7 @@ use Bolt\Extension\IComeFromTheNet\BookMe\BookMeException;
  * @author Lewis Dyer <getintouch@icomefromthenet.com>
  * @since 1.0.0
  */ 
-abstract class SelectQueryWithRoutes implements QueryInterface
+class SelectQueryWithRoutes extends SelectQuery
 {
     
     /**
@@ -28,35 +28,7 @@ abstract class SelectQueryWithRoutes implements QueryInterface
      */ 
     protected $aRawRoutes;
    
-    /**
-     * Adds a new route.
-     * 
-     * @return this
-     * @param ActionRoute
-     */ 
-    protected function addActionRoute(ActionRoute $sRouteName)
-    {
-        $this->aRawRoutes[$sRouteName->getRouteName()] = $sRouteName;
-        
-        return $this;
-    }
     
-    /**
-     * Remove the route.
-     * 
-     * @return this
-     * @param string the route name
-     */ 
-    protected function removeActionRoute($sRouteName)
-    {
-        if(!$this->hasActionRoute($sRouteName)) {
-            throw new BookMeException('The route '.$sRouteName.' not found in this SelectQueryWithRoutes');
-        }
-        
-        unset($this->aRawRoutes[$sRouteName]);
-        
-        return $this;
-    }
     
     /**
      * Extension to the default hook onRowMappingComplete which used to add
@@ -64,19 +36,13 @@ abstract class SelectQueryWithRoutes implements QueryInterface
      * 
      * Child of this SelectQuery to still be able to use the hook.
      */ 
-    abstract protected function doRowMappingComplete();
-   
-   
-    /**
-     * Check if a route with Name X exists.
-     * 
-     * @return boolean true if exists
-     * @param  string   the route name
-     */ 
-    protected function hasActionRoute($sRouteName)
+    protected function doRowMappingComplete(array $aData)
     {
-        return isset($this->aRawRoutes[$sRouteName]);
+        return $aData;    
     }
+   
+   
+    
    
     /**
      * Constructor.
@@ -89,12 +55,52 @@ abstract class SelectQueryWithRoutes implements QueryInterface
         $this->oUrl         = $oUrl;
         $this->aRawRoutes   = [];
         
-        parent::__construct($sql, $sAlias);
+        parent::__construct($qb, $sAlias);
     
     }
 
 
+    /**
+     * Adds a new route.
+     * 
+     * @return this
+     * @param ActionRoute
+     */ 
+    public function addActionRoute(ActionRoute $sRouteName)
+    {
+        $this->aRawRoutes[$sRouteName->getRouteName()] = $sRouteName;
+        
+        return $this;
+    }
     
+    /**
+     * Remove the route.
+     * 
+     * @return this
+     * @param string the route name
+     */ 
+    public function removeActionRoute($sRouteName)
+    {
+        if(!$this->hasActionRoute($sRouteName)) {
+            throw new BookMeException('The route '.$sRouteName.' not found in this SelectQueryWithRoutes');
+        }
+        
+        unset($this->aRawRoutes[$sRouteName]);
+        
+        return $this;
+    }
+    
+    
+    /**
+     * Check if a route with Name X exists.
+     * 
+     * @return boolean true if exists
+     * @param  string   the route name
+     */ 
+    public function hasActionRoute($sRouteName)
+    {
+        return isset($this->aRawRoutes[$sRouteName]);
+    }
 
 
     /**
@@ -111,7 +117,7 @@ abstract class SelectQueryWithRoutes implements QueryInterface
             throw new BookMeException('The entity with id field '.$sIdField.' has links already');
         }
         
-        $aData['links'] = [];
+        
         
         foreach($this->aRawRoutes as $sRouteName => $oRoute) {
             $aData['links'][] = [
@@ -121,9 +127,9 @@ abstract class SelectQueryWithRoutes implements QueryInterface
         }
         
         // Execute the hook extension
+        $aData = $this->doRowMappingComplete($aData);
         
-        $this->doRowMappingComplete();
-        
+        return $aData;
     }
 
 

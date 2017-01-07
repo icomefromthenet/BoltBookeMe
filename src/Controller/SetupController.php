@@ -1,5 +1,4 @@
 <?php
-
 namespace Bolt\Extension\IComeFromTheNet\BookMe\Controller;
 
 use DateTime;
