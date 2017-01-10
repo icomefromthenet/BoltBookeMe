@@ -3,9 +3,10 @@ namespace Bolt\Extension\IComeFromTheNet\BookMe\Model\Member\DataTable;
 
 use Doctrine\DBAL\Types\Type;
 use Bolt\Storage\Query\QueryInterface;
-use Bolt\Extension\IComeFromTheNet\BookMe\Model\SelectQuery;
+use Bolt\Extension\IComeFromTheNet\BookMe\Model\SelectQueryWithRoutes;
 use Bolt\Extension\IComeFromTheNet\BookMe\Model\Member\DataTable\Filter;
 use Bolt\Extension\IComeFromTheNet\BookMe\Model\Member\DataTable\Directive;
+use Bolt\Extension\IComeFromTheNet\BookMe\Model\Member\ActionRoute;
 
 
 /**
@@ -14,7 +15,7 @@ use Bolt\Extension\IComeFromTheNet\BookMe\Model\Member\DataTable\Directive;
  * @author Lewis Dyer <getintouch@icomefromthenet.com> 
  * @since 1.0
  */
-class MemberSearchQuery extends SelectQuery implements QueryInterface
+class MemberSearchQuery extends SelectQueryWithRoutes implements QueryInterface
 {
    
    
@@ -60,7 +61,10 @@ class MemberSearchQuery extends SelectQuery implements QueryInterface
         $this->addMap('isCarryover',$oBoolean);
         $this->addMap('closeDate',$oDateTime);
         
+        // Register Routes for CRUD
+        $oEditRoute   = new ActionRoute\EditMember('bookme-worker-edit-basic');
         
+        $this->addActionRoute($oEditRoute);
         
     }
     

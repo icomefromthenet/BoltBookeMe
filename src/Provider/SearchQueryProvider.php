@@ -53,7 +53,7 @@ class SearchQueryProvider implements ServiceProviderInterface
         
         $app['bm.query.member'] = function($c) use ($aConfig) {
             
-            return new MemberSearchQuery(new MemberSearchQueryBuilder($c['db'],$aConfig['tablenames']),'m');
+            return new MemberSearchQuery(new MemberSearchQueryBuilder($c['db'],$aConfig['tablenames']),'m', $c['url_generator']);
         };
         
 

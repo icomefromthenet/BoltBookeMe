@@ -3,6 +3,8 @@ namespace Bolt\Extension\IComeFromTheNet\BookMe\DataTable;
 
 use Bolt\Extension\IComeFromTheNet\BookMe\DataTable\Output\Output;
 use Bolt\Extension\IComeFromTheNet\BookMe\DataTable\Schema\ColumnSchema;
+use Bolt\Extension\IComeFromTheNet\BookMe\Model\Member\ActionRoute;
+use Symfony\Component\Routing\Generator\UrlGeneratorInterface;
 
 
 /**
@@ -40,11 +42,30 @@ abstract class AbstractDataTableManager implements DataTableConfigInterface
     protected $oEventRegistry;
     
     /**
+     * @var Symfony\Component\Routing\Generator\UrlGeneratorInterface;
+     */ 
+    protected $oUrlGenerator;
+    
+    
+    /**
     * Implemented to allow default to be set 
     * 
     * @return void
     */ 
     abstract public function setDefaults();
+
+
+    /**
+     * Fetch the route from a url name using the
+     * generator, this only helpful for route that dont require substitutions
+     * 
+     * @param string    $sRouteName     The Route Name
+     * @return string the url
+     */
+    protected function getRoute($sRouteName)
+    {
+       return $this->getUrlGenerator()->generate($sRouteName,[]);
+    }
 
     
     //------------------------------------------
@@ -142,13 +163,23 @@ abstract class AbstractDataTableManager implements DataTableConfigInterface
         return $this->oOutput;
     }
     
+    /**
+     * Return the Url Generator
+     * 
+     * @return Symfony\Component\Routing\Generator\UrlGeneratorInterface
+     */ 
+    public function getUrlGenerator()
+    {
+        return $this->oUrlGenerator;
+    }
 
     
-    public function __construct(Output $oOutput)
+    public function __construct(Output $oOutput, UrlGeneratorInterface $oUrl)
     {
         $this->oOutput        = $oOutput;
         $this->oEventRegistry = new DataTableEventRegistry();
         $this->oSchema        = new ColumnSchema();
+        $this->oUrlGenerator  = $oUrl;
         
         $this->setDefaults();
         

@@ -61,18 +61,18 @@ class WorkerController extends CommonController implements ControllerProviderInt
       
         $oCtr->get('edit/{member}/basic',[$this,'onWorkerDetailsEdit'])
               ->convert('member', [$this,'convertMemberIdToEntity'])
-              ->bind('bookme-worker-view-basic');    
+              ->bind('bookme-worker-edit-basic');    
         
         $oCtr->post('edit/{member}/basic',[$this,'onWorkerDetailsSaveExisting'])
-              ->bind('bookme-worker-edit-basic');
-        
+             ->convert('member', [$this,'convertMemberIdToEntity'])
+             ->bind('bookme-worker-edit-basic-save');    
         
         // Create New Schedule Member (bookme-worker-create-basic)
         $oCtr->get('edit/basic',[$this,'onWorkerDetailsCreate'])
               ->bind('bookme-worker-create-basic');
               
         $oCtr->post('edit/basic',[$this,'onWorkerDetailsSaveNew'])
-              ->bind('bookme-worker-create-basic');
+              ->bind('bookme-worker-create-basic-save');
               
           
             

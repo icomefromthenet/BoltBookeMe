@@ -3,6 +3,7 @@ namespace Bolt\Extension\IComeFromTheNet\BookMe\DataTable\Plugin\Button;
 
 use Bolt\Extension\IComeFromTheNet\BookMe\DataTable\DataTableOptionInterface;
 use Bolt\Extension\IComeFromTheNet\BookMe\DataTable\General\KeyboardKeyOption;
+use Bolt\Extension\IComeFromTheNet\BookMe\DataTable\General\LinkOptions;
 
 /**
  * Configures the jQuery DataTable Button Instance
@@ -27,6 +28,7 @@ class StandardButton implements DataTableOptionInterface
          'action'  => null,
          'init'    => null,
          'key'     => null,
+         'crudLinks' => null,
        ];
        
    }
@@ -138,6 +140,14 @@ class StandardButton implements DataTableOptionInterface
       return $this;
    }
 
+
+   public function setButtonLinks(LinkOptions $oCrudLinks)
+   {
+      $this->aConfigStruct['crudLinks'] = $oCrudLinks;
+      
+      return $this;
+   }
+
   
    /**
     * Return the config struct
@@ -160,7 +170,12 @@ class StandardButton implements DataTableOptionInterface
       if($aConfig['key'] instanceof DataTableOptionInterface) {
            $aConfig['key'] = $aConfig['key']->getStruct();
       }
-
+      
+      if($aConfig['crudLinks'] instanceof LinkOptions) {
+           $aCrudStruct = $aConfig['crudLinks']->getStruct();
+           $aConfig = array_merge($aConfig,$aCrudStruct);
+      }
+      
 
       return $aConfig;
    }

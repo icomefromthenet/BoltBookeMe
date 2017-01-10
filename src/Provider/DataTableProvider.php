@@ -50,7 +50,7 @@ class DataTableProvider implements ServiceProviderInterface
           
             $sDataUrl = $c['url_generator']->generate('bookme-rule-search');
           
-            return new RuleDataTable($c['bm.datatable.output'],$sDataUrl);
+            return new RuleDataTable($c['bm.datatable.output'],$c['url_generator'],$sDataUrl);
              
          });
         
@@ -58,7 +58,7 @@ class DataTableProvider implements ServiceProviderInterface
           
             $sDataUrl = $c['url_generator']->generate('bookme-worker-search');
           
-            return new MemberDataTable($c['bm.datatable.output'],$sDataUrl);
+            return new MemberDataTable($c['bm.datatable.output'],$c['url_generator'],$sDataUrl);
              
          });
 

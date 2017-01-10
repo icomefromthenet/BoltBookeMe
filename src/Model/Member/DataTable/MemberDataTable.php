@@ -1,12 +1,14 @@
 <?php
 namespace  Bolt\Extension\IComeFromTheNet\BookMe\Model\Member\DataTable;
 
+use Symfony\Component\Routing\Generator\UrlGeneratorInterface;
 use Bolt\Extension\IComeFromTheNet\BookMe\DataTable\AbstractDataTableManager;
 use Bolt\Extension\IComeFromTheNet\BookMe\DataTable\General;
 use Bolt\Extension\IComeFromTheNet\BookMe\DataTable\Plugin;
 use Bolt\Extension\IComeFromTheNet\BookMe\DataTable\Schema;
 use Bolt\Extension\IComeFromTheNet\BookMe\DataTable\DataTableEventRegistry;
 use Bolt\Extension\IComeFromTheNet\BookMe\DataTable\Output\Output;
+
 
 /**
  * DataTable for the Members
@@ -20,11 +22,11 @@ class MemberDataTable extends AbstractDataTableManager
     protected $sDataUrl;
     
     
-    public function __construct(Output $oOutput, $sDataUrl )
+    public function __construct(Output $oOutput, UrlGeneratorInterface $oUrl, $sDataUrl )
     {
         $this->sDataUrl = $sDataUrl;
     
-        parent::__construct($oOutput);
+        parent::__construct($oOutput,$oUrl);
     }
     
     
@@ -63,6 +65,13 @@ class MemberDataTable extends AbstractDataTableManager
         $this->addPlugin($oSelectPlugin);
         
         
+        
+         # Add Some Links For (C) in CRUD
+        $oLinkSet = new General\LinkOptions();
+        $oLinkSet->addLink('bookme-worker-create-basic', $this->getRoute('bookme-worker-create-basic'));
+        
+        
+        
         # Add Action Buttons
         
         $oButtonButton = new Plugin\ButtonPlugin();
@@ -73,9 +82,12 @@ class MemberDataTable extends AbstractDataTableManager
                           ->setInitialEnableState(true)
                           ->setActionCallback(new Plugin\Button\ActionCallback('bookme.datatable.button.onMemberAdd'))
                           ->setCSSClassName('btn-primary')
-                          ->setHtmlAttributeTitle('Add New Member');
+                          ->setHtmlAttributeTitle('Add New Member')
+                          ->setButtonLinks($oLinkSet);
         
         $oButtonButton->addButton('add',$oAddMember);
+        
+        
         
         $oEditMember  = new Plugin\Button\StandardButton();
         $oEditMember->setButtonText('<i class="fa fa-pencil-square"></i> Edit Member')
@@ -160,7 +172,6 @@ class MemberDataTable extends AbstractDataTableManager
         
         $this->getEventRegistry()->addEvent(DataTableEventRegistry::CORE_INIT, 'window.func',null);
         
-      
         
     }
 
@@ -168,4 +179,4 @@ class MemberDataTable extends AbstractDataTableManager
     
     
 }
-/* End of class */
+/* End of Class */

@@ -1,12 +1,14 @@
 <?php
 namespace  Bolt\Extension\IComeFromTheNet\BookMe\Model\Rule\DataTable;
 
+use Symfony\Component\Routing\Generator\UrlGeneratorInterface;
 use Bolt\Extension\IComeFromTheNet\BookMe\DataTable\AbstractDataTableManager;
 use Bolt\Extension\IComeFromTheNet\BookMe\DataTable\General;
 use Bolt\Extension\IComeFromTheNet\BookMe\DataTable\Plugin;
 use Bolt\Extension\IComeFromTheNet\BookMe\DataTable\Schema;
 use Bolt\Extension\IComeFromTheNet\BookMe\DataTable\DataTableEventRegistry;
 use Bolt\Extension\IComeFromTheNet\BookMe\DataTable\Output\Output;
+use Bolt\Extension\IComeFromTheNet\BookMe\Model\Member\ActionRoute;
 
 /**
  * DataTable for the Schedule Rules
@@ -20,11 +22,11 @@ class RuleDataTable extends AbstractDataTableManager
     protected $sDataUrl;
     
     
-    public function __construct(Output $oOutput, $sDataUrl )
+    public function __construct(Output $oOutput, UrlGeneratorInterface $oUrl, $sDataUrl )
     {
         $this->sDataUrl = $sDataUrl;
     
-        parent::__construct($oOutput);
+        parent::__construct($oOutput,$oUrl);
     }
     
     

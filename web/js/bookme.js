@@ -43,14 +43,41 @@
         //this.disable(); // disable button
     },
     onMemberAdd :  function ( e, dt, node, config ) {
-      
+        var data = dt.row().data();
+        var sLink = bookme.links.findLink('bookme-worker-create-basic',config.crudLinks);
+        
+        if(!sLink) {
+          alert('Link unknown unable to redirect to new member');
+        } else {
+          
+          window.location = sLink;
+            
+        }
+        
     },
     onMemberEdit :  function ( e, dt, node, config ) {
-      console.log(dt.row().data());
+      var data = dt.row().data();
+
     }
     
   };
   
+  
+  bookme.links = {
+    findLink: function(sLinkName, aLinks) {
+      var sLinkHref = '';
+      
+      for(var i = 0; i < aLinks.length; i++) {
+        if(aLinks[i].rel == sLinkName) {
+           sLinkHref = aLinks[i].link;
+           break;
+        }
+      }
+      
+      return sLinkHref;
+    }
+    
+  }
 
   
 
