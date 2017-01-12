@@ -24,15 +24,22 @@
 
 
 {% block page_main %}
-<div class="row">
-    {% include '@BookMe/_base/_menu.twig' with { 'menubuilder' : oMenubuilder, 'sMenuHeading' : __(sMenuHeading) } %}
-</div>
 
-{#  This worker_action block exists to be overriden in the child templates #} 
 
-{% block worker_action %}
-
-{% endblock worker_action %}
+    {% block worker_menu %}
+    
+    <div class="row">
+        {% include '@BookMe/_base/_menu.twig' with { 'menubuilder' : oMenubuilder, 'sMenuHeading' : __(sMenuHeading) } %}
+    </div>
+    
+    {% endblock worker_menu %}
+    
+    
+    {#  This worker_action block exists to be overriden in the child templates #} 
+    
+    {% block worker_action %}
+    
+    {% endblock worker_action %}
 
 
 {% endblock page_main %}

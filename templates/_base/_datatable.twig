@@ -2,58 +2,29 @@
  Bootstrap a jQuery DataTable Requires the following params
 
  sConfigString : The javascript config struct
- sElement : ID of element to bind the dataTable on
+ sTitle : Title for the panel
  aEvents  : array of event handlers that need t generate
  
  This should be included at the bottom of the page using the Page Script Block
  
- The Template _datatable_bootstrap.twig must be included too
 #}
 
+
+<div class="row panel panel-default">
+    <div class="panel-heading"> {{sTitle}}</div>
+    <div class="panel-body bm-table">
+         <table data-bind="datatable" class="table table-striped table-bordered table-hover">
+        
+       
+        </table>
+    </div>
+</div>
+
+
+{% block page_script %}
 <script type="text/javascript">
-
-console.log({{ sConfigString|raw }});
-
-
-
-
-(function( $, window, document, undefined ) {
- 
- var DataTable = $.fn.dataTable;
- 
- /* Set the defaults for DataTables initialisation */
-$.extend( true, DataTable.defaults, {
-	dom:
-		"<'row'<'col-sm-6'B><'col-sm-6'f>>" +
-		"<'row'<'col-sm-12'tr>>" +
-		"<'row'<'col-sm-5'i><'col-sm-7'p>>",
-	renderer: 'bootstrap'
-} );
- 
- $.extend( true, DataTable.Buttons.defaults, {
- 	dom: {
- 		container: {
- 			className: 'dt-buttons btn-group'
- 		},
- 		button: {
- 			className: 'btn'
- 		},
- 		collection: {
- 			tag: 'ul',
- 			className: 'dt-button-collection dropdown-menu',
- 			button: {
- 				tag: 'li',
- 				className: 'dt-button'
- 			},
- 			buttonLiner: {
- 				tag: 'a',
- 				className: ''
- 			}
- 		}
- 	}
- } );
-
-})($,window,document,undefined);
-
-jQuery('{{ sElement|raw }}').DataTable( {{ sConfigString|raw }});
+  bookme.datatable.bind($('[data-bind="datatable"]'),{{ sConfigString|raw }});
 </script>
+{% endblock page_script %}
+
+

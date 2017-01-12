@@ -1,0 +1,34 @@
+{% extends '@BookMe/_base/_worker_base.twig' %}
+
+
+
+   {% block worker_menu %}
+  
+    {% endblock worker_menu %}
+
+
+
+
+
+{% block worker_action %}
+
+<div class="row panel panel-default">
+  
+        {% form_theme oForm 'form_bolt_layout.twig' %}
+       
+        <div class="panel-heading">Create New Member</div>
+          <div class="panel-body bm-table">
+       
+               <form id="memberBasicForm" method="post" action="{{ path('bookme-worker-create-basic-save', { } )  }}"  class="form-horizontal">
+                {{ form_widget(oForm) }}
+                
+                <br />
+                <input type="submit" value="Save New Member" name="submit" class="btn btn-primary">
+              </form>
+
+        </div>
+       
+</div>
+
+
+{% endblock worker_action %}

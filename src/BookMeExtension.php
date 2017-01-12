@@ -265,21 +265,35 @@ class BookMeExtension extends SimpleExtension
             ->setLate(false)
             ->setPriority(98)
             ->setZone(Zone::BACKEND);
-        
-        $oAppJsAsset = new JavaScript();
-        $oAppJsAsset->setFileName('dist/js/bookme.js')
-            ->setLate(false)
-            ->setPriority(50)
-            ->setZone(Zone::BACKEND);
-
-        
+       
         $oVendorJSAsset = new JavaScript();
         $oVendorJSAsset->setFileName('dist/vendor/js/vendor.js')
             ->setLate(false)
-            ->setPriority(45)
+            ->setPriority(100)
             ->setZone(Zone::BACKEND);
 
-      
+       
+        $oNamespaceMixinJsAsset = new JavaScript();
+        $oNamespaceMixinJsAsset->setFileName('dist/js/bookme.js')
+            ->setLate(false)
+            ->setPriority(150)
+            ->setZone(Zone::BACKEND);
+
+        
+        $oAppJsAsset = new JavaScript();
+        $oAppJsAsset->setFileName('dist/js/app.js')
+            ->setLate(false)
+            ->setPriority(160)
+            ->setZone(Zone::BACKEND);
+
+        $oDatatableMixinJsAsset = new JavaScript();
+        $oDatatableMixinJsAsset->setFileName('dist/js/datatable.js')
+            ->setLate(false)
+            ->setPriority(165)
+            ->setZone(Zone::BACKEND);
+
+    
+    
         
         return [
             // Web assets that will be loaded in the frontend
@@ -288,8 +302,11 @@ class BookMeExtension extends SimpleExtension
             // Web assets that will be loaded in the backend
             $oAppCssAsset,
             $oVendorCSSAsset,
+            
+            $oVendorJSAsset,
+            $oNamespaceMixinJsAsset,
             $oAppJsAsset,
-            $oVendorJSAsset
+            $oDatatableMixinJsAsset,    
         ];
     }
     

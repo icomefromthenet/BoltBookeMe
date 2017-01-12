@@ -109,7 +109,7 @@ class MenuProvider implements ServiceProviderInterface
                 
                 
             $oMemberGroup  = new MenuGroup('Member Options', 100, 'bm-menu_linklistheading-setup');
-            $oMemberDetails = new MenuItem('Member Basic Details','Change Member Basic Details', 'bookme-worker-view-basic', 'bla.png', 10, []);  
+            $oMemberDetails = new MenuItem('Member Basic Details','Change Member Basic Details', 'bookme-worker-edit-basic', 'bla.png', 10, []);  
             
     
             // -----------------------------------------------------------------

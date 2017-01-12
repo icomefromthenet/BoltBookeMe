@@ -1,0 +1,28 @@
+{% extends '@BookMe/_base/_worker_base.twig' %}
+
+
+
+
+
+{% block worker_action %}
+
+<div class="row panel panel-default">
+  
+        {% form_theme oForm 'form_bolt_layout.twig' %}
+        
+         <div class="panel-heading">Member Basic Details</div>
+            <div class="panel-body bm-table">
+
+                <form id="memberBasicForm" method="post" action="{{ path('bookme-worker-edit-basic-save', { 'member' : oMember.getMembershipId() } )  }}"  class="form-horizontal">
+                  {{ form_widget(oForm) }}
+                  
+                  <br />
+                  <input type="submit" value="Save Member Basic Details" name="submit" class="btn btn-primary">
+                </form>
+            
+            </div>
+        
+</div>
+
+
+{% endblock worker_action %}

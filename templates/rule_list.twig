@@ -22,24 +22,15 @@
 </div>
 
 
+  {% include '@BookMe/_base/_datatable.twig' with {'sConfigString' : sConfigString , 'sTitle' : 'Schedule Rules' , 'aEvents' : aEvents } %}
 
-    <div class="row panel panel-default">
-        <div class="panel-heading"> Schedule Rules</div>
-        <div class="panel-body bm-table">
-             <table id="RuleTable" class="table table-striped table-bordered table-hover">
-            
-           
-            </table>
-        </div>
-    </div>
-
+    
 
 {% endblock page_main %}
 
 
 {% block page_script %}
 
-    {% include '@BookMe/_base/_datatable.twig' with {'sConfigString' : sConfigString , 'sElement' : '#RuleTable' , 'aEvents' : aEvents } %}
-
+  
 {% endblock page_script %}
 

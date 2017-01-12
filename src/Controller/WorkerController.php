@@ -158,25 +158,20 @@ class WorkerController extends CommonController implements ControllerProviderInt
     public function onWorkerDetailsCreate(Application $app, Request $request)
     {
         $oWorkerForm    = $this->getForm('memberdetails.builder')->getForm();
-        $oMenu          = $this->getMenu('member');
-        
-        
         
         
         // Build Data for View
         
         
         $aData = [
-          'title' => '',
-          'subtitle' => '',
-          'sMenuHeading' => 'Member Actions',
-          'oMenubuilder' => $oMenu,
+          'title' => 'Member Create',
+          'subtitle' => 'Create new Member',
           'oForm' => $oWorkerForm->createView(),
             
         ];
         
         
-         return $app['twig']->render('@BookMe/worker_basic_details.twig', $aData, []);
+         return $app['twig']->render('@BookMe/worker_basic_details_create.twig', $aData, []);
         
     }
 
@@ -218,7 +213,7 @@ class WorkerController extends CommonController implements ControllerProviderInt
         ];
         
         
-        return $app['twig']->render('@BookMe/worker_basic_details.twig', $aData, []);
+        return $app['twig']->render('@BookMe/worker_basic_details_edit.twig', $aData, []);
         
     }
     
