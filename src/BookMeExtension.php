@@ -82,6 +82,25 @@ class BookMeExtension extends SimpleExtension
     use DatabaseSchemaTrait;
     use StorageTrait;
     
+    
+    /**
+     * {@inheritdoc}
+     */
+    protected function subscribe(EventDispatcherInterface $dispatcher)
+    {
+        $config      = $this->getConfig();
+        $oCommandBus = $this->getContainer()->offsetGet('bm.commandBus');
+        
+        # Instance the Listeners
+        
+        $oStorageListener = new StorageEventListener($oCommandBus,$config);
+        
+        
+        # Register with Dispatcher
+        
+        $dispatcher->addSubscriber($oStorageListener);
+    }
+    
    
     //--------------------------------------------------------------------------
     # Properties
@@ -291,6 +310,12 @@ class BookMeExtension extends SimpleExtension
             ->setLate(false)
             ->setPriority(165)
             ->setZone(Zone::BACKEND);
+        
+        $oListMixinJsAsset = new JavaScript();
+        $oListMixinJsAsset->setFileName('dist/js/list.js')
+            ->setLate(false)
+            ->setPriority(168)
+            ->setZone(Zone::BACKEND);
 
     
     
@@ -306,7 +331,8 @@ class BookMeExtension extends SimpleExtension
             $oVendorJSAsset,
             $oNamespaceMixinJsAsset,
             $oAppJsAsset,
-            $oDatatableMixinJsAsset,    
+            $oDatatableMixinJsAsset,   
+            $oListMixinJsAsset,
         ];
     }
     

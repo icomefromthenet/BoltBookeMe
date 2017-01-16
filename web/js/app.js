@@ -34,7 +34,7 @@
      */
     function initGlobal() {
         
-        initDataTableDefaults();
+       
       
       
     }
@@ -49,8 +49,11 @@
      * @memberof bookme.app
      */
     app.run = function () {
+        
+        initGlobal();
+        
+        
         bookme.datatable.init();
-
     };
 
 

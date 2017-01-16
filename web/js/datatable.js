@@ -98,7 +98,7 @@
     /**
     * Bind Datatable Config to a plugin instance
     *
-    * @function initGlobal
+    * @function bind
     * @memberof bookme.datatable
     * @param {jQuery} $el       - The element as jquery selector 
     * @param {object} oConfig   - The column datatype
@@ -115,7 +115,7 @@
     /**
     * Append minute unit to a timeslor
     *
-    * @function initGlobal
+    * @function timeslotLength
     * @memberof bookme.datatable.render
     * @param {mixed}  data   - The data from the server for this column 
     * @param {string} type   - The column datatype
@@ -132,7 +132,7 @@
     /**
     * Remove time part of date string so rules appear for whole day
     *
-    * @function initGlobal
+    * @function ruleDates
     * @memberof bookme.datatable.render
     * @param {mixed}  data   - The data from the server for this column 
     * @param {string} type   - The column datatype
@@ -149,7 +149,7 @@
     /**
     * Appends AM/PM to timeslot starting time which defaults to 12 hour
     *
-    * @function initGlobal
+    * @function slotTime
     * @memberof bookme.datatable.render
     * @param {mixed}  data   - The data from the server for this column 
     * @param {string} type   - The column datatype
@@ -169,7 +169,7 @@
     /**
     * Button callback for Rule Table Delete Action
     *
-    * @function initGlobal
+    * @function onRuleDelete
     * @memberof bookme.datatable.button
     */ 
     button.onRuleDelete  = function ( e, dt, node, config ) {
@@ -180,7 +180,7 @@
     /**
     * Button add new schedule Member Action
     *
-    * @function initGlobal
+    * @function onMemberAdd
     * @memberof bookme.datatable.button
     */ 
     button.onMemberAdd = function ( e, dt, node, config ) {
@@ -199,7 +199,7 @@
     /**
     * Button callback for Schedule Member Edit Table Delete Action
     *
-    * @function initGlobal
+    * @function onMemberEdit
     * @memberof bookme.datatable.button
     */ 
     button.onMemberEdit = function ( e, dt, node, config ) {
@@ -235,7 +235,7 @@
     *   { rel:sRouteName, link: sFullRoute },
     * ]
     * 
-    * @function initGlobal
+    * @function findLink
     * @memberof bookme.datatable.links
     * @param {string}   sLinkName   - value of the rel property
     * @param {array}    aLinks      - a collection of link objects

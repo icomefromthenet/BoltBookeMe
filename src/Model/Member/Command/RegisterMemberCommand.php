@@ -29,11 +29,17 @@ class RegisterMemberCommand implements  HasEventInterface, ValidationInterface
    */ 
   protected $sMemberName;
     
+  /**
+   * @var integer the bolt members database id
+   */ 
+  protected $iBoltMemberId;
+  
     
-    
-  public function __construct($sMemberName)
+  public function __construct($sMemberName, $iBoltMemberId = null)
   {
-    $this->sMemberName = $sMemberName;
+      $this->sMemberName   = $sMemberName;
+      $this->iBoltMemberId = $iBoltMemberId;
+  
   }
   
   
@@ -56,6 +62,17 @@ class RegisterMemberCommand implements  HasEventInterface, ValidationInterface
   public function getMemberId()
   {
       return $this->iMemberDatabaseId;
+  }
+  
+  /**
+   * Return the bolt member database id
+   * 
+   * @access public
+   * @return integer the id if assigned
+   */ 
+  public function getBoltMemberId()
+  {
+    return $this->iBoltMemberId;
   }
   
   /**
@@ -92,7 +109,8 @@ class RegisterMemberCommand implements  HasEventInterface, ValidationInterface
   public function getData()
   {
       return [
-        'member_name' => $this->sMemberName
+        'member_name'    => $this->sMemberName,
+        'bolt_member_id' => $this->iBoltMemberId,
       ];
   }
   

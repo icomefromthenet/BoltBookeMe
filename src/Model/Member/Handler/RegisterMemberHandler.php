@@ -43,17 +43,19 @@ class RegisterMemberHandler
         
         $oDatabase          = $this->oDatabaseAdapter;
         $sMemberTableName   = $this->aTableNames['bm_schedule_membership'];
-        $iMemberId           = null;
-        $sMemberName       = $oCommand->getMemberName();
+        $iMemberId          = null;
+        $sMemberName        = $oCommand->getMemberName();
+        $iBoltMemberId      = $oCommand->getBoltMemberId();
         
-        $sSql = " INSERT INTO $sMemberTableName (membership_id, registered_date, member_name) VALUES (null, NOW(), :sMemberName) ";
+        $sSql = " INSERT INTO $sMemberTableName (membership_id, registered_date, member_name, bolt_user_id) VALUES (null, NOW(), :sMemberName, :iBoltUserId) ";
 
 	    
 	    try {
 	    
 	        $oStringType = TYPE::getType(TYPE::STRING);
+	        $iIntType    = TYPE::getType(TYPE::INTEGER);
 	    
-	        $oDatabase->executeUpdate($sSql, [':sMemberName' => $sMemberName], [$oStringType]);
+	        $oDatabase->executeUpdate($sSql, [':sMemberName' => $sMemberName, ':iBoltUserId' => $iBoltMemberId ], [$oStringType,$iIntType]);
             
             $iMemberId = $oDatabase->lastInsertId();
             

@@ -17,6 +17,29 @@ use Bolt\Extension\IComeFromTheNet\BookMe\Model\AbstractRepoQuery;
 class ScheduleQueryBuilder extends AbstractRepoQuery
 {
    
+    public function withMember($sAlias, $sMemberAlias)
+    {
+        
+        
+        
+        return $this;
+    }
+    
+    
+    public function filterActiveSchedules($sAlias)
+    {
+        
+     
+        return $this;
+    }
+    
+    public function filterInCalendarYear($iCalYear)
+    {
+        
+        
+        return $this;
+        
+    }
     
     
 }

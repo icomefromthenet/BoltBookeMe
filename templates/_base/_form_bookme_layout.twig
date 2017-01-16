@@ -3,8 +3,11 @@
 {% block form_row %}
     {% spaceless %}
         <div class="form-group {% if errors|length > 0 %}has-error{% endif %} col-sm-6 col-md-4 col-lg-2">
+            
+            {% set attr = attr|merge({'class': attr.class|default('') ~ ' form-control large'}) %} 
+            
             {{ form_label(form, null, {'label_attr': {'class':'control-label' } }) }}
-            {{ form_widget(form, {'attr' : { 'class' : 'form-control large' } }) }}
+            {{ form_widget(form, {'attr':attr}) }}
             {{ form_errors(form) }}
         </div>
     {% endspaceless %}

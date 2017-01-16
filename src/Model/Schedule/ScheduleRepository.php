@@ -63,7 +63,19 @@ class ScheduleRepository extends ReadOnlyRepository implements ObjectRepository
         
     }
 
+
+    public function findAllActiveSchedulesInCalYear($iCalYear)
+    {
+        
+        
+    }
   
+  
+    public function findAllSchedulesInCalYear($iCalYear)
+    {
+        
+        
+    }
    
 }
 /* End of Class */

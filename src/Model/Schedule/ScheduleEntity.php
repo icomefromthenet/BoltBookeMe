@@ -21,6 +21,9 @@ class ScheduleEntity
     public $registered_date;
     public $close_date;
     
+    // Virtual Fields
+    public $member_name;
+    public $member_email;
     
     //--------------------------------------------------------------
     # Getters and Setters
@@ -66,6 +69,16 @@ class ScheduleEntity
     }
     
     
+    public function getMemberName()
+    {
+        return $this->member_name;
+    }
+    
+    
+    public function getMemberEmail()
+    {
+        return $this->member_email;
+    }
     
     //-------------------------------------------------------------
     # Legacy Fields

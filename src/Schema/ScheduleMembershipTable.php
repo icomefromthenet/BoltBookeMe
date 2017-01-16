@@ -19,7 +19,7 @@ class ScheduleMembershipTable extends BaseTable
         $this->table->addColumn('registered_date',   'datetime',   ['notnull' => true, 'comment' =>'Date membership was created' ]);
         
         $this->table->addColumn('member_name',   'string',   ['notnull' => true, 'comment' =>'Member Name', 'length' => 100 ]);        
-        
+        $this->table->addColumn('bolt_user_id',   'integer',   ['notnull' => false, 'comment' =>'Reference to a bolt user', 'unsigned' => true ]);
     }
 
     /**

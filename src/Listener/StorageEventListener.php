@@ -3,8 +3,11 @@
 namespace Bolt\Extension\IComeFromTheNet\BookMe\Listener;
 
 use Bolt\Events\StorageEvent;
+use Bolt\Storage\Entity\Users;
 use Silex\Application;
 use Symfony\Component\EventDispatcher\EventSubscriberInterface;
+use Bolt\Extension\IComeFromTheNet\BookMe\Model\Member\Command\RegisterMemberCommand;
+use League\Tactician\CommandBus;
 
 /**
  * Event class to handle storage related events.
@@ -13,10 +16,16 @@ use Symfony\Component\EventDispatcher\EventSubscriberInterface;
  */
 class StorageEventListener implements EventSubscriberInterface
 {
-    /** @var Application Bolt's Application object */
-    private $app;
-    /** @var array The extension's configuration parameters */
-    private $config;
+    
+    /**
+     * @var League\Tactician\CommandBus
+     */ 
+    protected $oCommandBus;
+    
+    /** 
+     * @var array The extension's configuration parameters 
+    */
+    protected $config;
 
     /**
      * Initiate the listener with Bolt Application instance and extension config.
@@ -24,10 +33,10 @@ class StorageEventListener implements EventSubscriberInterface
      * @param Application $app
      * @param $config
      */
-    public function __construct(Application $app, array $config)
+    public function __construct(CommandBus $oCommandBus, array $config)
     {
-        $this->app = $app;
-        $this->config = $config;
+        $this->oCommandBus = $oCommandBus;
+        $this->config      = $config;
     }
 
     /**
@@ -37,41 +46,32 @@ class StorageEventListener implements EventSubscriberInterface
      */
     public function onPostSave(StorageEvent $event)
     {
-        $id = $event->getId(); // record id
-        $contenttype = $event->getContentType(); // record contenttype
+        $id     = $event->getId(); // record id
         $record = $event->getContent(); // record itself
-        $created = $event->isCreate(); // if record was created, updated or deleted, for more information look here: https://docs.bolt.cm/extensions/essentials#adding-storage-events
+        
+        
+        if($record instanceof Users && $event->isCreate()) {
+            $sUserName      = $record->getUsername();
+            $oCreateCommand = new RegisterMemberCommand($sUserName, $id);
+            
+            $this->oCommandBus->handle($oCreateCommand);
+        }
+        
+        return true;
     }
 
-    /**
-     * Handles PRE_DELETE storage event
-     *
-     * @param StorageEvent $event
-     */
-    public function onPreDelete(StorageEvent $event)
-    {
-        $id = $event->getId();
-        // $contenttype = $event->getContentType(); // You don't get this value at the moment on delete events
-        $record = $event->getContent();
-    }
-
-    /**
-     * Handles POST_DELETE storage event
-     *
-     * @param StorageEvent $event
-     */
-    public function onPostDelete(StorageEvent $event)
-    {
-        $id = $event->getId();
-        // $contenttype = $event->getContentType();
-        $record = $event->getContent();
-    }
+    
 
     /**
      * {@inheritdoc}
      */
     public static function getSubscribedEvents()
     {
-        return [];
+        return [
+            \Bolt\Events\StorageEvents::POST_SAVE =>'onPostSave',
+        ];
     }
+    
+    
 }
+/* End of Class */

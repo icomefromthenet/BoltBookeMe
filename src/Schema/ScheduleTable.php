@@ -28,6 +28,18 @@ class ScheduleTable extends BaseTable
         
         
     }
+    
+    /**
+     * {@inheritdoc}
+     */
+    protected function addVirtualColumns()
+    {
+        
+        # Schedule Member Details
+        $this->table->addColumn('member_name',   'string',   ['notnull' => true, 'unsigned' => true ]);
+        $this->table->addColumn('member_email',   'string',   ['notnull' => true, 'unsigned' => true ]);
+     
+    }
 
     /**
      * {@inheritdoc}

@@ -100,8 +100,8 @@ class FormProvider implements ServiceProviderInterface
                     ->setMethod('GET')
                     ->add('iCalYear'        ,CalendarYearField::class,  ['label' => 'Schedule in Calendar Year'])
                     ->add('iCreatedYear'    ,CalendarYearField::class,  ['label' => 'Created in Calendar Year', 'required' => false ,'placeholder' => 'Select a Year', 'empty_data' => null ])
-                    ->add('oCreatedAfter'   ,DateType::class,           ['label' => 'Created After', 'required' => false ,'placeholder' => ['year' => 'Year', 'month' => 'Month', 'day' => 'Day']])   
-                    ->add('oCreatedBefore'  ,DateType::class,           ['label' => 'Created Before','required' => false ,'placeholder' => ['year' => 'Year', 'month' => 'Month', 'day' => 'Day']])     
+                    ->add('oCreatedAfter'   ,DateType::class,           ['label' => 'Created After', 'required' => false , 'widget' => 'single_text', 'format' => 'dd-MM-yyyy', 'attr' => ['class' => 'datetime']])   
+                    ->add('oCreatedBefore'  ,DateType::class,           ['label' => 'Created Before','required' => false , 'widget' => 'single_text', 'format' => 'dd-MM-yyyy', 'attr' => ['class' => 'datetime']])     
                     ->add('iScheduleTeam'   ,ScheduleTeamField::class,  ['label' => 'Belongs in Team','required'=> false]);
             
         });
