@@ -145,14 +145,21 @@ class AbstractRepoQuery extends QueryBuilder
     
     
     
-    public function getField($sAlias, $sField) 
+    public function getField($sAlias, $sField, $sASField = null) 
     {
+        $sFQF = null;
+        
         if(empty($sAlias)) {
-            return $sField;
+            $sFQF  = $sField;
         }else {
-            return $sAlias.'.'.$sField;
+            $sFQF = $sAlias.'.'.$sField;
         }   
         
+        if(!empty($sASField)) {
+            $sFQF = $sFQF .' AS '. $sASField; 
+        }
+        
+        return $sFQF;
     }
     
     

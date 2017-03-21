@@ -15,6 +15,43 @@ use Bolt\Storage\Repository;
 class ReadOnlyRepository extends Repository implements ObjectRepository
 {
    
+   protected $aTableMap;
+   
+   
+    /**
+     * Return this entity table name or if given internal name will return it instead
+     * 
+     * @return string
+     * @param  string|null  $sInternalName  Optional name
+     */
+    public function getTableName($sInternalName = null)
+    {
+        $sTableName = null;
+        
+        if($sInternalName === null) {
+            $sTableName = $this->getClassMetadata()->getTableName();
+        }  
+        else {
+            $sTableName = $this->aTableMap[$sInternalName];    
+        }
+        
+        return $sTableName;
+         
+    }
+
+    /**
+     * Set the internal table map
+     *  
+     * @param array [internal=>actual]
+     */ 
+    public function setTableMap(array $aTableMap)
+    {
+        $this->aTableMap = $aTableMap;
+    }
+   
+   
+  
+
    
    
    /**

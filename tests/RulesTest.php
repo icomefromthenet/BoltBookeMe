@@ -402,7 +402,7 @@ class RulesTest extends ExtensionTest
         
         $this->assertCount(1,$aRange);
         $this->assertEquals(0,$aRange[0]->getRangeOpen());
-        $this->assertEquals(52,$aRange[0]->getRangeClose());
+        $this->assertEquals(53,$aRange[0]->getRangeClose());
         $this->assertEquals(1,$aRange[0]->getModValue());
        
         
@@ -417,7 +417,7 @@ class RulesTest extends ExtensionTest
         
         $this->assertCount(1,$aRange);
         $this->assertEquals(46,$aRange[0]->getRangeOpen());
-        $this->assertEquals(52,$aRange[0]->getRangeClose());
+        $this->assertEquals(53,$aRange[0]->getRangeClose());
         $this->assertEquals(2,$aRange[0]->getModValue());
         
         $aRange = $oSegmentParser->parseSegment($sCronType,$sCronExprC);    
@@ -445,7 +445,7 @@ class RulesTest extends ExtensionTest
         
         $this->assertCount(1,$aRange);
         $this->assertEquals(0,$aRange[0]->getRangeOpen());
-        $this->assertEquals(52,$aRange[0]->getRangeClose());
+        $this->assertEquals(53,$aRange[0]->getRangeClose());
         $this->assertEquals(3,$aRange[0]->getModValue());
        
       
@@ -511,8 +511,8 @@ class RulesTest extends ExtensionTest
         $oOpeningFirstSlot = $oDateType->convertToPHPValue($oDatabase->fetchColumn("SELECT min(opening_slot) FROM bm_tmp_rule_series",[],0), $oDatabase->getDatabasePlatform());
         $oClosingLastSlot = $oDateType->convertToPHPValue($oDatabase->fetchColumn("SELECT max(closing_slot) FROM bm_tmp_rule_series",[],0), $oDatabase->getDatabasePlatform());
         
-        $this->assertEquals('01-10-2016',$oOpeningFirstSlot->format('d-m-Y'),'Opening slot has wrong date');
-        $this->assertEquals('15-12-2016',$oClosingLastSlot->format('d-m-Y'),'Closing slot has wrong date');
+        $this->assertEquals('01-10-'.$oNow->format('Y'),$oOpeningFirstSlot->format('d-m-Y'),'Opening slot has wrong date');
+        $this->assertEquals('15-12-'.$oNow->format('Y'),$oClosingLastSlot->format('d-m-Y'),'Closing slot has wrong date');
         
         $this->assertEquals('16:40',$oOpeningFirstSlot->format('H:i'),'Opening minute has wrong date');
         $this->assertEquals('00:00',$oClosingLastSlot->format('H:i'),'Closing minute has wrong date');
@@ -550,8 +550,8 @@ class RulesTest extends ExtensionTest
         $oOpeningFirstSlot = $oDateType->convertToPHPValue($oDatabase->fetchColumn("SELECT min(opening_slot) FROM bm_tmp_rule_series",[],0), $oDatabase->getDatabasePlatform());
         $oClosingLastSlot = $oDateType->convertToPHPValue($oDatabase->fetchColumn("SELECT max(closing_slot) FROM bm_tmp_rule_series",[],0), $oDatabase->getDatabasePlatform());
         
-        $this->assertEquals('01-10-2016',$oOpeningFirstSlot->format('d-m-Y'),'Opening slot has wrong date');
-        $this->assertEquals('15-12-2016',$oClosingLastSlot->format('d-m-Y'),'Closing slot has wrong date');
+        $this->assertEquals('01-10-'.$oNow->format('Y'),$oOpeningFirstSlot->format('d-m-Y'),'Opening slot has wrong date');
+        $this->assertEquals('15-12-'.$oNow->format('Y'),$oClosingLastSlot->format('d-m-Y'),'Closing slot has wrong date');
         
         $this->assertEquals('16:40',$oOpeningFirstSlot->format('H:i'),'Opening minute has wrong date');
         $this->assertEquals('00:00',$oClosingLastSlot->format('H:i'),'Closing minute has wrong date');
@@ -588,8 +588,8 @@ class RulesTest extends ExtensionTest
         $oOpeningFirstSlot = $oDateType->convertToPHPValue($oDatabase->fetchColumn("SELECT min(opening_slot) FROM bm_tmp_rule_series",[],0), $oDatabase->getDatabasePlatform());
         $oClosingLastSlot = $oDateType->convertToPHPValue($oDatabase->fetchColumn("SELECT max(closing_slot) FROM bm_tmp_rule_series",[],0), $oDatabase->getDatabasePlatform());
         
-        $this->assertEquals('01-06-2016',$oOpeningFirstSlot->format('d-m-Y'),'Opening slot has wrong date');
-        $this->assertEquals('02-06-2016',$oClosingLastSlot->format('d-m-Y'),'Closing slot has wrong date');
+        $this->assertEquals('01-06-'.$oNow->format('Y'),$oOpeningFirstSlot->format('d-m-Y'),'Opening slot has wrong date');
+        $this->assertEquals('02-06-'.$oNow->format('Y'),$oClosingLastSlot->format('d-m-Y'),'Closing slot has wrong date');
         
         $this->assertEquals('16:40',$oOpeningFirstSlot->format('H:i'),'Opening minute has wrong date');
         $this->assertEquals('00:00',$oClosingLastSlot->format('H:i'),'Closing minute has wrong date');

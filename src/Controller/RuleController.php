@@ -34,7 +34,8 @@ class RuleController extends CommonController implements ControllerProviderInter
         /** @var $ctr \Silex\ControllerCollection */
         $oCtr = $app['controllers_factory'];
 
-        $oCtr->post('',[$this,'onRulePost']);
+        $oCtr->post('',[$this,'onRulePost'])
+             ->bind('bookme-rule-save');
         
         $oCtr->get('',[$this,'onRuleRemoveConfirm'])
              ->bind('bookme-rule-remove-confirm');

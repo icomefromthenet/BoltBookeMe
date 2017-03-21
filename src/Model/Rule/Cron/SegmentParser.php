@@ -205,7 +205,7 @@ class SegmentParser
                 $sCronRegex  = '/^([1-9]|[1-9][0-2])-([1-9]|[1-9][0-2])\/([0-9]+)$/';
             break; 
             case 'weekofyear' :
-                $sCronRegex  = '/^([0-9]|[1-4][0-9]|[5][0-2])-([0-9]|[1-4][0-9]|[5][0-2])\/([0-9]+)$/';
+                $sCronRegex  = '/^([0-9]|[1-4][0-9]|[5][0-2])-([0-9]|[1-4][0-9]|[5][0-3])\/([0-9]+)$/';
             break;
             default: throw ParseCronException::parseCronFailed("Unable to match $sCronType ",$sCronString);
         }
@@ -240,7 +240,7 @@ class SegmentParser
                 $sCronRegex = '/^([1-9]|[1-9][0-2])\/([0-9]+)$/';
             break;  
             case 'weekofyear' :
-                $sCronRegex = '/^([0-9]|[1-4][0-9]|[5][0-2])\/([0-9]+)$/';
+                $sCronRegex = '/^([0-9]|[1-4][0-9]|[5][0-3])\/([0-9]+)$/';
             break;
             default: throw ParseCronException::parseCronFailed("Unable to match $sCronType ",$sCronString);
         }
@@ -274,7 +274,7 @@ class SegmentParser
                 $sCronRegex = '/^([1-9]|[1-9][0-2])-([1-9]|[1-9][0-2])$/';
             break; 
             case 'weekofyear' :
-                 $sCronRegex = '/^([0-9]|[1-4][0-9]|[5][0-2])-([0-9]|[1-4][0-9]|[5][0-2])$/';
+                 $sCronRegex = '/^([0-9]|[1-4][0-9]|[5][0-2])-([0-9]|[1-4][0-9]|[5][0-3])$/';
             break;
             default: throw ParseCronException::parseCronFailed("Unable to match $sCronType ",$sCronString);
         }
@@ -308,7 +308,7 @@ class SegmentParser
                 $sCronRegex = '/^([1-9]|[1-9][0-2])$/';
             break;    
             case 'weekofyear':
-                $sCronRegex = '/^([0-9]|[1-4][0-9]|[5][0-2])$/';
+                $sCronRegex = '/^([0-9]|[1-4][0-9]|[5][0-3])$/';
             break;
             default: throw ParseCronException::parseCronFailed("Unable to match $sCronType ",$sCronString);
         }
@@ -414,7 +414,7 @@ class SegmentParser
                 $iMaxValue = 12;
             break;   
             case 'weekofyear':      
-                $iMaxValue = 52;
+                $iMaxValue = 53;
             break;
             default: throw ParseCronException::parseCronFailed("Unable to find max for cron type $sCronType ",$sCronString);
         }

@@ -50,10 +50,10 @@ class FormProvider implements ServiceProviderInterface
         
         $app['form.types'] = $app->share($app->extend('form.types', function ($types) use ($app) {
           
-            $oCalYearRepo  = $app['storage']->getRepository('Bolt\Extension\IComeFromTheNet\BookMe\Model\Setup\CalendarYearEntity');     
-            $oTimeSlotRepo = $app['storage']->getRepository('Bolt\Extension\IComeFromTheNet\BookMe\Model\Setup\TimeslotEntity'); 
-            $oRuleTypeRepo = $app['storage']->getRepository('Bolt\Extension\IComeFromTheNet\BookMe\Model\Rule\RuleTypeEntity'); 
-            $oTeamTypeRepo = $app['storage']->getRepository('Bolt\Extension\IComeFromTheNet\BookMe\Model\Member\TeamEntity'); 
+            $oCalYearRepo  = $app['bm.repo.calyear'];
+            $oTimeSlotRepo = $app['bm.repo.timeslot'];
+            $oRuleTypeRepo = $app['bm.repo.ruletype']; 
+            $oTeamTypeRepo = $app['bm.repo.team']; 
           
             $types[CalendarYearField::class]    = new CalendarYearField($oCalYearRepo);
             $types[ActiveTimeslotField::class]  = new ActiveTimeslotField($oTimeSlotRepo);
