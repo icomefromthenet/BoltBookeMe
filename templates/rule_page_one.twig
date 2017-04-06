@@ -1,3 +1,4 @@
+{% import '@BookMe/_base/_macros.twig' as _m %}
 {% extends '_base/_page-nav.twig' %}
 
 {% block page_nav title %}
@@ -22,37 +23,25 @@
             
             <!-- Rule Type -->    
             <div class="form-group">
-                <label for="bookeMeRuleType">Rule Type</label>
-                <select class="form-control" name="iRuleTypeId" id="bookeMeRuleType">
-                    {% for oRuleType in aRuleTypeList %}
-                        <option value="{{ oRuleType.rule_type_id }}" {% if sRequestRuleType == oRuleType.rule_code %} selected="selected" {% endif %}>{{ oRuleType.rule_code|ucfirst }}</option>,
-                    {% endfor %}
-                </select>
+                {{ _m.label('bookeMeRuleType','Rule Type', {}) }}
+                {{ _m.select_ruletype('iRuleTypeId', aRuleTypeList, sRequestRuleType, { "id": "bookeMeRuleType", "class" : "form-control" }) }}
             </div>
             
             <!-- Calendar Year -->
             <div class="form-group">
-                <label for="bookeMeCalYear">Calendar Year</label>
-                 <select class="form-control" name="iCalYear" id="bookeMeCalYear">
-                    {% for oCalYear in aCalendarYearList %}
-                        <option value="{{ oCalYear.y }}" {% if oCalYear.y == iActiveCalYear %} selected="selected" {% endif %}>{{ oCalYear.y }}</option>
-                    {% endfor %}
-                </select>
+                {{ _m.label("bookeMeCalYear", "Calendar Year", {}) }}
+                {{ _m.select_calyear("iCalYear", aCalendarYearList, iActiveCalYear, { "id":"bookeMeCalYear", "class" : "form-control" }) }}
             </div>
             
             <!-- Timeslot Year -->
             <div class="form-group">
-                <label for="bookeMeTimeslot">Timeslot</label>
-                <select class="form-control" name="iTimeslotId" id="bookeMeTimeslot">
-                    <option value="">Select A Slot</option>
-                    {% for oTimeSlot in aTimeslots %}
-                        <option value="{{ oTimeSlot.timeslot_id }}" {% if iTimeslotId == oTimeSlot.timeslot_id %} selectd ="selected" {% endif %}>{{ oTimeSlot.timeslot_length }} minutes</option>
-                    {% endfor %}
-                </select>
+                {{ _m.label("bookeMeTimeslot", "Timeslot", {}) }}
+                {{ _m.select_timeslot("iTimeslotId", aTimeslots, iTimeslotId, { "class": "form-control", "id": "bookeMeTimeslot" }) }}
             </div>
-            <input type="hidden" name="sRuleTypeCode" value="{{ sRequestRuleType }}" />
-        
-            <input class="btn btn-primary" type="submit" value="Continue to next step" /> 
+            
+            {{ _m.input("sRuleTypeCode",sRequestRuleType,'hidden', {}) }}
+            {{ _m.input("sSubmit","Continue to next step",'submit', { class : 'btn btn-primary' }) }}
+            
         </form>
 
                 

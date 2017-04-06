@@ -428,7 +428,7 @@ class RuleController extends CommonController implements ControllerProviderInter
        $oNow          = $this->getNow();
        $oCommandBus   = $this->getCommandBus();
        $sStepThreeUrl = $app['url_generator']->generate('bookme-rule-new-three');
-        
+       $aHomeUrl      = $app['url_generator']->generate('bookme-home');  
        
         $bSingleDay         = filter_var($request->request->get('bSingleDay'),FILTER_VALIDATE_BOOLEAN); 
         $iOpenSlotMinute    = filter_var($request->request->get('iOpenSlotMinute'),FILTER_VALIDATE_INT); 
@@ -521,7 +521,7 @@ class RuleController extends CommonController implements ControllerProviderInter
         
         $this->getFlash()->info('Saved new Rule at id::'.$oCommand->getRuleId());
         
-        
+        return $app->redirect($aHomeUrl);
     }
    
 }

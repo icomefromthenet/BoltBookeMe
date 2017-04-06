@@ -141,6 +141,7 @@ class SlotFinder
         $iClosingDaySlot     = $oCommand->getClosingSlot(); 
         $oDatabase           = $this->oDatabase;
         $oAppLogger          = $this->oAppLogger;
+        $iRowsAffected       = 0;
         
         $oAppLogger->debug('Flushing and creating slotFinder result table');
         

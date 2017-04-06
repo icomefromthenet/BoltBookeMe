@@ -1,3 +1,4 @@
+{% import '@BookMe/_base/_macros.twig' as _m %}
 {% extends '_base/_page-nav.twig' %}
 
 {% block page_nav title %}
@@ -22,14 +23,13 @@
           
             <h4>Repeat Option</h4>
             <div class="radio">
-                <label for="bIsSingleRule" class="radio-inline">
-                    <input type="radio" id="bIsSingleRule" value="1" name="bSingleDay" {% if bSingleDay == true %} checked="checked" {% endif %} /> 
-                    Occurs on a Single Day
-                </label>
-                <label for="bIsRepeatRule" class="radio-inline">
-                    <input type="radio" id="bIsRepeatRule" value="0" name="bSingleDay" {% if bSingleDay == false %} checked="checked" {% endif %} /> 
-                    Occurs over many Days
-                </label>
+                {% set bSingleDayInt = 0 %}
+                {% if bSingleDay == true %}
+                    {% set bSingleDayInt = 1%}
+                {% endif %}
+                {{ _m.radio_inline('bSingleDay','Occurs on a Single Day', 1 ,bSingleDayInt , { "id" : "bIsSingleRule"}) }}
+                {{ _m.radio_inline('bSingleDay','Occurs over many Days', 0 ,bSingleDayInt , { "id" : "bIsRepeatRule"}) }}
+                
             </div>
             <hr />
             
@@ -37,7 +37,7 @@
             <h4>Start and End Time</h4>
               <div class="form-inline">
                   <div class="form-group">
-                    <label for="iOpenSlotMinute">Open Time (24hr)</label>
+                   {{ _m.label('iOpenSlotMinute','Open Time (24hr)',{ }) }}
                     <select name="iOpenSlotMinute" class="form-control" id="iOpenSlotMinute">
                         {% for oTimeSlot in aDayTimeslots %}
                             <option value="{{ oTimeSlot.open_minute }}" 
@@ -49,7 +49,7 @@
                     </select> &nbsp;
                   </div>
                   <div class="form-group">
-                    <label for="iCloseSlotMinute">Close Time (24hr)</label>
+                    {{ _m.label('iCloseSlotMinute','Close Time (24hr)',{ }) }}
                     <select name="iCloseSlotMinute" class="form-control" id="iCloseSlotMinute">
                         {% for oTimeSlot in aDayTimeslots %}
                         <option value="{{ oTimeSlot.close_minute }}" 
@@ -67,19 +67,19 @@
             <h4> Rule Name & Description </h4>
             
             <div class="form-group">
-                    <label for="sRuleName">Rule Name</label>
-                    <input type="input" class="form-control" value="{{ sRuleName }}" name="sRuleName", id="sRuleName" />
+                    {{ _m.label('sRuleName','Rule Name',{ }) }}
+                    {{ _m.text('sRuleName', sRuleName, {"class":"form-control", "id":"sRuleName"}) }}
                     <br />
-                    <label for="sRuleDescription">Rule Description</label>
-                    <textarea rows="5" class="form-control" name="sRuleDescription", id="sRuleDescription">{{ sRuleDescription }}</textarea>
+                    {{ _m.label('sRuleDescription','Rule Description',{ }) }}
+                    {{ _m.textarea('sRuleDescription',sRuleDescription,{'id':"sRuleDescription", "class" : "form-control", "rows":"5" }) }}
             </div>
             
             <!-- Details From Step One -->
-            <input type="hidden" name="iTimeslotId" value="{{ iTimeslotId }}" />
-            <input type="hidden" name="iCalYear" value="{{ iCalYear }}" />
-            <input type="hidden" name="iRuleTypeId" value="{{ iRuleTypeId }}" />
+            {{ _m.input("iTimeslotId", iTimeslotId ,'hidden', {}) }}
+            {{ _m.input("iCalYear",iCalYear ,'hidden', {}) }}
+            {{ _m.input("iRuleTypeId",iRuleTypeId,'hidden', {}) }}
         
-            <input class="btn btn-primary" type="submit" value="Continue to next step" /> 
+            {{ _m.input("sSubmit","Continue to next step",'submit', { class : 'btn btn-primary' }) }}
         </form>
 
                 
