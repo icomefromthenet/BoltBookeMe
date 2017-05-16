@@ -22,20 +22,20 @@ class ActiveTimeslotField extends AbstractType
     
     public function configureOptions(OptionsResolver $resolver)
     {
-        $aChoices       = [];
-      
-        $aSlots     = $this->oTimeslotRepository->findAllActiveSlots();
-        
-        foreach($aSlots as $oSlot) {
-            $aChoices[$oSlot->getTimeslotId()] = $oSlot->getSlotLength(). ' Min'; 
-        }
         
         $resolver->setDefaults([
-            'choice_list' => new ChoiceList(array_keys($aChoices),array_values($aChoices)),
             'required'    => false,
             'empty_data'  => null,
-            'placeholder' => 'Select A Timeslot'
-            
+            'placeholder' => 'Select A Timeslot',
+            'choices'     => $this->oTimeslotRepository->findAllActiveSlots(),
+            'choices_as_values' => true,
+            'choice_label' => function($oTimeSlot, $key, $index) {
+                /** @var Bolt\Extension\IComeFromTheNet\BookMe\Model\Setup\TimeslotEntity $category */
+                if($oTimeSlot !== null) {
+                    return $oTimeSlot->getSlotLength(). ' Min'; 
+                }
+            },
+            'choice_value' => 'getTimeslotId'
         ]);
         
     }

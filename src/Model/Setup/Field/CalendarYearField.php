@@ -27,22 +27,23 @@ class CalendarYearField extends AbstractType
         $aYears     = $this->oCalYearRepository->findAllCalendarYears();
         
         foreach($aYears as $oYear) {
-            $iYear = $oYear->getCalendarYear();
-            
-            $aChoices[$iYear] = $iYear; 
-            
             if($oYear->getCurrentYearFlag()) {
-                $iCurrentYear = $iYear;
+                $iCurrentYear = $oYear->getCalendarYear();
             }
         }
         
         $resolver->setDefaults([
-            'choices'     => $aChoices,
+            'choices'     =>$aYears,
             'required'    => true,
             'empty_data'  => $iCurrentYear,
-            'choice_label' => function ($value, $key, $index) {
-                return $value.' Year';
+            'choices_as_values' => true,
+            'choice_label' => function($oCalYear, $key, $index) {
+                /** @var Bolt\Extension\IComeFromTheNet\BookMe\Model\Setup\CalendarYearEntity $category */
+                if($oCalYear !== null) {
+                    return $oCalYear->getCalendarYear(). ' Year'; 
+                }
             },
+            'choice_value' => 'getCalendarYear'
         ]);
         
     }

@@ -5,6 +5,7 @@ use Symfony\Component\Form\AbstractType;
 use Symfony\Component\OptionsResolver\OptionsResolver;
 use Symfony\Component\Form\Extension\Core\Type\ChoiceType;
 use Symfony\Component\Form\Extension\Core\ChoiceList\ChoiceList;
+use Symfony\Component\Form\FormBuilderInterface;
 use Bolt\Extension\IComeFromTheNet\BookMe\Model\ReadOnlyRepository;
 
 
@@ -20,23 +21,28 @@ class RuleTypeField extends AbstractType
     }
     
     
+    public function buildForm(FormBuilderInterface $builder, array $options)
+    {
+            
+    }
+    
+    
     public function configureOptions(OptionsResolver $resolver)
     {
-        $aChoices       = [];
-      
-        $aRuleTypes     = $this->oRuleTypeRepository->findRuleTypes();
-        
-        
-        foreach($aRuleTypes as $oRuleType) {
-            $aChoices[$oRuleType->getRuleTypeId()] = ucfirst($oRuleType->getRuleTypeCode()); 
-        }
         
         $resolver->setDefaults([
-            'choice_list' => new ChoiceList(array_keys($aChoices),array_values($aChoices)),
             'required'    => false,
             'empty_data'  => null,
             'placeholder' => 'Select A Rule Type',
-           
+            'choices'     => $this->oRuleTypeRepository->findRuleTypes(),
+            'choices_as_values' => true,
+            'choice_label' => function($oRuleType, $key, $index) {
+                /** @var Bolt\Extension\IComeFromTheNet\BookMe\Model\Rule\RuleTypeEntity $category */
+                if($oRuleType !== null) {
+                    return ucfirst($oRuleType->getRuleTypeCode());
+                }
+            },
+            'choice_value' => 'getRuleTypeId'
         ]);
         
     }

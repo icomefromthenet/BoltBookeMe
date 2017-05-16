@@ -271,7 +271,7 @@ class FilterQueryTest extends ExtensionTest
         $oFactory       = $oApp['form.factory'];
         
         
-        $form = $oFactory->create(RuleTypeField::class);
+        $form = $oFactory->create(RuleTypeField::class,array('example_option' => 'aaaa'));
 
         $formData = array(
           '1' => 2016

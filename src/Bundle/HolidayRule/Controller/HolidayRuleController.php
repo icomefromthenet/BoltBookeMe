@@ -27,7 +27,7 @@ class HolidayRuleController extends CommonController implements ControllerProvid
         /** @var $ctr \Silex\ControllerCollection */
         $oCtr = $app['controllers_factory'];
 
-        $oCtr->get('',[$this,'onRolloverPreviewGet'])
+        $oCtr->get('',[$this,'onHolidayRulePreviewGet'])
               ->bind('bookme-holidayrule-preview');
    
    

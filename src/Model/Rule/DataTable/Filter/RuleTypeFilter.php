@@ -25,7 +25,7 @@ class RuleTypeFilter extends AbstractFilter
             
             
             $oQuery->andWhere($oQuery->expr()->eq($this->getField($sAlias,'rule_type_id'),':iRuleTypeId'))
-                   ->setParameter('iRuleTypeId',$aParams['iRuleTypeId'],Type::INTEGER);
+                   ->setParameter('iRuleTypeId',$aParams['iRuleTypeId']->getRuleTypeId(),Type::INTEGER);
         }
         
     }

@@ -25,7 +25,7 @@ class TimeslotFilter extends AbstractFilter
             
             
             $oQuery->andWhere($oQuery->expr()->eq($this->getField($sAlias,'timeslot_id'),':iTimeslotId'))
-                   ->setParameter('iTimeslotId',$aParams['iTimeslotId'],Type::INTEGER);
+                   ->setParameter('iTimeslotId',$aParams['iTimeslotId']->getTimeslotId(),Type::INTEGER);
         }
         
     }
