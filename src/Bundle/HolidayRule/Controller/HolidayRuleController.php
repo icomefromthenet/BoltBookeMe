@@ -27,15 +27,30 @@ class HolidayRuleController extends CommonController implements ControllerProvid
         /** @var $ctr \Silex\ControllerCollection */
         $oCtr = $app['controllers_factory'];
 
-        $oCtr->get('',[$this,'onHolidayRulePreviewGet'])
+        $oCtr->get('',[$this,'onHolidayRulePreview'])
               ->bind('bookme-holidayrule-preview');
    
-   
+        $oCtr->post('',[$this,'onHolidayRuleSave'])
+              ->bind('bookme-holidayrule-save');
       
     
         
         return $oCtr;
     }
+    
+    /**
+     * Saves a Selected Holiday Rules for the Given Schedule Year
+     *
+     * @param Application   $app
+     * @param Request       $request
+     * @return Response
+     */
+    public function onHolidayRuleSave(Application $app, Request $request)
+    {
+        
+    
+    }
+    
 
     /**
      * Display a preview of the holiday rules that can be generated
@@ -44,24 +59,27 @@ class HolidayRuleController extends CommonController implements ControllerProvid
      * @param Request       $request
      * @return Response
      */
-    public function onHolidayRulePreviewGet(Application $app, Request $request)
+    public function onHolidayRulePreview(Application $app, Request $request)
     {
-       
-       $oDatabase = $this->getDatabaseAdapter();
-       $oNow      = $this->getNow();
-      
-       $oSearchForm = $this->getForm('queue.jobsearch');
+        $oSearchForm  = $this->getForm('holidayrule.builder')->getForm();
+        $aErrors = [];
+        $aHolidays = [];
         
-       //bind request vars to datatable data url
-       $oDataTable->getOptionSet('AjaxOptions')->setRequestParams($request->query->all());
-        
-        //incude request params as values to our form
-        //$oSearchForm->setValuesFromRequest($request);
-        
+        $oSearchForm->handleRequest($request);
+    
+        if ($oSearchForm->isSubmitted() && $oSearchForm->isValid()) {
+            $aSearch = $oSearchForm->getData();
+         
+            $sHolidayProvider = $this->oContainer['bm.holidayrule.choicelist'][$aSearch['sHolidayProvider']];
+         
+            $aHolidays = \Yasumi\Yasumi::create($sHolidayProvider, $aSearch['iCalYear']->getCalendarYear());
+            
+        } 
         
         $aOption = [
             'title'     => 'Choose Holiday',
-            'oForm'     =>  $oSearchForm->getForm()->createView(),
+            'oForm'     => $this->getForm('holidayrule.view'),  
+            'aHoliday'  => $aHolidays
         ];  
        
        return $app['twig']->render('@HolidayRule/preview_holiday.twig', $aOption, []);

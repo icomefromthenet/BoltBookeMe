@@ -10,6 +10,10 @@ use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\Form\FormTypeInterface;
 use Symfony\Component\Form\Extension\Core\Type;
 
+use Bolt\Extension\IComeFromTheNet\BookMe\Model\Setup\Field\CalendarYearField;
+use Bolt\Extension\IComeFromTheNet\BookMe\Bundle\HolidayRule\Model\Field\YasumiLocaleField;
+
+
 /**
  * Loads this HolidayRule Bundle.
  *
@@ -40,7 +44,29 @@ class HolidayRuleFormProvider implements ServiceProviderInterface
     {
         $aConfig   = $this->config;
      
+         //----------------------------------------------------------------------
+        # Rules Form
         
+        $app['bm.holidayrule.choicelist'] = [
+                'Australia','Austria','Belgium','Brazil','Croatia','Czechia','Denmark','Finland',
+                'France','Germany','Greece','Hungary','Ireland','Italy','Japan','Netherlands','New Zealand',
+                'Norway','Poland','Portugal','Romania','Slovakia','South Africa','Spain', 'Sweden',
+                'Switzerland','United States','Ukraine','United Kingdom'
+        ];
+        
+        $app['bm.form.holidayrule.builder'] = $app->share(function () use ($app) {
+   
+            return $app['form.factory']
+                    ->createBuilder('form',[])
+                    ->setMethod('GET')
+                    ->add('iCalYear'        ,CalendarYearField::class, ['label' => 'Calendar Year:'])
+                    ->add('sHolidayProvider',Type\ChoiceType::class, ['label' => 'Supported Countries:', 'choices' => $app['bm.holidayrule.choicelist'] ]);
+                    
+        });
+      
+        $app['bm.form.holidayrule.view'] = function () use ($app) {
+            return $app['bm.form.holidayrule.builder']->getForm()->createView();
+        };
        
         
     }
