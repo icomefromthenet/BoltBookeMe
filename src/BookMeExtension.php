@@ -574,6 +574,8 @@ class BookMeExtension extends SimpleExtension
                 ,'bm_queue'               => 'bolt_bm_queue'
                 ,'bm_queue_monitor'       => 'bolt_bm_queue_monitor'
                 ,'bm_queue_transition'    => 'bolt_bm_queue_transition'
+                
+                ,'bm_holiday'             => 'bolt_bm_holiday'
 
             ]
             ,'leadtime' => 'PT1D'

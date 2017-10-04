@@ -27,9 +27,11 @@
 <div class="row panel panel-default">
     <div class="panel-heading">Choose Holidays</div>
     <div class="panel-body bm-table">
-        
-        
-        
+        {% for oHoliday in aHoliday %}
+            
+            {{ oHoliday.getName() }}    
+                
+        {% endfor %}
     </div>
 </div>
 

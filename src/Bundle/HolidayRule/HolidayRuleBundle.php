@@ -8,6 +8,7 @@ use Bolt\Extension\DatabaseSchemaTrait;
 use Bolt\Extension\IComeFromTheNet\BookMe\Bundle\SimpleBundle;
 use Bolt\Extension\IComeFromTheNet\BookMe\Bundle\HolidayRule\Provider;
 use Bolt\Extension\IComeFromTheNet\BookMe\Bundle\HolidayRule\Controller;
+use Bolt\Extension\IComeFromTheNet\BookMe\Bundle\HolidayRule\Schema;
 
 
 
@@ -93,8 +94,7 @@ class HolidayRuleBundle extends SimpleBundle
     {
         
         return [
-       
-            
+            'bm_holiday'           => Schema\HolidayTable::class,
         ];
     
         

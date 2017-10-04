@@ -48,7 +48,7 @@ abstract class AbstractDataTableManager implements DataTableConfigInterface
     
     
     /**
-    * Implemented to allow default to be set 
+    * Implemented to allow default to be set in instances
     * 
     * @return void
     */ 
@@ -116,7 +116,7 @@ abstract class AbstractDataTableManager implements DataTableConfigInterface
     }
     
     /**
-     * Return the given opion set
+     * Return the given option set
      * 
      * @param string    $sOptionSet     The class name of the option set
      * @return DataTableOptionInterface The option set if found

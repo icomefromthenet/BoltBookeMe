@@ -12,7 +12,6 @@ use Bolt\Storage\Database\Connection;
 use Bolt\Extension\IComeFromTheNet\BookMe\Controller\CommonController;
 
 
-
 /**
  * Preview and Process Holiday Rule generator
  * 
@@ -81,6 +80,7 @@ class HolidayRuleController extends CommonController implements ControllerProvid
             'oForm'     => $this->getForm('holidayrule.view'),  
             'aHoliday'  => $aHolidays
         ];  
+       
        
        return $app['twig']->render('@HolidayRule/preview_holiday.twig', $aOption, []);
        
