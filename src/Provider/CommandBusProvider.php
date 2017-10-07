@@ -250,6 +250,45 @@ class CommandBusProvider implements ServiceProviderInterface
         $app['bm.leagueeventhandler'] = function($c) {
             return new CustomHandler($c['dispatcher']);
         };
+        
+        $app['bm.commandBus.locator'] = $app->share(function(Application $c){
+            
+               $aLocatorMap = [
+                    CalAddYearCommand::class            => 'bm.model.setup.handler.addyear',
+                    SlotAddCommand::class               => 'bm.model.setup.handler.addslot',
+                    SlotToggleStatusCommand::class      => 'bm.model.setup.handler.toggleslot',
+                    RolloverTimeslotCommand::class      => 'bm.model.setup.handler.rolloverslot',
+                    RegisterMemberCommand::class        => 'bm.model.member.handler.addmember',
+                    RegisterTeamCommand::class          => 'bm.model.member.handler.addteam',
+                    AssignTeamMemberCommand::class      => 'bm.model.member.handler.assign',
+                    WithdrawlTeamMemberCommand::class   => 'bm.model.member.handler.withdrawl',
+                    StartScheduleCommand::class         => 'bm.model.schedule.handler.start',
+                    StopScheduleCommand::class          => 'bm.model.schedule.handler.stop',
+                    ResumeScheduleCommand::class        => 'bm.model.schedule.handler.resume',
+                    ToggleScheduleCarryCommand::class   => 'bm.model.schedule.handler.toggle',
+                    RefreshScheduleCommand::class       => 'bm.model.schedule.handler.refresh',
+                    AssignRuleToScheduleCommand::class  => 'bm.model.rule.handler.addschedule',
+                    CreateRuleCommand::class            => 'bm.model.rule.handler.create',
+                    RemoveRuleFromScheduleCommand::class=> 'bm.model.rule.handler.removeschedule',
+                    RolloverRulesCommand::class         => 'bm.model.rule.handler.rollover',
+                    TakeBookingCommand::class           => 'bm.model.booking.handler.take',
+                    WebBookingCommand::class            => 'bm.model.booking.handler.web',
+                    ManualBookingCommand::class         => 'bm.model.booking.handler.manual',
+                    ClearBookingCommand::class          => 'bm.model.booking.handler.clear',
+                    LookBookingConflictsCommand::class  => 'bm.model.booking.handler.conflict',
+                    CreateCustomerCommand::class        => 'bm.model.customer.handler.create',
+                    ChangeCustomerCommand::class        => 'bm.model.customer.handler.change',
+                    CreateApptCommand::class            => 'bm.model.appointment.handler.create',
+                    CancelApptCommand::class            => 'bm.model.appointment.handler.cancel',
+                    AssignApptCommand::class            => 'bm.model.appointment.handler.assign',
+                    CompleteApptCommand::class          => 'bm.model.appointment.handler.complete',
+                    MoveApptWaitingCommand::class       => 'bm.model.appointment.handler.waiting',
+                ];
+            
+            
+             return new PimpleLocator($c, $aLocatorMap); 
+            
+        });
       
       
        $app['bm.commandBus'] = $app->share(function(Application $c) {
@@ -257,46 +296,10 @@ class CommandBusProvider implements ServiceProviderInterface
            # fetch database
            $oDatabase = $c['db'];
           
-           
-            $aLocatorMap = [
-                CalAddYearCommand::class            => 'bm.model.setup.handler.addyear',
-                SlotAddCommand::class               => 'bm.model.setup.handler.addslot',
-                SlotToggleStatusCommand::class      => 'bm.model.setup.handler.toggleslot',
-                RolloverTimeslotCommand::class      => 'bm.model.setup.handler.rolloverslot',
-                RegisterMemberCommand::class        => 'bm.model.member.handler.addmember',
-                RegisterTeamCommand::class          => 'bm.model.member.handler.addteam',
-                AssignTeamMemberCommand::class      => 'bm.model.member.handler.assign',
-                WithdrawlTeamMemberCommand::class   => 'bm.model.member.handler.withdrawl',
-                StartScheduleCommand::class         => 'bm.model.schedule.handler.start',
-                StopScheduleCommand::class          => 'bm.model.schedule.handler.stop',
-                ResumeScheduleCommand::class        => 'bm.model.schedule.handler.resume',
-                ToggleScheduleCarryCommand::class   => 'bm.model.schedule.handler.toggle',
-                RefreshScheduleCommand::class       => 'bm.model.schedule.handler.refresh',
-                AssignRuleToScheduleCommand::class  => 'bm.model.rule.handler.addschedule',
-                CreateRuleCommand::class            => 'bm.model.rule.handler.create',
-                RemoveRuleFromScheduleCommand::class=> 'bm.model.rule.handler.removeschedule',
-                RolloverRulesCommand::class         => 'bm.model.rule.handler.rollover',
-                TakeBookingCommand::class           => 'bm.model.booking.handler.take',
-                WebBookingCommand::class            => 'bm.model.booking.handler.web',
-                ManualBookingCommand::class         => 'bm.model.booking.handler.manual',
-                ClearBookingCommand::class          => 'bm.model.booking.handler.clear',
-                LookBookingConflictsCommand::class  => 'bm.model.booking.handler.conflict',
-                CreateCustomerCommand::class        => 'bm.model.customer.handler.create',
-                ChangeCustomerCommand::class        => 'bm.model.customer.handler.change',
-                CreateApptCommand::class            => 'bm.model.appointment.handler.create',
-                CancelApptCommand::class            => 'bm.model.appointment.handler.cancel',
-                AssignApptCommand::class            => 'bm.model.appointment.handler.assign',
-                CompleteApptCommand::class          => 'bm.model.appointment.handler.complete',
-                MoveApptWaitingCommand::class       => 'bm.model.appointment.handler.waiting',
-            ];
-            
-            
-    
-         
-            // Create the Middleware that loads the commands
+           // Create the Middleware that loads the commands
          
             $oCommandNamingExtractor = new ClassNameExtractor();
-            $oCommandLoadingLocator  = new PimpleLocator($c, $aLocatorMap);
+            $oCommandLoadingLocator  = $c['bm.commandBus.locator'];
             $oCommandNameInflector   = new HandleInflector();
                 
             $oCommandMiddleware      = new CommandHandlerMiddleware($oCommandNamingExtractor,$oCommandLoadingLocator,$oCommandNameInflector);

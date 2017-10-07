@@ -5,7 +5,8 @@ use DateTime;
 use Silex\Application;
 use Silex\ServiceProviderInterface;
 use Bolt\Extension\IComeFromTheNet\BookMe\BookMeException;
-
+use League\Tactician\Handler\Locator\HandlerLocator;
+use Bolt\Extension\IComeFromTheNet\BookMe\Bundle\HolidayRule\Handler\SaveHolidayHandler;
 
 
 /**
@@ -36,7 +37,21 @@ class HolidayRuleCommandBusProvider implements ServiceProviderInterface
     {
         $aConfig   = $this->config;
        
-       
+    
+        
+        $app['bm.holidayrule.model.handler.addyear'] = $app->share(function(Application $container) use ($aConfig){
+            return new SaveHolidayHandler($aConfig['tablenames'],$container['db']);
+        });
+        
+    
+    
+        $app['bm.commandBus.locator'] = $app->extend('bm.commandBus.locator',
+            function(HandlerLocator $oLocator, Application $container) use ($aConfig){
+                
+                $oLocator->addMapping(SaveHolidayHandler::class, 'bm.holidayrule.model.handler.addyear');
+    
+                return $oLocator;
+        });
        
        
     }
