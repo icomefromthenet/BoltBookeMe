@@ -6,7 +6,7 @@ class ScheduleFixture extends BaseFixture
 {
  
     
-    public function runFixture()
+    public function runFixture(array $aAppConfig)
     {
         
       $oNow         = $this->getNow();
@@ -181,6 +181,11 @@ class ScheduleFixture extends BaseFixture
         'customer_1'             => $iCustomerOneId,
         'customer_2'             => $iCustomerTwoId,
         'customer_3'             => $iCustomerThreeId,
+        
+        'member_one_schedule'   => $iMemberOneSchedule,
+        'member_two_schedule'   => $iMemberTwoSchedule,
+        'member_three_schedule' => $iMemberThreeSchedule,
+        'member_four_schedule'  => $iMemberFourSchedule,
         
       ];
       

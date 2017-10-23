@@ -62,15 +62,51 @@ class ScheduleQueryBuilder extends AbstractRepoQuery
         return $this;
     }
     
-    public function scheduleNotClosed($sAlias, DateTime $oDateTime)
+    
+    public function whereScheduleOpenDuringCalenderYear($sAlias, $iCalYear)
     {
-        $this->filterByCalendarYear($sAlias, $oDateTime->format('Y'))
-            ->andWhere($this->expr()->lte($this->getField($sAlias,'close_date'),':sCloseDate'))
-            ->setParameter('sCloseDate',$oDateTime,Type::DATE);
+        $oDateTime = new DateTime('31-12-'.$iCalYear);
+        $sCloseDateColumn = $this->getField($sAlias,'close_date');
+        
+        $this->filterByCalendarYear($sAlias, $iCalYear)
+             ->andWhere("$sCloseDateColumn < :sCloseDate OR $sCloseDateColumn IS NULL ")
+             ->setParameter('sCloseDate',$oDateTime,Type::DATE);
         
         return $this;
     }
     
+    
+    public function whereScheduleClosedDuringCalenderYear($sAlias, $iCalYear)
+    {
+        $sCloseDateColumn = $this->getField($sAlias,'close_date');
+       
+        // Since a schedule last for a single calendar year then any with close
+        // date in the given year must have closed during it
+        $this->filterByCalendarYear($sAlias, $iCalYear)
+             ->andWhere("$sCloseDateColumn IS NOT NULL ");
+        
+        return $this;
+    }
+    
+    
+    public function filterByScheduleOpen($sAlias)
+    {
+        $sCloseDateColumn = $this->getField($sAlias,'close_date');
+        
+        $this->andWhere("$sCloseDateColumn IS NULL ");
+        
+        return $this;
+    }
+    
+    
+    public function filterByscheduleClosed($sAlias)
+    {
+        $sCloseDateColumn = $this->getField($sAlias,'close_date');
+        
+        $this->andWhere("$sCloseDateColumn IS NOT NULL ");
+        
+        return $this;
+    }
     
 }
 /* End of File */

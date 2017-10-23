@@ -81,6 +81,7 @@ class ScheduleBasicTest extends ExtensionTest
     
         $this->ToggleScheduleCarry($this->aDatabaseId['schedule_one'], $oNow, $iCalYear);   
        
+        
     }
     
     

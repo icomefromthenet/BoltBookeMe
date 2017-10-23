@@ -40,9 +40,12 @@ class VirtualFieldsDecorator extends MetadataDriver implements MappingDriver
 
         
         
-        if(method_exists($table,'getVirtualColumns')) {
         
+        if(method_exists($table,'getVirtualColumns')) {
+      
              foreach ($table->getVirtualColumns() as $colName => $column) {
+                
+                  //var_dump($column->getName());
                 $mapping = [
                     'fieldname'        => $column->getName(),
                     'attribute'        => $this->camelize($column->getName()),

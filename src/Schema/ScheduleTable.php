@@ -1,10 +1,10 @@
 <?php
 namespace Bolt\Extension\IComeFromTheNet\BookMe\Schema;
 
-use Bolt\Storage\Database\Schema\Table\BaseTable;
+use Bolt\Extension\IComeFromTheNet\BookMe\Model\VirtualColumnTable;
 
 
-class ScheduleTable extends BaseTable
+class ScheduleTable extends VirtualColumnTable
 {
     
     /**
@@ -34,10 +34,9 @@ class ScheduleTable extends BaseTable
      */
     protected function addVirtualColumns()
     {
-        
         # Schedule Member Details
-        $this->table->addColumn('member_name',   'string',   ['notnull' => true, 'unsigned' => true ]);
-        $this->table->addColumn('member_email',   'string',   ['notnull' => true, 'unsigned' => true ]);
+        $this->table->addVirtualColumn('member_name',   'string',   ['notnull' => true, 'unsigned' => true ]);
+        $this->table->addVirtualColumn('member_email',   'string',   ['notnull' => true, 'unsigned' => true ]);
      
     }
 

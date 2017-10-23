@@ -7,6 +7,7 @@ use Doctrine\DBAL\Query\QueryBuilder;
 use Doctrine\DBAL\Types\Type;
 use Doctrine\DBAL\DBALException;
 use Bolt\Extension\IComeFromTheNet\BookMe\Model\ReadOnlyRepository;
+use Bolt\Events\HydrationEvent;
 
 
 
@@ -34,10 +35,15 @@ class ScheduleRepository extends ReadOnlyRepository implements ObjectRepository
         }
 
         $oQuery = new ScheduleQueryBuilder($this->getEntityManager()->getConnection(), $this);
-        $oQuery->select($select)->from($this->getTableName(), $alias);
+        $oQuery->select($select)
+               ->from($this->getTableName(), $alias)
+               ->withMember($alias,'m')
+               ->withBoltUser('m','u');
             
         return $oQuery;
     }
+    
+    
     
     
     /**
@@ -66,16 +72,66 @@ class ScheduleRepository extends ReadOnlyRepository implements ObjectRepository
 
     public function findAllActiveSchedulesInCalYear($iCalYear)
     {
-        
+        $qb = $this->getLoadQuery();
+    
+    
+        $result = $qb
+                    ->filterByCalendarYear($this->getAlias(),$iCalYear)
+                    ->filterByScheduleOpen($this->getAlias())
+                    ->execute()
+                    ->fetchAll();
+ 
+        if ($result) {
+            return $this->hydrateAll($result, $qb);
+        }
+
+
+        return false;
         
     }
   
   
     public function findAllSchedulesInCalYear($iCalYear)
     {
+        $qb = $this->getLoadQuery();
+    
+    
+        $result = $qb
+                    ->filterByScheduleOpen($this->getAlias())       
+                    ->filterByCalendarYear($this->getAlias(),$iCalYear)
+                    ->execute()
+                    ->fetchAll();
+ 
+        if ($result) {
+            return $this->hydrateAll($result, $qb);
+        }
+
+
+        return false;
+        
+    }
+   /*
+    public function findScheduleForUser($oUsr, $iCalYear)
+    {
+        $qb = $this->getLoadQuery();
+    
+    
+        $result = $qb
+                    ->filterByCalendarYear($this->getAlias(),$iCalYear)       
+                    ->withBoltUser($this->getAlias(),)
+                    ->execute()
+                    ->fetch();
+ 
+        if ($result) {
+            return $this->hydrate($result, $qb);
+        }
+
+
+        return false;
+        
         
         
     }
-   
+    */
 }
 /* End of Class */

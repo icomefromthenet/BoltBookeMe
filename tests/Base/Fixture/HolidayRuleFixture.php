@@ -2,14 +2,14 @@
 namespace Bolt\Extension\IComeFromTheNet\BookMe\Tests\Base\Fixture;
 
 
-class HolidayRuleFixture extends ScheduleFixture
+class HolidayRuleFixture extends BaseFixture
 {
  
     
-    public function runFixture()
+    public function runFixture(array $aAppConfig)
     {
         
-        return parent::runFixture();
+        
       
     }
     

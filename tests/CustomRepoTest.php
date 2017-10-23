@@ -202,21 +202,21 @@ class CustomRepoTest extends ExtensionTest
     public function testCustomRepo()
     {
        
-       $this->RuleRepoTest($this->aDatabaseId['work_repeat']);
+       //$this->RuleRepoTest($this->aDatabaseId['work_repeat']);
        
        $this->ScheduleRepoTest($this->aDatabaseId['schedule_member_one'], $this->aDatabaseId['five_minute'],$this->aDatabaseId['member_one']);
        
-       $this->MemberRepoTest($this->aDatabaseId['member_one']);
+       //$this->MemberRepoTest($this->aDatabaseId['member_one']);
        
-       $this->CustomerRepoTest($this->aDatabaseId['customer_1']);
+       //$this->CustomerRepoTest($this->aDatabaseId['customer_1']);
        
-       $this->CalendarYearRepoTest($this->aDatabaseId['start_year']);
+       //$this->CalendarYearRepoTest($this->aDatabaseId['start_year']);
        
-       $this->TimeslotRepoTest($this->aDatabaseId['ten_minute']);
+       //$this->TimeslotRepoTest($this->aDatabaseId['ten_minute']);
        
-       $this->RuleTypeRepoTest();
+       //$this->RuleTypeRepoTest();
        
-       $this->TeamRepoTest($this->aDatabaseId['team_one']);
+       //$this->TeamRepoTest($this->aDatabaseId['team_one']);
     }
     
     protected function RuleRepoTest($iRuleId)
@@ -261,8 +261,9 @@ class CustomRepoTest extends ExtensionTest
     public function ScheduleRepoTest($iScheduleId,$iTimeSlotId, $iMemberId)
     {
         $oApp = $this->getContainer();
+        $oNow = $this->getNow();
     
-        $oRepo = $oApp['storage']->getRepository('Bolt\Extension\IComeFromTheNet\BookMe\Model\Schedule\ScheduleEntity');    
+        $oRepo = $oApp['bm.repo.schedule'];
     
         $this->assertInstanceOf('Bolt\Extension\IComeFromTheNet\BookMe\Model\Schedule\ScheduleRepository',$oRepo);
         
@@ -282,14 +283,59 @@ class CustomRepoTest extends ExtensionTest
         $this->assertTrue($oSchedule->getCarryOver());
         $this->assertNotEmpty($oSchedule->getRegisteredDate());
         $this->assertEmpty($oSchedule->getCloseDate());
-            
+        
+        // Test the Query Builder Filters
+        $oQuery = $oRepo->createQueryBuilder('a');
+        
+        $oQuery->filterByCalendarYear('a',2017);
+        $this->assertContains('a.calendar_year = :iCalYear',$oQuery->getSQL());
+        
+        $oQuery = $oRepo->createQueryBuilder('a');
+    
+        $oQuery->filterByScheduleOpen('a',2017);
+        $this->assertContains('a.close_date IS NULL',$oQuery->getSQL());
+    
+    
+        $oQuery = $oRepo->createQueryBuilder('a');
+    
+        $oQuery->filterByscheduleClosed('a',2017);
+        $this->assertContains('a.close_date IS NOT NULL',$oQuery->getSQL());
+        
+        $oQuery = $oRepo->createQueryBuilder('a');
+    
+        $oQuery->whereScheduleClosedDuringCalenderYear('a',2017);
+        $this->assertContains('a.calendar_year = :iCalYear',$oQuery->getSQL());
+        $this->assertContains('a.close_date IS NOT NULL',$oQuery->getSQL());
+        
+        $oQuery = $oRepo->createQueryBuilder('a');
+    
+        $oQuery->whereScheduleOpenDuringCalenderYear('a',2017);
+        $this->assertContains('a.calendar_year = :iCalYear',$oQuery->getSQL());
+        $this->assertContains('a.close_date < :sCloseDate OR a.close_date IS NULL',$oQuery->getSQL());
+    
+        $oQuery = $oRepo->createQueryBuilder('a');
+    
+        $oQuery->withMember('a','b');
+        $this->assertContains('INNER JOIN bolt_bm_schedule_membership b ON a.membership_id = b.membership_id',$oQuery->getSQL());
+        
+        $oQuery = $oRepo->createQueryBuilder('a');
+    
+        $oQuery->withBoltUser('a','b');
+        $this->assertContains('LEFT JOIN bolt_users b ON a.bolt_user_id = b.id', $oQuery->getSQL());
+        
+        // Test Repository Finders 
+        
+        $aResult = $oRepo->findAllSchedulesInCalYear($oNow->format('Y'));
+        $this->assertCount(3,$aResult); // 3 Active Schedules
+        
+        var_dump($aResult);
         
     }
         
     
     public function MemberRepoTest($iMemberId)
     {
-        $oNow         = $this->getNow();
+        $oNow = $this->getNow();
         $oApp = $this->getContainer();
     
         $oRepo = $oApp['storage']->getRepository('Bolt\Extension\IComeFromTheNet\BookMe\Model\Member\MemberEntity');    

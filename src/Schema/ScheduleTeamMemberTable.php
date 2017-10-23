@@ -1,10 +1,10 @@
 <?php
 namespace Bolt\Extension\IComeFromTheNet\BookMe\Schema;
 
-use Bolt\Storage\Database\Schema\Table\BaseTable;
+use Bolt\Extension\IComeFromTheNet\BookMe\Model\VirtualColumnTable;
 
 
-class ScheduleTeamMemberTable extends BaseTable
+class ScheduleTeamMemberTable extends VirtualColumnTable
 {
     
     /**
