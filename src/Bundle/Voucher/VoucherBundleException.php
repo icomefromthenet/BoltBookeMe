@@ -1,5 +1,5 @@
 <?php
-namespace Bolt\Extension\IComeFromTheNet\BookMe\Bundle\HolidayRule;
+namespace Bolt\Extension\IComeFromTheNet\BookMe\Bundle\Voucher;
 
 use Bolt\Extension\IComeFromTheNet\BookMe\BookMeException;
 use Doctrine\DBAL\DBALException;
@@ -12,7 +12,7 @@ use Doctrine\DBAL\DBALException;
  * @since 1.0
  * 
  */ 
-class HolidayRuleBundleException extends BookMeException
+class VoucherBundleException extends BookMeException
 {
   
  

@@ -9,9 +9,9 @@ use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Bolt\Storage\Database\Connection;
 use Silex\Application;
-use LaterJobApi\Controllers\ActivityProvider;
+use LaterJobApi\Controllers\ActivityController;
 
-class QueueActivityController extends ActivityProvider implements ControllerProviderInterface
+class QueueActivityController extends ActivityController implements ControllerProviderInterface
 {
     
     

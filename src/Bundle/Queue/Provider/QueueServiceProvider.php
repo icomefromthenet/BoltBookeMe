@@ -4,22 +4,51 @@ namespace Bolt\Extension\IComeFromTheNet\BookMe\Bundle\Queue\Provider;
 use DateTime;
 use Silex\Application;
 use Silex\ServiceProviderInterface;
-use LaterJobApi\Provider\QueueServiceProvider as BaseQueueServiceProvider;
 use LaterJob\Log\LogSubscriber;
 use Bolt\Extension\IComeFromTheNet\BookMe\Bundle\Queue\Worker\RebuildWorker;
 use Bolt\Extension\IComeFromTheNet\BookMe\Bundle\Queue\Worker\PurgeWorker;
 use Bolt\Extension\IComeFromTheNet\BookMe\Bundle\Queue\Worker\MonitorWorker;
+
+use Symfony\Component\EventDispatcher\EventDispatcher;
+use LaterJob\Queue,
+    LaterJob\Log\MonologBridge,
+    LaterJob\UUID,
+    LaterJob\Util\MersenneRandom,
+    LaterJob\Loader\ConfigLoader,
+    LaterJob\Loader\ModelLoader,
+    LaterJob\Loader\EventSubscriber;
 
 /**
  * Wrapper for the later job Queue Service Provider
  *
  * @author Lewis Dyer <getintouch@icomefromthenet.com>
  */
-class QueueServiceProvider extends BaseQueueServiceProvider implements ServiceProviderInterface
+class QueueServiceProvider  implements ServiceProviderInterface
 {
+      
+    const EVENT_DISPATCHER  = '.event.dispatcher';
+    
+    const UUID_GENERATOR    = '.uuid.generator';
+    
+    const QUEUE             = '.queue';
+    
+    const LOG_BRIDGE        = '.log.bridge';
+    
+    const LOADER_CONFIG     = '.loader.config';
+    
+    const LOADER_MODEL      = '.loader.model';
+    
+    const LOADER_EVENTS     = '.loader.events';
+    
+    const OPTIONS           = '.options';
+    
+    const QUERY_LOG         = '.query_log'; 
+    
     /** @var array */
-    private $config;
-
+    protected $config;
+    
+    
+    protected $index;
 
     /**
      * Constructor.
@@ -30,11 +59,11 @@ class QueueServiceProvider extends BaseQueueServiceProvider implements ServicePr
     {
         $this->config = $config;
         
-        parent::__construct('bm.queue');
-        
+        $this->index = 'bm.queue';
         
     }
 
+ 
     /**
      * {@inheritdoc}
      */
@@ -42,6 +71,7 @@ class QueueServiceProvider extends BaseQueueServiceProvider implements ServicePr
     {
        
         $aConfig   = $this->config;
+        $index     = $this->index;
         
         # expects options to be part of the container
         $aConfig['queue']['db'] = [
@@ -52,9 +82,6 @@ class QueueServiceProvider extends BaseQueueServiceProvider implements ServicePr
       
         $app[$this->index.self::OPTIONS] = $aConfig['queue'];
       
-      
-        # regester the parent implementation
-        parent::register($app);
       
         # Override services to use bolt equivalents
         $app[$this->index.self::LOG_BRIDGE] = $app->share(function($app) use ($aConfig) {
@@ -95,6 +122,41 @@ class QueueServiceProvider extends BaseQueueServiceProvider implements ServicePr
         $app['laterjob.api.formatters.monitor'] = $app->share(function(){
             return new \LaterJobApi\Formatter\MonitorFormatter();
         });
+        
+        
+        $app[$this->index.self::UUID_GENERATOR] = function () use ($app)  {
+            return new UUID(new MersenneRandom());
+        };
+        
+        
+        $app[$this->index.self::LOADER_CONFIG] = function() use ($app){
+            return new ConfigLoader();
+        };
+        
+        $app[$this->index.self::LOADER_EVENTS] = function() use ($app){
+            return new EventSubscriber();
+        };
+        
+        $app[$this->index.self::LOADER_MODEL] = function() use ($app){
+            return new ModelLoader($app['db']);
+        };
+        
+        $app[$this->index.self::QUEUE] = function($name) use ($app,$index){
+            
+             $event  = $app[$index.QueueServiceProvider::EVENT_DISPATCHER]; 
+             $log    = $app[$index.QueueServiceProvider::LOG_BRIDGE];
+             $option = $app[$index.QueueServiceProvider::OPTIONS];
+             $uuid   = $app[$index.QueueServiceProvider::UUID_GENERATOR];
+             $config = $app[$index.QueueServiceProvider::LOADER_CONFIG];
+             $model  = $app[$index.QueueServiceProvider::LOADER_MODEL];
+             $events = $app[$index.QueueServiceProvider::LOADER_EVENTS];
+             
+             
+             return new Queue($event,$log,$option,$uuid,$config,$model,$events);
+            
+        };
+        
+        
        
         
     }
@@ -104,7 +166,7 @@ class QueueServiceProvider extends BaseQueueServiceProvider implements ServicePr
      */
     public function boot(Application $app)
     {
-      return parent::boot($app);
+       $app[$this->index.self::EVENT_DISPATCHER]->addSubscriber($app[$this->index.self::QUERY_LOG]); 
     }
 }
 /* End of Service Provider */

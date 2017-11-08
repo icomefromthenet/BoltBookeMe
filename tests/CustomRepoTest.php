@@ -328,7 +328,7 @@ class CustomRepoTest extends ExtensionTest
         $aResult = $oRepo->findAllSchedulesInCalYear($oNow->format('Y'));
         $this->assertCount(3,$aResult); // 3 Active Schedules
         
-        var_dump($aResult);
+        
         
     }
         

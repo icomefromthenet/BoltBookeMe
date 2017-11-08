@@ -5,7 +5,7 @@ use Silex\Application;
 use Silex\ServiceProviderInterface;
 use Bolt\Extension\IComeFromTheNet\BookMe\Model\VirtualFieldsDecorator;
 use Bolt\Extension\IComeFromTheNet\BookMe\Model\SchemaManagerDecorator;
-
+use DBALGateway\Table\GatewayProxyCollection;
 
 class StorageExtensionsProvider implements ServiceProviderInterface
 {
@@ -58,6 +58,18 @@ class StorageExtensionsProvider implements ServiceProviderInterface
                 }
             )
         );
+        
+        
+        // Gateway Proxy 
+        
+        $app['bm.tablegateway.proxycollection'] = $app->share(function($c) use ($aConfig) {
+            
+            /**@var Doctrine\DBAL\Schema\Schema **/
+            $oSchema = $c['schema'];
+       
+            return new GatewayProxyCollection($oSchema);
+       
+         });
         
         // Register Repoisotry Extensions
         

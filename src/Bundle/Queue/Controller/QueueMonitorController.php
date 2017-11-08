@@ -9,9 +9,9 @@ use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Bolt\Storage\Database\Connection;
 use Silex\Application;
-use LaterJobApi\Controllers\MonitorProvider;
+use LaterJobApi\Controllers\MonitorController;
 
-class QueueMonitorController extends MonitorProvider implements ControllerProviderInterface
+class QueueMonitorController extends MonitorController implements ControllerProviderInterface
 {
     
     
