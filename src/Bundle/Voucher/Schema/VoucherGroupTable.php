@@ -33,7 +33,7 @@ class VoucherGroupTable extends VirtualColumnTable
      */
     protected function addIndexes()
     {
-        $table->addUniqueIndex(array('voucher_group_slug'),'bm_voucher_group_uiq1');
+        $this->table->addUniqueIndex(array('voucher_group_slug'),'bm_voucher_group_uiq1');
     }
 
     /**

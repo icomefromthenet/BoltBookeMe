@@ -65,7 +65,7 @@ class StorageExtensionsProvider implements ServiceProviderInterface
         $app['bm.tablegateway.proxycollection'] = $app->share(function($c) use ($aConfig) {
             
             /**@var Doctrine\DBAL\Schema\Schema **/
-            $oSchema = $c['schema'];
+            $oSchema = $c['schema']->getSchema();
        
             return new GatewayProxyCollection($oSchema);
        

@@ -32,7 +32,7 @@ class VoucherTypeTable extends VirtualColumnTable
      */
     protected function addIndexes()
     {
-        $this->table->addUniqueIndex(array('voucher_name','voucher_enabled_from'),'voucher_type_uiq1');
+        $this->table->addUniqueIndex(array('voucher_name','voucher_enabled_from'),'bm_voucher_type_uiq1');
      
     }
 
@@ -50,12 +50,12 @@ class VoucherTypeTable extends VirtualColumnTable
     protected function addForeignKeyConstraints()
     {
         
-        $sVoucherGenRuleName = $this->tablePrefix . 'voucher_gen_rule';
-        $sVoucherGroupName   = $this->tablePrefix . 'voucher_group';
+        $sVoucherGenRuleName = $this->tablePrefix . 'bm_voucher_gen_rule';
+        $sVoucherGroupName   = $this->tablePrefix . 'bm_voucher_group';
       
         
-        $this->table->addForeignKeyConstraint($sVoucherGroupName,array('voucher_group_id'),array('voucher_group_id'),array(),'voucher_type_fk1');
-        $this->table->addForeignKeyConstraint($sVoucherGenRuleName,array('voucher_gen_rule_id'),array('voucher_gen_rule_id'),array(),'voucher_type_fk2');
+        $this->table->addForeignKeyConstraint($sVoucherGroupName,array('voucher_group_id'),array('voucher_group_id'),array(),'bm_voucher_type_fk1');
+        $this->table->addForeignKeyConstraint($sVoucherGenRuleName,array('voucher_gen_rule_id'),array('voucher_gen_rule_id'),array(),'bm_voucher_type_fk2');
        
     }
     

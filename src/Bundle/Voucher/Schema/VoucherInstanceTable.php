@@ -27,7 +27,7 @@ class VoucherInstanceTable extends VirtualColumnTable
      */
     protected function addIndexes()
     {
-         $this->table->addUniqueIndex(array('voucher_code'),'voucher_instance_uiq1');
+         $this->table->addUniqueIndex(array('voucher_code'),'bm_voucher_instance_uiq1');
        
     }
 
@@ -45,9 +45,9 @@ class VoucherInstanceTable extends VirtualColumnTable
      */
     protected function addForeignKeyConstraints()
     {
-        $sVoucherTypeName = $this->tablePrefix . 'voucher_type';
+        $sVoucherTypeName = $this->tablePrefix . 'bm_voucher_type';
         
-        $table->addForeignKeyConstraint($sVoucherTypeName,array('voucher_type_id'),array('voucher_type_id'),array(),'voucher_instance_fk1');
+        $this->table->addForeignKeyConstraint($sVoucherTypeName,array('voucher_type_id'),array('voucher_type_id'),array(),'bm_voucher_instance_fk1');
 
     }
     

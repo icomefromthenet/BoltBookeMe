@@ -1,5 +1,4 @@
 <?php
-
 namespace Bolt\Extension\IComeFromTheNet\BookMe\Tests\Base;
 
 use DateTime;
@@ -107,9 +106,9 @@ class ExtensionTest extends \PHPUnit_Framework_TestCase
     protected function setUp()
     {
         # Truncate the Tables
-        $aConfig = $this->getAppConfig();
+        $aConfig   = $this->getAppConfig();
         $oDatabase = $this->getDatabaseAdapter();
-        $oNow     = $this->getNow();
+        $oNow      = $this->getNow();
         
         $oFixture = new BasicFixture($oDatabase, null, $oNow);
         

@@ -259,6 +259,7 @@ class BookMeExtension extends SimpleExtension
             'bm_appointment_status' => AppointmentStatusTable::class,
             'bm_appointment'        => AppointmentTable::class,
             
+            
         ];
     }
     
@@ -575,7 +576,15 @@ class BookMeExtension extends SimpleExtension
                 ,'bm_queue_monitor'       => 'bolt_bm_queue_monitor'
                 ,'bm_queue_transition'    => 'bolt_bm_queue_transition'
                 
-                ,'bm_holiday'             => 'bolt_bm_holiday'
+                // Holiday Rule Bundle
+                
+                ,'bm_holiday'             => 'bolt_bm_holiday',
+                
+                // Voucher Bundle
+                'bm_voucher_group'         => 'bolt_bm_voucher_group',
+                'bm_voucher_gen_rule'      => 'bolt_bm_voucher_gen_rule',
+                'bm_voucher_type'          => 'bolt_bm_voucher_type',
+                'bm_voucher_instance'      => 'bolt_bm_voucher_instance',
 
             ]
             ,'leadtime' => 'PT1D'
@@ -585,6 +594,7 @@ class BookMeExtension extends SimpleExtension
                 'Queue'      => true,   
                 'Rollover'   => true,
                 'HolidayRule' => true,
+                'Voucher'    => true,
             ]
             ,'queue' => [
                 'worker' => [

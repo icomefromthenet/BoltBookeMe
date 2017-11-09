@@ -9,6 +9,7 @@ class BasicFixture extends BaseFixture
     {
         $aConfig = $aAppConfig;
         
+        
         $oDatabase = $this->getDatabaseAdapter();
         
         // Truncate the Tables
@@ -40,7 +41,92 @@ class BasicFixture extends BaseFixture
         $this->getDatabaseAdapter()->executeUpdate("INSERT INTO ".$aConfig['tablenames']['bm_appointment_status'] ." (`status_code`,`status_description`) values ('C','Canceled')");
 
         
-      
+        $this->getDatabaseAdapter()->executeUpdate(
+            "INSERT INTO ".$aConfig['tablenames']['bm_voucher_group'] ." (`voucher_group_id`,`voucher_group_name`,`voucher_group_slug`,`is_disabled`,`sort_order`,`date_created`) ".
+            " VALUES (1,'Appointment','appointment',0,1,now())");
+        
+        $this->getDatabaseAdapter()->executeUpdate(
+            "INSERT INTO ".$aConfig['tablenames']['bm_voucher_group']." (`voucher_group_id`,`voucher_group_name`,`voucher_group_slug`,`is_disabled`,`sort_order`,`date_created`) ".
+            " VALUES (2,'Journal','journal',0,1,now())");
+            
+            
+          $this->getDatabaseAdapter()->executeUpdate(
+            "INSERT INTO ".$aConfig['tablenames']['bm_voucher_gen_rule'] .
+            "(`voucher_gen_rule_id`,`voucher_rule_name`,`voucher_rule_slug`,`voucher_padding_char`,`voucher_prefix`,`voucher_suffix`,
+              `voucher_length`,`date_created`,`voucher_sequence_no`,`voucher_sequence_strategy`,`voucher_validate_rules`) ".
+            " VALUES ('1','Appointment Number','appointment_number','','A', '', 5, now(), 1000, 'sequence', '".serialize(['always-valid'])."')");
+                      
+            $this->getDatabaseAdapter()->executeUpdate(
+            "INSERT INTO ".$aConfig['tablenames']['bm_voucher_gen_rule'] .
+            "(`voucher_gen_rule_id`,`voucher_rule_name`,`voucher_rule_slug`,`voucher_padding_char`,`voucher_prefix`,`voucher_suffix`,
+              `voucher_length`,`date_created`,`voucher_sequence_no`,`voucher_sequence_strategy`,`voucher_validate_rules`) ".
+            " VALUES ('2','Sales Journal','sales_journal','','S', '', 8, now(), 100, 'sequence', '".serialize(['always-valid'])."')");           
+            
+            $this->getDatabaseAdapter()->executeUpdate(
+            "INSERT INTO ".$aConfig['tablenames']['bm_voucher_gen_rule'] .
+            "(`voucher_gen_rule_id`,`voucher_rule_name`,`voucher_rule_slug`,`voucher_padding_char`,`voucher_prefix`,`voucher_suffix`,
+              `voucher_length`,`date_created`,`voucher_sequence_no`,`voucher_sequence_strategy`,`voucher_validate_rules`) ".
+            " VALUES ('3','Discounts Journal','discounts_journal','','D', '', 8, now(), 100, 'sequence', '".serialize(['always-valid'])."')");           
+            
+            $this->getDatabaseAdapter()->executeUpdate(
+            "INSERT INTO ".$aConfig['tablenames']['bm_voucher_gen_rule'] .
+            "(`voucher_gen_rule_id`,`voucher_rule_name`,`voucher_rule_slug`,`voucher_padding_char`,`voucher_prefix`,`voucher_suffix`,
+              `voucher_length`,`date_created`,`voucher_sequence_no`,`voucher_sequence_strategy`,`voucher_validate_rules`) ".
+            " VALUES ('4','General Journal','general_journal','','G', '', 8, now(), 100, 'sequence', '".serialize(['always-valid'])."')");
+            
+             $this->getDatabaseAdapter()->executeUpdate(
+            "INSERT INTO ".$aConfig['tablenames']['bm_voucher_type'] .
+            "(`voucher_type_id`, `voucher_enabled_from`, `voucher_enabled_to`, `voucher_name`, `voucher_name_slug`, `voucher_description`, `voucher_group_id`, `voucher_gen_rule_id`) ".
+            " VALUES (1,
+                     DATE_FORMAT(NOW() ,'%Y-01-01'),
+                     '3000-01-01',
+                     'Appointment Number V1',
+                     'appointment_number_v1',
+                     'Appointment Number Version 1',
+                     1,
+                     1
+            )");
+            
+            $this->getDatabaseAdapter()->executeUpdate(
+            "INSERT INTO ".$aConfig['tablenames']['bm_voucher_type'] .
+            "(`voucher_type_id`, `voucher_enabled_from`, `voucher_enabled_to`, `voucher_name`, `voucher_name_slug`, `voucher_description`, `voucher_group_id`, `voucher_gen_rule_id`) ".
+            " VALUES (2,
+                     DATE_FORMAT(NOW() ,'%Y-01-01'),
+                     '3000-01-01',
+                     'Sales Journals V1',
+                     'salues_journals_v1',
+                     'Sales Journals Version 1',
+                     2,
+                     2
+            )");
+            
+            $this->getDatabaseAdapter()->executeUpdate(
+            "INSERT INTO ".$aConfig['tablenames']['bm_voucher_type'] .
+            "(`voucher_type_id`, `voucher_enabled_from`, `voucher_enabled_to`, `voucher_name`, `voucher_name_slug`, `voucher_description`, `voucher_group_id`, `voucher_gen_rule_id`) ".
+            " VALUES (3,
+                     DATE_FORMAT(NOW() ,'%Y-01-01'),
+                     '3000-01-01',
+                     'Discounts Journals V1',
+                     'discounts_journals_v1',
+                     'Discounts Journals Version 1',
+                     2,
+                     3
+            )");
+            
+            $this->getDatabaseAdapter()->executeUpdate(
+            "INSERT INTO ".$aConfig['tablenames']['bm_voucher_type'] .
+            "(`voucher_type_id`, `voucher_enabled_from`, `voucher_enabled_to`, `voucher_name`, `voucher_name_slug`, `voucher_description`, `voucher_group_id`, `voucher_gen_rule_id`) ".
+            " VALUES (4,
+                     DATE_FORMAT(NOW() ,'%Y-01-01'),
+                     '3000-01-01',
+                     'General Journals V1',
+                     'general_journals_v1',
+                     'General Journals Version 1',
+                     2,
+                     4
+            )");
+            
+            
     }
     
     

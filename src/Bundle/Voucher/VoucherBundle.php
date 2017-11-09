@@ -95,10 +95,10 @@ class VoucherBundle extends SimpleBundle
     {
         
         return [
-            'voucher_group'         => Schema\VoucherGroupTable::class,
-            'voucher_gen_rule'      => Schema\VoucherGenRuleTable::class,
-            'voucher_type'          => Schema\VoucherTypeTable::class,
-            'voucher_instance'      => Schema\VoucherInstanceTable::class,
+            'bm_voucher_group'         => Schema\VoucherGroupTable::class,
+            'bm_voucher_gen_rule'      => Schema\VoucherGenRuleTable::class,
+            'bm_voucher_type'          => Schema\VoucherTypeTable::class,
+            'bm_voucher_instance'      => Schema\VoucherInstanceTable::class,
         ];
     
         
