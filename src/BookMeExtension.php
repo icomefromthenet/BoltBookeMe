@@ -585,6 +585,17 @@ class BookMeExtension extends SimpleExtension
                 'bm_voucher_gen_rule'      => 'bolt_bm_voucher_gen_rule',
                 'bm_voucher_type'          => 'bolt_bm_voucher_type',
                 'bm_voucher_instance'      => 'bolt_bm_voucher_instance',
+                
+                // Ledger Tables
+                'ledger_account'           => 'bm_ledger_accounts',
+                'ledger_account_group'     => 'bm_ledger_account_group',
+                'ledger_org_unit'          => 'bm_ledger_org_unit',
+                'ledger_user'              => 'bm_ledger_user',
+                'ledger_journal_type'      => 'bm_ledger_journal_type',
+                'ledger_transaction'       => 'bm_ledger_transaction',
+                'ledger_entry'             => 'bm_ledger_entry',
+                'ledger_daily'             => 'bm_ledger_daily',
+                
 
             ]
             ,'leadtime' => 'PT1D'
