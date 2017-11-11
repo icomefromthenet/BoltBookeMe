@@ -3,7 +3,16 @@ namespace Bolt\Extension\IComeFromTheNet\BookMe\Bundle\Voucher;
 
 use IComeFromTheNet\VoucherNum\VoucherGenerator;
 
-
+/**
+ * API for generating Voucher for support journal types.
+ * 
+ * Using the Slug Names to identify voucher types.
+ * 
+ * VoucherServiceProvider registers the support vouchers.
+ * 
+ * @author Lewis Dyer <getintouch@icomefromthenet.com>
+ * @since 1.0
+ */
 class VoucherNumbers
 {
     
@@ -11,7 +20,7 @@ class VoucherNumbers
     
     
     
-    public function addVoucherGenerator($sTypeName, VoucherGenerator $oGenerator)
+    public function registerVoucherGenerator($sTypeName, VoucherGenerator $oGenerator)
     {
         $this->aVoucherGenerators[$sTypeName] = $oGenerator;
     
@@ -40,9 +49,19 @@ class VoucherNumbers
     
     public function getSalesJournalNumber()
     {
-        return $this->getVoucherGenerator('sales')->generate();
+        return $this->getVoucherGenerator('sales_journals')->generate();
     }
     
+    public function getDiscountJournalNumber()
+    {
+        return $this->getVoucherGenerator('discounts_journals')->generate();
+    }
+    
+    
+    public function getGeneralJournalNumber()
+    {
+        return $this->getVoucherGenerator('general_journals')->generate();
+    }
     
 }
 /* End of Class */

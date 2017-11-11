@@ -71,7 +71,7 @@ class VoucherBundle extends SimpleBundle
     protected function registerTwigPaths()
     {
         
-        return ['/src/Bundle/Voucher/Resources/view' => ['namespace' => 'Voucher']];
+        return ['/src/Bundle/Voucher/Resources/view' => ['namespace' => 'bmVoucher']];
     }
 
     /**

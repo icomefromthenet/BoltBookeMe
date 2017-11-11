@@ -4,8 +4,9 @@ namespace Bolt\Extension\IComeFromTheNet\BookMe\Bundle\Voucher\Provider;
 use DateTime;
 use Silex\Application;
 use Silex\ServiceProviderInterface;
+use Bolt\Extension\IComeFromTheNet\BookMe\Bundle\Voucher\CustomVoucherGenerator;
 use Bolt\Extension\IComeFromTheNet\BookMe\Bundle\Voucher\CustomVoucherContainer;
-use IComeFromTheNet\VoucherNum\VoucherGenerator;
+use Bolt\Extension\IComeFromTheNet\BookMe\Bundle\Voucher\VoucherNumbers;
 
 /**
  * Bootstrap The Voucher Generator 
@@ -36,6 +37,11 @@ class VoucherServiceProvider implements ServiceProviderInterface
     {
         $aConfig   = $this->config;
         
+        /**
+         * Load our customer voucher service container
+         * 
+         * @return CustomVoucherContainer
+         */ 
         $app['bm.voucher.container'] = $app->share(function($c) use ($aConfig) {
             
             $oDatabase      = $c['db'];
@@ -74,12 +80,55 @@ class VoucherServiceProvider implements ServiceProviderInterface
         });
         
         
-        $app['bm.voucher.generator'] = function($c){
+        /**
+         * Load custom voucher generator.
+         *  
+         * @return CustomVoucherGenerator
+         */ 
+        $app['bm.voucher.generator'] =  function($c){
             $oContainer =  $c['bm.voucher.container'];
             
-            return new VoucherGenerator($oContainer);
+            return new CustomVoucherGenerator($oContainer);
             
         };
+        
+        
+        
+        /**
+         * Load the voucher service which API to generate voucher numbers
+         * for the supported journals.
+         * 
+         * @return VoucherNumbers
+         */ 
+        $app['bm.voucher.service'] = $app->share(function($c) use ($aConfig){
+            
+            /** @var DateTime **/
+            $oNow           = $c['bm.now'];
+            
+            $oVoucherNumbers = new VoucherNumbers();
+            
+            /** @var CustomVoucherContainer **/
+            $oContainer =  $c['bm.voucher.container'];
+             
+            // Load the Types in Bulk
+            /** @var IComeFromTheNet\VoucherNum\Model\VoucherType\VoucherTypeGateway **/
+            $oTypeGateway = $oContainer->getGateway(CustomVoucherContainer::DB_TABLE_VOUCHER_TYPE);
+                             
+            $aTypes =  $oTypeGateway->selectQuery()->start()->filterCurrent($oNow)->end()->find(); 
+        
+            foreach($aTypes as $oVoucherType) {
+                /** @var CustomVoucherGenerator **/
+                $oVoucherGenerator = $c['bm.voucher.generator'];
+                
+                $oVoucherGenerator->setVoucherType($oVoucherType);
+                
+                $oVoucherNumbers->registerVoucherGenerator($oVoucherType->getSlug(),$oVoucherGenerator);
+                
+            }
+            
+            return $oVoucherNumbers;
+            
+        });
         
 
     }

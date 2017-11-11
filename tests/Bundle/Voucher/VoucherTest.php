@@ -37,13 +37,41 @@ class VoucherTest extends ExtensionTest
    {
      
       $oContainer = $this->getContainer();
-    
-      $oGenerator = $oContainer['bm.voucher.generator'];
       
-      $sVoucher  = $oGenerator
-                    ->setVoucherByName('salues_journals_v1')
-                    ->generate();
+      /** @var Bolt\Extension\IComeFromTheNet\BookMe\Bundle\Voucher\VoucherNumbers  **/
+      $oVoucherService = $oContainer['bm.voucher.service'];
+      
+      // Test Appointment Numbers
+      
+      $sVoucher  = $oVoucherService->getAppointmentNumber();
        
+      $this->assertNotEmpty($sVoucher); 
+      $this->assertEquals(0,strpos($sVoucher,'A'));
+      
+      
+      // Test Sales Journals
+    
+      $sVoucher  = $oVoucherService->getSalesJournalNumber();
+      
+      
+      $this->assertNotEmpty($sVoucher); 
+      $this->assertEquals(0,strpos($sVoucher,'S'));
+      
+      // Test Discount Journals
+    
+      $sVoucher  = $oVoucherService->getDiscountJournalNumber();
+      
+      $this->assertNotEmpty($sVoucher); 
+      $this->assertEquals(0,strpos($sVoucher,'D'));
+      
+      // Test General Journals
+    
+      $sVoucher  = $oVoucherService->getGeneralJournalNumber();
+      
+      
+      $this->assertNotEmpty($sVoucher); 
+      $this->assertEquals(0,strpos($sVoucher,'G'));
+      
    }
    
    

@@ -81,7 +81,7 @@ class BasicFixture extends BaseFixture
                      DATE_FORMAT(NOW() ,'%Y-01-01'),
                      '3000-01-01',
                      'Appointment Number V1',
-                     'appointment_number_v1',
+                     'appointment_number',
                      'Appointment Number Version 1',
                      1,
                      1
@@ -94,7 +94,7 @@ class BasicFixture extends BaseFixture
                      DATE_FORMAT(NOW() ,'%Y-01-01'),
                      '3000-01-01',
                      'Sales Journals V1',
-                     'salues_journals_v1',
+                     'sales_journals',
                      'Sales Journals Version 1',
                      2,
                      2
@@ -107,7 +107,7 @@ class BasicFixture extends BaseFixture
                      DATE_FORMAT(NOW() ,'%Y-01-01'),
                      '3000-01-01',
                      'Discounts Journals V1',
-                     'discounts_journals_v1',
+                     'discounts_journals',
                      'Discounts Journals Version 1',
                      2,
                      3
@@ -120,7 +120,7 @@ class BasicFixture extends BaseFixture
                      DATE_FORMAT(NOW() ,'%Y-01-01'),
                      '3000-01-01',
                      'General Journals V1',
-                     'general_journals_v1',
+                     'general_journals',
                      'General Journals Version 1',
                      2,
                      4
