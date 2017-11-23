@@ -43,10 +43,10 @@ class LedgerAccountGroupTable extends VirtualColumnTable
      */
     protected function addForeignKeyConstraints()
     {
-        $sAccountTable = $this->tablePrefix . 'bm_ledger_accounts';
+        $sAccountTable = $this->tablePrefix . 'bm_ledger_account';
         
-        $table->addForeignKeyConstraint($sAccountTable,array("parent_account_id"), array("account_id"), array("onUpdate" => "CASCADE"));
-        $table->addForeignKeyConstraint($sAccountTable,array("child_account_id"), array("account_id"), array("onUpdate" => "CASCADE"));
+        $this->table->addForeignKeyConstraint($sAccountTable,array("parent_account_id"), array("account_id"), array("onUpdate" => "CASCADE"));
+        $this->table->addForeignKeyConstraint($sAccountTable,array("child_account_id"), array("account_id"), array("onUpdate" => "CASCADE"));
 
     }
 }

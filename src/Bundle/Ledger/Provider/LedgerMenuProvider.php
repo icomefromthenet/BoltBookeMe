@@ -14,7 +14,7 @@ use Bolt\Extension\IComeFromTheNet\BookMe\Menu\MenuBuilder;
  * 
  * @author Lewis Dyer <getintouch@icomefromthenet.com>
  */
-class VoucherMenuProvider implements ServiceProviderInterface
+class LedgerMenuProvider implements ServiceProviderInterface
 {
     /** @var array */
     private $config;

@@ -52,9 +52,9 @@ class VoucherNumbers
         return $this->getVoucherGenerator('sales_journals')->generate();
     }
     
-    public function getDiscountJournalNumber()
+    public function getPaymentJournalNumber()
     {
-        return $this->getVoucherGenerator('discounts_journals')->generate();
+        return $this->getVoucherGenerator('payments_journals')->generate();
     }
     
     

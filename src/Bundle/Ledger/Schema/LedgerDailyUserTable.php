@@ -4,7 +4,7 @@ namespace Bolt\Extension\IComeFromTheNet\BookMe\Bundle\Ledger\Schema;
 use Bolt\Extension\IComeFromTheNet\BookMe\Model\VirtualColumnTable;
 
 
-class LedgerEntryTable extends VirtualColumnTable
+class LedgerDailyUserTable extends VirtualColumnTable
 {
     
     /**
@@ -13,13 +13,13 @@ class LedgerEntryTable extends VirtualColumnTable
     protected function addColumns()
     {
         
-        $this->table->addOption('comment','Holds the finance movements for each transaction');
+        $this->table->addOption('comment','Holds the agg finance values for account for a calendar day for given user/appointment');
             
-        $this->table->addColumn('entry_id',"integer",array("unsigned" => true, "autoincrement" => true)); 
-        $this->table->addColumn('transaction_id',"integer",array("notnull" => true,"unsigned" => true));
+        $this->table->addColumn('user_id',"integer",array("notnull" => true,"unsigned" => true));
+        $this->table->addColumn('process_dt',"date",array("notnull" => true));
         $this->table->addColumn('account_id',"integer",array("notnull" => true,"unsigned" => true));
-        $this->table->addColumn('movement',"float",array("notnull" => true));
-       
+        $this->table->addColumn('balance',"float",array("notnull" => true));
+        
     }
 
     /**
@@ -34,8 +34,8 @@ class LedgerEntryTable extends VirtualColumnTable
      * {@inheritdoc}
      */
     protected function setPrimaryKey()
-    {
-        $this->table->setPrimaryKey(array("entry_id"));
+    {     
+        $this->table->setPrimaryKey(array("process_dt","account_id",'user_id'));
     }
     
     /**
@@ -43,12 +43,12 @@ class LedgerEntryTable extends VirtualColumnTable
      */
     protected function addForeignKeyConstraints()
     {
-        $sTransactionTable = $this->tablePrefix . 'bm_ledger_transaction';
         $sAccountTable     = $this->tablePrefix . 'bm_ledger_account';
+        $sLedgerUserTable  = $this->tablePrefix . 'bm_ledger_user';
         
-        $this->table->addForeignKeyConstraint($sTransactionTable, array("transaction_id"), array("transaction_id"));
         $this->table->addForeignKeyConstraint($sAccountTable, array("account_id"), array("account_id"));
-  
+        $this->table->addForeignKeyConstraint($sLedgerUserTable, array("user_id"), array("user_id"));
     }
+    
 }
 /* End of Table */

@@ -103,7 +103,8 @@ class LedgerBundle extends SimpleBundle
            'bm_ledger_transaction'       => Schema\LedgerTransactionTable::class,
            'bm_ledger_entry'             => Schema\LedgerEntryTable::class,
            'bm_ledger_daily'             => Schema\LedgerDailyTable::class,
-           
+           'bm_ledger_daily_user'        => Schema\LedgerDailyUserTable::class,
+           'bm_ledger_daily_org'         => Schema\LedgerDailyOrgTable::class, 
         ];
     
         

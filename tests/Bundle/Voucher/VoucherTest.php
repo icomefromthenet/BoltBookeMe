@@ -57,9 +57,9 @@ class VoucherTest extends ExtensionTest
       $this->assertNotEmpty($sVoucher); 
       $this->assertEquals(0,strpos($sVoucher,'S'));
       
-      // Test Discount Journals
+      // Test Payments Journals
     
-      $sVoucher  = $oVoucherService->getDiscountJournalNumber();
+      $sVoucher  = $oVoucherService->getPaymentJournalNumber();
       
       $this->assertNotEmpty($sVoucher); 
       $this->assertEquals(0,strpos($sVoucher,'D'));

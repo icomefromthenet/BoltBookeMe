@@ -6,6 +6,7 @@ use Silex\Application;
 use Silex\ServiceProviderInterface;
 
 use Bolt\Extension\IComeFromTheNet\BookMe\Bundle\Ledger\CustomLedgerContainer;
+use IComeFromTheNet\IComeFromTheNet\GeneralLedger\TransactionBuilder;
 
 /**
  * Bootstrap The Ledger Generator 
@@ -37,7 +38,7 @@ class LedgerServiceProvider implements ServiceProviderInterface
         $aConfig   = $this->config;
         
        
-        $app['bn_ledger_container'] = function($c) use ($aConfig) {
+        $app['bm.ledger.container'] = $app->share(function($c) use ($aConfig) {
             
             $oDatabase      = $c['db'];
             $oEvent         = $c['dispatcher'];
@@ -93,8 +94,43 @@ class LedgerServiceProvider implements ServiceProviderInterface
             };   
             
             return $oContainer;
+        });
+        
+        
+        
+        $app['bm.ledger.transaction.sales'] = function($c) {
+          
+          $oContainer = $c['bm.ledger.container'];  
+        
+          $oTransactionBuilder = new TransactionBuilder($oContainer);
+          
+          //$oTransactionBuilder->set
+            
+            
+            return $oTransactionBuilder;
         };
        
+        $app['bm.ledger.transaction.discounts'] = function($c) {
+             $oContainer = $c['bm.ledger.container'];  
+        
+          $oTransactionBuilder = new TransactionBuilder($oContainer);
+          
+          //$oTransactionBuilder->set
+            
+            
+            return $oTransactionBuilder;
+         };
+         
+         $app['bm.ledger.transaction.general'] = function($c) {
+             $oContainer = $c['bm.ledger.container'];  
+        
+          $oTransactionBuilder = new TransactionBuilder($oContainer);
+          
+          //$oTransactionBuilder->set
+            
+            
+            return $oTransactionBuilder;
+         }; 
 
     }
 

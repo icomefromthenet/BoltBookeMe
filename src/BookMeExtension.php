@@ -587,16 +587,17 @@ class BookMeExtension extends SimpleExtension
                 'bm_voucher_instance'      => 'bolt_bm_voucher_instance',
                 
                 // Ledger Tables
-                'ledger_account'           => 'bm_ledger_accounts',
-                'ledger_account_group'     => 'bm_ledger_account_group',
-                'ledger_org_unit'          => 'bm_ledger_org_unit',
-                'ledger_user'              => 'bm_ledger_user',
-                'ledger_journal_type'      => 'bm_ledger_journal_type',
-                'ledger_transaction'       => 'bm_ledger_transaction',
-                'ledger_entry'             => 'bm_ledger_entry',
-                'ledger_daily'             => 'bm_ledger_daily',
-                
-
+                'ledger_account'           => 'bolt_bm_ledger_account',
+                'ledger_account_group'     => 'bolt_bm_ledger_account_group',
+                'ledger_org_unit'          => 'bolt_bm_ledger_org_unit',
+                'ledger_user'              => 'bolt_bm_ledger_user',
+                'ledger_journal_type'      => 'bolt_bm_ledger_journal_type',
+                'ledger_transaction'       => 'bolt_bm_ledger_transaction',
+                'ledger_entry'             => 'bolt_bm_ledger_entry',
+                'ledger_daily'             => 'bolt_bm_ledger_daily',
+                'ledger_daily_user'        => 'bolt_bm_ledger_daily_user',
+                'ledger_daily_org'         => 'bolt_bm_ledger_daily_org',
+        
             ]
             ,'leadtime' => 'PT1D'
             
@@ -606,6 +607,7 @@ class BookMeExtension extends SimpleExtension
                 'Rollover'   => true,
                 'HolidayRule' => true,
                 'Voucher'    => true,
+                'Ledger'     => true,
             ]
             ,'queue' => [
                 'worker' => [
