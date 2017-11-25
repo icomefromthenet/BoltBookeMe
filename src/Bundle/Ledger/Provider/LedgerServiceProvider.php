@@ -48,9 +48,9 @@ class LedgerServiceProvider implements ServiceProviderInterface
             $oNow           = $c['bm.now'];
             $aTables        = $aConfig['tablenames']; 
             
-            $oContainer =  new CustomLedgerContainer($oDatabase, $oEvent, $oLogger, $oGatewayProxy);
+            $oContainer =  new CustomLedgerContainer($oEvent, $oDatabase, $oLogger, $oGatewayProxy);
               
-            $oContainer->boot($oNow, $aTables); 
+            $oContainer->boot($aTables); 
          
             
             $oContainer['ledger_table_account'] = function($c)  {

@@ -26,6 +26,8 @@ class AppointmentTable extends VirtualColumnTable
         $this->table->addColumn('status_code',    'string', ['notnull' => true, 'comment' => 'Status Code from status table', 'length' => 2]);
         
         $this->table->addColumn('appointment_no',    'string', ['notnull' => false, 'comment' => 'Appointment Products', 'length' => 25]);
+        
+        $this->table->addColumn('ledger_user_id',    'integer', ['notnull' => false, 'comment' => 'Ledger reference' , 'unsigned' => true ]);
     }
 
     /**
