@@ -17,5 +17,15 @@ class CustomLedgerContainer extends LedgerContainer
         throw new LedgerBundleException('Must pass the table list to the container through LedgerContainer::boot');
     }
     
+    /**
+     * Return the voucher number generator
+     * 
+     * @return Bolt\Extension\IComeFromTheNet\BookMe\Bundle\Voucher\VoucherNumbers
+     */ 
+    public function getVoucherGenerator()
+    {
+        return $this['bm.voucher.generator'];
+    }
+    
 }
 /* End of Class */

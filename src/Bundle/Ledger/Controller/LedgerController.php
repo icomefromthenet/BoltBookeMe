@@ -1,5 +1,5 @@
 <?php
-namespace Bolt\Extension\IComeFromTheNet\BookMe\Bundle\Voucher\Controller;
+namespace Bolt\Extension\IComeFromTheNet\BookMe\Bundle\Ledger\Controller;
 
 use DateTime;
 use Silex\Application;
@@ -17,7 +17,7 @@ use Bolt\Extension\IComeFromTheNet\BookMe\Controller\CommonController;
  * 
  * @author Lewis Dyer <getintouch@icomefromthenet.com>
  */
-class VouchersController extends CommonController implements ControllerProviderInterface
+class LedgerController extends CommonController implements ControllerProviderInterface
 {
     
 

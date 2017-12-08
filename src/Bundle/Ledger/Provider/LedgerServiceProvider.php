@@ -93,44 +93,14 @@ class LedgerServiceProvider implements ServiceProviderInterface
                 return $c->getGatewayProxyCollection()->getSchema()->getTable($aTables['ledger_daily_org']);
             };   
             
+            
+            $oContainer['bm.voucher.generator'] = function($innerContainer) use ($c) {
+                return $c['bm.voucher.generator'];
+            };
+            
             return $oContainer;
         });
         
-        
-        
-        $app['bm.ledger.transaction.sales'] = function($c) {
-          
-          $oContainer = $c['bm.ledger.container'];  
-        
-          $oTransactionBuilder = new TransactionBuilder($oContainer);
-          
-          //$oTransactionBuilder->set
-            
-            
-            return $oTransactionBuilder;
-        };
-       
-        $app['bm.ledger.transaction.discounts'] = function($c) {
-             $oContainer = $c['bm.ledger.container'];  
-        
-          $oTransactionBuilder = new TransactionBuilder($oContainer);
-          
-          //$oTransactionBuilder->set
-            
-            
-            return $oTransactionBuilder;
-         };
-         
-         $app['bm.ledger.transaction.general'] = function($c) {
-             $oContainer = $c['bm.ledger.container'];  
-        
-          $oTransactionBuilder = new TransactionBuilder($oContainer);
-          
-          //$oTransactionBuilder->set
-            
-            
-            return $oTransactionBuilder;
-         }; 
 
     }
 

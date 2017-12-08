@@ -602,12 +602,13 @@ class BookMeExtension extends SimpleExtension
             ,'leadtime' => 'PT1D'
             
             ,'bundle' => [
-                'AuditTrail' => true,
-                'Queue'      => true,   
-                'Rollover'   => true,
+                'AuditTrail'  => true,
+                'Queue'       => true,   
+                'Rollover'    => true,
                 'HolidayRule' => true,
-                'Voucher'    => true,
-                'Ledger'     => true,
+                'Voucher'     => true,
+                'Ledger'      => true,
+                'Transaction' => true,
             ]
             ,'queue' => [
                 'worker' => [

@@ -133,56 +133,20 @@ class BasicFixture extends BaseFixture
             ,'is_right' => 0
         ]
             
-        # Asset Accounts
+
                     
        ,[
             'account_id' => 2
             ,'account_number' => '1-0000'
-            ,'account_name' => 'Assets'
-            ,'account_name_slug' => 'assets'
+            ,'account_name' => 'Debits'
+            ,'account_name_slug' => 'debits'
             ,'hide_ui'  => 0
             ,'is_left'  => 1
             ,'is_right' => 0  
         ]
-        
+      
         ,[
             'account_id' => 3
-            ,'account_number' => '1-0001'
-            ,'account_name' => 'Payments'
-            ,'account_name_slug' => 'sales'
-            ,'hide_ui'  => 0
-            ,'is_left'  => 1
-            ,'is_right' => 0  
-        ]
-        ,[
-            'account_id' => 4
-            ,'account_number' => '1-0002'
-            ,'account_name' => 'Cash Payments'
-            ,'account_name_slug' => 'cash_payments'
-            ,'hide_ui'  => 0
-            ,'is_left'  => 1
-            ,'is_right' => 0  
-        ]
-        ,[
-            'account_id' => 5
-            ,'account_number' => '1-0003'
-            ,'account_name' => 'Credit Card Payments'
-            ,'account_name_slug' => 'credit_card_payments'
-            ,'hide_ui'  => 0
-            ,'is_left'  => 1
-            ,'is_right' => 0  
-        ]
-        ,[
-            'account_id' => 6
-            ,'account_number' => '1-0004'
-            ,'account_name' => 'Direct Deposits'
-            ,'account_name_slug' => 'direct_deposits'
-            ,'hide_ui'  => 0
-            ,'is_left'  => 1
-            ,'is_right' => 0  
-        ]
-        ,[
-            'account_id' => 7
             ,'account_number' => '1-0005'
             ,'account_name' => 'Sales'
             ,'account_name_slug' => 'sales'
@@ -190,8 +154,73 @@ class BasicFixture extends BaseFixture
             ,'is_left'  => 1
             ,'is_right' => 0  
         ]
+        ,[
+            'account_id' => 4
+            ,'account_number' => '1-0006'
+            ,'account_name' => 'Tax Owed'
+            ,'account_name_slug' => 'tax_owed'
+            ,'hide_ui'  => 0
+            ,'is_left'  => 1
+            ,'is_right' => 0  
+        ]
         
-        # Liabilties Accounts
+        ,[
+            'account_id' => 100
+            ,'account_number' => '2-0000'
+            ,'account_name' => 'Credits'
+            ,'account_name_slug' => 'credits'
+            ,'hide_ui'  => 0
+            ,'is_left'  => 1
+            ,'is_right' => 0  
+        ]
+        
+       ,[
+            'account_id' => 101
+            ,'account_number' => '2-0010'
+            ,'account_name' => 'Discounts'
+            ,'account_name_slug' => 'discounts'
+            ,'hide_ui'  => 0
+            ,'is_left'  => 0
+            ,'is_right' => 1  
+        ]
+        
+        ,[
+            'account_id' => 103
+            ,'account_number' => '2-0001'
+            ,'account_name' => 'Payments'
+            ,'account_name_slug' => 'payments'
+            ,'hide_ui'  => 0
+            ,'is_left'  => 1
+            ,'is_right' => 0  
+        ]
+        ,[
+            'account_id' => 104
+            ,'account_number' => '2-0002'
+            ,'account_name' => 'Cash Payments'
+            ,'account_name_slug' => 'cash_payments'
+            ,'hide_ui'  => 0
+            ,'is_left'  => 1
+            ,'is_right' => 0  
+        ]
+        ,[
+            'account_id' => 105
+            ,'account_number' => '2-0003'
+            ,'account_name' => 'Credit Card Payments'
+            ,'account_name_slug' => 'credit_card_payments'
+            ,'hide_ui'  => 0
+            ,'is_left'  => 1
+            ,'is_right' => 0  
+        ]
+        ,[
+            'account_id' => 106
+            ,'account_number' => '2-0004'
+            ,'account_name' => 'Direct Deposits'
+            ,'account_name_slug' => 'direct_deposits'
+            ,'hide_ui'  => 0
+            ,'is_left'  => 1
+            ,'is_right' => 0  
+        ]
+        
         
         ];
         
@@ -216,20 +245,28 @@ class BasicFixture extends BaseFixture
         # Account Groups
         
         $aAccountGroups = [
+            
+            // Root
+      
             ['child_account_id' =>2, 'parent_account_id' => 1],
-            ['child_account_id' =>3, 'parent_account_id' => 1],
-            ['child_account_id' =>4, 'parent_account_id' => 1],
-            ['child_account_id' =>5, 'parent_account_id' => 1],
-            ['child_account_id' =>6, 'parent_account_id' => 1],
-            ['child_account_id' =>7, 'parent_account_id' => 1],
+            ['child_account_id' =>100, 'parent_account_id' => 1],
+            
+            // Debits
             
             ['child_account_id' =>3, 'parent_account_id' => 2],
             ['child_account_id' =>4, 'parent_account_id' => 2],
-            ['child_account_id' =>5, 'parent_account_id' => 2],
-            ['child_account_id' =>6, 'parent_account_id' => 2],
-            ['child_account_id' =>7, 'parent_account_id' => 2],
+             
+            // Credits
+           
+            ['child_account_id' =>101, 'parent_account_id' => 100],
+            ['child_account_id' =>102, 'parent_account_id' => 100],
+            ['child_account_id' =>103, 'parent_account_id' => 100],
             
-        
+            // Credit - Payments
+            ['child_account_id' =>104, 'parent_account_id' => 103],
+            ['child_account_id' =>105, 'parent_account_id' => 103],
+            ['child_account_id' =>106, 'parent_account_id' => 103],
+       
         ];
         
         
