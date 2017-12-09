@@ -18,8 +18,8 @@ class MockApp extends Application
         $oWebDir           = new Directory($this['filesystem'],'extensions://'.BOOKME_EXTENSION_PATH.'/web');
         
         $this['extensions']->add(new BookMeExtension(),$oExtensionBaseDir,$oWebDir);
-        $this['extensions']->addManagedExtensions();
-        $this['extensions']->register($this);
+        //$this['extensions']->addManagedExtensions();
+        //$this['extensions']->register($this);
     }
     
     

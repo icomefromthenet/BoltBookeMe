@@ -259,7 +259,6 @@ class BasicFixture extends BaseFixture
             // Credits
            
             ['child_account_id' =>101, 'parent_account_id' => 100],
-            ['child_account_id' =>102, 'parent_account_id' => 100],
             ['child_account_id' =>103, 'parent_account_id' => 100],
             
             // Credit - Payments
@@ -275,7 +274,7 @@ class BasicFixture extends BaseFixture
             $this->getDatabaseAdapter()->executeUpdate(
                 "INSERT INTO ".$sAccountGroup .
                 "(`child_account_id`, `parent_account_id`) ".
-                " VALUES (:iParent, :iChild)",
+                " VALUES (:iChild,:iParent)",
                 [':iParent' => $aAccountGroup['parent_account_id'], ':iChild' => $aAccountGroup['child_account_id']]
             );
         }

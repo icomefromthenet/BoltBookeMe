@@ -219,6 +219,7 @@ class SimpleBundle implements ExtensionInterface, ServiceProviderInterface, Even
     {
         $this->setContainer($app);
        
+       
         $this->extendConfigService();
         $this->extendTwigService();
         $this->extendMenuService();

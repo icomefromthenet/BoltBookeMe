@@ -53,7 +53,7 @@
               <!-- Theme directory. Can be relative to TEST_ROOT directory, the Bolt directory, or an absolute path -->
               <array>
                   <element key="theme">
-                      <string>theme/base-2016</string>
+                      <string>themes/base-2016</string>
                   </element>
               </array>
               <!-- Reset the cache and test temporary directories -->

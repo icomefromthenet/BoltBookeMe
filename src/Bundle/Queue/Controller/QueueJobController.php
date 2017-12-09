@@ -25,7 +25,7 @@ class QueueJobController extends QueueController implements ControllerProviderIn
         $this->app        = $oContainer; // needed for ActivityProvider
         $this->oExtension = $oExtension;
         
-        parent::__construct('bm.queue.queue');
+        parent::__construct('bm.queue.queue',$oContainer);
     }
     
     

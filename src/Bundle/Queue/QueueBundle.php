@@ -157,6 +157,7 @@ class QueueBundle extends SimpleBundle
         $app = $this->getContainer();
         $config = $this->getConfig();
       
+      
         return [
           'extend/bookme/queue/activities' =>  new Controller\QueueActivityController($config,$app,$this),
           'extend/bookme/queue/monitor'    =>  new Controller\QueueMonitorController($config,$app,$this),

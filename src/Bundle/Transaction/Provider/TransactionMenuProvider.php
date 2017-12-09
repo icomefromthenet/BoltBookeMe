@@ -41,7 +41,7 @@ class TransactionMenuProvider implements ServiceProviderInterface
         $app['bm.transactionm.menu'] = $app->share(
             $app->extend(
                 'bm.menu.home',
-                function ($oMenuBilder) {
+                function ($oMenuBuilder) {
                  
                  
                    $oMenuSetupGroup  = new MenuGroup('Sales and Payments', 300, 'bm-menu_linklistheading-setup');
@@ -55,8 +55,7 @@ class TransactionMenuProvider implements ServiceProviderInterface
             
                     $oMenuBuilder->addMenuGroup($oMenuSetupGroup);
                  
-                  
-                    return $oMenuBilder;
+                    return $oMenuBuilder;
                 }
             )
         );

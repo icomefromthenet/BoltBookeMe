@@ -609,6 +609,7 @@ class BookMeExtension extends SimpleExtension
                 'Voucher'     => true,
                 'Ledger'      => true,
                 'Transaction' => true,
+                
             ]
             ,'queue' => [
                 'worker' => [

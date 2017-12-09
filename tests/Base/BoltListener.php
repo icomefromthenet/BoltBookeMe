@@ -104,6 +104,7 @@ class BoltListener implements \PHPUnit_Framework_TestListener
             return $file;
         }
 
+        
         if (file_exists(TEST_ROOT . '/' . $file)) {
             return TEST_ROOT . '/' . $file;
         }
@@ -111,6 +112,11 @@ class BoltListener implements \PHPUnit_Framework_TestListener
         if (file_exists(TEST_ROOT . '/vendor/bolt/bolt/' . $file)) {
             return TEST_ROOT . '/vendor/bolt/bolt/' . $file;
         }
+        
+        if (file_exists(TEST_ROOT . '/../' . $file)) {
+            return TEST_ROOT . '/../' . $file;
+        }
+
 
         throw new \InvalidArgumentException("The file parameter '$name:' '$file' in the PHPUnit XML file is invalid.");
     }

@@ -1,14 +1,14 @@
 <?php
 namespace Bolt\Extension\IComeFromTheNet\BookMe\Bundle\Queue\Controller;
 
-use Bolt\Extension\ExtensionInterface;
-use Bolt\Extension\IComeFromTheNet\BookMe\Controller\CommonControllerTrait;
+use Silex\Application;
 use Silex\ControllerProviderInterface;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
+use Bolt\Extension\ExtensionInterface;
 use Bolt\Storage\Database\Connection;
-use Silex\Application;
+use Bolt\Extension\IComeFromTheNet\BookMe\Controller\CommonControllerTrait;
 use LaterJobApi\Controllers\ActivityController;
 
 class QueueActivityController extends ActivityController implements ControllerProviderInterface
@@ -25,7 +25,7 @@ class QueueActivityController extends ActivityController implements ControllerPr
         $this->app        = $oContainer; // needed for ActivityProvider
         $this->oExtension = $oExtension;
         
-        parent::__construct('bm.queue.queue');
+        parent::__construct('bm.queue.queue',$oContainer);
     }
     
     
