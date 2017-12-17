@@ -41,6 +41,7 @@ class ExtensionTest extends \PHPUnit_Framework_TestCase
         $config->setPath('themebase', PHPUNIT_WEBROOT . '/theme/');
         $config->setPath('extensionsconfig', PHPUNIT_WEBROOT . '/config/extensions');
         $config->setPath('extensions', PHPUNIT_WEBROOT . '/extensions');
+        
     }
     
     protected function makeApp()

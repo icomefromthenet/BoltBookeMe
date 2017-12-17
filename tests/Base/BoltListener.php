@@ -251,10 +251,16 @@ class BoltListener implements \PHPUnit_Framework_TestListener
     private function buildTestEnv()
     {
         $fs = new Filesystem();
+        
+        
         if ($fs->exists(PHPUNIT_WEBROOT)) {
             $fs->remove(PHPUNIT_WEBROOT);
+        } else {
+            
+            $fs->mkdir(PHPUNIT_WEBROOT, 0777);
         }
-      
+        
+     
         // Create needed directories
         @$fs->mkdir(PHPUNIT_ROOT . '/resources/files/', 0777);
         @$fs->mkdir(PHPUNIT_ROOT . '/resources/translations/', 0777);
@@ -266,10 +272,12 @@ class BoltListener implements \PHPUnit_Framework_TestListener
         @$fs->mkdir(PHPUNIT_WEBROOT . '/files/', 0777);
         @$fs->mkdir(PHPUNIT_WEBROOT . '/theme/', 0777);
 
+        
         // Mirror in required assets.
         $fs->mirror(TEST_ROOT . '/app/resources/',      PHPUNIT_WEBROOT . '/app/resources/',      null, ['override' => true]);
         $fs->mirror(TEST_ROOT . '/app/theme_defaults/', PHPUNIT_WEBROOT . '/app/theme_defaults/', null, ['override' => true]);
         $fs->mirror(TEST_ROOT . '/app/view/',           PHPUNIT_WEBROOT . '/app/view/',           null, ['override' => true]);
+        
         
         // System link extension to local
         $fs->symlink(BOOKME_EXTENSION_PATH,PHPUNIT_WEBROOT.'/extensions/local/icomefromthenet/bookme',false);
@@ -290,11 +298,13 @@ class BoltListener implements \PHPUnit_Framework_TestListener
         $name = basename($this->theme);
         $fs->mirror($this->theme, PHPUNIT_WEBROOT . '/theme/' . $name);
 
+
+        // done run as create folders and worng dir, we set paths when make the app
         // Set the theme name in config.yml
-        system('php ' . NUT_PATH . ' config:set theme ' . $name);
+        //system('php ' . NUT_PATH . ' config:set theme ' . $name);
 
         // Empty the cache
-        system('php ' . NUT_PATH . ' cache:clear');
+        //system('php ' . NUT_PATH . ' cache:clear');
         
         
     }
@@ -305,7 +315,8 @@ class BoltListener implements \PHPUnit_Framework_TestListener
     private function cleanTestEnv()
     {
         // Empty the cache
-        system('php ' . NUT_PATH . ' cache:clear');
+        // bolt not have correct paths set so clear cache usless
+        //system('php ' . NUT_PATH . ' cache:clear');
    
         // Remove the test database
         if ($this->reset) {

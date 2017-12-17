@@ -5,6 +5,30 @@ namespace Bolt\Extension\IComeFromTheNet\BookMe\Tests\Base\Fixture;
 class BasicFixture extends BaseFixture
 {
     
+    protected function doInitTables($aTableNames)
+    {
+        $oDatabase       = $this->getDatabaseAdapter();
+        $sIntsTable      = $aTableNames['bm_ints'];
+        $aSql            = [];
+       
+       
+        $aSql[] = " INSERT INTO `$sIntsTable` (`i`) VALUES (0) ON DUPLICATE KEY UPDATE `i` = 0";
+	    $aSql[] = " INSERT INTO `$sIntsTable` (`i`) VALUES (1) ON DUPLICATE KEY UPDATE `i` = 1";
+	    $aSql[] = " INSERT INTO `$sIntsTable` (`i`) VALUES (2) ON DUPLICATE KEY UPDATE `i` = 2";
+	    $aSql[] = " INSERT INTO `$sIntsTable` (`i`) VALUES (3) ON DUPLICATE KEY UPDATE `i` = 3";
+	    $aSql[] = " INSERT INTO `$sIntsTable` (`i`) VALUES (4) ON DUPLICATE KEY UPDATE `i` = 4";
+	    $aSql[] = " INSERT INTO `$sIntsTable` (`i`) VALUES (5) ON DUPLICATE KEY UPDATE `i` = 5";
+	    $aSql[] = " INSERT INTO `$sIntsTable` (`i`) VALUES (6) ON DUPLICATE KEY UPDATE `i` = 6";
+	    $aSql[] = " INSERT INTO `$sIntsTable` (`i`) VALUES (7) ON DUPLICATE KEY UPDATE `i` = 7";
+	    $aSql[] = " INSERT INTO `$sIntsTable` (`i`) VALUES (8) ON DUPLICATE KEY UPDATE `i` = 8";
+	    $aSql[] = " INSERT INTO `$sIntsTable` (`i`) VALUES (9) ON DUPLICATE KEY UPDATE `i` = 9";
+    
+        foreach($aSql as $sSql) {
+            $oDatabase->executeUpdate($sSql, [], []);    
+        }
+        
+    }
+    
     
     protected function doBookingFixtures($aTableNames)
     {
@@ -347,14 +371,18 @@ class BasicFixture extends BaseFixture
     
         $oDatabase->exec('SET foreign_key_checks = 1');
         
+        $aTableNames = $aConfig['tablenames'];
         
-        $this->doBookingFixtures($aConfig['tablenames']);
+        $this->doInitTables($aTableNames);
+        
+        
+        $this->doBookingFixtures($aTableNames);
         
        
-        $this->doVoucherFixture($aConfig['tablenames']);
+        $this->doVoucherFixture($aTableNames);
         
         
-        $this->doLedgerFixture($aConfig['tablenames']);
+        $this->doLedgerFixture($aTableNames);
             
             
     }
