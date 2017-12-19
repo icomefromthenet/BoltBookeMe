@@ -20,14 +20,14 @@ abstract class BaseFixture
     
     protected $oDatabase;
     
+    protected $aTableNames;
     
-    
-    public function __construct($oDatabase, $oBookMeApi, DateTime $oNow)
+    public function __construct($oDatabase, $oBookMeApi, DateTime $oNow, array $aTableNames)
     {
-        $this->oDatabase = $oDatabase;
-        $this->oBookMeApi = $oBookMeApi;
-        $this->oNow       = $oNow;
-        
+        $this->oDatabase   = $oDatabase;
+        $this->oBookMeApi  = $oBookMeApi;
+        $this->oNow        = $oNow;
+        $this->aTableNames = $aTableNames;
     }
     
     
@@ -48,6 +48,10 @@ abstract class BaseFixture
         return $this->oBookMeApi;
     }
     
+    public function getTableNames()
+    {
+        return $this->aTableNames;
+    }
     
 }
 /* End of Class */

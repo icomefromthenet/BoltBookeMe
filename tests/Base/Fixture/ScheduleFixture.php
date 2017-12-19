@@ -1,10 +1,20 @@
 <?php
 namespace Bolt\Extension\IComeFromTheNet\BookMe\Tests\Base\Fixture;
 
+use Bolt\Extension\IComeFromTheNet\BookMe\Tests\Base\Seed\CalendarSeed;
 
 class ScheduleFixture extends BaseFixture
 {
  
+    protected function doCalendarFixture()
+    {
+        $oDatabase     = $this->getDatabaseAdapter();
+        $aTableNames   = $this->getTableNames();
+   
+        $oCalendarSeed = 
+    }
+    
+    
     
     public function runFixture(array $aAppConfig)
     {
@@ -12,8 +22,12 @@ class ScheduleFixture extends BaseFixture
       $oNow         = $this->getNow();
       $oService     = $this->getTestAPI();
       
+      
       $oStartYear = clone $oNow;
       $oStartYear->setDate($oNow->format('Y'),1,1);
+      
+      
+      CalendarSeed
       
       $oService->addCalenderYears(1,$oStartYear);
       
