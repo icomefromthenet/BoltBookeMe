@@ -6,13 +6,6 @@ use Bolt\Extension\IComeFromTheNet\BookMe\Tests\Base\Seed\CalendarSeed;
 class ScheduleFixture extends BaseFixture
 {
  
-    protected function doCalendarFixture()
-    {
-        $oDatabase     = $this->getDatabaseAdapter();
-        $aTableNames   = $this->getTableNames();
-   
-        $oCalendarSeed = 
-    }
     
     
     
@@ -26,8 +19,6 @@ class ScheduleFixture extends BaseFixture
       $oStartYear = clone $oNow;
       $oStartYear->setDate($oNow->format('Y'),1,1);
       
-      
-      CalendarSeed
       
       $oService->addCalenderYears(1,$oStartYear);
       
