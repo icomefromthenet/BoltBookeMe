@@ -154,7 +154,7 @@ class CalendarSeed extends BaseSeed
     
     protected function doExecuteSeed()
     {
-        $iStartYear = $this->iEndYear;
+        $iStartYear = $this->iStartYear;
         $iEndYear   = $this->iEndYear;
        
         $this->buildCalendar($iStartYear, $iEndYear);
