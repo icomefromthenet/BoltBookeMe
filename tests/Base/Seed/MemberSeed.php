@@ -15,7 +15,7 @@ class MemberSeed extends BaseSeed
     
     protected function createMember($sMemberName, $iBoltMemberId)
     {
-        $oDatabase          = $this->oDatabaseAdapter;
+        $oDatabase          = $this->getDatabase();
         $aTableNames        = $this->getTableNames();
         $sMemberTableName   = $aTableNames['bm_schedule_membership'];
         $iMemberId          = null;
@@ -45,7 +45,7 @@ class MemberSeed extends BaseSeed
             $aMembers[$sKey] =  $this->createMember($aMember['MEMBER_NAME'], $aMember['BOLT_USER_ID']);
         }
         
-        return $aMember;       
+        return $aMembers;       
     }
     
     

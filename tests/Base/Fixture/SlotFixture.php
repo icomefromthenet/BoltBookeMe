@@ -16,14 +16,18 @@ class SlotFixture extends BaseFixture
          
         $aTimeSlots = []; 
        
-        $oSlotSeed = new SlotFixture($oDatabase, $aTableNames, 5, 1 );
+        $oSlotSeed = new SlotSeed($oDatabase, $aTableNames, 5, 1 );
         $aTimeSlots['iFiveMinuteTimeslot'] = $oSlotSeed->executeSeed();
         
-        $oSlotSeed = new SlotFixture($oDatabase, $aTableNames, 10, 0 );
+        $oSlotSeed = new SlotSeed($oDatabase, $aTableNames, 10, 0 );
         $aTimeSlots['iTenMinuteTimeslot'] = $oSlotSeed->executeSeed();
       
-        $oSlotSeed = new SlotFixture($oDatabase, $aTableNames, 7, 1 );
+        $oSlotSeed = new SlotSeed($oDatabase, $aTableNames, 7, 1 );
         $aTimeSlots['iSevenMinuteTimeslot'] = $oSlotSeed->executeSeed();
+      
+        $oSlotSeed = new SlotSeed($oDatabase, $aTableNames, 15, 1 );
+        $aTimeSlots['iFifteenMinuteTimeslot'] = $oSlotSeed->executeSeed();
+      
       
         return $aTimeSlots;
         

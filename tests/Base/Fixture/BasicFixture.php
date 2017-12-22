@@ -350,10 +350,8 @@ class BasicFixture extends BaseFixture
  
     public function runFixture(array $aAppConfig)
     {
-        $aConfig = $aAppConfig;
-        
-        
-        $oDatabase = $this->getDatabaseAdapter();
+        $aTableNames = $this->getTableNames();
+        $oDatabase   = $this->getDatabaseAdapter();
         
         // Truncate the Tables
         $sm = $oDatabase->getSchemaManager();
@@ -371,7 +369,7 @@ class BasicFixture extends BaseFixture
     
         $oDatabase->exec('SET foreign_key_checks = 1');
         
-        $aTableNames = $aConfig['tablenames'];
+        
         
         $this->doInitTables($aTableNames);
         

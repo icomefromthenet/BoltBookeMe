@@ -5,7 +5,7 @@ use Doctrine\DBAL\Connection;
 use Doctrine\DBAL\Types\Type;
 use Doctrine\DBAL\DBALException;
 
-class ScheduleSeed extends BaseSeed
+class NewScheduleSeed extends BaseSeed
 {
     
    

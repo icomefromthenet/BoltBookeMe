@@ -106,15 +106,6 @@ class ExtensionTest extends \PHPUnit_Framework_TestCase
     
     protected function setUp()
     {
-        # Truncate the Tables
-        $aConfig   = $this->getAppConfig();
-        $oDatabase = $this->getDatabaseAdapter();
-        $oNow      = $this->getNow();
-        
-        $oFixture = new BasicFixture($oDatabase, null, $oNow);
-        
-        $oFixture->runFixture($aConfig);
-       
        $this->handleEventPostFixtureRun();
     }
 

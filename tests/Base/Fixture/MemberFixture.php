@@ -1,7 +1,7 @@
 <?php
 namespace Bolt\Extension\IComeFromTheNet\BookMe\Tests\Base\Fixture;
 
-use Bolt\Extension\Tests\Base\Seed\MemberSeed;
+use Bolt\Extension\IComeFromTheNet\BookMe\Tests\Base\Seed\MemberSeed;
 
 class MemberFixture extends BaseFixture
 {

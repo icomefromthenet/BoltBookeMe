@@ -24,12 +24,12 @@ class CalendarSeed extends BaseSeed
         $sIntsTable    = $aTableNames['bm_ints'];
         
         $sStartDate = $iStartYear."-01-01";
-        $sLastYear  = $sLastYear."-12-31";
+        $sLastYear  = $iEndYear."-12-31";
         
         $aSql[] = " INSERT INTO $sCalTableName (calendar_date) ";
 		$aSql[] = " SELECT CAST('".$sStartDate."' AS DATETIME) + INTERVAL a.i*10000 + b.i*1000 + c.i*100 + d.i*10 + e.i DAY ";
 		$aSql[] = " FROM $sIntsTable a JOIN $sIntsTable b JOIN $sIntsTable c JOIN $sIntsTable d JOIN $sIntsTable e ";
-		$aSql[] = " WHERE (a.i*10000 + b.i*1000 + c.i*100 + d.i*10 + e.i) <= DATEDIFF(CAST('".$sLastYear."' AS DATETIME), CAST('".$sStartDate."')' AS DATETIME)) ";
+		$aSql[] = " WHERE (a.i*10000 + b.i*1000 + c.i*100 + d.i*10 + e.i) <= DATEDIFF(CAST('".$sLastYear."' AS DATETIME), CAST('".$sStartDate."' AS DATETIME)) ";
 		$aSql[] = " ORDER BY 1 ";
 	
 	    $sSql = implode(PHP_EOL,$aSql);
