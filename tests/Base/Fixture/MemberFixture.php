@@ -18,6 +18,7 @@ class MemberFixture extends BaseFixture
           'iMemberTwo'   => ['MEMBER_NAME' => 'Bobs Assisstant', 'BOLT_USER_ID' => 1],
           'iMemberThree' => ['MEMBER_NAME' => 'Bill Builder', 'BOLT_USER_ID' => 1],
           'iMemberFour'  => ['MEMBER_NAME' => 'Bill Assistant', 'BOLT_USER_ID' => 1],
+          'iMemberFive'  => ['MEMBER_NAME' => 'New Assistant', 'BOLT_USER_ID' => 1],
           
         ]);
       

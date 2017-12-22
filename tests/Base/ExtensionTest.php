@@ -6,7 +6,6 @@ use Doctrine\DBAL\Types\Type;
 use Bolt\Tests\BoltUnitTest;
 use Bolt\Extension\IComeFromTheNet\BookMe\BookMeExtension;
 use Bolt\Extension\IComeFromTheNet\BookMe\Tests\Base\BookMeService;
-use Bolt\Extension\IComeFromTheNet\BookMe\Tests\Base\Fixture\BasicFixture;
 use Bolt\Application;
 use Bolt\Configuration\Standard;
 use Cocur\Slugify\Slugify;

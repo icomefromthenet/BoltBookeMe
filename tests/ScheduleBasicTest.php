@@ -15,14 +15,13 @@ use Bolt\Extension\IComeFromTheNet\BookMe\Model\Schedule\ScheduleException;
 class ScheduleBasicTest extends ExtensionTest
 {
     
-    
-    protected $aDatabaseId = [];
-    
+
     
     
    protected function handleEventPostFixtureRun()
    {
       // Create the Calendar 
+      /*
       $oService = $this->getTestAPI();
       
       $oService->addCalenderYears(5);
@@ -42,8 +41,7 @@ class ScheduleBasicTest extends ExtensionTest
     
       $iTeamOne     = $oService->registerTeam('Alpha Team');
       $iTeamTwo     = $oService->registerTeam('Beta Team');
-            
-            
+       
       $this->aDatabaseId = [
         'five_minute'    => $iFiveMinuteTimeslot,
         'ten_minute'     => $iTenMinuteTimeslot,
@@ -55,8 +53,9 @@ class ScheduleBasicTest extends ExtensionTest
         'team_two'       => $iTeamTwo,
         'team_one'       => $iTeamOne,
       ];
-      
-      
+       */    
+            
+       $this->aDatabaseId = $GLOBALS['BM_TEST_DATABASE_ID'];
    }  
    
    
@@ -66,20 +65,16 @@ class ScheduleBasicTest extends ExtensionTest
     public function testScheduleCommands()
     {
        // Test Add New Slot
-       $iCalYear =  (int) $this->getDatabaseAdapter()
-                                ->fetchColumn("select year(NOW()) 
-                                                from bolt_bm_schedule_membership 
-                                                ",[],0,[]);
-      
-        $oNow = $this->getNow();  
+        $oNow     = $this->getNow();  
+        $iCalYear =  $oNow->format('Y');
        
-        $this->StartScheduleTest($this->aDatabaseId['member_one'], $this->aDatabaseId['five_minute'], $iCalYear);
+        $this->StartScheduleTest($this->aDatabaseId['member_five'], $this->aDatabaseId['five_minute'], $iCalYear);
        
-        $this->StopScheduleTest($this->aDatabaseId['schedule_one'], $oNow, $iCalYear);
+        //$this->StopScheduleTest($this->aDatabaseId['schedule_one'], $oNow, $iCalYear);
     
-        $this->ResumeScheduleTest($this->aDatabaseId['schedule_one'], $oNow, $iCalYear);
+        //$this->ResumeScheduleTest($this->aDatabaseId['schedule_one'], $oNow, $iCalYear);
     
-        $this->ToggleScheduleCarry($this->aDatabaseId['schedule_one'], $oNow, $iCalYear);   
+        //$this->ToggleScheduleCarry($this->aDatabaseId['schedule_one'], $oNow, $iCalYear);   
        
         
     }
