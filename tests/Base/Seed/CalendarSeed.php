@@ -57,7 +57,7 @@ class CalendarSeed extends BaseSeed
     }
     
     
-    protected function buildWeeks()
+    protected function buildWeeks($iStartYear)
     {
         $oDatabase     = $this->getDatabase();
         $aTableNames   = $this->getTableNames();
@@ -71,6 +71,7 @@ class CalendarSeed extends BaseSeed
         $aSql[] =" INSERT INTO `$sCalWeekTableName` (`y`,`m`,`w`,`open_date`,`close_date`) ";
         $aSql[] =" SELECT `c`.`y`, `c`.`m`, `c`.`w`, min(`c`.`calendar_date`), max(`c`.`calendar_date`)  ";
         $aSql[] =" FROM `$sCalTableName` c ";
+        $aSql[] =" WHERE `c`.`y` >= ".$iStartYear . ' ';
         $aSql[] =" GROUP BY `c`.`y`,`c`.`w` ";
 
         $sSql = implode(PHP_EOL,$aSql);
@@ -79,7 +80,7 @@ class CalendarSeed extends BaseSeed
     }
     
     
-    protected function buildMonths()
+    protected function buildMonths($iStartYear)
     {
         $oDatabase     = $this->getDatabase();
         $aTableNames   = $this->getTableNames();
@@ -93,6 +94,7 @@ class CalendarSeed extends BaseSeed
     	$aSql[] =" SELECT `c`.`y`, `c`.`m`, max(`c`.`month_name`) as month_name ";
     	$aSql[] ="        ,min(`c`.`w`) AS a, max(`c`.`w`) AS b ";
     	$aSql[] =" FROM $sCalTableName c ";
+    	$aSql[] =" WHERE `c`.`y` >= ".$iStartYear . ' ';
         $aSql[] =" GROUP BY `c`.`y`,`c`.`m` ";
            
     
@@ -102,7 +104,7 @@ class CalendarSeed extends BaseSeed
         
     }
     
-    protected function buildQuarters()
+    protected function buildQuarters($iStartYear)
     {
         $oDatabase     = $this->getDatabase();
         $aTableNames   = $this->getTableNames();
@@ -117,6 +119,7 @@ class CalendarSeed extends BaseSeed
     	$aSql[] ="		,min(`c`.`calendar_date`) ";
     	$aSql[] ="		,max(`c`.`calendar_date`) ";
     	$aSql[] =" FROM `$sCalTableName` c ";
+    	$aSql[] =" WHERE `c`.`y` >= ".$iStartYear . ' ';
         $aSql[] =" GROUP BY `c`.`y`,`c`.`q`; ";
            
     
@@ -127,7 +130,7 @@ class CalendarSeed extends BaseSeed
     }
     
     
-    protected function buildYears()
+    protected function buildYears($iStartYear)
     {
         $oDatabase     = $this->getDatabase();
         $aTableNames   = $this->getTableNames();
@@ -140,6 +143,7 @@ class CalendarSeed extends BaseSeed
         $aSql[] =" INSERT INTO `$sCalYearTableName` (`y`,`y_start`,`y_end`) ";
 	    $aSql[] =" SELECT `c`.`y`,min(`c`.`calendar_date`),max(`c`.`calendar_date`) ";
 	    $aSql[] =" FROM `$sCalTableName` c ";
+	    $aSql[] =" WHERE `c`.`y` >= ".$iStartYear . ' ';
 	    $aSql[] =" GROUP BY `c`.`y` ";
     
         $sSql = implode(PHP_EOL,$aSql);
@@ -158,10 +162,10 @@ class CalendarSeed extends BaseSeed
         $iEndYear   = $this->iEndYear;
        
         $this->buildCalendar($iStartYear, $iEndYear);
-        $this->buildMonths();
-        $this->buildQuarters();
-        $this->buildWeeks();
-        $this->buildYears();
+        $this->buildMonths($iStartYear);
+        $this->buildQuarters($iStartYear);
+        $this->buildWeeks($iStartYear);
+        $this->buildYears($iStartYear);
         
     }
     

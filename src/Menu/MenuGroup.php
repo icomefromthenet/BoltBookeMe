@@ -20,7 +20,7 @@ class MenuGroup implements ValidationRulesInterface, MenuOrderInterface, \Iterat
     protected $sGroupName;
     protected $sGroupStyleClasses;
     
-    public function __construct($sGroupName, $iOrder, $sGroupStyleClasses)
+    public function __construct($sGroupName, $iOrder, $sGroupStyleClasses ='')
     {
         $this->iOrder       = $iOrder;
         $this->sGroupName   = $sGroupName;

@@ -24,6 +24,9 @@ class SlotAndCalendarTest extends ExtensionTest
    protected function handleEventPostFixtureRun()
    {
       return false;
+      
+      
+       
    }  
    
     
@@ -99,7 +102,12 @@ class SlotAndCalendarTest extends ExtensionTest
         
         // Assert max date is equal
         
-        $aDates = $this->getDatabaseAdapter()->fetchArray("select date_format(max(calendar_date),'%Y-%m-%d') as max from bolt_bm_calendar");
+        $aDates = $this->getDatabaseAdapter()->fetchArray("
+            select date_format(max(calendar_date),'%Y-%m-%d') as max 
+            from bolt_bm_calendar 
+            where y = ?
+        ",[$oStartYear->format('Y')]);
+        
         $oMaxDateTime = \DateTime::createFromFormat('Y-m-d',$aDates[0]);
        
         $this->assertEquals($oStartYear->format('Y').'-12-31', $oMaxDateTime->format('Y-m-d'));

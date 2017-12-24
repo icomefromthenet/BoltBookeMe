@@ -23,6 +23,8 @@ class RulesTest extends ExtensionTest
    protected function handleEventPostFixtureRun()
    {
       // Create the Calendar 
+     
+     /*
       $oService = $this->getTestAPI();
       
       $oService->addCalenderYears(5);
@@ -54,7 +56,8 @@ class RulesTest extends ExtensionTest
         'team_two'       => $iTeamTwo,
         'team_one'       => $iTeamOne,
       ];
-    
+     */
+
       
       
    }  

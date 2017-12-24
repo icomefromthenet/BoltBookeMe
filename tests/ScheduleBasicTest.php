@@ -70,11 +70,11 @@ class ScheduleBasicTest extends ExtensionTest
        
         $this->StartScheduleTest($this->aDatabaseId['member_five'], $this->aDatabaseId['five_minute'], $iCalYear);
        
-        //$this->StopScheduleTest($this->aDatabaseId['schedule_one'], $oNow, $iCalYear);
+        $this->StopScheduleTest($this->aDatabaseId['schedule_one'], $oNow, $iCalYear);
     
-        //$this->ResumeScheduleTest($this->aDatabaseId['schedule_one'], $oNow, $iCalYear);
+        $this->ResumeScheduleTest($this->aDatabaseId['schedule_one'], $oNow, $iCalYear);
     
-        //$this->ToggleScheduleCarry($this->aDatabaseId['schedule_one'], $oNow, $iCalYear);   
+        $this->ToggleScheduleCarry($this->aDatabaseId['schedule_one'], $oNow, $iCalYear);   
        
         
     }

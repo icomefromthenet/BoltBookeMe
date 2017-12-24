@@ -19,7 +19,7 @@ class ExceptionWrapperMiddleware implements Middleware
   
   
     /**
-     * Will Validate the command if it implements the valdiation interface
+     * Ensure any exceptions are wrapped with this components custom exception.
      * 
      * @throws Bolt\Extension\IComeFromTheNet\BookMe\BookMeException
      * @param mixed $oCommand

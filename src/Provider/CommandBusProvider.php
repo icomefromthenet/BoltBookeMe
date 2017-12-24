@@ -328,7 +328,7 @@ class CommandBusProvider implements ServiceProviderInterface
                         $oExceptionMiddleware,
                         $oEventMiddleware,
                         $oLockingMiddleware,
-                        $oUnitOfWorkMiddleware,
+                        //$oUnitOfWorkMiddleware,
                         $oValdiationMiddleware,
                         $oCommandMiddleware
             ]);

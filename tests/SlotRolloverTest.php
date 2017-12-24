@@ -12,6 +12,8 @@ use Bolt\Extension\IComeFromTheNet\BookMe\Bus\Middleware\ValidationException;
 use Bolt\Extension\IComeFromTheNet\BookMe\Model\Setup\Command\RolloverTimeslotCommand;
 use Bolt\Extension\IComeFromTheNet\BookMe\Model\Setup\SetupException;
 
+use Bolt\Extension\IComeFromTheNet\BookMe\Tests\Base\Seed\CalendarSeed;
+
 class SlotRolloverTest extends ExtensionTest
 {
     
@@ -19,7 +21,7 @@ class SlotRolloverTest extends ExtensionTest
     
    protected function handleEventPostFixtureRun()
    {
-      
+      /*
       $oNow         = $this->getNow();
       $oService     = $this->getTestAPI();
       
@@ -41,8 +43,21 @@ class SlotRolloverTest extends ExtensionTest
         'ten_minute'             => $iTenMinuteTimeslot,
         'fifteen_minute'         => $iFifteenMinuteTimeslot,
       ];
+      */
       
+       $oNow        = $this->getNow();
+       
+       $oStartYear       = clone $oNow;
+       $oStartYear->setDate($oNow->format('Y'),1,1);
       
+       $iStartYear = $oStartYear->format('Y') + 3;
+       $iEndYear   =$oStartYear->format('Y') + 4;
+      
+       $aConfig = $this->getAppConfig();
+      
+       $oCalendarSeed = new CalendarSeed($this->getDatabaseAdapter(),$aConfig['tablenames'],$iStartYear, $iEndYear);
+      
+       $oCalendarSeed->executeSeed();
    }  
    
     
@@ -53,21 +68,9 @@ class SlotRolloverTest extends ExtensionTest
     */ 
     public function testSlotRollover()
     {
-       $oStartYear = \DateTime::createFromFormat('Y-m-d','2015-01-01');
-       
        // Test disabled toggle
-       $this->RolloverTimeSlotTest($this->aDatabaseId['five_minute']);
-     
-      
-    }
-    
-  
- 
-
-    
-    
-    protected function RolloverTimeSlotTest($iSlotId)
-    {
+       $iSlotId = $this->aDatabaseId['five_minute'];
+       
         $oContainer  = $this->getContainer();
         
         $oCommandBus = $this->getCommandBus(); 
@@ -95,16 +98,15 @@ class SlotRolloverTest extends ExtensionTest
                                                                             where timeslot_id = ? "
                                                                             ,[$oCommand->getTimeSlotId()],0,[]);
                                                                             
-        $iDaysInYear  = date("z", mktime(0,0,0,12,31,$oNow->format('Y'))) + 1;
-        $iDaysInYear += date("z", mktime(0,0,0,12,31,($oNow->format('Y')+1))) + 1;
+        $iDaysInYear  = date("z", mktime(0,0,0,12,31,$oNow->format('Y'))) + 3;
+        $iDaysInYear += date("z", mktime(0,0,0,12,31,($oNow->format('Y')+1))) + 4;
         
         $this->assertGreaterThanOrEqual($iDayCount *$iDaysInYear, $iYearCount,'The 2 year slot count is less than expected' );
       
-       
+      
     }
     
 
-   
     
     
 }

@@ -99,6 +99,7 @@ class CalAddYearHandler
         $aSql[] =" SELECT `c`.`y`, `c`.`m`, `c`.`w`, min(`c`.`calendar_date`), max(`c`.`calendar_date`)  ";
         $aSql[] =" FROM `$sCalTableName` c ";
         $aSql[] =" WHERE `c`.calendar_date >= CAST('".$oLastCalYear->format('Y-m-d')."' AS DATE) ";
+        $aSql[] =" AND `c`.`y` <= ".($oLastCalYear->format('Y')+$iYears)." ";
         $aSql[] =" GROUP BY `c`.`y`,`c`.`w` ";
 
         $sSql = implode(PHP_EOL,$aSql);
@@ -120,6 +121,7 @@ class CalAddYearHandler
     	$aSql[] ="        ,min(`c`.`w`) AS a, max(`c`.`w`) AS b ";
     	$aSql[] =" FROM $sCalTableName c ";
     	$aSql[] =" WHERE `c`.calendar_date >= CAST('".$oLastCalYear->format('Y-m-d')."' AS DATE) ";
+    	$aSql[] =" AND `c`.`y` <= ".($oLastCalYear->format('Y')+$iYears)." ";
         $aSql[] =" GROUP BY `c`.`y`,`c`.`m` ";
            
     
@@ -143,6 +145,7 @@ class CalAddYearHandler
     	$aSql[] ="		,max(`c`.`calendar_date`) ";
     	$aSql[] =" FROM `$sCalTableName` c ";
     	$aSql[] =" WHERE `c`.calendar_date >= CAST('".$oLastCalYear->format('Y-m-d')."' AS DATE) ";
+    	$aSql[] =" AND `c`.`y` <= ".($oLastCalYear->format('Y')+$iYears)." ";
         $aSql[] =" GROUP BY `c`.`y`,`c`.`q`; ";
            
     
@@ -165,6 +168,7 @@ class CalAddYearHandler
 	    $aSql[] =" SELECT `c`.`y`,min(`c`.`calendar_date`),max(`c`.`calendar_date`) ";
 	    $aSql[] =" FROM `$sCalTableName` c ";
 	    $aSql[] =" WHERE `c`.calendar_date >= CAST('".$oLastCalYear->format('Y-m-d')."' AS DATE) ";
+	    $aSql[] =" AND `c`.`y` <= ".($oLastCalYear->format('Y')+$iYears)." ";
 	    $aSql[] =" GROUP BY `c`.`y` ";
     
         $sSql = implode(PHP_EOL,$aSql);

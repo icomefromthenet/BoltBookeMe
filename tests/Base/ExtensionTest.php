@@ -105,10 +105,17 @@ class ExtensionTest extends \PHPUnit_Framework_TestCase
     
     protected function setUp()
     {
+       $this->getDatabaseAdapter()->beginTransaction();
+       
+       $this->aDatabaseId = $GLOBALS['BM_TEST_DATABASE_ID'];
+       
        $this->handleEventPostFixtureRun();
     }
 
-    
+    protected function tearDown() 
+    {
+        $this->getDatabaseAdapter()->rollBack();
+    }
     
     /**
     *  Return a dateTime object
