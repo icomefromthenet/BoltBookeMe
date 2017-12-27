@@ -473,7 +473,7 @@ class BoltListener implements \PHPUnit_Framework_TestListener
        $aConfig['ten_minute']      = $aTimeSlots['iTenMinuteTimeslot'];
        $aConfig['seven_minute']    = $aTimeSlots['iSevenMinuteTimeslot'];
        $aConfig['fifteen_minute']  = $aTimeSlots['iFifteenMinuteTimeslot'];
-       
+       $aConfig['six_minute'] = $aTimeSlots['iSixMinuteTimeslot'];
        
        // Register new Members
        

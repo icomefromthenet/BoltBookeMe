@@ -1,5 +1,5 @@
 <?php
-namespace Bolt\Extension\IComeFromTheNet\BookMe\Tests;
+namespace Bolt\Extension\IComeFromTheNet\BookMe\Tests\Schedule;
 
 use DateTime;
 use Doctrine\DBAL\Types\Type;
@@ -23,47 +23,11 @@ class RulesTest extends ExtensionTest
    protected function handleEventPostFixtureRun()
    {
       // Create the Calendar 
-     
-     /*
-      $oService = $this->getTestAPI();
-      
-      $oService->addCalenderYears(5);
-      $oNow   = $this->getNow();
-      
-      $iFiveMinuteTimeslot    = $oService->addTimeslot(5,$oNow->format('Y'));
-      $iTenMinuteTimeslot     = $oService->addTimeslot(10,$oNow->format('Y'));
-      $iSevenMinuteTimeslot    = $oService->addTimeslot(7,$oNow->format('Y'));
-
-      $oService->toggleSlotAvability($iTenMinuteTimeslot);    
-  
-      $iMemberOne   = $oService->registerMembership('Bob Builder');
-      $iMemberTwo   = $oService->registerMembership('Bob Assistant');
-      $iMemberThree = $oService->registerMembership('Bill Builder');
-      $iMemberFour  = $oService->registerMembership('Bill Assistant');
-    
-      $iTeamOne     = $oService->registerTeam('Bobs Team');
-      $iTeamTwo     = $oService->registerTeam('Bills Team');
-      
-            
-      $this->aDatabaseId = [
-        'five_minute'    => $iFiveMinuteTimeslot,
-        'ten_minute'     => $iTenMinuteTimeslot,
-        'seven_minute'   => $iSevenMinuteTimeslot,
-        'member_one'     => $iMemberOne,
-        'member_two'     => $iMemberTwo,
-        'member_three'   => $iMemberThree,
-        'member_four'    => $iMemberFour,
-        'team_two'       => $iTeamTwo,
-        'team_one'       => $iTeamOne,
-      ];
-     */
-
-      
       
    }  
    
     /**
-    * @group Rule
+    * @group schedule
     */ 
    public function testRule()
    {

@@ -1,25 +1,31 @@
 <?php
-namespace  Bolt\Extension\IComeFromTheNet\BookMe\Tests;
+namespace Bolt\Extension\IComeFromTheNet\BookMe\Tests\Appointment;
 
+use DateInterval;
 use DateTime;
-use Silex\Application;
 use Doctrine\DBAL\Types\Type;
-use Bolt\Extension\IComeFromTheNet\BookMe\Tests\Base\ExtensionTest;
-use Bolt\Extension\IComeFromTheNet\BookMe\Model\Schedule\Command\RefreshScheduleCommand;
-use Bolt\Extension\IComeFromTheNet\BookMe\Model\Schedule\Handler\RefreshScheduleHandler;
-use Bolt\Extension\IComeFromTheNet\BookMe\Bundle\Queue\Model\RefreshScheduleDecorator;
+use Doctrine\DBAL\Connection;
+use Psr\Log\LoggerInterface;
+use Valitron\Validator;
 
-class QueueWorkerTest extends ExtensionTest
+use Bolt\Extension\IComeFromTheNet\BookMe\BookMeExtension;
+use Bolt\Extension\IComeFromTheNet\BookMe\Tests\Base\ExtensionTest;
+use Bolt\Extension\IComeFromTheNet\BookMe\Bus\Middleware\ValidationException;
+
+use Bolt\Extension\IComeFromTheNet\BookMe\Model\Booking\Command\WebBookingCommand;
+use Bolt\Extension\IComeFromTheNet\BookMe\Model\Booking\Command\LookBookingConflictsCommand;
+use Bolt\Extension\IComeFromTheNet\BookMe\Model\Booking\Command\ClearBookingCommand;
+use Bolt\Extension\IComeFromTheNet\BookMe\Model\Booking\BookingException;
+
+class BookingWebTest extends ExtensionTest
 {
-    
-    
-   protected $aDatabaseId;    
     
     
    protected function handleEventPostFixtureRun()
    {
-       $oNow         = $this->getNow();
-      $oService     = $this->getTestAPI();
+      // Create the Calendar 
+      $oService = $this->getTestAPI();
+      $oNow     = $this->getNow();
       
       $oStartYear = clone $oNow;
       $oStartYear->setDate($oNow->format('Y'),1,1);
@@ -88,8 +94,8 @@ class QueueWorkerTest extends ExtensionTest
       $iFivePmSlot = (12*17)*5;
       $iTenPmSlot  = (12*20)*5;    
         
-      $iRepeatWorkDayRule    = $oService->createRepeatingWorkDayRule($oDayWorkDayRuleStart,$oDayWorkDayRuleEnd,$iFiveMinuteTimeslot,$iNineAmSlot,$iFivePmSlot,'1-5','*','2-12','*','Repeat Work Day Rule');
-      $iSingleWorkDayRule    = $oService->createSingleWorkDayRule($oSingleDate,$iFiveMinuteTimeslot,$iFivePmSlot,$iTenPmSlot,'Single Workday rule'); 
+      $iRepeatWorkDayRule    = $oService->createRepeatingWorkDayRule($oDayWorkDayRuleStart,$oDayWorkDayRuleEnd,$iFiveMinuteTimeslot,$iNineAmSlot,$iFivePmSlot,'1-5','*','2-12','*', 'Repeat Work Day Rule');
+      $iSingleWorkDayRule    = $oService->createSingleWorkDayRule($oSingleDate,$iFiveMinuteTimeslot,$iFivePmSlot,$iTenPmSlot, 'Single Work Day Rule'); 
       
       $iMidaySlot = (12*12)*5;
       $iOnePmSlot = (12*13)*5;
@@ -97,16 +103,16 @@ class QueueWorkerTest extends ExtensionTest
       $iEightPmSlot  = (12*18)*5;
       $iEightThirtyPmSlot = ((12*18) + 6)*5;
       
-      $iRepeatBreakRule      = $oService->createRepeatingBreakRule($oDayWorkDayRuleStart,$oDayWorkDayRuleEnd,$iFiveMinuteTimeslot,$iMidaySlot,$iOnePmSlot,'1-5','*','2-12','*','Repeat Break Rule');
-      $iSingleBreakRule      = $oService->createSingleBreakRule($oSingleDate,$iFiveMinuteTimeslot,$iEightPmSlot,$iEightThirtyPmSlot,'Single Break Rule'); 
+      $iRepeatBreakRule      = $oService->createRepeatingBreakRule($oDayWorkDayRuleStart,$oDayWorkDayRuleEnd,$iFiveMinuteTimeslot,$iMidaySlot,$iOnePmSlot,'1-5','*','2-12','*', 'Repat Break Rule');
+      $iSingleBreakRule      = $oService->createSingleBreakRule($oSingleDate,$iFiveMinuteTimeslot,$iEightPmSlot,$iEightThirtyPmSlot, 'Single Break Rule'); 
             
             
-      $iRepeatHolidayRule    = $oService->createRepeatingHolidayRule($oDayWorkDayRuleStart,$oDayWorkDayRuleEnd,$iFiveMinuteTimeslot,$iNineAmSlot,$iFivePmSlot,'*','28-30','*','*','Repeat Holiday Rule');    
-      $iSingleHolidayRule      = $oService->createSingleHolidayRule($oHolidayStart,$iFiveMinuteTimeslot,$iNineAmSlot,$iFivePmSlot,'Single Holiday Rule');             
+      $iRepeatHolidayRule    = $oService->createRepeatingHolidayRule($oDayWorkDayRuleStart,$oDayWorkDayRuleEnd,$iFiveMinuteTimeslot,$iNineAmSlot,$iFivePmSlot,'*','28-30','*','*', 'Repeat Holiday Rule');    
+      $iSingleHolidayRule      = $oService->createSingleHolidayRule($oHolidayStart,$iFiveMinuteTimeslot,$iNineAmSlot,$iFivePmSlot, 'Single Holiday Rule');             
     
     
-      $iRepeatOvertimeRule   = $oService->createRepeatingOvertimeRule($oDayWorkDayRuleStart,$oDayWorkDayRuleEnd,$iFiveMinuteTimeslot,$iNineAmSlot,$iFivePmSlot,'*','28-30','*','*','Repeat Overtime Rule');
-      $iSingleOvertimeRule   = $oService->createSingleOvertmeRule($oHolidayStart,$iFiveMinuteTimeslot,$iNineAmSlot,$iFivePmSlot,'Single Overtime Rule');
+      $iRepeatOvertimeRule   = $oService->createRepeatingOvertimeRule($oDayWorkDayRuleStart,$oDayWorkDayRuleEnd,$iFiveMinuteTimeslot,$iNineAmSlot,$iFivePmSlot,'*','28-30','*','*', 'Repeat Overtime Rule');
+      $iSingleOvertimeRule   = $oService->createSingleOvertmeRule($oHolidayStart,$iFiveMinuteTimeslot,$iNineAmSlot,$iFivePmSlot, 'Single Overtime Rule');
       
       
       // Link Rules to Schedule
@@ -153,17 +159,20 @@ class QueueWorkerTest extends ExtensionTest
       $oService->resfreshSchedule($iMemberThreeSchedule);
       $oService->resfreshSchedule($iMemberFourSchedule);
     
+    
+     // Take some manual bookings
+       
+      $oOpen  =  clone $oNow;
+      $oOpen->setDate($oNow->format('Y'),1,14);
+      $oOpen->setTime(17,0,0);
+      
+      $oClose = clone $oNow;
+      $oClose->setDate($oNow->format('Y'),1,14);
+      $oClose->setTime(17,20,0);
+    
+      $iBookingMemberOneFirst = $oService->takeManualBooking($iMemberOneSchedule,$oOpen,$oClose);
      
-      
-      
-      // Create some customers
-      
-      $iCustomerOneId     = $oService->createCustomer('Bob', 'Builder', 'bob@builder.com', '0404555555', '98172762', 'Bob Address Line One', 'Bob Address Line Two', 'Company One');
-      $iCustomerTwoId     = $oService->createCustomer('Steve', 'Builder', 'seteve@builder.com', '0404555556', '98172762' , 'Steve Address Line One', 'Steve Address Line Two', 'Company two');
-      $iCustomerThreeId   = $oService->createCustomer('Karen', 'Builder', 'karen@builder.com', '0404555557', '98172762' , 'Karen Address Line One', 'Karen Address Line Two', 'Company three');
-   
-      
-       // save identifiers for use below    
+      // save identifiers for use below    
             
       $this->aDatabaseId = [
         'five_minute'            => $iFiveMinuteTimeslot,
@@ -187,64 +196,127 @@ class QueueWorkerTest extends ExtensionTest
         'schedule_member_two'    => $iMemberTwoSchedule,
         'schedule_member_three'  => $iMemberThreeSchedule,
         'schedule_member_four'   => $iMemberFourSchedule,
-        'customer_1'             => $iCustomerOneId,
-        'customer_2'             => $iCustomerTwoId,
-        'customer_3'             => $iCustomerThreeId,
-        
+        'booking_member_one_first' => $iBookingMemberOneFirst,
       ];
+      
+    
+      
+      
    }  
    
-   
-   public function testQueueWorkers()
+   /**
+    * @group Booking
+    */ 
+   public function testBookingSteps()
    {
-        $oApp = $this->getContainer();
-        $oBus = $this->getCommandBus();
-        $oWorker = $oApp['bm.queue.worker.rebuild'];
-        $oMonitorWorker = $oApp['bm.queue.worker.monitor'];
-        $oPurgeWorker = $oApp['bm.queue.worker.purge'];
+      $oNow       = $this->getNow();
+      
+      
+      // Take a second booking so we can test if max check works
+      $oOpen  =  clone $oNow;
+      $oOpen->setDate($oNow->format('Y'),1,14);
+      $oOpen->setTime(17,20,0);
+      
+      $oClose = clone $oNow;
+      $oClose->setDate($oNow->format('Y'),1,14);
+      $oClose->setTime(17,40,0);
+      
+      $this->SucessfulyTakeBooking($this->aDatabaseId['schedule_member_one'],$oOpen,$oClose,4);
+      $this->FailMaxBooking($this->aDatabaseId['schedule_member_one'],$oOpen,$oClose);
+      
+      $oOpen  =  clone $oNow;
+      $oOpen->setTime(17,20,0);
+      
+      $oClose = clone $oNow;
+      $oClose->setTime(17,40,0);
+      
+      $this->FailLeadTimeBooking($this->aDatabaseId['schedule_member_one'],$oOpen,$oClose);
+    
+   }
+   
+   
+   
+   public function SucessfulyTakeBooking($iScheduleId, DateTime $oOpeningSlot, DateTime $oClosingSlot, $iExpectedSlotCount)
+   {
         
-        // Add some jobs onto the queue
+        $oContainer  = $this->getContainer();
+        $oDatabase   = $this->getDatabaseAdapter();
+        $oCommandBus = $this->getCommandBus(); 
+        $oNow        = $this->getNow();
+       
+        $oCommand  = new WebBookingCommand($iScheduleId, $oOpeningSlot, $oClosingSlot, $oNow, 1, new DateInterval('P1D'));
         
+        $oCommandBus->handle($oCommand);
         
-        foreach($this->aDatabaseId as $key => $value) {
-            
-            if (true === in_array($key,['schedule_member_one','schedule_member_two','schedule_member_three','schedule_member_four'])) {
-                $oCommand   = new RefreshScheduleCommand($value,true);
-                
-                $oBus->handle($oCommand);
-            }
-            
-        }
+        // check if we have a booking saved
+        $this->assertGreaterThanOrEqual(1,$oCommand->getBookingId());
         
-        $phpunit = $this;
+        // verify the slots were reserved
+        $iSlotCount = 0;
         
-        // override the command bus handler and ensure that handle been called
-        $oApp['bm.model.schedule.handler.refresh'] = $oApp->share($oApp->extend('bm.model.schedule.handler.refresh',
-            function($oRefreshHandler, Application $container) use ($phpunit){
-                $oMock =  $phpunit->getMockBuilder('Bolt\Extension\IComeFromTheNet\BookMe\Bundle\Queue\Model\RefreshScheduleDecorator')
-                                ->disableOriginalConstructor()
-                                ->getMock(); 
-                                
-                $oMock->expects($phpunit->exactly(4))
-                      ->method('handle');
-
-                return $oMock;
-        }));
+        $iSlotCount = (integer) $oDatabase->fetchColumn('SELECT count(*) 
+                                                FROM bolt_bm_schedule_slot
+                                                WHERE schedule_id = ? 
+                                                and slot_open >= ?
+                                                and slot_close <= ?
+                                                and booking_id = ?'
+                                                ,[$iScheduleId,$oOpeningSlot,$oClosingSlot,$oCommand->getBookingId()]
+                                                ,0
+                                                ,[Type::INTEGER, Type::DATETIME,Type::DATETIME,Type::INTEGER]);
         
+        $this->assertEquals($iSlotCount,$iExpectedSlotCount,'The slots have not been reserved');
         
-        // Execute the worker and assert items have completed.
-        $oWorker();
-        
-        
-        //Execute Monitor Worker
-        $oMonitorWorker();
-        
-        
-        //Execute Purge Worker
-        $oPurgeWorker();
         
    }
    
    
+   
+   public function FailMaxBooking($iScheduleId, DateTime $oOpeningSlot, DateTime $oClosingSlot)
+   {
+        $oContainer  = $this->getContainer();
+        $oDatabase   = $this->getDatabaseAdapter();
+        $oCommandBus = $this->getCommandBus(); 
+       
+        $oNow        = $this->getNow();
+       
+        $oCommand  = new WebBookingCommand($iScheduleId, $oOpeningSlot, $oClosingSlot, $oNow, 1, new DateInterval('P1D'));
+      
+       
+        try {
+        
+            $oCommandBus->handle($oCommand);
+            $this->assertFalse(true,'The Max Booking check should of failed');
+            
+        }
+        catch(BookingException $e) {
+           $this->assertEquals('Max bookings taken for calendar day for schedule at id 1 time from '.$oOpeningSlot->format('Y-m-d H:i:s').' until '.$oClosingSlot->format('Y-m-d H:i:s'), $e->getMessage());
+        }
+    
+   }
+   
+   
+   public function FailLeadTimeBooking($iScheduleId, DateTime $oOpeningSlot, DateTime $oClosingSlot)
+   {
+        $oContainer  = $this->getContainer();
+        $oDatabase   = $this->getDatabaseAdapter();
+        $oCommandBus = $this->getCommandBus(); 
+       
+        $oNow        = $this->getNow();
+       
+        $oCommand  = new WebBookingCommand($iScheduleId, $oOpeningSlot, $oClosingSlot, $oNow, 1, new DateInterval('P1D'));
+      
+       
+        try {
+        
+            $oCommandBus->handle($oCommand);
+            $this->assertFalse(true,'The Max Booking check should of failed');
+            
+        }
+        catch(BookingException $e) {
+           $this->assertEquals('Unable to create booking it has been taken within the required lead time',$e->getMessage());
+        }
+    
+   }
+  
 }
 /* end of file */

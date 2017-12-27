@@ -1,5 +1,5 @@
 <?php
-namespace  Bolt\Extension\IComeFromTheNet\BookMe\Tests;
+namespace  Bolt\Extension\IComeFromTheNet\BookMe\Tests\Schedule;
 
 use Doctrine\DBAL\Types\Type;
 use Bolt\Extension\IComeFromTheNet\BookMe\Tests\Base\ExtensionTest;
@@ -21,29 +21,15 @@ class MembersTeamsTest extends ExtensionTest
     
    protected function handleEventPostFixtureRun()
    {
-      // Create the Calendar 
-      $oNow         = $this->getNow();
-      $oService     = $this->getTestAPI();
-      
-      $oService->addCalenderYears(5);
-      
-      // Create some timeslots
-      $iSixMinuteSlotId = $oService->addTimeslot(6,$oNow->format('Y'));
-      
-      $this->aDatabaseId  = [
-          'slot_six_minute' => $iSixMinuteSlotId,
-          
-       ];
-      
+      return;
    }  
    
    
     /**
-    * @group Setup
+    * @group Schedule
     */ 
     public function testMembershipCommands()
     {
-        $iSixMinuteSlotId = $this->aDatabaseId['slot_six_minute'];
         $sMemberName      = 'Bob the Builder';
         $sTeamName        = 'Bobs Team';
         

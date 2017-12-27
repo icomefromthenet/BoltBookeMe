@@ -1,6 +1,6 @@
 <?php
 
-namespace Bolt\Extension\IComeFromTheNet\BookMe\Tests;
+namespace Bolt\Extension\IComeFromTheNet\BookMe\Tests\Schedule;
 
 use DateTime;
 use Doctrine\DBAL\Types\Type;
@@ -33,7 +33,7 @@ class SlotAndCalendarTest extends ExtensionTest
     
    
     /**
-    * @group Setup
+    * @group schedule
     */ 
     public function testCalendar()
     {

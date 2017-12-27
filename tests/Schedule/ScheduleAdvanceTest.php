@@ -1,5 +1,5 @@
 <?php
-namespace Bolt\Extension\IComeFromTheNet\BookMe\Tests;
+namespace Bolt\Extension\IComeFromTheNet\BookMe\Tests\Schedule;
 
 use DateTime;
 use Doctrine\DBAL\Types\Type;
@@ -30,35 +30,16 @@ class ScheduleAdvanceTest extends ExtensionTest
       $oNow       = $this->getNow();
       
       
-      $oStart = clone $oNow;
-      $oStart->setDate($oNow->format('Y'),1,1);
+      //Timeslots
+      $iFiveMinuteTimeslot  = $this->aDatabaseId['five_minute'];
+      $iTenMinuteTimeslot   = $this->aDatabaseId['ten_minute'];
+      $iFifteenMinuteTimeslot   = $this->aDatabaseId['fifteen_minute'];
       
-      $oService->addCalenderYears(5,$oStart);
-      
-      // Timeslots
-      
-      $iFiveMinuteTimeslot    = $oService->addTimeslot(5,$oNow->format('Y'));
-      $iTenMinuteTimeslot     = $oService->addTimeslot(10,$oNow->format('Y'));
-      $iFifteenMinuteTimeslot = $oService->addTimeslot(15,$oNow->format('Y'));
-
-      $oService->toggleSlotAvability($iTenMinuteTimeslot);    
-  
-     // Teams
-  
-      $iMemberOne   = $oService->registerMembership('Bob Builder');
-      $iMemberTwo   = $oService->registerMembership('Bobs Assistant');
-      $iMemberThree = $oService->registerMembership('Bill Builder');
-      $iMemberFour  = $oService->registerMembership('bills Assisstant');
-    
-      $iTeamOne     = $oService->registerTeam('Bob Team');
-      $iTeamTwo     = $oService->registerTeam('Bills Tean');
-         
-         
       // Schedules
-      $iMemberOneSchedule   = $oService->startSchedule($iMemberOne,   $iFiveMinuteTimeslot, $oNow->format('Y'));
-      $iMemberTwoSchedule   = $oService->startSchedule($iMemberTwo,   $iFiveMinuteTimeslot, $oNow->format('Y'));
-      $iMemberThreeSchedule = $oService->startSchedule($iMemberThree, $iFiveMinuteTimeslot, $oNow->format('Y'));
-      $iMemberFourSchedule  = $oService->startSchedule($iMemberFour,  $iFiveMinuteTimeslot, $oNow->format('Y'));
+      $iMemberOneSchedule   = $this->aDatabaseId['member_one'];
+      $iMemberTwoSchedule   = $this->aDatabaseId['member_two'];
+      $iMemberThreeSchedule = $this->aDatabaseId['member_three'];
+      $iMemberFourSchedule  = $this->aDatabaseId['member_four'];
       
       
       // Rules Single
@@ -106,16 +87,9 @@ class ScheduleAdvanceTest extends ExtensionTest
       // Link Rules to Schedule
       
             
-      $this->aDatabaseId = [
-        'five_minute'            => $iFiveMinuteTimeslot,
-        'ten_minute'             => $iTenMinuteTimeslot,
-        'fifteen_minute'         => $iFifteenMinuteTimeslot,
-        'member_one'             => $iMemberOne,
-        'member_two'             => $iMemberTwo,
-        'member_three'           => $iMemberThree,
-        'member_four'            => $iMemberFour,
-        'team_two'               => $iTeamTwo,
-        'team_one'               => $iTeamOne,
+      $this->aDatabaseId = array_merge($this->aDatabaseId, 
+        [
+       
         'work_repeat'            => $iRepeatWorkDayRule,
         'work_single'            => $iSingleWorkDayRule,
         'break_repeat'           => $iRepeatBreakRule,
@@ -129,7 +103,7 @@ class ScheduleAdvanceTest extends ExtensionTest
         'schedule_member_three'  => $iMemberThreeSchedule,
         'schedule_member_four'   => $iMemberFourSchedule,
         
-      ];
+      ]);
       
       
    }  
@@ -147,14 +121,14 @@ class ScheduleAdvanceTest extends ExtensionTest
         $iScheduleId       = $this->aDatabaseId['schedule_member_two'];
         
         $iMemberOneId      = $this->aDatabaseId['member_one'];
-        $iTeamOneId        = $this->aDatabaseId['team_one'];
-        $iTeamOneScheduleId= $this->aDatabaseId['schedule_member_one'];
+        $iTeamTwoId        = $this->aDatabaseId['team_two'];
+        
         
         $this->ApplyRulesTest($iScheduleId, $iRuleOneId,$iRuleTwoId,$iRuleThreeId);
         $this->RefreshScheduleTest($iScheduleId);
         $this->RemoveFromScheduleTest($iScheduleId, $iRuleOneId);
-        $this->AssignToTeam($iMemberOneId,$iTeamOneId);
-        $this->WithdrawlToTeam($iMemberOneId,$iTeamOneId);
+        $this->AssignToTeam($iMemberOneId,$iTeamTwoId);
+        $this->WithdrawlToTeam($iMemberOneId,$iTeamTwoId);
        
     }
     

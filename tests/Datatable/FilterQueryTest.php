@@ -1,23 +1,32 @@
 <?php
-namespace  Bolt\Extension\IComeFromTheNet\BookMe\Tests;
+namespace  Bolt\Extension\IComeFromTheNet\BookMe\Tests\Datatable;
 
-use DateTime;
 use Doctrine\DBAL\Types\Type;
+use Symfony\Component\Form\Forms;
+use Symfony\Component\Form\FormFactoryInterface;
+use Symfony\Component\EventDispatcher\EventDispatcher;
 use Bolt\Extension\IComeFromTheNet\BookMe\Tests\Base\ExtensionTest;
 use Bolt\Extension\IComeFromTheNet\BookMe\Bus\Middleware\ValidationException;
+use Bolt\Extension\IComeFromTheNet\BookMe\Model\SelectQueryHandler;
+
+use Bolt\Extension\IComeFromTheNet\BookMe\Model\Setup\Field\CalendarYearField;
+use Bolt\Extension\IComeFromTheNet\BookMe\Model\Setup\Field\ActiveTimeslotField;
+use Bolt\Extension\IComeFromTheNet\BookMe\Model\Rule\Field\RuleTypeField;
+use Bolt\Extension\IComeFromTheNet\BookMe\Model\Member\Field\ScheduleTeamField;
 
 
-class CustomRepoTest extends ExtensionTest
+class FilterQueryTest extends ExtensionTest
 {
     
     
    protected $aDatabaseId;    
-    
+   
     
    protected function handleEventPostFixtureRun()
    {
       $oNow         = $this->getNow();
       $oService     = $this->getTestAPI();
+      
       
       $oStartYear = clone $oNow;
       $oStartYear->setDate($oNow->format('Y'),1,1);
@@ -164,7 +173,6 @@ class CustomRepoTest extends ExtensionTest
        // save identifiers for use below    
             
       $this->aDatabaseId = [
-        'start_year'             => $oStartYear,
         'five_minute'            => $iFiveMinuteTimeslot,
         'ten_minute'             => $iTenMinuteTimeslot,
         'fifteen_minute'         => $iFifteenMinuteTimeslot,
@@ -202,278 +210,229 @@ class CustomRepoTest extends ExtensionTest
     public function testCustomRepo()
     {
        
-       //$this->RuleRepoTest($this->aDatabaseId['work_repeat']);
+       $this->TestRuleQuery();
+       $this->TestMemberQuery();
        
-       $this->ScheduleRepoTest($this->aDatabaseId['schedule_member_one'], $this->aDatabaseId['five_minute'],$this->aDatabaseId['member_one']);
-       
-       //$this->MemberRepoTest($this->aDatabaseId['member_one']);
-       
-       //$this->CustomerRepoTest($this->aDatabaseId['customer_1']);
-       
-       //$this->CalendarYearRepoTest($this->aDatabaseId['start_year']);
-       
-       //$this->TimeslotRepoTest($this->aDatabaseId['ten_minute']);
-       
-       //$this->RuleTypeRepoTest();
-       
-       //$this->TeamRepoTest($this->aDatabaseId['team_one']);
     }
     
-    protected function RuleRepoTest($iRuleId)
+    public function testCustomFields()
     {
-        $oNow         = $this->getNow();
-        $oApp = $this->getContainer();
+        
+        $this->TestCalendarYearField();
+        $this->TestActiveTimeslotField();
+        $this->TestRuleTypeField();
+        $this->TestScheduleTeamField();
+        
+    }
     
-        $oRuleRepo = $oApp['storage']->getRepository('Bolt\Extension\IComeFromTheNet\BookMe\Model\Rule\RuleEntity');    
+    protected function TestCalendarYearField()
+    {
+        $oApp           = $this->getContainer();
+        $oFactory       = $oApp['form.factory'];
+        
+        
+        $form = $oFactory->create(CalendarYearField::class);
+
+        $formData = array(
+          'cal_year' => 2016
+        );
+        
+        $form->submit($formData);
+
+
+        //$this->assertTrue($form->isSynchronized());
+        //$this->assertEquals($formData, $form->getData());
+        
+    }
     
-        $this->assertInstanceOf('Bolt\Extension\IComeFromTheNet\BookMe\Model\Rule\RuleRepository',$oRuleRepo);
-        
-        $oRuleQueryBuilder = $oRuleRepo->createQueryBuilder();
-        
-        $this->assertInstanceOf('Bolt\Extension\IComeFromTheNet\BookMe\Model\Rule\RuleQueryBuilder',$oRuleQueryBuilder);
-        
+    protected function TestActiveTimeslotField()
+    {
+        $oApp           = $this->getContainer();
+        $oFactory       = $oApp['form.factory'];
         
         
-        $oWorkDayRule = $oRuleRepo->find($iRuleId);
+        $form = $oFactory->create(ActiveTimeslotField::class);
+
+        $formData = array(
+          '1' => 15
+        );
+        
+        $form->submit($formData);
+
+
+        //$this->assertTrue($form->isSynchronized());
+        //$this->assertEquals($formData, $form->getData());
+        
+    }
   
-        $this->assertEquals($iRuleId,$oWorkDayRule->getRuleId());
-        $this->assertEquals("Repeat Work Day Rule",$oWorkDayRule->getRuleName());
-        $this->assertEquals(false, $oWorkDayRule->getSingleDayFlag());
-        $this->assertEquals($oNow->format('Y'),$oWorkDayRule->getCalendarYear());
-        $this->assertEquals(540,$oWorkDayRule->getDayOpenSlot());
-        $this->assertEquals(1020, $oWorkDayRule->getDayCloseSlot());
-        $this->assertEquals($oNow->format('Y')."-12-31" , $oWorkDayRule->getEndAt()->format('Y-m-d'));
-        $this->assertEquals($oNow->format('Y')."-01-01" , $oWorkDayRule->getStartFrom()->format('Y-m-d'));
-        $this->assertEquals('short rule description', $oWorkDayRule->getRuleDescription());
-        $this->assertEquals("2-12", $oWorkDayRule->getRepeatMonth());
-        $this->assertEquals("*", $oWorkDayRule->getRepeatDayOfMonth());
-        $this->assertEquals("1-5", $oWorkDayRule->getRepeatDayOfWeek());
-        $this->assertEquals("*", $oWorkDayRule->getRepeatWeekOfYear());
-        $this->assertEquals(1, $oWorkDayRule->getTimeslotId());
-        $this->assertEquals(1, $oWorkDayRule->getRuleTypeId());
+    protected function TestRuleTypeField()
+    {
+         $oApp           = $this->getContainer();
+        $oFactory       = $oApp['form.factory'];
+        
+        
+        $form = $oFactory->create(RuleTypeField::class,array('example_option' => 'aaaa'));
+
+        $formData = array(
+          '1' => 2016
+        );
+        
+        $form->submit($formData);
+
+
+        //$this->assertTrue($form->isSynchronized());
+        //$this->assertEquals($formData, $form->getData());
+        
+    }
+    
+    protected function TestScheduleTeamField()
+    {
+         $oApp           = $this->getContainer();
+        $oFactory       = $oApp['form.factory'];
+        
+        
+        $form = $oFactory->create(ScheduleTeamField::class);
+
+        $formData = array(
+          '1' => 2016
+        );
+        
+        $form->submit($formData);
+        
+         //$this->assertTrue($form->isSynchronized());
+        //$this->assertEquals($formData, $form->getData());
+
+    }
+    
+    
+    protected function TestRuleQuery()
+    {
+        
+        # Fetch Search Query From Container
+        
+        $oSearchHandler = new SelectQueryHandler($this->getContainer());
+        $oRuleQuery     = $oSearchHandler->getQuery('rule');
+        
+        $this->assertInstanceOf('Bolt\Extension\IComeFromTheNet\BookMe\Model\Rule\DataTable\RuleSearchQuery',$oRuleQuery);
+        
+        # Do a Dry run and verify filters and directives are applied
+        
+        $aParams =[
+            'oApplyFrom' => new \DateTime(),
+            'oEndBefore' => new \DateTime(), 
+            'iRuleTypeId' => 1,
+            'iCalYear' => 2016,
+            'iTimeslotId' => 2,
+        ];
+        
+        
+        $oQueryBuilder     = $oRuleQuery->setParameters($aParams)->build();
+        
+        $sRuleFilterQuery  = $oQueryBuilder->getSQL();
+        $aRuleFilterParams = $oQueryBuilder->getParameters();
+        
+        $this->assertNotEmpty($sRuleFilterQuery);
+        $this->assertNotEmpty($aRuleFilterParams);
+        
+        # Test timeslot Join Directive
+        $this->assertRegExp('/INNER JOIN bolt_bm_timeslot tslot/', $sRuleFilterQuery);
+        $this->assertRegExp('/INNER JOIN bolt_bm_rule_type rt/', $sRuleFilterQuery);
+        
+        # Test the start from
+        $this->assertRegExp('/r.start_from >=/', $sRuleFilterQuery);
+        $this->assertEquals($aParams['oApplyFrom'], $aRuleFilterParams['StartFrom']);
+        
+        # Test Apply Before
+        $this->assertRegExp('/r.end_at <=/', $sRuleFilterQuery);
+        $this->assertEquals($aParams['oEndBefore'], $aRuleFilterParams['EndAt']);
+        
+        # Timeslot 
+        $this->assertRegExp('/r.timeslot_id =/', $sRuleFilterQuery);
+        $this->assertEquals($aParams['iTimeslotId'], $aRuleFilterParams['iTimeslotId']);
+       
+        
+        # Cal Year
+        $this->assertRegExp(preg_quote('/year(r.start_from) =/'), $sRuleFilterQuery);
+        $this->assertEquals($aParams['iCalYear'], $aRuleFilterParams['iCalYear']);
+       
+        
+        # Rule Type
+        $this->assertRegExp('/r.rule_type_id =/', $sRuleFilterQuery);
+        $this->assertEquals($aParams['iRuleTypeId'], $aRuleFilterParams['iRuleTypeId']);
+       
+        
+        
+        # Execute a query using handler and test rule mapping 
+        $aParams            = [];
+        $oRuleQuery         = $oSearchHandler->getQuery('rule');
+        
+        $aQueryResultSet = $oSearchHandler->executeQuery($oRuleQuery,$aParams);
+        
+        $this->assertGreaterThanOrEqual(2,count($aQueryResultSet));
+        
+        # Test Dates columns are mapped which means its iterating over mapping rules
+        $oRecord = $aQueryResultSet->get(1);
+
+        $this->assertInstanceOf('\DateTime',$oRecord['startFrom']);
+        $this->assertInstanceOf('\DateTime',$oRecord['endAt']);
         
         
         
     }
     
     
+    public function TestMemberQuery()
+    {
+        $oSearchHandler = new SelectQueryHandler($this->getContainer());
+        $oQuery     = $oSearchHandler->getQuery('member');
+        
+        $this->assertInstanceOf('Bolt\Extension\IComeFromTheNet\BookMe\Model\Member\DataTable\MemberSearchQuery',$oQuery);
+        
+        # Do a Dry run and verify filters and directives are applied
+        
+        $aParams =[
+            'oCreatedAfter' => new \DateTime(), 
+            'oCreatedBefore'  => new \DateTime(),
+            'iCreatedYear'   => 2016,
+            'iCalYear'   => 2017,
+            'iScheduleTeam' => 2,
+        ];
+        
+        
+        $oQueryBuilder = $oQuery->setParameters($aParams)->build();
+        
+        $sFilterQuery  = $oQueryBuilder->getSQL();
+        $aFilterParams = $oQueryBuilder->getParameters();
+        
+        $this->assertNotEmpty($sFilterQuery);
+        $this->assertNotEmpty($sFilterQuery);
+   
+        
+        # Created in Cal Year
+        $this->assertRegExp(preg_quote('/year(m.registered_date) =/'), $sFilterQuery);
+        $this->assertEquals($aParams['iCreatedYear'], $aFilterParams['iCreatedYear']);
+    
+        # Created Before
+        $this->assertRegExp(preg_quote('/m.registered_date <=/'), $sFilterQuery);
+        $this->assertEquals($aParams['oCreatedBefore'], $aFilterParams['oCreatedBefore']);
+     
+        
+        # Created After
+        $this->assertRegExp(preg_quote('/m.registered_date >=/'), $sFilterQuery);
+        $this->assertEquals($aParams['oCreatedAfter'], $aFilterParams['oCreatedAfter']);
+        
+        
+        # Last Schedule Cal Year Test
+        $this->assertRegExp(preg_quote('/(curSch.calendar_year = :iCalYear)/'), $sFilterQuery);
+        $this->assertEquals($aParams['iCalYear'], $aFilterParams['iCalYear']);
+    
+        # Member in team
+        $this->assertRegExp(preg_quote('/st.team_id = :iScheduleTeam/'), $sFilterQuery);
+        $this->assertEquals($aParams['iScheduleTeam'], $aFilterParams['iScheduleTeam']);
+    
+        
+    }
   
-    public function ScheduleRepoTest($iScheduleId,$iTimeSlotId, $iMemberId)
-    {
-        $oApp = $this->getContainer();
-        $oNow = $this->getNow();
     
-        $oRepo = $oApp['bm.repo.schedule'];
-    
-        $this->assertInstanceOf('Bolt\Extension\IComeFromTheNet\BookMe\Model\Schedule\ScheduleRepository',$oRepo);
-        
-        $oQueryBuilder = $oRepo->createQueryBuilder();
-        
-        $this->assertInstanceOf('Bolt\Extension\IComeFromTheNet\BookMe\Model\Schedule\ScheduleQueryBuilder',$oQueryBuilder);
-        
-        
-        
-        $oSchedule = $oRepo->find($iScheduleId);
-  
-        $this->assertEquals($iScheduleId,$oSchedule->getScheduleId());
-        $this->assertEquals($iTimeSlotId, $oSchedule->getTimeslotId());
-        $this->assertEquals($iMemberId, $oSchedule->getMemberId());
-        
-        $this->assertNotEmpty($oSchedule->getCalendarYear());
-        $this->assertTrue($oSchedule->getCarryOver());
-        $this->assertNotEmpty($oSchedule->getRegisteredDate());
-        $this->assertEmpty($oSchedule->getCloseDate());
-        
-        // Test the Query Builder Filters
-        $oQuery = $oRepo->createQueryBuilder('a');
-        
-        $oQuery->filterByCalendarYear('a',2017);
-        $this->assertContains('a.calendar_year = :iCalYear',$oQuery->getSQL());
-        
-        $oQuery = $oRepo->createQueryBuilder('a');
-    
-        $oQuery->filterByScheduleOpen('a',2017);
-        $this->assertContains('a.close_date IS NULL',$oQuery->getSQL());
-    
-    
-        $oQuery = $oRepo->createQueryBuilder('a');
-    
-        $oQuery->filterByscheduleClosed('a',2017);
-        $this->assertContains('a.close_date IS NOT NULL',$oQuery->getSQL());
-        
-        $oQuery = $oRepo->createQueryBuilder('a');
-    
-        $oQuery->whereScheduleClosedDuringCalenderYear('a',2017);
-        $this->assertContains('a.calendar_year = :iCalYear',$oQuery->getSQL());
-        $this->assertContains('a.close_date IS NOT NULL',$oQuery->getSQL());
-        
-        $oQuery = $oRepo->createQueryBuilder('a');
-    
-        $oQuery->whereScheduleOpenDuringCalenderYear('a',2017);
-        $this->assertContains('a.calendar_year = :iCalYear',$oQuery->getSQL());
-        $this->assertContains('a.close_date < :sCloseDate OR a.close_date IS NULL',$oQuery->getSQL());
-    
-        $oQuery = $oRepo->createQueryBuilder('a');
-    
-        $oQuery->withMember('a','b');
-        $this->assertContains('INNER JOIN bolt_bm_schedule_membership b ON a.membership_id = b.membership_id',$oQuery->getSQL());
-        
-        $oQuery = $oRepo->createQueryBuilder('a');
-    
-        $oQuery->withBoltUser('a','b');
-        $this->assertContains('LEFT JOIN bolt_users b ON a.bolt_user_id = b.id', $oQuery->getSQL());
-        
-        // Test Repository Finders 
-        
-        $aResult = $oRepo->findAllSchedulesInCalYear($oNow->format('Y'));
-        $this->assertCount(3,$aResult); // 3 Active Schedules
-        
-        
-        
-    }
-        
-    
-    public function MemberRepoTest($iMemberId)
-    {
-        $oNow = $this->getNow();
-        $oApp = $this->getContainer();
-    
-        $oRepo = $oApp['storage']->getRepository('Bolt\Extension\IComeFromTheNet\BookMe\Model\Member\MemberEntity');    
-    
-        $this->assertInstanceOf('Bolt\Extension\IComeFromTheNet\BookMe\Model\Member\MemberRepository',$oRepo);
-        
-        $oQueryBuilder = $oRepo->createQueryBuilder();
-        
-        $this->assertInstanceOf('Bolt\Extension\IComeFromTheNet\BookMe\Model\Member\MemberQueryBuilder',$oQueryBuilder);
-        
-        
-        
-        $oMember = $oRepo->find($iMemberId);
-  
-        $this->assertEquals($iMemberId,$oMember->getMembershipId());
-        $this->assertEquals($iMemberId,$oMember->getMemberId());
-        
-        $this->assertEquals($oNow->format('Y-m-d'), $oMember->getRegisteredDate()->format('Y-m-d'));
-        $this->assertEquals('Bob Builder',$oMember->getMemberName());
-        
-        
-        
-    }
-    
-    
-    public function CustomerRepoTest($iCustomerId)
-    {
-        $oNow         = $this->getNow();
-        $oApp = $this->getContainer();
-    
-        $oRepo = $oApp['storage']->getRepository('Bolt\Extension\IComeFromTheNet\BookMe\Model\Customer\CustomerEntity');    
-    
-        $this->assertInstanceOf('Bolt\Extension\IComeFromTheNet\BookMe\Model\Customer\CustomerRepository',$oRepo);
-        
-        $oQueryBuilder = $oRepo->createQueryBuilder();
-        
-        $this->assertInstanceOf('Bolt\Extension\IComeFromTheNet\BookMe\Model\Customer\CustomerQueryBuilder',$oQueryBuilder);
-        
-        
-        
-        $oCustomer = $oRepo->find($iCustomerId);
-  
-        $this->assertEquals($iCustomerId,$oCustomer->getCustomerId());
-    
-        
-    }
-    
-    
-    public function CalendarYearRepoTest(DateTime $oDate)
-    {
-        $oNow         = $oDate;
-        $oApp = $this->getContainer();
-    
-        $oRepo = $oApp['storage']->getRepository('Bolt\Extension\IComeFromTheNet\BookMe\Model\Setup\CalendarYearEntity');    
-    
-        $this->assertInstanceOf('Bolt\Extension\IComeFromTheNet\BookMe\Model\Setup\CalendarYearRepository',$oRepo);
-        
-        $oQueryBuilder = $oRepo->createQueryBuilder();
-        
-        $this->assertInstanceOf('Bolt\Extension\IComeFromTheNet\BookMe\Model\Setup\CalendarYearQueryBuilder',$oQueryBuilder);
-        
-        $oCalYear = $oRepo->find($oNow->format('Y'));
-        
-        $this->assertEquals($oNow->format('Y'),$oCalYear->getCalendarYear());
-        $this->assertEquals($oNow->format('Y'), $oCalYear->getStartOfYear());
-        $this->assertEquals($oNow->format('Y'), $oCalYear->getEndOfYear());
-        $this->assertEquals(true, $oCalYear->getCurrentYearFlag());
-        
-        
-    }
-    
-    
-    public function TimeslotRepoTest($iTimeslotId)
-    {
-        $oNow         = $oDate;
-        $oApp = $this->getContainer();
-    
-        $oRepo = $oApp['storage']->getRepository('Bolt\Extension\IComeFromTheNet\BookMe\Model\Setup\TimeslotEntity');    
-    
-        $this->assertInstanceOf('Bolt\Extension\IComeFromTheNet\BookMe\Model\Setup\TimeslotRepository',$oRepo);
-        
-        $oQueryBuilder = $oRepo->createQueryBuilder();
-        
-        $this->assertInstanceOf('Bolt\Extension\IComeFromTheNet\BookMe\Model\Setup\TimeslotQueryBuilder',$oQueryBuilder);
-        
-        $oTimeSlot = $oRepo->find($iTimeslotId);
-    
-        $this->assertEquals($iTimeslotId,$oTimeSlot->getTimeslotId());
-        $this->assertEquals(10, $oTimeSlot->getSlotLength());
-        $this->assertEquals(false, $oTimeSlot->getActiviteStatus());
-      
-    }
-    
-    public function RuleTypeRepoTest()
-    {
-        $oNow         = $oDate;
-        $oApp = $this->getContainer();
-    
-        $oRepo = $oApp['storage']->getRepository('Bolt\Extension\IComeFromTheNet\BookMe\Model\Rule\RuleTypeEntity');    
-    
-        $this->assertInstanceOf('Bolt\Extension\IComeFromTheNet\BookMe\Model\Rule\RuleTypeRepository',$oRepo);
-        
-        $oQueryBuilder = $oRepo->createQueryBuilder();
-        
-        $this->assertInstanceOf('Bolt\Extension\IComeFromTheNet\BookMe\Model\Rule\RuleTypeQueryBuilder',$oQueryBuilder);
-        
-        $oRuleType = $oRepo->find(1);
-    
-        $this->assertEquals(1,$oRuleType->getRuleTypeId());
-        $this->assertTrue($oRuleType->getRuleTypeCode() !== null);
-        $this->assertTrue($oRuleType->getInclusionOverrideFlag() !== null);
-        $this->assertTrue($oRuleType->getWorkDayFlag() !== null);
-        $this->assertTrue($oRuleType->getExclusionFlag() !== null);
-        
-      
-    }
-    
-    public function TeamRepoTest($iTeamId)
-    {
-        
-        $oNow         = $oDate;
-        $oApp = $this->getContainer();
-    
-        $oRepo = $oApp['storage']->getRepository('Bolt\Extension\IComeFromTheNet\BookMe\Model\Member\TeamEntity');    
-    
-        $this->assertInstanceOf('Bolt\Extension\IComeFromTheNet\BookMe\Model\Member\TeamRepository',$oRepo);
-        
-        $oQueryBuilder = $oRepo->createQueryBuilder();
-        
-        $this->assertInstanceOf('Bolt\Extension\IComeFromTheNet\BookMe\Model\Member\TeamQueryBuilder',$oQueryBuilder);
-        
-        $oTeam = $oRepo->find($iTeamId);
-    
-        $this->assertEquals($iTeamId,$oTeam->getTeamId());
-        $this->assertNotEmpty($oTeam->getRegisteredDate());
-        $this->assertNotEmpty($oTeam->getTeamName());
-      
-        
-    }
 }
 /* end of file */

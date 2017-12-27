@@ -28,6 +28,8 @@ class SlotFixture extends BaseFixture
         $oSlotSeed = new SlotSeed($oDatabase, $aTableNames, 15, 1 );
         $aTimeSlots['iFifteenMinuteTimeslot'] = $oSlotSeed->executeSeed();
       
+        $oSlotSeed = new SlotSeed($oDatabase, $aTableNames, 6, 1);
+        $aTimeSlots['iSixMinuteTimeslot'] = $oSlotSeed->executeSeed();
       
         return $aTimeSlots;
         

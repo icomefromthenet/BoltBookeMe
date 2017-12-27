@@ -1,5 +1,5 @@
 <?php
-namespace  Bolt\Extension\IComeFromTheNet\BookMe\Tests;
+namespace  Bolt\Extension\IComeFromTheNet\BookMe\Tests\Customer;
 
 use Doctrine\DBAL\Types\Type;
 use Bolt\Extension\IComeFromTheNet\BookMe\Tests\Base\ExtensionTest;

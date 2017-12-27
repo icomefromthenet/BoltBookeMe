@@ -1,5 +1,5 @@
 <?php
-namespace Bolt\Extension\IComeFromTheNet\BookMe\Tests;
+namespace Bolt\Extension\IComeFromTheNet\BookMe\Tests\Schedule;
 
 use DateTime;
 use Doctrine\DBAL\Types\Type;
@@ -14,53 +14,16 @@ use Bolt\Extension\IComeFromTheNet\BookMe\Model\Schedule\ScheduleException;
 
 class ScheduleBasicTest extends ExtensionTest
 {
-    
 
-    
     
    protected function handleEventPostFixtureRun()
    {
-      // Create the Calendar 
-      /*
-      $oService = $this->getTestAPI();
-      
-      $oService->addCalenderYears(5);
-      
-      $oNow     = $this->getNow();
-      
-      $iFiveMinuteTimeslot    = $oService->addTimeslot(5,$oNow->format('Y'));
-      $iTenMinuteTimeslot     = $oService->addTimeslot(10,$oNow->format('Y'));
-      $iFifteenMinuteTimeslot = $oService->addTimeslot(15,$oNow->format('Y'));
 
-      $oService->toggleSlotAvability($iTenMinuteTimeslot);    
-  
-      $iMemberOne   = $oService->registerMembership('Bob Builder');
-      $iMemberTwo   = $oService->registerMembership('Bob Assistant');
-      $iMemberThree = $oService->registerMembership('Bob Backup');
-      $iMemberFour  = $oService->registerMembership('Bob Evil Twin');
-    
-      $iTeamOne     = $oService->registerTeam('Alpha Team');
-      $iTeamTwo     = $oService->registerTeam('Beta Team');
-       
-      $this->aDatabaseId = [
-        'five_minute'    => $iFiveMinuteTimeslot,
-        'ten_minute'     => $iTenMinuteTimeslot,
-        'fifteen_minute' => $iFifteenMinuteTimeslot,
-        'member_one'     => $iMemberOne,
-        'member_two'     => $iMemberTwo,
-        'member_three'   => $iMemberThree,
-        'member_four'    => $iMemberFour,
-        'team_two'       => $iTeamTwo,
-        'team_one'       => $iTeamOne,
-      ];
-       */    
-            
-       $this->aDatabaseId = $GLOBALS['BM_TEST_DATABASE_ID'];
    }  
    
    
     /**
-    * @group Management
+    * @group basic
     */ 
     public function testScheduleCommands()
     {

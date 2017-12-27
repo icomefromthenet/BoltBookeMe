@@ -1,6 +1,6 @@
 <?php
 
-namespace Bolt\Extension\IComeFromTheNet\BookMe\Tests;
+namespace Bolt\Extension\IComeFromTheNet\BookMe\Tests\Schedule;
 
 use DateTime;
 use Doctrine\DBAL\Types\Type;
@@ -21,29 +21,6 @@ class SlotRolloverTest extends ExtensionTest
     
    protected function handleEventPostFixtureRun()
    {
-      /*
-      $oNow         = $this->getNow();
-      $oService     = $this->getTestAPI();
-      
-      
-      $oStartYear       = clone $oNow;
-      $oStartYear->setDate($oNow->format('Y'),1,1);
-      
-      $oService->addCalenderYears(2,$oStartYear);
-      
-      
-      // Create Timeslots for first year as out test is see if the rollover will add them remainder
-      
-      $iFiveMinuteTimeslot    = $oService->addTimeslot(5,$oNow->format('Y'));
-      $iTenMinuteTimeslot     = $oService->addTimeslot(10,$oNow->format('Y'));
-      $iSevenMinuteTimeslot    = $oService->addTimeslot(7,$oNow->format('Y'));
-      
-      $this->aDatabaseId = [
-        'five_minute'            => $iFiveMinuteTimeslot,
-        'ten_minute'             => $iTenMinuteTimeslot,
-        'fifteen_minute'         => $iFifteenMinuteTimeslot,
-      ];
-      */
       
        $oNow        = $this->getNow();
        
@@ -64,7 +41,7 @@ class SlotRolloverTest extends ExtensionTest
     
    
     /**
-    * @group Setup
+    * @group schedule
     */ 
     public function testSlotRollover()
     {

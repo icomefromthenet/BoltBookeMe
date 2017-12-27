@@ -1,5 +1,5 @@
 <?php
-namespace  Bolt\Extension\IComeFromTheNet\BookMe\Tests;
+namespace  Bolt\Extension\IComeFromTheNet\BookMe\Tests\Datatable;
 
 use Doctrine\DBAL\Query\QueryBuilder;
 use Symfony\Component\Routing\Generator\UrlGeneratorInterface;
