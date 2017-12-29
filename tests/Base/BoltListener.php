@@ -1,6 +1,7 @@
 <?php
 namespace Bolt\Extension\IComeFromTheNet\BookMe\Tests\Base;
 
+use DateTime;
 use Bolt\Extension\IComeFromTheNet\BookMe\Tests\Base\Fixture;
 use Symfony\Component\Filesystem\Filesystem;
 use Doctrine\DBAL\Types\Type;
@@ -446,7 +447,7 @@ class BoltListener implements \PHPUnit_Framework_TestListener
 
 
     
-    protected function buildTestDatabase($oDatabase, $aTableNames, $oNow)
+    protected function buildTestDatabase($oDatabase, $aTableNames, DateTime $oNow)
     {
        
        $aConfig     = [];
@@ -529,9 +530,72 @@ class BoltListener implements \PHPUnit_Framework_TestListener
         $aConfig['schedule_member_four']  = $aNewSchedules['iMemberFourSchedule'];
        
        
+       // Creat Some Rules
        
+       $oNewRuleFixture = new Fixture\NewRuleFixture($oDatabase, $oNow, $aTableNames);
        
+       $aRuntimeData = [
+            'iRepeatWorkDayRule' => [
+                'RULE_TYPE_ID' => 1,
+                'TIMESLOT_ID'  => $aConfig['five_minute'],
+            
+            ],
+            
+            'iSingleWorkDayRule' => [
+                'RULE_TYPE_ID' => 1,
+                'TIMESLOT_ID'  => $aConfig['five_minute'],
+            ],
+            
+            'iRepeatBreakRule' => [
+                'RULE_TYPE_ID' => 2,
+                'TIMESLOT_ID'  => $aConfig['five_minute'],
+            ],
+            
+            'iSingleBreakRule' =>[
+                'RULE_TYPE_ID' => 2,
+                'TIMESLOT_ID'  => $aConfig['five_minute'],
+            ],
+            
+            'iRepeatHolidayRule' => [
+                'RULE_TYPE_ID' => 3,
+                'TIMESLOT_ID'  => $aConfig['five_minute'],
+            ],
+            
+            'iSingleHolidayRule' => [
+                'RULE_TYPE_ID' => 3,
+                'TIMESLOT_ID'  => $aConfig['five_minute'],
+            ],
+            
+            'iRepeatOvertimeRule' => [
+                'RULE_TYPE_ID' => 4,
+                'TIMESLOT_ID'  => $aConfig['five_minute'],
+            ],
+            
+            'iSingleOvertimeRule' => [
+                'RULE_TYPE_ID' => 4,
+                'TIMESLOT_ID'  => $aConfig['five_minute'],
+            ],
+           
+        ];
+       
+        $aNewRules                   = $oNewRuleFixture->runFixture($aRuntimeData, $oNow);
         
+        $aConfig['work_repeat']      = $aNewRules['iRepeatWorkDayRule'];
+        $aConfig['work_single']      = $aNewRules['iSingleWorkDayRule'];
+        $aConfig['break_repeat']     = $aNewRules['iRepeatBreakRule'];
+        $aConfig['break_single']     = $aNewRules['iSingleBreakRule'];
+        $aConfig['holiday_repeat']   = $aNewRules['iRepeatHolidayRule'];
+        $aConfig['holiday_single']   = $aNewRules['iSingleHolidayRule'];
+        $aConfig['overtime_repeat']  = $aNewRules['iRepeatOvertimeRule'];
+        $aConfig['overtime_single']  = $aNewRules['iSingleOvertimeRule'];
+
+
+        // Assign new Rules to Known Schedules, include a schedule refresh which applies the rules to a schedule
+        $oAssignRuleFixture = new Fixture\AssignRuleFixture($oDatabase, $oNow, $aTableNames);
+        $oAssignRuleFixture->runFixture([], $oNow);
+        
+        
+
         $GLOBALS['BM_TEST_DATABASE_ID'] = $aConfig;       
 
         

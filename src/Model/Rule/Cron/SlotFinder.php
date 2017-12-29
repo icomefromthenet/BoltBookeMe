@@ -141,7 +141,7 @@ class SlotFinder
         $iClosingDaySlot     = $oCommand->getClosingSlot(); 
         $oDatabase           = $this->oDatabase;
         $oAppLogger          = $this->oAppLogger;
-        $iRowsAffected       = 0;
+        $iTotalRowsAffected  = 0;
         
         $oAppLogger->debug('Flushing and creating slotFinder result table');
         
@@ -179,7 +179,9 @@ class SlotFinder
      
         // Find all slots between applicability date and in the calender year
         // This will find slots that finish after the current calendar day. (Tail end)
-       
+        // E.g we have a slot that is say 11:59pm-12:01am It carries across two calendar days. 
+        // `d`.`opening_slot` is a date check not a datetime, so need different query to fetch overlaps
+        
         $a1Sql[] =" INSERT INTO $sSeriesTmpTable (`timeslot_id`,`y`,`m`,`d`,`dw`,`w`,`open_minute`,`close_minute`,`closing_slot`,`opening_slot`) ";
         $a1Sql[] =" SELECT `d`.`timeslot_id`, `d`.`y`, `d`.`m`, `d`.`d`, `d`.`dw`, `d`.`w` , `d`.`open_minute`, `d`.`close_minute`,`d`.`closing_slot`, `d`.`opening_slot`";
         $a1Sql[] =" FROM $sYearSlotTabale d ";
@@ -192,7 +194,8 @@ class SlotFinder
 
         
      
-        // This find all the slots between start and finish 
+        // This find all the slots between start and finish but excude overlaps ie slots that cover two calendar days.
+        
         $a2Sql[] =" REPLACE INTO $sSeriesTmpTable (`timeslot_id`,`y`,`m`,`d`,`dw`,`w`,`open_minute`,`close_minute`,`closing_slot`,`opening_slot`) ";
         $a2Sql[] =" SELECT `d`.`timeslot_id`, `d`.`y`, `d`.`m`, `d`.`d`, `d`.`dw`, `d`.`w` , `d`.`open_minute`, `d`.`close_minute`,`d`.`closing_slot`, `d`.`opening_slot`";
         $a2Sql[] =" FROM $sYearSlotTabale d ";
@@ -317,13 +320,14 @@ class SlotFinder
            
             $sSql1  =  implode(PHP_EOL,$a1Sql);
             $sSql1 .=  implode(PHP_EOL,$aSql);
-    
-    
+            
+            
             $iRows1Affected = $oDatabase->executeUpdate($sSql1,$aBinds,$aTypes);
             
             $sSql2  =   implode(PHP_EOL,$a2Sql);
             $sSql2 .=  implode(PHP_EOL,$aSql);
     
+            
             $iRows2Affected = $oDatabase->executeUpdate($sSql2,$aBinds,$aTypes);
             
             
@@ -340,7 +344,7 @@ class SlotFinder
             throw SlotFinderException::hasFailedToFindSlotsQuery($oCommand,$e);
         }
         
-        return $iRowsAffected;
+        return $iTotalRowsAffected;
     }
     
     
