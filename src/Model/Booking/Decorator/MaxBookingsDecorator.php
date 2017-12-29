@@ -68,7 +68,7 @@ class MaxBookingsDecorator
             
             
             # Have we exceeded max booking rile
-            if($iBookingCount > $iMaxBookings) {
+            if($iBookingCount >= $iMaxBookings) {
                 throw BookingException::maxBookingsExceeded($oCommand,null);      
             } 
         
