@@ -600,10 +600,7 @@ class BoltListener implements \PHPUnit_Framework_TestListener
         $oCustomerFixture = new Fixture\CustomerFixture($oDatabase, $oNow, $aTableNames);
         $aNewCustomers = $oCustomerFixture->runFixture([],$oNow);
         
-        $aConfig['appt_customer_one_1']  = $aNewCustomers['iCustomerOneId'];
-        $aConfig['appt_customer_one_2']  = $aNewCustomers['iCustomerTwoId'];
-        $aConfig['appt_customer_two_1']  = $aNewCustomers['iCustomerThreeId'];
-        
+       
         $aConfig['customer_1']  = $aNewCustomers['iCustomerOneId'];
         $aConfig['customer_2']  = $aNewCustomers['iCustomerTwoId'];
         $aConfig['customer_3']  = $aNewCustomers['iCustomerThreeId'];

@@ -201,7 +201,7 @@ class DataTableEventRegistry
        
        unset($this->aRegistry[$sEvent][$bFoundIndex]);
        
-       return $self;
+       return $this;
    }
    
    /**

@@ -23,7 +23,7 @@ class TimeslotFilter extends AbstractFilter
         if(true === isset($aParams['iTimeslotId'])) {
         
             $oQuery->andWhere($this->getField('timeslot_id',$this->getAlias())." = :iTimeslotId")
-                   ->setParameter('iTimeslotId',$aParams['iTimeslotId'],Type::INTEGER);
+                   ->setParameter('iTimeslotId',$aParams['iTimeslotId']->getTimeslotId(),Type::INTEGER);
         }
         
     }
