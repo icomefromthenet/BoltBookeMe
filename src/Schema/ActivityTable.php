@@ -62,27 +62,27 @@ class ActivityTable extends VirtualColumnTable
        
        $sApptTableName = $this->tablePrefix .'bm_appointment';
        
-       $this->table->addForeignKeyConstraint($sApptTableName, ['appointment_id'], ['appointment_id'], [], null);
+       $this->table->addForeignKeyConstraint($sApptTableName, ['appointment_id'], ['appointment_id'], ['onDelete'=>'CASCADE'], null);
        
        
        $sCustomerTableName = $this->tablePrefix .'bm_customer';
        
-       $this->table->addForeignKeyConstraint($sCustomerTableName, ['customer_id'], ['customer_id'], [], null);
+       $this->table->addForeignKeyConstraint($sCustomerTableName, ['customer_id'], ['customer_id'], ['onDelete'=>'CASCADE'], null);
        
        
        $sMemberTableName = $this->tablePrefix .'bm_schedule_membership';
        
-       $this->table->addForeignKeyConstraint($sMemberTableName, ['member_id'], ['membership_id'], [], null);
+       $this->table->addForeignKeyConstraint($sMemberTableName, ['member_id'], ['membership_id'], ['onDelete'=>'CASCADE'], null);
        
        
        $sRuleTableName = $this->tablePrefix .'bm_rule';
        
-       $this->table->addForeignKeyConstraint($sRuleTableName, ['rule_id'], ['rule_id'], [], null);
+       $this->table->addForeignKeyConstraint($sRuleTableName, ['rule_id'], ['rule_id'], ['onDelete'=>'CASCADE'], null);
        
        
        $sScheduleTableName = $this->tablePrefix .'bm_schedule';
        
-       $this->table->addForeignKeyConstraint($sScheduleTableName, ['schedule_id'], ['schedule_id'], [], null);
+       $this->table->addForeignKeyConstraint($sScheduleTableName, ['schedule_id'], ['schedule_id'], ['onDelete'=>'CASCADE'], null);
        
        
     }

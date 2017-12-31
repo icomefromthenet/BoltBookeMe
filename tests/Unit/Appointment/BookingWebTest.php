@@ -24,8 +24,13 @@ class BookingWebTest extends ExtensionTest
    protected function handleEventPostFixtureRun()
    {
       // Create the Calendar 
-      $oService = $this->getTestAPI();
-      $oNow     = $this->getNow();
+      $oService   = $this->getTestAPI();
+      $oNow       = $this->getNow();
+      $oDatabase  = $this->getDatabaseAdapter();
+      
+       $oDatabase->executeUpdate(
+        'DELETE FROM bolt_bm_booking WHERE 1=1'  
+      );
       
       return;
     

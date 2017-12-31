@@ -45,8 +45,8 @@ class BookingConflictTable extends VirtualColumnTable
     {
        $sBookingTableName = $this->tablePrefix .'bm_booking';
        
-       $this->table->addForeignKeyConstraint($sBookingTableName, ['booking_id'], ['booking_id'], [], null);
-       
+       $this->table->addForeignKeyConstraint($sBookingTableName, ['booking_id'], ['booking_id'], ["onDelete" => "CASCADE"], null);
+     
     }
 }
 /* End of Table */

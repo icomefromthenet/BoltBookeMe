@@ -27,8 +27,9 @@ class AppointmentAdvTest extends ExtensionTest
    {
       $oNow         = $this->getNow();
       $oService     = $this->getTestAPI();
+      $oDatabase    = $this->getDatabaseAdapter();
       
-     
+     /*
       
       // Create some manual bookings
       
@@ -78,6 +79,15 @@ class AppointmentAdvTest extends ExtensionTest
         'appt_customer_one_2'      => $iApptCustomerOne2ndApptId,
         'appt_customer_two_1'      => $iApptCustomerTwoId,
       ]);
+      */
+      
+      
+      
+      $oDatabase->executeUpdate("
+        update bolt_bm_appointment 
+        set booking_id = null, status_code = 'W' 
+        where 1=1");
+      
       
       return;
    }  

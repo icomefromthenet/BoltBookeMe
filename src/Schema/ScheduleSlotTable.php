@@ -53,8 +53,13 @@ class ScheduleSlotTable extends VirtualColumnTable
     {
        $sScheduleTableName = $this->tablePrefix . 'bm_schedule';
        
-       $this->table->addForeignKeyConstraint($sScheduleTableName, ['schedule_id'], ['schedule_id'], [], null);
+       $this->table->addForeignKeyConstraint($sScheduleTableName, ['schedule_id'], ['schedule_id'], ['onDelete' => 'CASCADE'], null);
+    
+       $sBookingTableName = $this->tablePrefix . 'bm_booking';
        
+       $this->table->addForeignKeyConstraint($sBookingTableName, ['booking_id'], ['booking_id'], ['onDelete' => 'SET NULL'], null);
+   
+        
     }
 }
 /* End of Table */

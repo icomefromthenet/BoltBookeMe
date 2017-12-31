@@ -612,6 +612,14 @@ class BoltListener implements \PHPUnit_Framework_TestListener
         $aNewAppts = $oApptFixture->runFixture($aConfig, $oNow);
         
         
+        $aConfig['booking_member_one_1'] = $aNewAppts['APPT_ONE']['BOOKING_ID'];
+        $aConfig['booking_member_one_2'] = $aNewAppts['APPT_TWO']['BOOKING_ID'];
+        
+        $aConfig['appt_customer_one_1']  = $aNewAppts['APPT_ONE']['APPOINTMENT_ID'];
+        $aConfig['appt_customer_one_2']  = $aNewAppts['APPT_TWO']['APPOINTMENT_ID'];
+        $aConfig['appt_customer_two_1']  = $aNewAppts['APPT_THREE']['APPOINTMENT_ID'];
+  
+   
   
         $GLOBALS['BM_TEST_DATABASE_ID'] = $aConfig;       
 

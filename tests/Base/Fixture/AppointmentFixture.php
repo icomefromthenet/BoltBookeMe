@@ -3,6 +3,7 @@ namespace Bolt\Extension\IComeFromTheNet\BookMe\Tests\Base\Fixture;
 
 use DateTime;
 use Bolt\Extension\IComeFromTheNet\BookMe\Tests\Base\Seed\NewBookingSeed;
+use Bolt\Extension\IComeFromTheNet\BookMe\Tests\Base\Seed\NewApptSeed;
 
 class AppointmentFixture extends BaseFixture
 {
@@ -60,22 +61,41 @@ class AppointmentFixture extends BaseFixture
         
         $aAppointments = [
            'APPT_ONE' => [
-                'APPOINTMENT_ID' => '',
+                'APPOINTMENT_ID' => 1,
                 'BOOKING_ID'     => $aNewBooking['BOOKING_ONE'],
-                'CUSTOMER_ID'   => '',
-                'APPT_NO'       => '',
-                'USER_ID'       => '',
-                'EXTERNAL_GUID' => '',
+                'CUSTOMER_ID'   =>  $aAppConfig['customer_1'],
+                'APPT_NO'       => 'A001',
+                'USER_ID'       => '1',
+                'EXTERNAL_GUID' => '59d0b996-80e1-48c9-8b32-aff8c5a1ca75',
+                'INSTRUCTIONS'  => 'First Job Instruction',
+                'STATUS_CODE'   => 'A',
             ],
             'APPT_TWO' => [
-                'APPOINTMENT_ID' => '',
+                'APPOINTMENT_ID' => 2,
                 'BOOKING_ID'     => $aNewBooking['BOOKING_TWO'],
-                'CUSTOMER_ID'   => '',
-                'APPT_NO'       => '',
-                'USER_ID'       => '',
-                'EXTERNAL_GUID' => '',
+                'CUSTOMER_ID'   =>  $aAppConfig['customer_1'],
+                'APPT_NO'       => 'A002',
+                'USER_ID'       => '2',
+                'EXTERNAL_GUID' => '49e2b8f7-a3c5-4488-a4ee-f91343436fa2',
+                'INSTRUCTIONS'  => 'Second Job Instruction',
+                'STATUS_CODE'   => 'A',
+            ],
+            'APPT_THREE' => [
+                'APPOINTMENT_ID' => 3,
+                'BOOKING_ID'     => null, // no booking
+                'CUSTOMER_ID'   => $aAppConfig['customer_2'],
+                'APPT_NO'       => 'A003',
+                'USER_ID'       => '3',
+                'EXTERNAL_GUID' => 'a38f6823-c61f-4ab4-8aab-929af8554cfe',
+                'INSTRUCTIONS'  => 'Third Job Instruction',
+                'STATUS_CODE'   => 'W',
             ]  
         ];
+        
+        
+        $oNewApptSeed = new NewApptSeed($oDatabase, $aTableNames, $aAppointments);
+        $oNewApptSeed->executeSeed();
+        
             
         return $aAppointments; 
       

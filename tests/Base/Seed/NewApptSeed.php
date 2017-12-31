@@ -20,7 +20,9 @@ class NewApptSeed extends BaseSeed
         $iBookingId,
         $iCustomerId,
         $sApptNo,
-        $iLedgerUserId
+        $iLedgerUserId,
+        $sInstruction,
+        $sApptStatus
     )
     {
         $oDatabase         = $this->getDatabase();
@@ -29,7 +31,7 @@ class NewApptSeed extends BaseSeed
         $sApptTableName   = $aTableNames['bm_appointment'];
         
         $sSql  = " INSERT INTO $sApptTableName (`appointment_id`, `booking_id`, `status_code`, `customer_id`, `instructions`, `appointment_no`, `ledger_user_id`) 
-                  VALUES (:iAppointmentId, :iBookingId, 'A', :iCustomerId, ':sInstructions', ':sApptNo', ':iLedgerUserId') ";
+                  VALUES (:iAppointmentId, :iBookingId, :sApptStatus, :iCustomerId, :sInstructions, :sApptNo, :iLedgerUserId) ";
         
 	    
         $oIntegerType = Type::getType(Type::INTEGER);
@@ -39,7 +41,9 @@ class NewApptSeed extends BaseSeed
             ':iBookingId'     => $iBookingId,
             'iCustomerId'     => $iCustomerId,
             ':sApptNo'        => $sApptNo,
-            ':iLedgerUserId' => $iLedgerUserId
+            ':iLedgerUserId' => $iLedgerUserId,
+            ':sInstructions' => $sInstruction,
+            ':sApptStatus'   => $sApptStatus,
         ];
         
         $aTypes = [
@@ -47,7 +51,9 @@ class NewApptSeed extends BaseSeed
             ':iBookingId'     => Type::INTEGER,
             'iCustomerId'     => Type::INTEGER,
             ':sApptNo'        => Type::STRING,
-            ':iLedgerUserId' => Type::INTEGER,
+            ':iLedgerUserId'  => Type::INTEGER,
+            ':sInstructions'  => Type::STRING,
+            ':sApptStatus'    => Type::STRING,
         ];
     
         $iAffected = $oDatabase->executeUpdate($sSql, $aParams, $aTypes);
@@ -100,7 +106,9 @@ class NewApptSeed extends BaseSeed
                 $aAppt['BOOKING_ID'],
                 $aAppt['CUSTOMER_ID'],
                 $aAppt['APPT_NO'],
-                $aAppt['USER_ID']
+                $aAppt['USER_ID'],
+                $aAppt['INSTRUCTIONS'],
+                $aAppt['STATUS_CODE']
             );
             
             

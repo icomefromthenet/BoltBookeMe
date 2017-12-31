@@ -23,8 +23,25 @@ class BookingManualTest extends ExtensionTest
    protected function handleEventPostFixtureRun()
    {
       // Create the Calendar 
-      $oService = $this->getTestAPI();
-      $oNow     = $this->getNow();
+      $oService  = $this->getTestAPI();
+      $oNow      = $this->getNow();
+      $oDatabase = $this->getDatabaseAdapter();
+      
+      $oDatabase->executeUpdate(
+        'DELETE FROM bolt_bm_booking WHERE 1=1'  
+      );
+      
+     /* $iCount = $oDatabase->fetchColumn(
+        'select count(*) 
+        from bolt_bm_schedule_slot 
+        WHERE booking_id is null
+        AND ((is_available = true AND is_excluded = false) OR is_override = true)
+        AND `schedule_id` = :iScheduleId 
+        ' ,[':iScheduleId' =>$this->aDatabaseId['schedule_member_one']],0  
+      );
+      */
+        //$aCreateBookSql[] = " AND `slot_open` >= :oSlotOpen AND `slot_close` <= :oSlotClose ";
+        //$aCreateBookSql[] = " AND is_closed = false
       
       return;
       
