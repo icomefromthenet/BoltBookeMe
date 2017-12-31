@@ -25,7 +25,7 @@ class ScheduleCalendarYearFilter extends AbstractFilter
         if(isset($aParams['iCalYear']) && !empty($aParams['iCalYear'])) {
             
             $oQuery->andWhere($oQuery->expr()->eq($this->getField($sAlias,'calendar_year'),':iCalYear'))
-                   ->setParameter('iCalYear',$aParams['iCalYear'],Type::INTEGER);
+                   ->setParameter('iCalYear',$aParams['iCalYear']->getCalendarYear(),Type::INTEGER);
                   
         }
         

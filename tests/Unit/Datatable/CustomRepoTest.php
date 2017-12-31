@@ -31,21 +31,21 @@ class CustomRepoTest extends ExtensionTest
     public function testCustomRepo()
     {
        
-       //$this->RuleRepoTest($this->aDatabaseId['work_repeat']);
+       $this->RuleRepoTest($this->aDatabaseId['work_repeat']);
        
        $this->ScheduleRepoTest($this->aDatabaseId['schedule_member_one'], $this->aDatabaseId['five_minute'],$this->aDatabaseId['member_one']);
        
-       //$this->MemberRepoTest($this->aDatabaseId['member_one']);
+       $this->MemberRepoTest($this->aDatabaseId['member_one']);
        
-       //$this->CustomerRepoTest($this->aDatabaseId['customer_1']);
+       $this->CustomerRepoTest($this->aDatabaseId['customer_1']);
        
-       //$this->CalendarYearRepoTest($this->aDatabaseId['start_year']);
+       $this->CalendarYearRepoTest($this->getNow());
        
-       //$this->TimeslotRepoTest($this->aDatabaseId['ten_minute']);
+       $this->TimeslotRepoTest($this->aDatabaseId['ten_minute']);
        
-       //$this->RuleTypeRepoTest();
+       $this->RuleTypeRepoTest();
        
-       //$this->TeamRepoTest($this->aDatabaseId['team_one']);
+       $this->TeamRepoTest($this->aDatabaseId['team_one']);
     }
     
     protected function RuleRepoTest($iRuleId)
@@ -66,14 +66,14 @@ class CustomRepoTest extends ExtensionTest
         $oWorkDayRule = $oRuleRepo->find($iRuleId);
   
         $this->assertEquals($iRuleId,$oWorkDayRule->getRuleId());
-        $this->assertEquals("Repeat Work Day Rule",$oWorkDayRule->getRuleName());
+        $this->assertEquals("Repeat Work Day Rule A",$oWorkDayRule->getRuleName());
         $this->assertEquals(false, $oWorkDayRule->getSingleDayFlag());
         $this->assertEquals($oNow->format('Y'),$oWorkDayRule->getCalendarYear());
         $this->assertEquals(540,$oWorkDayRule->getDayOpenSlot());
         $this->assertEquals(1020, $oWorkDayRule->getDayCloseSlot());
         $this->assertEquals($oNow->format('Y')."-12-31" , $oWorkDayRule->getEndAt()->format('Y-m-d'));
         $this->assertEquals($oNow->format('Y')."-01-01" , $oWorkDayRule->getStartFrom()->format('Y-m-d'));
-        $this->assertEquals('short rule description', $oWorkDayRule->getRuleDescription());
+        $this->assertEquals('Repeat Work Day Rule A Desc', $oWorkDayRule->getRuleDescription());
         $this->assertEquals("2-12", $oWorkDayRule->getRepeatMonth());
         $this->assertEquals("*", $oWorkDayRule->getRepeatDayOfMonth());
         $this->assertEquals("1-5", $oWorkDayRule->getRepeatDayOfWeek());
@@ -155,7 +155,7 @@ class CustomRepoTest extends ExtensionTest
         // Test Repository Finders 
         
         $aResult = $oRepo->findAllSchedulesInCalYear($oNow->format('Y'));
-        $this->assertCount(3,$aResult); // 3 Active Schedules
+        $this->assertCount(4,$aResult); // 4 Active Schedules
         
         
         
@@ -239,7 +239,7 @@ class CustomRepoTest extends ExtensionTest
     
     public function TimeslotRepoTest($iTimeslotId)
     {
-        $oNow         = $oDate;
+        $oNow = $this->getNow();
         $oApp = $this->getContainer();
     
         $oRepo = $oApp['storage']->getRepository('Bolt\Extension\IComeFromTheNet\BookMe\Model\Setup\TimeslotEntity');    
@@ -260,7 +260,7 @@ class CustomRepoTest extends ExtensionTest
     
     public function RuleTypeRepoTest()
     {
-        $oNow         = $oDate;
+        $oNow  = $this->getNow();
         $oApp = $this->getContainer();
     
         $oRepo = $oApp['storage']->getRepository('Bolt\Extension\IComeFromTheNet\BookMe\Model\Rule\RuleTypeEntity');    
@@ -285,7 +285,7 @@ class CustomRepoTest extends ExtensionTest
     public function TeamRepoTest($iTeamId)
     {
         
-        $oNow         = $oDate;
+        $oNow = $this->getNow();
         $oApp = $this->getContainer();
     
         $oRepo = $oApp['storage']->getRepository('Bolt\Extension\IComeFromTheNet\BookMe\Model\Member\TeamEntity');    

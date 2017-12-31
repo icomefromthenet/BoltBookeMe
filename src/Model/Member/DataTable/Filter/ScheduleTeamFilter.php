@@ -33,7 +33,7 @@ class ScheduleTeamFilter extends AbstractFilter
                                                     ,$this->getField('st','membership_id'))."
                         and  st.team_id = :iScheduleTeam) "
                     )
-                   ->setParameter('iScheduleTeam',$aParams['iScheduleTeam'],Type::INTEGER);
+                   ->setParameter('iScheduleTeam',$aParams['iScheduleTeam']->getTeamId(),Type::INTEGER);
                   
         }
         

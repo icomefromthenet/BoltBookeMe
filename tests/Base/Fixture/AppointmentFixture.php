@@ -1,6 +1,8 @@
 <?php
 namespace Bolt\Extension\IComeFromTheNet\BookMe\Tests\Base\Fixture;
 
+use DateTime;
+use Bolt\Extension\IComeFromTheNet\BookMe\Tests\Base\Seed\NewBookingSeed;
 
 class AppointmentFixture extends BaseFixture
 {
@@ -9,34 +11,73 @@ class AppointmentFixture extends BaseFixture
     
  
     
-    public function runFixture(array $aAppConfig)
+    public function runFixture(array $aAppConfig, DateTime $oNow)
     {
         
-        $oNow         = $this->getNow();
-        $oService     = $this->getTestAPI();
-
+        $oDatabase   = $this->getDatabaseAdapter();
+        $aTableNames = $this->getTableNames();
+    
+        $iMemberOneSchedule = $aAppConfig['schedule_member_one'];
+      
         
-        $iCustomerOneId   = $aAppConfig['CUSTOMER_1'];
-        $iCustomerTwoId   = $aAppConfig['CUSTOMER_2'];
-        $iCustomerThreeId = $aAppConfig['CUSTOMER_3'];
+        $oOpenOne  =  clone $oNow;
+        $oOpenOne->setDate($oNow->format('Y'),1,14);
+        $oOpenOne->setTime(17,0,0);
         
-        $oDatabase = $this->getDatabaseAdapter();
+        $oCloseOne = clone $oNow;
+        $oCloseOne->setDate($oNow->format('Y'),1,14);
+        $oCloseOne->setTime(17,20,0);
         
-        // Truncate the Tables
-        $aTableNames = $aAppConfig['tablenames'];
         
-        $aAppointments = [
-          [
-              
-          ]
-          
+        $oOpenTwo  =  clone $oNow;
+        $oOpenTwo->setDate($oNow->format('Y'),2,13);
+        $oOpenTwo->setTime(13,0,0);
+        
+        $oCloseTwo = clone $oNow;
+        $oCloseTwo->setDate($oNow->format('Y'),2,13);
+        $oCloseTwo->setTime(13,20,0);
+        
+        
+        
+        $aBookings = [
+          'BOOKING_ONE' => [
+                'SCHEDULE_ID' => $iMemberOneSchedule,
+                'SLOT_OPEN'   => $oOpenOne, 
+                'SLOT_CLOSE'  => $oCloseOne,
+            ], 
+            'BOOKING_TWO' => [
+                'SCHEDULE_ID' => $iMemberOneSchedule,
+                'SLOT_OPEN'   => $oOpenTwo, 
+                'SLOT_CLOSE'  => $oCloseTwo,
+            ],
             
         ];
         
-        foreach($aAppointments as $aAppt) {
-            $oDatabase->
+        
+        $oBookingSeed = new NewBookingSeed($oDatabase, $aTableNames, $aBookings);
+        $aNewBooking     = $oBookingSeed->executeSeed();
+        
+        
+        $aAppointments = [
+           'APPT_ONE' => [
+                'APPOINTMENT_ID' => '',
+                'BOOKING_ID'     => $aNewBooking['BOOKING_ONE'],
+                'CUSTOMER_ID'   => '',
+                'APPT_NO'       => '',
+                'USER_ID'       => '',
+                'EXTERNAL_GUID' => '',
+            ],
+            'APPT_TWO' => [
+                'APPOINTMENT_ID' => '',
+                'BOOKING_ID'     => $aNewBooking['BOOKING_TWO'],
+                'CUSTOMER_ID'   => '',
+                'APPT_NO'       => '',
+                'USER_ID'       => '',
+                'EXTERNAL_GUID' => '',
+            ]  
+        ];
             
-        } 
+        return $aAppointments; 
       
     }
     

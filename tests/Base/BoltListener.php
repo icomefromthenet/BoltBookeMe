@@ -605,6 +605,13 @@ class BoltListener implements \PHPUnit_Framework_TestListener
         $aConfig['customer_2']  = $aNewCustomers['iCustomerTwoId'];
         $aConfig['customer_3']  = $aNewCustomers['iCustomerThreeId'];
         
+        
+        // Create some Bookings and Appointments
+        
+        $oApptFixture = new Fixture\AppointmentFixture($oDatabase, $oNow, $aTableNames);
+        $aNewAppts = $oApptFixture->runFixture($aConfig, $oNow);
+        
+        
   
         $GLOBALS['BM_TEST_DATABASE_ID'] = $aConfig;       
 

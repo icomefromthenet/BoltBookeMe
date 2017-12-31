@@ -24,19 +24,19 @@ class ScheduleTeamField extends AbstractType
     
     public function configureOptions(OptionsResolver $resolver)
     {
-        $aChoices       = [];
-        $aTeams         = $this->oTeamRepo->findAllTeams();
-        
-        foreach($aTeams as $oTeam) {
-            $aChoices[$oTeam->getTeamId()] = ucfirst($oTeam->getTeamName()); 
-        }
-        
         $resolver->setDefaults([
-            'choice_list' => new ChoiceList(array_keys($aChoices),array_values($aChoices)),
             'required'    => false,
             'empty_data'  => null,
-            'placeholder' => 'Select A Team'
-            
+            'placeholder' => 'Select A Team',
+            'choices'     =>  $this->oTeamRepo->findAllTeams(),
+            'choices_as_values' => true,
+            'choice_label' => function($oTeam, $key, $index) {
+                /** @var Bolt\Extension\IComeFromTheNet\BookMe\Model\Member\TeamEntity $category */
+                if($oTeam !== null) {
+                    return ucfirst($oTeam->getTeamName());
+                }
+            },
+            'choice_value' => 'getTeamId'
         ]);
     }
 

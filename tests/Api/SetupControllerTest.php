@@ -1,5 +1,5 @@
 <?php
-namespace Bolt\Extension\IComeFromTheNet\BookMe\Tests;
+namespace Bolt\Extension\IComeFromTheNet\BookMe\Tests\Api;
 
 use DateTime;
 use Doctrine\DBAL\Types\Type;
@@ -21,24 +21,10 @@ class SetupControllerTest extends ExtensionTest
    {
       // Create the Calendar 
       $oService = $this->getTestAPI();
-      
-      $oService->addCalenderYears(1);
-      
-      $oNow     = $this->getNow();
-      
-      $iFiveMinuteTimeslot    = $oService->addTimeslot(5,$oNow->format('Y'));
-      $iTenMinuteTimeslot     = $oService->addTimeslot(10,$oNow->format('Y'));
-      $iFifteenMinuteTimeslot = $oService->addTimeslot(15,$oNow->format('Y'));
-
-      $oService->toggleSlotAvability($iTenMinuteTimeslot);    
-  
-            
-            
-      $this->aDatabaseId = [
-        'five_minute'    => $iFiveMinuteTimeslot,
-        'ten_minute'     => $iTenMinuteTimeslot,
-        'fifteen_minute' => $iFifteenMinuteTimeslot,
-      ];
+    
+    
+    
+      return;
       
       
    }  
