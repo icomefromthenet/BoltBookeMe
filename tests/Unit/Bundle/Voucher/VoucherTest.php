@@ -22,6 +22,7 @@ class VoucherTest extends ExtensionTest
       $oDatabase = $this->getDatabaseAdapter();
       $aConfig   = $this->getAppConfig();
       
+     $oDatabase->executeUpdate('DELETE FROM bolt_bm_voucher_instance WHERE 1=1');
      
    }
    

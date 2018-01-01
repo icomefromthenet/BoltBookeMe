@@ -4,6 +4,7 @@ namespace Bolt\Extension\IComeFromTheNet\BookMe\Bundle\Ledger;
 use IComeFromTheNet\GeneralLedger\LedgerContainer;
 
 
+
 /**
  * Voucher Service Container
  * 
@@ -20,7 +21,7 @@ class CustomLedgerContainer extends LedgerContainer
     /**
      * Return the voucher number generator
      * 
-     * @return Bolt\Extension\IComeFromTheNet\BookMe\Bundle\Voucher\VoucherNumbers
+     * @return Bolt\Extension\IComeFromTheNet\BookMe\Bundle\Voucher\CustomVoucherGenerator
      */ 
     public function getVoucherGenerator()
     {

@@ -618,8 +618,20 @@ class BoltListener implements \PHPUnit_Framework_TestListener
         $aConfig['appt_customer_one_1']  = $aNewAppts['APPT_ONE']['APPOINTMENT_ID'];
         $aConfig['appt_customer_one_2']  = $aNewAppts['APPT_TWO']['APPOINTMENT_ID'];
         $aConfig['appt_customer_two_1']  = $aNewAppts['APPT_THREE']['APPOINTMENT_ID'];
+        $aConfig['appt_customer_two_2']  = $aNewAppts['APPT_FOUR']['APPOINTMENT_ID'];
   
+  
+        // Create Some Voucher Numbers
+        
+        $oVoucherFixture = new Fixture\VoucherNumberFixture($oDatabase, $oNow, $aTableNames);
+        $oVoucherFixture->runFixture($aConfig, $oNow);
    
+        // Create Some Ledger Transactions for the above Appts and Voucher Numbers
+        
+        $oTransactionFixture = new Fixture\NewTransactionFixture($oDatabase, $oNow, $aTableNames);
+        $oTransactionFixture->runFixture($aConfig, $oNow);
+        
+        
   
         $GLOBALS['BM_TEST_DATABASE_ID'] = $aConfig;       
 

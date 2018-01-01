@@ -26,6 +26,7 @@ class LedgerBundle extends SimpleBundle
              new Provider\LedgerMenuProvider($aConfig),
              new Provider\LedgerDataTableProvider($aConfig),
              new Provider\LedgerFormProvider($aConfig),
+             new Provider\LedgerCommandBusProvider($aConfig),
              new Provider\LedgerServiceProvider($aConfig),
              
         ];

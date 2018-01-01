@@ -251,9 +251,9 @@ class CommandBusProvider implements ServiceProviderInterface
             return new CustomHandler($c['dispatcher']);
         };
         
-        $app['bm.commandBus.locator'] = $app->share(function(Application $c){
+        $app['bm.commandBus.map'] = $app->share(function(Application $c){
             
-               $aLocatorMap = [
+            return  [
                     CalAddYearCommand::class            => 'bm.model.setup.handler.addyear',
                     SlotAddCommand::class               => 'bm.model.setup.handler.addslot',
                     SlotToggleStatusCommand::class      => 'bm.model.setup.handler.toggleslot',
@@ -285,6 +285,13 @@ class CommandBusProvider implements ServiceProviderInterface
                     MoveApptWaitingCommand::class       => 'bm.model.appointment.handler.waiting',
                 ];
             
+            
+            
+        });
+        
+        $app['bm.commandBus.locator'] = $app->share(function(Application $c){
+            
+             $aLocatorMap = $c['bm.commandBus.map'];
             
              return new PimpleLocator($c, $aLocatorMap); 
             

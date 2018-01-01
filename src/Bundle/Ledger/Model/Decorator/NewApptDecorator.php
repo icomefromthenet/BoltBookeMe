@@ -52,8 +52,7 @@ class NewApptDecorator
     protected $oNow;
     
     
-    public function __construct($oInternalHander , array $aTableNames, Connection $oDatabaseAdapter, GatewayProxyCollection $oGatewayProxy, LoggerInterface $oLogger, DateTime $oN
-    )
+    public function __construct($oInternalHander , array $aTableNames, Connection $oDatabaseAdapter, GatewayProxyCollection $oGatewayProxy, LoggerInterface $oLogger, DateTime $oNow)
     {
         $this->oDatabaseAdapter = $oDatabaseAdapter;
         $this->aTableNames      = $aTableNames;

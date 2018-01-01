@@ -89,7 +89,17 @@ class AppointmentFixture extends BaseFixture
                 'EXTERNAL_GUID' => 'a38f6823-c61f-4ab4-8aab-929af8554cfe',
                 'INSTRUCTIONS'  => 'Third Job Instruction',
                 'STATUS_CODE'   => 'W',
-            ]  
+            ],
+            'APPT_FOUR' => [
+                'APPOINTMENT_ID' => 4,
+                'BOOKING_ID'     => null, // no booking
+                'CUSTOMER_ID'   => $aAppConfig['customer_2'],
+                'APPT_NO'       => 'A004',
+                'USER_ID'       => '4',
+                'EXTERNAL_GUID' => '08481164-4d94-43ea-ba02-9bdd2f3e4987',
+                'INSTRUCTIONS'  => 'Fourth Job Instruction',
+                'STATUS_CODE'   => 'W',
+            ]
         ];
         
         
