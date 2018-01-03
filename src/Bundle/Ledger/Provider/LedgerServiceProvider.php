@@ -53,44 +53,64 @@ class LedgerServiceProvider implements ServiceProviderInterface
             $oContainer->boot($aTables); 
          
             
-            $oContainer['ledger_table_account'] = function($c)  {
-                return $c->getGatewayProxyCollection()->getSchema()->getTable($aTables['ledger_account']);
+            $oContainer['ledger_table_account'] = function($c)   {
+                $aTables = $c->getTableMap();
+                
+                return $c->getGatewayCollection()->getSchema()->getTable($aTables['ledger_account']);
             };
         
             $oContainer['ledger_table_group'] = function($c)  {
-                return $c->getGatewayProxyCollection()->getSchema()->getTable($aTables['ledger_account_group']);
+                $aTables = $c->getTableMap();
+                
+                return $c->getGatewayCollection()->getSchema()->getTable($aTables['ledger_account_group']);
             };
         
             $oContainer['ledger_table_org'] = function($c)  {
-                return $c->getGatewayProxyCollection()->getSchema()->getTable($aTables['ledger_org_unit']);
+                $aTables = $c->getTableMap();
+                
+                return $c->getGatewayCollection()->getSchema()->getTable($aTables['ledger_org_unit']);
             };
             
             $oContainer['ledger_table_user'] = function($c)  {
-                return $c->getGatewayProxyCollection()->getSchema()->getTable($aTables['ledger_user']); 
+                $aTables = $c->getTableMap();
+               
+                return $c->getGatewayCollection()->getSchema()->getTable($aTables['ledger_user']); 
             };
             
             $oContainer['ledger_table_journal'] = function($c)  {
-                return $c->getGatewayProxyCollection()->getSchema()->getTable($aTables['ledger_journal_type']);
+                $aTables = $c->getTableMap();
+                
+                return $c->getGatewayCollection()->getSchema()->getTable($aTables['ledger_journal_type']);
             };
             
             $oContainer['ledger_table_transaction'] = function($c)  {
-                return $c->getGatewayProxyCollection()->getSchema()->getTable($aTables['ledger_transaction']);
+                $aTables = $c->getTableMap();
+                
+                return $c->getGatewayCollection()->getSchema()->getTable($aTables['ledger_transaction']);
             };
             
             $oContainer['ledger_table_entry'] = function($c)  {
-                return $c->getGatewayProxyCollection()->getSchema()->getTable($aTables['ledger_entry']);
+                $aTables = $c->getTableMap();
+                
+                return $c->getGatewayCollection()->getSchema()->getTable($aTables['ledger_entry']);
             };
             
             $oContainer['ledger_table_agg_daily'] = function($c)  {
-               return $c->getGatewayProxyCollection()->getSchema()->getTable($aTables['ledger_daily']);
+               $aTables = $c->getTableMap();
+               
+               return $c->getGatewayCollection()->getSchema()->getTable($aTables['ledger_daily']);
             };
             
             $oContainer['ledger_table_agg_user'] = function($c)  {
-                return $c->getGatewayProxyCollection()->getSchema()->getTable($aTables['ledger_daily_user']);
+               $aTables = $c->getTableMap();
+               
+                return $c->getGatewayCollection()->getSchema()->getTable($aTables['ledger_daily_user']);
             };
             
             $oContainer['ledger_table_agg_org'] = function($c)  {
-                return $c->getGatewayProxyCollection()->getSchema()->getTable($aTables['ledger_daily_org']);
+                $aTables = $c->getTableMap();
+                
+                return $c->getGatewayCollection()->getSchema()->getTable($aTables['ledger_daily_org']);
             };   
             
             

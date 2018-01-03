@@ -66,7 +66,7 @@ class StorageExtensionsProvider implements ServiceProviderInterface
             
             /**@var Doctrine\DBAL\Schema\Schema **/
             $oSchema = $c['schema']->getSchema();
-       
+            
             return new GatewayProxyCollection($oSchema);
        
          });

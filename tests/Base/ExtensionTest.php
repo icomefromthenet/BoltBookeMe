@@ -167,6 +167,13 @@ class ExtensionTest extends \PHPUnit_Framework_TestCase
     }
     
     
+    protected function getTableNames()
+    {
+        $aConfig = $this->getAppConfig();
+        
+        return $aConfig['tablenames'];
+    }
+    
 }
 /* End of Unit Test */
 

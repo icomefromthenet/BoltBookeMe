@@ -143,5 +143,25 @@ final class BookMeEvents
     const APPT_CANCELED = 'bookme.appointment.canceled';  
     
     
+    /**
+     * When a sale was made
+     */ 
+    const SALE_TRANSACTION_MADE = 'bookme.transaction.sale.create';
+    
+    /**
+     * When a sale was reversed
+     */ 
+    const SALE_TRANSACTION_REVERSED = 'bookme.transaction.sale.reversed';
+    
+    /**
+     * When an payment is taken
+     */ 
+    const PAYMENT_TRANSACTION_MADE = 'bookme.transaction.payment.create';
+    
+    /**
+     * When an payment is reversed
+     */ 
+    const PAYMENT_TRANSACTION_REVERSED = 'bookme.transaction.payment.reversed';
+    
 }
 /* End of File */

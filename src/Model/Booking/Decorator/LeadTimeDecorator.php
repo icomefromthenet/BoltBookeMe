@@ -53,9 +53,9 @@ class LeadTimeDecorator
         $oDatabase      = $this->oDatabaseAdapter;
         $oLeadTime      = $oCommand->getLeadTime();
         $iSeconds       = date_create('@0')->add($oLeadTime)->getTimestamp();
-        $oCheck         = clone $oCommand->getOpeningSlot();    
+        $oApptDate      = clone $oCommand->getOpeningSlot();    
         $oBoundry       = clone $oCommand->getNow();
-        
+    
           
         // find the opening boundry of the required lead time
         if($iSeconds >= (60*60*24)) {
@@ -64,19 +64,26 @@ class LeadTimeDecorator
             $oBoundry->modify("-$iDays Day");
             
             // compare days not time so zero time down
-            $oCheck->setTime(0,0,0);
+            $oApptDate->setTime(0,0,0);
             $oBoundry->setTime(0,0,0);
-          
+            
             
         } else {
             // Less then 1 calendar day
-            $oCheck->modify("-$iSeconds Second");
+            $oApptDate->modify("-$iSeconds Second");
+            
+            $oApptDate->setTime(0,0,0);
+            $oBoundry->setTime(0,0,0);
+            
         }
         
-        // Check if where booking inside lead time 
-        if($oBoundry < $oCheck) {
+        
+         // Check if where booking inside lead time anot stop appts before current date, 
+        // A manual booking will not doing a lead time check.
+        if($oBoundry < $oApptDate) {
             throw BookingException::hasFailedLeadTimeCheck($oCommand);
         }
+        
         
         
         return $this->oHandler->handle($oCommand);

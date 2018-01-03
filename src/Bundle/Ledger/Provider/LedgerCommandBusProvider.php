@@ -37,6 +37,9 @@ class LedgerCommandBusProvider implements ServiceProviderInterface
         
         $app->extend('bm.model.appointment.handler.create', function ($oDefaultHandler, $c) use ($aConfig) {
            
+            // Force the Library to Load all dependecies
+            $oLedgerContainer = $c['bm.ledger.container'];
+           
             $aTableNames = $aConfig['tablenames'];
             $oDatabase   = $c['db'];
             $oGateway    = $c['bm.tablegateway.proxycollection'];

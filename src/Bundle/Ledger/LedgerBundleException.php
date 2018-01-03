@@ -47,10 +47,18 @@ class LedgerBundleException extends BookMeException implements BusException
      *
      * @return static
      */
-    public static function unableToCreateLedgerUser(CreateApptCommand $oCommand, DBALException $oDatabaseException= null)
+    public static function unableToCreateLedgerUser(CreateApptCommand $oCommand, DBALException $oDatabaseException= null, array $aErrors)
     {
+        $sErrorMessage = '';
+        
+        if(isset($aErrors['msg'])) {
+            foreach($aErrors['msg'] as $aReasons) {
+                $sErrorMessage .= implode(',',$aReasons);
+            }
+        }
+        
         $exception = new static(
-            'Unable to create a new ledger user for the appointment ', null, $oDatabaseException
+            'Unable to create a new ledger user for the appointment with error '.$sErrorMessage, null, $oDatabaseException
         );
         
         $exception->oCommand = $oCommand;

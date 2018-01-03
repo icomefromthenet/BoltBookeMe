@@ -73,7 +73,6 @@ class AppointmentBasicTest extends ExtensionTest
             
             $oCommand  = new CreateApptCommand($iCustomerId,$sInstructions);
            
-            
             $oCommandBus->handle($oCommand);
        
         } catch (ValidationException $e) {

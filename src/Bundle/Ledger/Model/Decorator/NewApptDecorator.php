@@ -7,6 +7,7 @@ use Doctrine\DBAL\Types\Type;
 use Doctrine\DBAL\DBALException;
 use DBALGateway\Table\GatewayProxyCollection;
 use Psr\Log\LoggerInterface;
+use IComeFromTheNet\GeneralLedger\Entity\LedgerUser;
 use Bolt\Extension\IComeFromTheNet\BookMe\Model\Appointment\Command\CreateApptCommand;
 use Bolt\Extension\IComeFromTheNet\BookMe\Bundle\Ledger\LedgerBundleException;
 use Bolt\Extension\IComeFromTheNet\BookMe\Bundle\Ledger\Model\GuidTrait;
@@ -82,13 +83,15 @@ class NewApptDecorator
         // create a new ledger user
         $oEntity = new LedgerUser($oGateway,$this->oLogger);
         
-        $oEntity->sExternalGUID  = $this->guid();
-        $oEntity->oRegoDate      = $this->oNow;
+        $oEntity->sExternalGUID  = $this->guid(false);
+        $oEntity->oRegoDate      = new \DateTime($this->oNow);
         
         $oEntity->save();
         
         if(true === empty($oEntity->iUserID)) {
-            throw LedgerBundleException::unableToCreateLedgerUser($oCommand);
+            $aError = $oEntity->getLastQueryResult();
+           
+            throw LedgerBundleException::unableToCreateLedgerUser($oCommand, null, $aError);
         }
         
          
