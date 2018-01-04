@@ -47,7 +47,7 @@ class LedgerContainerTest extends ExtensionTest
        
        $oVoucherGenerator = $oLedgerContainer->getVoucherGenerator();
        
-       $this->assertInstanceOf("Bolt\\Extension\\IComeFromTheNet\\BookMe\\Bundle\\Voucher\\CustomVoucherGenerator",$oVoucherGenerator);
+       $this->assertInstanceOf("Bolt\\Extension\\IComeFromTheNet\\BookMe\\Bundle\\Voucher\\VoucherNumbers",$oVoucherGenerator);
        
        
    }

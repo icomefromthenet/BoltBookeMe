@@ -144,6 +144,7 @@ class BasicFixture extends BaseFixture
         $sAccounts      = $aTableNames['ledger_account'];
         $sAccountGroup  = $aTableNames['ledger_account_group'];
         $sJournalTable  = $aTableNames['ledger_journal_type'];
+        $sOrgUnitTable  = $aTableNames['ledger_org_unit'];
         
         $aAccounts = [
         
@@ -344,6 +345,11 @@ class BasicFixture extends BaseFixture
             );
             
         }
+        
+        $this->getDatabaseAdapter()->executeUpdate("
+            INSERT into $sOrgUnitTable (`org_unit_id`, `org_unit_name`, `org_unit_name_slug`, `hide_ui`)
+            VALUES (1,'default','default',0)
+        ");
         
     }
     

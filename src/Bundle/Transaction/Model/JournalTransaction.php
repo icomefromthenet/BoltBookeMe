@@ -1,10 +1,11 @@
 <?php
 namespace Bolt\Extension\IComeFromTheNet\BookMe\Bundle\Transaction\Model;
 
+use DateTime;
 use Bolt\Extension\IComeFromTheNet\BookMe\Bundle\Voucher\VoucherNumbers;
 use IComeFromTheNet\GeneralLedger\TransactionBuilder;
 use IComeFromTheNet\GeneralLedger\LedgerTransaction; 
-
+use Bolt\Extension\IComeFromTheNet\BookMe\Bundle\Transaction\TransactionBundleException;
 
 /**
  * A Base class for Transaction Journals.
@@ -49,6 +50,9 @@ abstract class JournalTransaction extends TransactionBuilder
         $iJournalType = $this->doGetJournalType();
         $this->setJournalType($iJournalType);
         
+        // we need a default
+        $this->setOrgUnit(1);
+        
     }
     
     
@@ -60,18 +64,50 @@ abstract class JournalTransaction extends TransactionBuilder
         $aTableMap      = $this->getContainer()->getTableMap();
         $sApptTable     = $aTableMap['bm_appointment'];
         
-        $iLedgerUserId = $oDatabase->fetchColumn("
+        $iLedgerUserId = (integer) $oDatabase->fetchColumn("
             SELECT ledger_user_id 
             FROM $sApptTable 
             WHERE appointment_id = :iAppId",
-            ['iAppId' => $iApptId],1
+            ['iAppId' => $iApptId],0
         );
+        
+        if(empty($iLedgerUserId)) {
+            throw new TransactionBundleException('The Ledger User does not exist');
+        }
         
         
         return $this->setUser($iLedgerUserId);
         
     }
     
+    /**
+     * Sets the Processing date
+     * 
+     * The General Ledger Library not like when use a date library like Carbon
+     * wants a DateTime not a class that extends it.
+     * 
+     */ 
+    public function setProcessingDate(DateTime $oNow)
+    {
+        $oNewDte = new DateTime($oNow);
+        
+        return parent::setProcessingDate($oNewDte);
+    }
+       
+     /**
+     * Sets the Occured date
+     * 
+     * The General Ledger Library not like when use a date library like Carbon
+     * wants a DateTime not a class that extends it.
+     * 
+     */   
+    public function setOccuredDate(DateTime $oNow)
+    {
+        $oNewDte = new DateTime($oNow);
+        
+        return parent::setOccuredDate($oNewDte);
+    }
+      
     
     
     /**

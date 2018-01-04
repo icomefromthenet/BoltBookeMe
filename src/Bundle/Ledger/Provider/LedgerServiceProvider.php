@@ -115,7 +115,7 @@ class LedgerServiceProvider implements ServiceProviderInterface
             
             
             $oContainer['bm.voucher.generator'] = function($innerContainer) use ($c) {
-                return $c['bm.voucher.generator'];
+                return $c['bm.voucher.service'];
             };
             
             return $oContainer;

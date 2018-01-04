@@ -68,6 +68,12 @@ class VoucherNumberSeed extends BaseSeed
             
         }
         
+        $oDatabase          = $this->getDatabase();
+        $aTableNames        = $this->getTableNames();
+     
+        $sVoucherRuleTable  = $aTableNames['bm_voucher_gen_rule'];
+        
+        $oDatabase->executeUpdate("UPDATE $sVoucherRuleTable set `voucher_sequence_no` = voucher_sequence_no +10 WHERE 1=1 ");
         
     }
     
