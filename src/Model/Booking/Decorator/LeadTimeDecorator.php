@@ -54,33 +54,29 @@ class LeadTimeDecorator
         $oLeadTime      = $oCommand->getLeadTime();
         $iSeconds       = date_create('@0')->add($oLeadTime)->getTimestamp();
         $oApptDate      = clone $oCommand->getOpeningSlot();    
-        $oBoundry       = clone $oCommand->getNow();
+        $oNow           = clone $oCommand->getNow();
     
+        
           
         // find the opening boundry of the required lead time
         if($iSeconds >= (60*60*24)) {
             // More then 1 calendar day     
             $iDays = ceil($iSeconds/(60*60*24));
-            $oBoundry->modify("-$iDays Day");
+            $oApptDate ->modify("-$iDays Day");
             
             // compare days not time so zero time down
             $oApptDate->setTime(0,0,0);
-            $oBoundry->setTime(0,0,0);
-            
+            $oNow->setTime(0,0,0);
             
         } else {
-            // Less then 1 calendar day
+            // Less then 1 calendar day we then need to check if the appt date mius the
+            // our lead time still occurs before current time.
             $oApptDate->modify("-$iSeconds Second");
-            
-            $oApptDate->setTime(0,0,0);
-            $oBoundry->setTime(0,0,0);
             
         }
         
-        
-         // Check if where booking inside lead time anot stop appts before current date, 
-        // A manual booking will not doing a lead time check.
-        if($oBoundry < $oApptDate) {
+        // if the aappt occurs after now then where within the required lead time
+        if($oApptDate < $oNow) {
             throw BookingException::hasFailedLeadTimeCheck($oCommand);
         }
         

@@ -248,7 +248,7 @@ class BookingWebTest extends ExtensionTest
         $aTableNames = $this->getTableNames(); 
         $oNow        = $this->getNow();
        
-        $oCommand  = new WebBookingCommand($iScheduleId, $oOpeningSlot, $oClosingSlot, $oNow, 1, new DateInterval('P2D'));
+        $oCommand  = new WebBookingCommand($iScheduleId, $oOpeningSlot, $oClosingSlot, $oNow, 1, new DateInterval('P1D'));
       
         $oMockApptHandler = $this->getMockBuilder('Bolt\\Extension\\IComeFromTheNet\\BookMe\\Tests\\Mock\\MockHandler')
                                  ->setMethods(['handle'])
