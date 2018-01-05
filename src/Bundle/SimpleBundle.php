@@ -18,6 +18,7 @@ use Bolt\Extension\ControllerMountTrait;
 use Bolt\Extension\MenuTrait;
 use Bolt\Extension\NutTrait;
 use Bolt\Extension\TwigTrait;
+use Bolt\Extension\StorageTrait;
 
 /**
  * These bundles are extensions that are loaded by the BookeMe Core.
@@ -54,6 +55,7 @@ class SimpleBundle implements ExtensionInterface, ServiceProviderInterface, Even
     use MenuTrait;
     use NutTrait;
     use TwigTrait;
+   
     
      /** @var Container */
     protected $container;
@@ -225,6 +227,7 @@ class SimpleBundle implements ExtensionInterface, ServiceProviderInterface, Even
         $this->extendMenuService();
         $this->extendAssetServices();
         $this->extendNutService();
+        
 
         $this->registerServices($app);
         

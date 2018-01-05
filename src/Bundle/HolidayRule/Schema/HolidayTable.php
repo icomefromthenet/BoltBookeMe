@@ -17,7 +17,7 @@ class HolidayTable extends BaseTable
 
         
         # table pk
-        $this->table->addColumn('holiday_hash',   'string',   ['notnull' => true,'comment' =>'Table Primary key','unsigned' => true ]);
+        $this->table->addColumn('holiday_hash',   'string',   ['notnull' => true,'comment' =>'Table Primary key' ]);
 
         # optional fk 
         $this->table->addColumn('schedule_id',    'integer',   ['notnull' => false, 'comment' =>'Fk to Schedule table',         'unsigned' => true ]);

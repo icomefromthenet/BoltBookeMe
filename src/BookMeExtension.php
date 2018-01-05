@@ -597,6 +597,13 @@ class BookMeExtension extends SimpleExtension
                 'ledger_daily'             => 'bolt_bm_ledger_daily',
                 'ledger_daily_user'        => 'bolt_bm_ledger_daily_user',
                 'ledger_daily_org'         => 'bolt_bm_ledger_daily_org',
+                'bm_order_appointment'           => 'bolt_bm_order_appointment',
+                'bm_order_coupon'                => 'bolt_bm_order_coupon',
+                'bm_order_package'               => 'bolt_bm_order_package',
+                'bm_order_surcharge'             => 'bolt_bm_order_surcharge',
+                'bm_order_appointment_coupon'    => 'bolt_bm_order_appointment_coupon',
+                'bm_order_appointment_package'   => 'bolt_bm_order_appointment_package',
+                'bm_order_appointment_surcharge' => 'bolt_bm_order_appointment_surcharge',
         
             ]
             ,'leadtime' => 'PT1D'
@@ -609,6 +616,7 @@ class BookMeExtension extends SimpleExtension
                 'Voucher'     => true,
                 'Ledger'      => true,
                 'Transaction' => true,
+                'Order'       => true,
                 
             ]
             ,'queue' => [
