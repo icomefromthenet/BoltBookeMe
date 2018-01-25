@@ -92,6 +92,15 @@ class StorageExtensionsProvider implements ServiceProviderInterface
         
         });
         
+        $app['bm.repo.rule'] = $app->share(function($c) use ($aConfig) {
+            
+             $oRuleTypeRepo = $c['storage']->getRepository('Bolt\Extension\IComeFromTheNet\BookMe\Model\Rule\RuleEntity'); 
+             $oRuleTypeRepo->setTableMap($aConfig['tablenames']);
+             
+             return $oRuleTypeRepo;
+        
+        });
+        
         $app['bm.repo.calyear'] = $app->share(function($c) use ($aConfig) {
             
             $oCalYearRepo  = $c['storage']->getRepository('Bolt\Extension\IComeFromTheNet\BookMe\Model\Setup\CalendarYearEntity');     

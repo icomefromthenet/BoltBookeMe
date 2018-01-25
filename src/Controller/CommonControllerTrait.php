@@ -28,7 +28,6 @@ trait  CommonControllerTrait
     protected $oExtension;
     
     
-  
     
     protected function getExtension()
     {
@@ -102,17 +101,29 @@ trait  CommonControllerTrait
     }
     
     /**
-     * Loads a repositry
+     * Loads a repositry ONLY for Repos that not part of this project
      * 
      * @return and Entity
      */ 
-    protected function getRepository($sEntityClass)
+    protected function getRepositoryForBolt($sEntityClass)
     {
+        
+      
         return $this->oContainer
                     ->offsetGet('storage')
                     ->getRepository($sEntityClass);
         
     }
+    
+    /**
+     * Return A repo for this project
+     * 
+     */
+    protected function getRepository($sRepoIndex)
+    {
+        return $this->oContainer->offsetGet($sRepoIndex);
+    }
+    
     
     /**
      * Bind menu params to a given MenuBuilder.
@@ -132,6 +143,29 @@ trait  CommonControllerTrait
         
         $oMenuBuilder->visit($oVisitor);
         
+    }
+    
+    /**
+     *  Fetch the bolt user service manager 
+     * 
+     * @return Bolt\Users
+     */ 
+    protected function getUsersService()
+    {
+        return $this->oContainer
+                    ->offsetGet('users');
+                
+    }
+    
+    /**
+     * Return the bolt container/application
+     * which also subclass of silex
+     * 
+     * @return Bolt/Application
+     */ 
+    protected function getSilex()
+    {
+        return $this->oContainer;
     }
     
 }

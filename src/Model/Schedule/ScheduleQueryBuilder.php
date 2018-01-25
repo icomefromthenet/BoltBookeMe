@@ -18,10 +18,11 @@ use Bolt\Extension\IComeFromTheNet\BookMe\Model\AbstractRepoQuery;
 class ScheduleQueryBuilder extends AbstractRepoQuery
 {
    
-    public function withMember($sAlias, $sMemberAlias)
+    public function withMember($sMemberAlias)
     {
         $sMemberTable = $this->getRepository()->getTableName('bm_schedule_membership');
-        
+        $sAlias       = $this->getRepository()->getAlias();
+     
         $this->join($sAlias,
                     $sMemberTable,
                     $sMemberAlias,
@@ -51,6 +52,16 @@ class ScheduleQueryBuilder extends AbstractRepoQuery
         
     }
     
+    
+    public function filterByUsername($sUserAlias, $sUsername)
+    {
+        $this->andWhere($this->getField($sUserAlias,'username').'= :sUsername');
+        
+        $this->setParameter(':sUsername', $sUsername, TYPE::STRING);
+        
+        return $this;
+        
+    }
     
     public function filterByCalendarYear($sAlias, $iCalYear)
     {

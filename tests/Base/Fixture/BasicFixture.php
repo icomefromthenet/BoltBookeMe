@@ -36,6 +36,8 @@ class BasicFixture extends BaseFixture
         $this->getDatabaseAdapter()->executeUpdate("INSERT INTO ".$aTableNames['bm_rule_type'] ." (`rule_type_id`,`rule_code`,`is_work_day`,`is_exclusion`,`is_inc_override`) values (2,'break',false,true,false)");
         $this->getDatabaseAdapter()->executeUpdate("INSERT INTO ".$aTableNames['bm_rule_type'] ." (`rule_type_id`,`rule_code`,`is_work_day`,`is_exclusion`,`is_inc_override`) values (3,'holiday',false,true,false)");
         $this->getDatabaseAdapter()->executeUpdate("INSERT INTO ".$aTableNames['bm_rule_type'] ." (`rule_type_id`,`rule_code`,`is_work_day`,`is_exclusion`,`is_inc_override`) values (4,'overtime',false,false,true)");
+        $this->getDatabaseAdapter()->executeUpdate("INSERT INTO ".$aTableNames['bm_rule_type'] ." (`rule_type_id`,`rule_code`,`is_work_day`,`is_exclusion`,`is_inc_override`) values (5,'surcharge',false,false,false)");
+
 
         $this->getDatabaseAdapter()->executeUpdate("INSERT INTO ".$aTableNames['bm_appointment_status'] ." (`status_code`,`status_description`) values ('W','Waiting')");
         $this->getDatabaseAdapter()->executeUpdate("INSERT INTO ".$aTableNames['bm_appointment_status'] ." (`status_code`,`status_description`) values ('A','Assigned')");

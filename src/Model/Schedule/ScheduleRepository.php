@@ -37,7 +37,7 @@ class ScheduleRepository extends ReadOnlyRepository implements ObjectRepository
         $oQuery = new ScheduleQueryBuilder($this->getEntityManager()->getConnection(), $this);
         $oQuery->select($select)
                ->from($this->getTableName(), $alias)
-               ->withMember($alias,'m')
+               ->withMember('m')
                ->withBoltUser('m','u');
             
         return $oQuery;
@@ -85,7 +85,6 @@ class ScheduleRepository extends ReadOnlyRepository implements ObjectRepository
             return $this->hydrateAll($result, $qb);
         }
 
-
         return false;
         
     }
@@ -110,15 +109,16 @@ class ScheduleRepository extends ReadOnlyRepository implements ObjectRepository
         return false;
         
     }
-   /*
-    public function findScheduleForUser($oUsr, $iCalYear)
+   
+   
+    public function findScheduleForUsername($sUsername, $iCalYear)
     {
         $qb = $this->getLoadQuery();
     
     
         $result = $qb
+                    ->filterByUsername('u', $sUsername)
                     ->filterByCalendarYear($this->getAlias(),$iCalYear)       
-                    ->withBoltUser($this->getAlias(),)
                     ->execute()
                     ->fetch();
  
@@ -132,6 +132,6 @@ class ScheduleRepository extends ReadOnlyRepository implements ObjectRepository
         
         
     }
-    */
+    
 }
 /* End of Class */

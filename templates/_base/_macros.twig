@@ -90,8 +90,9 @@
   <label for="{{ id }}"{% for attr, value in attributes %} {{ attr }}="{{ value }}"{% endfor %}>{{ content|e }}</label>
 {% endmacro %}
 
+
 {% macro checkbox(name, value, id, attributes) %}
-  <input type="checkbox" name="{{ name }}" id="{{ id|default(name) }}" class="{{ class }}" value="1"{% if value %} checked="checked"{% endif %}{% for attr, value in attributes %} {{ attr }}="{{ value }}"{% endfor %} />
+  <input type="checkbox" name="{{ name }}" id="{{ id|default(name) }}"  value="1"{% if value %} checked="checked"{% endif %}{% for attr, value in attributes %} {{ attr }}="{{ value }}"{% endfor %} />
 {% endmacro %}
 
 {% macro select(name, values, value, attributes) %}

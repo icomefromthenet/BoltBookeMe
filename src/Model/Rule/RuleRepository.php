@@ -62,8 +62,56 @@ class RuleRepository extends ReadOnlyRepository implements ObjectRepository
         return false;
         
     }
+    
+    
+    public function getRulesForSchedule($iScheduleId, $iRuleType= null)
+    {
+        $qb = $this->getLoadQuery();
+        
+        if($iRuleType !== null) {
+            $qb->filterByRuleType($this->getAlias(), $iRuleType);
+        }
+        
+        $qb->filterBySchedule($this->getAlias(), $iScheduleId);
+        
+        
+        $result = $qb->execute()->fetch();
 
-  
+        if ($result) {
+            return $this->hydrate($result, $qb);
+        }
+
+        return false;
+
+        
+        
+    }
+    
+    
+    public function getHoldiayRulesForSchedule($iScheduleId)
+    {
+        return $this->getRulesForSchedule($iScheduleId,3);
+    }
+
+    public function getBreakRulesForSchedule($iScheduleId)
+    {
+        return $this->getRulesForSchedule($iScheduleId, 2);
+    }
+    
+    public function getWorkdayRulesForSchedule($iScheduleId)
+    {
+        return $this->getRulesForSchedule($iScheduleId, 1);
+    }
+    
+    public function getSurchargeRulesForSchedule($iScheduleId)
+    {
+        return $this->getRulesForSchedule($iScheduleId, 5);
+    }
+    
+    public function getOvertimeRulesForSchedule()
+    {
+        return $this->getRulesForSchedule($iScheduleId, 4);
+    }
    
 }
 /* End of Class */

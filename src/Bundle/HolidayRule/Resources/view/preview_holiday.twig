@@ -1,5 +1,5 @@
 {% extends '_base/_page-nav.twig' %}
-
+{% import '@BookMe/_base/_macros.twig' as _m %}
 
 {% block page_nav title %}
 
@@ -27,11 +27,21 @@
 <div class="row panel panel-default">
     <div class="panel-heading">Choose Holidays</div>
     <div class="panel-body bm-table">
-        {% for oHoliday in aHoliday %}
+        <form method="post" action="{{ path('bookme-holidayrule-save') }}">
+ 
+             {{ _m.label('','Pick your Holiday','') }}  
+ 
+             {% for oHoliday in aHoliday %}
+             {{ _m.checkbox('holiday[]', oHoliday.shortName,oHoliday.shortName,{}) }}               
+             {{ oHoliday.getName() }}    
+             <br />       
+            {% endfor %}
+           
+            {{ _m.input('submitHoliday','Create Holiday Rules','submit',{"class":"btn btn-primary", "style":"float:right;"}) }}
             
-            {{ oHoliday.getName() }}    
-                
-        {% endfor %}
+        </form>
+
+       
     </div>
 </div>
 

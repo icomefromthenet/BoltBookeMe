@@ -20,6 +20,14 @@ use Bolt\Extension\IComeFromTheNet\BookMe\Controller\CommonController;
 class HolidayRuleController extends CommonController implements ControllerProviderInterface
 {
     
+    
+    
+    protected function fetchHolidayRulesForUser()
+    {
+        
+        
+        
+    }
 
     public function connect(Application $app)
     {
@@ -60,9 +68,13 @@ class HolidayRuleController extends CommonController implements ControllerProvid
      */
     public function onHolidayRulePreview(Application $app, Request $request)
     {
-        $oSearchForm  = $this->getForm('holidayrule.builder')->getForm();
-        $aErrors = [];
-        $aHolidays = [];
+        $oSearchForm    = $this->getForm('holidayrule.builder')->getForm();
+        $aErrors        = [];
+        $aHolidays      = [];
+        $sUsername      = $this->getUsersService()->getCurrentUserProperty('username');
+        
+        $oScheduleRepo = $this->getRepository('bm.repo.schedule');
+        $oRuleRepo     = $this->getRepository('bm.repo.rule');    
         
         $oSearchForm->handleRequest($request);
     
@@ -73,7 +85,17 @@ class HolidayRuleController extends CommonController implements ControllerProvid
          
             $aHolidays = \Yasumi\Yasumi::create($sHolidayProvider, $aSearch['iCalYear']->getCalendarYear());
             
+            // Find the schedule for the current user for given cal year
+            $oCurrentSchedule = $oScheduleRepo->findScheduleForUsername($sUsername, $aSearch['iCalYear']->getCalendarYear());
+        
+            if(empty($oCurrentSchedule)) {
+                $this->getSilex()->abort(500,'Unable to match current user to a schedule');
+            } 
+            
+            
         } 
+        
+        
         
         $aOption = [
             'title'     => 'Choose Holiday',
