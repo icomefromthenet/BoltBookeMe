@@ -62,7 +62,8 @@ use Bolt\Extension\IComeFromTheNet\BookMe\Model\Setup\CalendarYearEntity;
 use Bolt\Extension\IComeFromTheNet\BookMe\Model\Setup\CalendarYearRepository;
 use Bolt\Extension\IComeFromTheNet\BookMe\Model\Setup\TimeslotEntity;
 use Bolt\Extension\IComeFromTheNet\BookMe\Model\Setup\TimeslotRepository;
-
+use Bolt\Extension\IComeFromTheNet\BookMe\Model\Booking\BookingEntity;
+use Bolt\Extension\IComeFromTheNet\BookMe\Model\Booking\BookingRepository;
 
 
 // Load this extension composer dep autoloader
@@ -220,6 +221,7 @@ class BookMeExtension extends SimpleExtension
             'bm_calendar_years'     => [CalendarYearEntity::class => CalendarYearRepository::class],
             'bm_timeslot'           => [TimeslotEntity::class => TimeslotRepository::class],
             'bm_schedule_team'      => [TeamEntity::class => TeamRepository::class],
+            'bm_booking'            => [BookingEntity::class => BookingRepository::class],
         ];
     }
     

@@ -1,6 +1,7 @@
 <?php
 namespace Bolt\Extension\IComeFromTheNet\BookMe\Bundle\Transaction\Model;
 
+use DateTime; 
 use Bolt\Extension\IComeFromTheNet\BookMe\Bundle\Transaction\TransactionBundleException;
 use Bolt\Extension\IComeFromTheNet\BookMe\Bundle\Transaction\Model\Transaction;
 
@@ -27,7 +28,7 @@ class TransactionReverse extends Transaction
             ->selectQuery()
              ->start()
                 ->where('transaction_id = :iTransactionId')
-                ->setParameter(':iTransactionId',$iTransactionId,$oType)
+                ->setParameter(':iTransactionId',$iTransactionId,$oTransactionType)
              ->end()
            ->findOne(); 
 
@@ -40,10 +41,10 @@ class TransactionReverse extends Transaction
      * occured date for assignment to this journal entry
      * 
      * @param integer $iTransaction The Transction Database Id
-     * @return IComeFromTheNet\GeneralLedger\Entity\LedgerTransaction
+     * @return integer the transaction id assigned to the reversal
      * @throws TransactionBundleException when the transaction is invalid
      */ 
-    public function reverseTransaction($iTransaction)
+    public function saveTransaction($iTransaction)
     {
         if(!is_integer($iTransaction)) {
             throw new TransactionBundleException('Transaction Id must be an integer');
@@ -63,8 +64,8 @@ class TransactionReverse extends Transaction
         $this->oJournal->processReversal($oLedgerTransaction);
         
         // This will have reversal transaction assigned to adjustment id property, return the
-        // object so later process can use this identifer
-        return $oLedgerTransaction;
+        // this identifer
+        return $oLedgerTransaction->iAdjustmentID;
         
     }
     

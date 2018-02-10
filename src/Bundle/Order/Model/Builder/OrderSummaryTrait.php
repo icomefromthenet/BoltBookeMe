@@ -13,7 +13,7 @@ use Bolt\Extension\IComeFromTheNet\BookMe\Bundle\Order\Model\OrderSurchageEntity
  *  @author Lewis Dyer <getintouch@icomefromthenet.com>
  *  @since 1.0
  */ 
-class OrderSummary
+trait OrderSummaryTrait
 {
     
     protected $oOrderSurcharge;
@@ -68,15 +68,7 @@ class OrderSummary
         return $this->oOrderApptEntity;
     }
     
-    
-    public function __construct(OrderApptEntity $oHeader, OrderPackageEntity $oPackage, OrderCouponEntity $oCoupon = null, OrderSurchageEntity $oSurcharge = null)
-    {
-        $this->oOrderApptEntity = $oHeader;
-        $this->oOrderPackage    = $oPackage;
-        $this->oOrderCoupon     = $oCoupon;
-        $this->oOrderSurcharge  = $oSurcharge; 
-        
-    }
+ 
     
 }
-/* End of Class */
+/* End of Trait */

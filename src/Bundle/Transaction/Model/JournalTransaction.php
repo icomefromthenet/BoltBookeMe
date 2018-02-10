@@ -4,7 +4,7 @@ namespace Bolt\Extension\IComeFromTheNet\BookMe\Bundle\Transaction\Model;
 use DateTime;
 use Bolt\Extension\IComeFromTheNet\BookMe\Bundle\Voucher\VoucherNumbers;
 use IComeFromTheNet\GeneralLedger\TransactionBuilder;
-use IComeFromTheNet\GeneralLedger\LedgerTransaction; 
+use IComeFromTheNet\GeneralLedger\Entity\LedgerTransaction; 
 use Bolt\Extension\IComeFromTheNet\BookMe\Bundle\Transaction\TransactionBundleException;
 
 /**
@@ -103,9 +103,7 @@ abstract class JournalTransaction extends TransactionBuilder
      */   
     public function setOccuredDate(DateTime $oNow)
     {
-        $oNewDte = new DateTime($oNow);
-        
-        return parent::setOccuredDate($oNewDte);
+        return parent::setOccuredDate(DateTime::createFromFormat('U',$oNow->format('U')));
     }
       
     

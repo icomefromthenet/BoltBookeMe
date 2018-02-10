@@ -76,8 +76,5 @@ class Transaction
     }
     
     
-    
-    
-    
 }
 /* End of File */

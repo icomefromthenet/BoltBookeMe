@@ -8,7 +8,7 @@
         "icomefromthenet/dbal-gateway" : "1.0.*",
         "icomefromthenet/laterjob" : "1.1.*",
         "icomefromthenet/vouchernum": "1.0.*",
-        "icomefromthenet/ledger" : "dev-master",
+        "icomefromthenet/ledger" : "1.0.*",
         "azuyalabs/yasumi" : "^1.5.0"
     },
     "authors": [

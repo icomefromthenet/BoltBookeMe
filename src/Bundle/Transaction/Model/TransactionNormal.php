@@ -71,6 +71,23 @@ class TransactionNormal extends Transaction
         
         return true;
     }
+    
+    
+     /**
+     * Save the built transaction to the ledger
+     * 
+     * @return integer the new transaction id
+     * @throws LedgerException if the transaction fails to save.
+     */ 
+    public function saveTransaction() 
+    {
+        $this->oJournal->processTransaction();
+        
+        return $this->oJournal->getTransactionHeader()->iTransactionID;
+    }
+    
+   
+   
 
 }
 /* End of Class */
