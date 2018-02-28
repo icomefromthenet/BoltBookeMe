@@ -50,8 +50,9 @@ class LedgerServiceProvider implements ServiceProviderInterface
             
             $oContainer =  new CustomLedgerContainer($oEvent, $oDatabase, $oLogger, $oGatewayProxy);
               
-            $oContainer->boot($aTables); 
+            $oContainer->boot(); 
          
+            $oContainer['table_map'] = array_merge($oContainer['table_map'],$aTables);
             
             $oContainer['ledger_table_account'] = function($c)   {
                 $aTables = $c->getTableMap();

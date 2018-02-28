@@ -2,8 +2,9 @@
 namespace Bolt\Extension\IComeFromTheNet\BookMe\Bundle\Ledger;
 
 use IComeFromTheNet\GeneralLedger\LedgerContainer;
-
-
+use Bolt\Extension\IComeFromTheNet\BookMe\Bundle\Ledger\Provider\LedgerTableMapProvider;
+use IComeFromTheNet\GeneralLedger\Provider\DBGatewayProvider;
+use IComeFromTheNet\GeneralLedger\Provider\TransactionProvider;
 
 /**
  * Voucher Service Container
@@ -13,10 +14,18 @@ use IComeFromTheNet\GeneralLedger\LedgerContainer;
  */
 class CustomLedgerContainer extends LedgerContainer 
 {
-    protected function getDefaultTableMap() 
+    
+    
+    protected function getServiceProviders()
     {
-        throw new LedgerBundleException('Must pass the table list to the container through LedgerContainer::boot');
+        return [
+             new LedgerTableMapProvider(),
+             new DBGatewayProvider(),
+             new TransactionProvider(),
+        ];
+        
     }
+    
     
     /**
      * Return the voucher number generator

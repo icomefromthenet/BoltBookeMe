@@ -32,7 +32,7 @@ class TransactionReverse extends Transaction
              ->end()
            ->findOne(); 
 
-    }  
+    }
     
     /**
      * Process a Transction Reversal for the given transaction

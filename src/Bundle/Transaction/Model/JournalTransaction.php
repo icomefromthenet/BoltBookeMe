@@ -42,7 +42,7 @@ abstract class JournalTransaction extends TransactionBuilder
     abstract protected function doGetJournalType();
     
     
-    protected function doSetDefault()
+    protected function doSetDefault(LedgerTransaction $oAdjustedTransaction = null)
     {
         $sVoucherNumber = $this->doGenerateVoucherNumber();
         $this->setVoucherNumber($sVoucherNumber);
@@ -50,8 +50,11 @@ abstract class JournalTransaction extends TransactionBuilder
         $iJournalType = $this->doGetJournalType();
         $this->setJournalType($iJournalType);
         
-        // we need a default
+        // we need a default Org unit, since where not using it
         $this->setOrgUnit(1);
+        if($oAdjustedTransaction) {
+            $oAdjustedTransaction->iOrgUnitID = 1;
+        }
         
     }
     
@@ -133,7 +136,7 @@ abstract class JournalTransaction extends TransactionBuilder
      */
     public function processReversal(LedgerTransaction $oAdjustedTransaction)
     {
-        $this->doSetDefault();
+        $this->doSetDefault($oAdjustedTransaction);
         
         return parent::processAdjustment($oAdjustedTransaction);
     }
