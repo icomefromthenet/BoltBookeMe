@@ -7,3 +7,4 @@ tests/tmp/
 web/dist/*
 web/less/*.css
 public
+node_modules

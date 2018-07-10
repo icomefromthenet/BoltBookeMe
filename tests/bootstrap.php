@@ -35,5 +35,9 @@ if (!defined('BOOKME_EXTENSION_PATH')) {
 // Vendor Auto Load
 require_once __DIR__.'/../vendor/autoload.php';
 
+
+
 // Auto Load Extensions
 require_once EXTENSION_AUTOLOAD;
+
+

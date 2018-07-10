@@ -16,8 +16,8 @@ class CalendarYearTable extends VirtualColumnTable
         $this->table->addOption('comment','Calender table that store the next x years');
         
         $this->table->addColumn('y',             'smallint',    ['notnull' => true,'comment' =>'year where date occurs' ]);
-        $this->table->addColumn('y_start',       'smallint',    ['notnull' => true,'comment' => '']);
-        $this->table->addColumn('y_end',         'smallint',    ['notnull' => true,'comment' => '']);
+        $this->table->addColumn('y_start',       'date',    ['notnull' => true,'comment' => '']);
+        $this->table->addColumn('y_end',         'date',    ['notnull' => true,'comment' => '']);
         
         
     }

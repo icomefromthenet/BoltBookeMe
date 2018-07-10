@@ -1,6 +1,6 @@
 {
     "name": "root/thirdparty",
-    "minimum-stability": "dev",
+    "minimum-stability": "stable",
     "require": {
         "vlucas/valitron": "^1.2",
         "league/tactician-command-events": "^0.6.0",
@@ -9,7 +9,8 @@
         "icomefromthenet/laterjob" : "1.1.*",
         "icomefromthenet/vouchernum": "1.0.*",
         "icomefromthenet/ledger" : "1.0.5",
-        "azuyalabs/yasumi" : "^1.5.0"
+        "azuyalabs/yasumi" : "^1.5.0",
+        "doctrine/dbal": "2.6"
     },
     "authors": [
         {

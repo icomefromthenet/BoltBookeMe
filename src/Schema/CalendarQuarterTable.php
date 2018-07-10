@@ -17,8 +17,8 @@ class CalendarQuarterTable extends VirtualColumnTable
         
         $this->table->addColumn('y',             'smallint',    ['notnull' => true,'comment' =>'year where date occurs' ]);
         $this->table->addColumn('q',             'smallint',    ['notnull' => true,'comment' => 'quarter of the year date belongs']);
-        $this->table->addColumn('m_start',       'smallint',    ['notnull' => true,'comment' => 'starting month']);
-        $this->table->addColumn('m_end',         'smallint',    ['notnull' => true,'comment' => 'ending month']);
+        $this->table->addColumn('m_start',       'date',    ['notnull' => true,'comment' => 'starting month']);
+        $this->table->addColumn('m_end',         'date',    ['notnull' => true,'comment' => 'ending month']);
       
         
     }

@@ -51,6 +51,8 @@ class BoltListener implements \PHPUnit_Framework_TestListener
         $this->timer = $timer;
 
         $this->buildTestEnv();
+      
+      
     }
 
     /**
@@ -461,12 +463,14 @@ class BoltListener implements \PHPUnit_Framework_TestListener
        
        $aConfig     = [];
        
+      
        
        // Common
        
        $oBasicFixture = new Fixture\BasicFixture($oDatabase, $oNow, $aTableNames);
        $oBasicFixture->runFixture([]);
        
+      
        
        // Calendar
        
@@ -640,8 +644,12 @@ class BoltListener implements \PHPUnit_Framework_TestListener
         $oTransactionFixture = new Fixture\NewTransactionFixture($oDatabase, $oNow, $aTableNames);
         $oTransactionFixture->runFixture($aConfig, $oNow);
         
-        
-  
+     
+      
+      
+        // commit changes
+        $oDatabase->exec('COMMIT');
+      
         $GLOBALS['BM_TEST_DATABASE_ID'] = $aConfig;       
 
         

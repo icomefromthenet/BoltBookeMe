@@ -155,9 +155,9 @@ class BasicFixture extends BaseFixture
             ,'account_number' => '000000'
             ,'account_name' => 'Root Account'
             ,'account_name_slug' => 'root_account'
-            ,'hide_ui'  => 0
-            ,'is_left'  => 0
-            ,'is_right' => 0
+            ,'hide_ui'  => false
+            ,'is_left'  => false
+            ,'is_right' => false
         ]
             
 
@@ -167,9 +167,9 @@ class BasicFixture extends BaseFixture
             ,'account_number' => '1-0000'
             ,'account_name' => 'Debits'
             ,'account_name_slug' => 'debits'
-            ,'hide_ui'  => 0
-            ,'is_left'  => 1
-            ,'is_right' => 0  
+            ,'hide_ui'  => false
+            ,'is_left'  => true
+            ,'is_right' => false  
         ]
       
         ,[
@@ -177,18 +177,18 @@ class BasicFixture extends BaseFixture
             ,'account_number' => '1-0005'
             ,'account_name' => 'Sales'
             ,'account_name_slug' => 'sales'
-            ,'hide_ui'  => 0
-            ,'is_left'  => 1
-            ,'is_right' => 0  
+            ,'hide_ui'  => false
+            ,'is_left'  => true
+            ,'is_right' => false
         ]
         ,[
             'account_id' => 4
             ,'account_number' => '1-0006'
             ,'account_name' => 'Tax Owed'
             ,'account_name_slug' => 'tax_owed'
-            ,'hide_ui'  => 0
-            ,'is_left'  => 1
-            ,'is_right' => 0  
+            ,'hide_ui'  => false
+            ,'is_left'  => true
+            ,'is_right' => false  
         ]
         
         ,[
@@ -196,9 +196,9 @@ class BasicFixture extends BaseFixture
             ,'account_number' => '2-0000'
             ,'account_name' => 'Credits'
             ,'account_name_slug' => 'credits'
-            ,'hide_ui'  => 0
-            ,'is_left'  => 1
-            ,'is_right' => 0  
+            ,'hide_ui'  => false
+            ,'is_left'  => true
+            ,'is_right' => false
         ]
         
        ,[
@@ -206,9 +206,9 @@ class BasicFixture extends BaseFixture
             ,'account_number' => '2-0010'
             ,'account_name' => 'Discounts'
             ,'account_name_slug' => 'discounts'
-            ,'hide_ui'  => 0
-            ,'is_left'  => 0
-            ,'is_right' => 1  
+            ,'hide_ui'  => false
+            ,'is_left'  => false
+            ,'is_right' => true
         ]
         
         ,[
@@ -216,36 +216,36 @@ class BasicFixture extends BaseFixture
             ,'account_number' => '2-0001'
             ,'account_name' => 'Payments'
             ,'account_name_slug' => 'payments'
-            ,'hide_ui'  => 0
-            ,'is_left'  => 1
-            ,'is_right' => 0  
+            ,'hide_ui'  => false
+            ,'is_left'  => true
+            ,'is_right' => false
         ]
         ,[
             'account_id' => 104
             ,'account_number' => '2-0002'
             ,'account_name' => 'Cash Payments'
             ,'account_name_slug' => 'cash_payments'
-            ,'hide_ui'  => 0
-            ,'is_left'  => 1
-            ,'is_right' => 0  
+            ,'hide_ui'  => false
+            ,'is_left'  => true
+            ,'is_right' => false
         ]
         ,[
             'account_id' => 105
             ,'account_number' => '2-0003'
             ,'account_name' => 'Credit Card Payments'
             ,'account_name_slug' => 'credit_card_payments'
-            ,'hide_ui'  => 0
-            ,'is_left'  => 1
-            ,'is_right' => 0  
+            ,'hide_ui'  => false
+            ,'is_left'  => true
+            ,'is_right' => false
         ]
         ,[
             'account_id' => 106
             ,'account_number' => '2-0004'
             ,'account_name' => 'Direct Deposits'
             ,'account_name_slug' => 'direct_deposits'
-            ,'hide_ui'  => 0
-            ,'is_left'  => 1
-            ,'is_right' => 0  
+            ,'hide_ui'  => false
+            ,'is_left'  => true 
+            ,'is_right' => false  
         ]
         
         
@@ -253,19 +253,22 @@ class BasicFixture extends BaseFixture
         
         foreach($aAccounts as $aAccount) {
             
+           $aValues =  [
+             ':iAccountId' => $aAccount['account_id'],
+              ':sAccountNumber' => $aAccount['account_number'],
+               ':sAccountName' => $aAccount['account_name'],
+               ':sAccountNameSlug' => $aAccount['account_name_slug'],
+               ':iHideUI' => (int) $aAccount['hide_ui'],
+               ':isLeft' => (int) $aAccount['is_left'], 
+               ':isRight' => (int) $aAccount['is_right']
+            ];
+          
             $this->getDatabaseAdapter()->executeUpdate(
                 "INSERT INTO ".$sAccounts .
                 "(`account_id`, `account_number`, `account_name`, `account_name_slug`, `hide_ui`, `is_left`, `is_right`) ".
-                " VALUES (:iAccountId, :sAccountNumber, :sAccountName, :sAccountNameSlug, ':iHideUI', :isLeft, :isRight)",
-                [':iAccountId' => $aAccount['account_id'],
-                 ':sAccountNumber' => $aAccount['account_number'],
-                 ':sAccountName' => $aAccount['account_name'],
-                 ':sAccountNameSlug' => $aAccount['account_name_slug'],
-                 ':iHideUI' => $aAccount['hide_ui'],
-                 ':isLeft' => $aAccount['is_left'], 
-                 ':isRight' => $aAccount['is_right']
-                ]
-            );
+                " VALUES (:iAccountId, :sAccountNumber, :sAccountName, :sAccountNameSlug, :iHideUI, :isLeft, :isRight)",
+              $aValues 
+           );
             
         }
         
@@ -314,21 +317,21 @@ class BasicFixture extends BaseFixture
             'journal_type_id' =>  1
             ,'journal_name'  => 'Sales journal'
             ,'journal_name_slug' => 'sales_journal'
-            ,'hide_ui' => 0
+            ,'hide_ui' => false
         ]
         
         ,[
              'journal_type_id' =>  2
             ,'journal_name'  => 'Payments journal'
             ,'journal_name_slug' => 'payments_journal'
-            ,'hide_ui' => 0 
+            ,'hide_ui' => true
         ]
         
         ,[
              'journal_type_id' =>  3
             ,'journal_name'  => 'Adjustments journal'
             ,'journal_name_slug' => 'adjustments_journal'
-            ,'hide_ui' => 0 
+            ,'hide_ui' => false
         ]
         
         ];
@@ -342,7 +345,7 @@ class BasicFixture extends BaseFixture
                 [':iJournalType'     => $aJournal['journal_type_id'],
                  ':sJournalName'     =>  $aJournal['journal_name'],
                  ':sJournalNameSlug' =>  $aJournal['journal_name_slug'],
-                 ':iHideUI'          =>  $aJournal['hide_ui'],
+                 ':iHideUI'          =>  (int) $aJournal['hide_ui'],
                 ]
             );
             
@@ -367,9 +370,11 @@ class BasicFixture extends BaseFixture
         $aTables = $sm->listTables();
         
         $oDatabase->exec('SET foreign_key_checks = 0');
+        $oDatabase->exec('SET autocommit = 0');
         
         foreach ($aTables as $table) {
             if(strpos($table->getName(),'_bm_') != false) {
+                //echo 'Truncate Table '. $table->getName();
                 $oDatabase->exec('TRUNCATE TABLE '.$table->getName());    
             }
             

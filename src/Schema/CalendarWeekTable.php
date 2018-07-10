@@ -15,12 +15,12 @@ class CalendarWeekTable extends VirtualColumnTable
         $this->table->addOption('comment','Calender table that store the next x years in week aggerates');
      
         
-        $this->table->addColumn('y',             'smallint',    ['notnull' => true,'comment' =>'year where date occurs' ]);
-        $this->table->addColumn('m',             'smallint',    ['notnull' => true,'comment' => 'month of the year']);
-        $this->table->addColumn('w',             'smallint',    ['notnull' => true,'comment' => 'week number in the year']);
+        $this->table->addColumn('y',         'smallint',    ['notnull' => true,'comment' =>'year where date occurs' ]);
+        $this->table->addColumn('m',         'smallint',    ['notnull' => true,'comment' => 'month of the year']);
+        $this->table->addColumn('w',         'smallint',    ['notnull' => true,'comment' => 'week number in the year']);
         
-        $this->table->addColumn('open_date', 'date',        ['notnull' => true, 'comment' =>'first date of week']);
-        $this->table->addColumn('close_date', 'date',        ['notnull' => true, 'comment' =>'last date of week']);
+        $this->table->addColumn('open_date',  'date',       ['notnull' => true, 'comment' =>'first date of week']);
+        $this->table->addColumn('close_date', 'date',       ['notnull' => true, 'comment' =>'last date of week']);
    
     }
 

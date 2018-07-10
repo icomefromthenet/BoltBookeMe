@@ -69,10 +69,10 @@ class CalendarSeed extends BaseSeed
         $aSql               = [];
        
         $aSql[] =" INSERT INTO `$sCalWeekTableName` (`y`,`m`,`w`,`open_date`,`close_date`) ";
-        $aSql[] =" SELECT `c`.`y`, `c`.`m`, `c`.`w`, min(`c`.`calendar_date`), max(`c`.`calendar_date`)  ";
+        $aSql[] =" SELECT `c`.`y`, max(`c`.`m`), `c`.`w`, min(`c`.`calendar_date`), max(`c`.`calendar_date`)  ";
         $aSql[] =" FROM `$sCalTableName` c ";
         $aSql[] =" WHERE `c`.`y` >= ".$iStartYear . ' ';
-        $aSql[] =" GROUP BY `c`.`y`,`c`.`w` ";
+        $aSql[] =" GROUP BY `c`.`y`,`c`.`w`";
 
         $sSql = implode(PHP_EOL,$aSql);
 	    $oDatabase->executeUpdate($sSql, [], []);
